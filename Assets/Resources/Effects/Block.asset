@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c72ce9337e905f47bdcdf9774858d67, type: 3}
+  m_Name: Block
+  m_EditorClassIdentifier: 
+  effectName: Block
+  duration: 1
+  damage: 0
+  cancelMove: 0
+  cancelAttack: 0
+  isStackable: 1
+  isNegative: 0
+  damageType: 0
+  icon: {fileID: 8892759074320436052, guid: 0407366509a56bc4aa69ec59349aa5a2, type: 3}
+  skillButton: {fileID: 4587448470713484878, guid: 0080bb2f0480d30448f9a71653666868,
+    type: 3}

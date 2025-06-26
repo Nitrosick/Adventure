@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb13a142f8c484a44b9b8c61360ca04b, type: 3}
+  m_Name: Old sword
+  m_EditorClassIdentifier: 
+  id: 1
+  itemName: Old sword
+  icon: {fileID: 21300000, guid: d0b4cc2057f2d9b4aa230db733619641, type: 3}
+  type: 0
+  weight: 0
+  damage: 6
+  critModifier: 1.8
+  armorPenetration: 0
+  effectChance: 7
+  range: 1
+  prefab: {fileID: 432409815444410632, guid: 6396ad9ff95fbe6489ac7d7f915802e0, type: 3}
+  onHitEffect: {fileID: 11400000, guid: 19ac65e2e41cb3c40bff7534d5e20d42, type: 2}
+  damageType: 1

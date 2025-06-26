@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c72ce9337e905f47bdcdf9774858d67, type: 3}
+  m_Name: Stun
+  m_EditorClassIdentifier: 
+  effectName: Stun
+  duration: 1
+  damage: 0
+  cancelMove: 1
+  cancelAttack: 1
+  isStackable: 0
+  isNegative: 1
+  damageType: 0
+  icon: {fileID: 8892759074320436052, guid: 00b00989182e29e49bc6f415810233ff, type: 3}
+  skillButton: {fileID: 0}
+  skillPhase: 1
