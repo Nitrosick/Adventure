@@ -11,7 +11,7 @@ public class Militia : Unit
     Type = UnitType.Melee;
     TotalHealth = 25f;
     MoveSpeed = 3f;
-    defaultMovePoints = 5;
+    DefaultMovePoints = 5;
     Initiative = 5;
     Priority = 10;
   }

@@ -42,6 +42,5 @@ public class PlayerArmy : MonoBehaviour {
     Unit selected = Array.Find(Units, u => u == unit);
     if (selected == null) return;
     selected.InSquad = !selected.InSquad;
-    PlayerMenuUI.SelectUnitsTab();
   }
 }

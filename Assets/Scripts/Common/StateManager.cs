@@ -20,8 +20,17 @@ public static class StateManager
 
   // Global
   public static int currentPlayerZoneId;
+  public static int gold;
+  public static int[] resources = { 0, 0, 0 };
+  public static int villagers;
+  // public static int maxVillagers;
+  public static int experience;
+  public static int fame;
+  public static int level;
+
   public static Dictionary<int, bool> clearedZones = new();
-  public static UnitData[] reserve = {};
+  // FIXME: Сохранение юнитов в отряде
+  public static UnitData[] reserve = { };
 
   public static void WriteUnitsData(Unit[] units, string to) {
     if (to == "allies") allies = units.Select(u => u.ToData()).ToArray();

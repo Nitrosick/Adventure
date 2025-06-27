@@ -37,12 +37,11 @@ public class Unit : MonoBehaviour {
   public int Level { get; protected set; } = 1;
   public int Initiative { get; protected set; }
   public float MoveSpeed { get; protected set; }
-  protected float defaultMovePoints;
+  public float DefaultMovePoints { get; protected set; }
   public float TotalMovePoints { get; protected set; }
   public float CurrentMovePoints { get; set; }
   public float TotalHealth { get; protected set; }
   public float CurrentHealth { get; set; }
-  public int AttackType { get; protected set; } = 1;
   // FIXME: Управление зарядами скиллов
   public int SkillCharges { get; protected set; } = 3;
 
@@ -53,6 +52,7 @@ public class Unit : MonoBehaviour {
   public bool InSquad { get; set; } = true;
 
   protected void Awake() {
+    Equip = transform.GetComponent<UnitEquipment>();
     if (!IsDead && CurrentHealth <= 0) CurrentHealth = TotalHealth;
   }
 
@@ -66,7 +66,6 @@ public class Unit : MonoBehaviour {
     UnitCollider = transform.GetComponent<CapsuleCollider>();
     Ui = transform.GetComponent<UnitUI>();
     Animator = transform.GetComponent<UnitAnimator>();
-    Equip = transform.GetComponent<UnitEquipment>();
     Effects = transform.GetComponent<UnitEffects>();
     SetMovePoints();
 
@@ -87,7 +86,7 @@ public class Unit : MonoBehaviour {
   }
 
   private void SetMovePoints() {
-    float result = defaultMovePoints;
+    float result = DefaultMovePoints;
     Equipment[] unitEquip = { Equip.primaryWeapon, Equip.secondaryWeapon, Equip.shield, Equip.armor };
 
     foreach (Equipment item in unitEquip) {
@@ -158,7 +157,7 @@ public class Unit : MonoBehaviour {
 
     if (!successAttack) Target.Animator.Dodge();
 
-    Animator.SetAttackType(AttackType);
+    Animator.SetAttackType(Equip.primaryWeapon.attackType);
     Animator.Attack();
   }
 
@@ -169,7 +168,7 @@ public class Unit : MonoBehaviour {
     Vector3 dirToTarget = (TargetObject.transform.position - transform.position).normalized;
     await Animator.RotateTowards(dirToTarget);
 
-    Animator.SetAttackType(AttackType);
+    Animator.SetAttackType(Equip.primaryWeapon.attackType);
     Animator.Attack();
   }
 
@@ -252,11 +251,16 @@ public class Unit : MonoBehaviour {
     UnitEquipment equipment = transform.GetComponent<UnitEquipment>();
 
     // FIXME: Добавить все сериализуемые поля
+    // FIXME: Возможно надо убрать IsDead
     return new UnitData {
       prefabId = prefabId,
       currentHealth = health,
       isDead = IsDead,
       inSquad = InSquad,
+      strength = Strength,
+      dexterity = Dexterity,
+      intelligence = Intelligence,
+      level = Level,
       primaryWeapon = equipment.primaryWeapon,
       secondaryWeapon = equipment.secondaryWeapon,
       shield = equipment.shield,
@@ -270,6 +274,10 @@ public class Unit : MonoBehaviour {
     CurrentHealth = data.currentHealth;
     IsDead = data.isDead;
     InSquad = data.inSquad;
+    Strength = data.strength;
+    Dexterity = data.dexterity;
+    Intelligence = data.intelligence;
+    Level = data.level;
     equipment.primaryWeapon = data.primaryWeapon;
     equipment.secondaryWeapon = data.secondaryWeapon;
     equipment.shield = data.shield;

@@ -14,14 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 3
   itemName: Iron short sword
-  icon: {fileID: 21300000, guid: e2545fc3403b736409828b3304ec8c45, type: 3}
   type: 0
   weight: 0
+  effect: {fileID: 0}
+  skill: {fileID: 0}
+  icon: {fileID: 21300000, guid: e2545fc3403b736409828b3304ec8c45, type: 3}
   damage: 5
   critModifier: 2
   armorPenetration: 0
   effectChance: 10
   range: 1
+  attackType: 2
   prefab: {fileID: 8078070449173333099, guid: 4d3629c5a46a2ed4087228f9908494d4, type: 3}
-  onHitEffect: {fileID: 11400000, guid: 19ac65e2e41cb3c40bff7534d5e20d42, type: 2}
   damageType: 1

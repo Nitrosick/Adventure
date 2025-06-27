@@ -11,9 +11,8 @@ public class Bandit : Unit
     Type = UnitType.Melee;
     TotalHealth = 20f;
     MoveSpeed = 3f;
-    defaultMovePoints = 6;
+    DefaultMovePoints = 6;
     Initiative = 6;
     Priority = 12;
-    AttackType = 2;
   }
 }

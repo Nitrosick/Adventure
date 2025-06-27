@@ -15,7 +15,7 @@ public class Crossbowman : Unit
     Type = UnitType.Range;
     TotalHealth = 20f;
     MoveSpeed = 3f;
-    defaultMovePoints = 5;
+    DefaultMovePoints = 5;
     Initiative = 4;
     Priority = 15;
   }

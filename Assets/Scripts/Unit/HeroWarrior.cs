@@ -13,7 +13,7 @@ public class HeroWarrior : Unit {
     Type = UnitType.Melee;
     TotalHealth = 40f;
     MoveSpeed = 3f;
-    defaultMovePoints = 6;
+    DefaultMovePoints = 6;
     Initiative = 7;
     Priority = 6;
   }
