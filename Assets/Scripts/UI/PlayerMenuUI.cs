@@ -97,6 +97,7 @@ public class PlayerMenuUI : MonoBehaviour {
     navUnits.onClick.AddListener(SelectUnitsTab);
     navInventory.onClick.AddListener(SelectInventoryTab);
     unitInSquad.onClick.AddListener(SwitchUnitInSquad);
+    unitDismiss.onClick.AddListener(DismissConfirmation);
   }
 
   private async void Start() {
@@ -124,6 +125,7 @@ public class PlayerMenuUI : MonoBehaviour {
     navUnits.onClick.RemoveListener(SelectUnitsTab);
     navInventory.onClick.RemoveListener(SelectInventoryTab);
     unitInSquad.onClick.RemoveListener(SwitchUnitInSquad);
+    unitDismiss.onClick.RemoveListener(DismissConfirmation);
   }
 
   public static void Switch() {
@@ -201,6 +203,9 @@ public class PlayerMenuUI : MonoBehaviour {
 
     Unit[] units = Player.Instance.Army.Units
       .Where(u => !u.IsHero).ToArray();
+
+    if (units.Length <= 1) unitDismiss.interactable = false;
+    else unitDismiss.interactable = true;
 
     foreach (Unit unit in units) {
       GameObject slot = Instantiate(Instance.menuSlotPrefab, leftSlots);
@@ -308,16 +313,22 @@ public class PlayerMenuUI : MonoBehaviour {
   }
 
   private static void SwitchUnitInSquad() {
-    Player.Instance.Army.SwitchUnitInSquad(selectedUnit);
+    selectedUnit.InSquad = false;
     inSquadMark.SetActive(selectedUnit.InSquad);
     if (selectedSlot != null) selectedSlot.SwitchActiveFrame();
   }
 
-  // public static void DisableUI() {
-  //   button.interactable = false;
-  // }
+  private static void DismissConfirmation() {
+    Dialog.Confirmation(
+      DismissUnit,
+      "Unit dismissing",
+      "Are you sure you want to dismiss this unit?\nIt will become a regular villager and lose all accumulated levels.\nIts equipment will be moved to the player's inventory."
+    );
+  }
 
-  // public static void EnableUI() {
-  //   button.interactable = true;
-  // }
+  private static void DismissUnit(bool accepted) {
+    if (!accepted) return;
+    Player.Instance.Army.DeleteUnit(selectedUnit);
+    SelectUnitsTab();
+  }
 }
