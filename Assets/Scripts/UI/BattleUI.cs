@@ -151,10 +151,10 @@ public class BattleUI : MonoBehaviour {
       totalHp.ToString()
     );
     unitStats.text = string.Format(
-      "<color=#F61010>{0}</color> / <color=#498500>{1}</color> / <color=#2B8EF3>{2}</color>",
-      stats[0].ToString(),
-      stats[1].ToString(),
-      stats[2].ToString()
+      "<color=#F61010>{0}</color> / <color=#81D11F>{1}</color> / <color=#2B8EF3>{2}</color>",
+      stats[0],
+      stats[1],
+      stats[2]
     );
     unitMP.text = mp.ToString();
     unitDamage.text = damage.ToString();
@@ -164,7 +164,7 @@ public class BattleUI : MonoBehaviour {
     string effectsText = "Effects";
     foreach (EffectInstance effect in effects) {
       if (effect.effectData.isNegative) effectsText += "\n<color=#F61010>" + effect.effectData.effectName + "</color>";
-      else effectsText += "\n<color=#498500>" + effect.effectData.effectName + "</color>";
+      else effectsText += "\n<color=#81D11F>" + effect.effectData.effectName + "</color>";
     }
     unitEffects.text = effectsText;
   }

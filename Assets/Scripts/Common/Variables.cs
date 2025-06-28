@@ -12,7 +12,7 @@ Colors
 ------
 Main blue: #2B8EF3 / #174E87
 Negative: #F61010 / #781010
-Positive: #498500
+Positive: #81D11F
 Warning: #EFBF0D
 Inactive: #A0A0A0
 

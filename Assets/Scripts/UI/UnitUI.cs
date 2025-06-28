@@ -14,7 +14,7 @@ public class UnitUI : MonoBehaviour {
 
   private readonly Dictionary<PopupType, string> PopupColors = new() {
     { PopupType.Negative, "#F61010" },
-    { PopupType.Positive, "#498500" },
+    { PopupType.Positive, "#81D11F" },
     { PopupType.Crit, "#EFBF0D" },
     { PopupType.Neutral, "#FFFFFF" },
     { PopupType.Inactive, "#A0A0A0" }

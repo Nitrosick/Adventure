@@ -24,6 +24,15 @@ public class PlayerMenuUI : MonoBehaviour {
   private static TextMeshProUGUI leftSlotsTitle;
   private static TextMeshProUGUI rightSlotsTitle;
 
+  // Progress
+  private static Transform playerProgress;
+  private static TextMeshProUGUI playerXpValue;
+  private static RectTransform playerXpBar;
+  private static RectTransform playerXpBarFill;
+  private static TextMeshProUGUI playerFameValue;
+  private static RectTransform playerFameBar;
+  private static RectTransform playerFameBarFill;
+
   // Info
   private static TextMeshProUGUI infoName;
   private static TextMeshProUGUI infoLevel;
@@ -67,6 +76,15 @@ public class PlayerMenuUI : MonoBehaviour {
     rightSlots = menu.Find("Left/Blocks/Right/Slots/Viewport/Content").GetComponent<RectTransform>();
     leftSlotsTitle = menu.Find("Left/Blocks/Left/Title").GetComponent<TextMeshProUGUI>();
     rightSlotsTitle = menu.Find("Left/Blocks/Right/Title").GetComponent<TextMeshProUGUI>();
+
+    playerProgress = menu.Find("Left/Blocks/Left/PlayerProgress").GetComponent<Transform>();
+    Transform progressContent = playerProgress.Find("Viewport/Content").GetComponent<Transform>();
+    playerXpValue = progressContent.Find("Experience/Value").GetComponent<TextMeshProUGUI>();
+    playerXpBar = progressContent.Find("ExperienceBar").GetComponent<RectTransform>();
+    playerXpBarFill = progressContent.Find("ExperienceBar/Fill").GetComponent<RectTransform>();
+    playerFameValue = progressContent.Find("Fame/Value").GetComponent<TextMeshProUGUI>();
+    playerFameBar = progressContent.Find("FameBar").GetComponent<RectTransform>();
+    playerFameBarFill = progressContent.Find("FameBar/Fill").GetComponent<RectTransform>();
 
     infoName = info.Find("Head/Data/Name").GetComponent<TextMeshProUGUI>();
     infoLevel = info.Find("Head/Data/Level").GetComponent<TextMeshProUGUI>();
@@ -117,7 +135,9 @@ public class PlayerMenuUI : MonoBehaviour {
     infoStrength != null && infoDexterity != null && infoIntelligence != null &&
     infoDescription != null && infoUnitParams != null && infoUnitMp != null &&
     infoUnitDamage != null && infoUnitDefense != null && infoUnitRange != null &&
-    inSquadMark != null;
+    inSquadMark != null && playerProgress != null && playerXpValue != null &&
+    playerXpBar != null && playerXpBarFill != null && playerFameValue != null &&
+    playerFameBar != null && playerFameBarFill != null;
   }
 
   private void OnDestroy() {
@@ -141,6 +161,8 @@ public class PlayerMenuUI : MonoBehaviour {
     navInventory.interactable = true;
     foreach (Transform child in leftSlots) Destroy(child.gameObject);
     foreach (Transform child in rightSlots) Destroy(child.gameObject);
+    ShowSlots(false);
+    playerProgress.gameObject.SetActive(false);
 
     leftSlotsTitle.text = "";
     rightSlotsTitle.text = "";
@@ -163,7 +185,7 @@ public class PlayerMenuUI : MonoBehaviour {
     selectedUnit = null;
   }
 
-  private void UpdateSlotsSize(RectTransform slots) {
+  private static void UpdateSlotsSize(RectTransform slots) {
     GridLayoutGroup gridGroup = slots.GetComponent<GridLayoutGroup>();
 
     float totalWidth = slots.rect.width - scrollWidth * 2;
@@ -177,6 +199,13 @@ public class PlayerMenuUI : MonoBehaviour {
     }
   }
 
+  private static void ShowSlots(bool on) {
+    GameObject l = menu.Find("Left/Blocks/Left/Slots").gameObject;
+    GameObject r = menu.Find("Left/Blocks/Right/Slots").gameObject;
+    l.SetActive(on);
+    r.SetActive(on);
+  }
+
   private static void SelectHeroTab() {
     Clear();
     navHero.interactable = false;
@@ -188,9 +217,25 @@ public class PlayerMenuUI : MonoBehaviour {
     infoLevel.text = "Level: " + player.Level.ToString();
     Unit hero = player.Army.Units.FirstOrDefault(u => u.IsHero);
     if (hero == null) return;
+
     infoEquipment.gameObject.SetActive(true);
     infoCoreStats.SetActive(true);
     infoUnitParams.SetActive(true);
+    playerProgress.gameObject.SetActive(true);
+
+    playerXpValue.text = string.Format(
+      "{0} / {1} (Level {2})",
+      player.Experience,
+      player.XPForNextLevel,
+      player.Level
+    );
+    playerFameValue.text = player.Fame.ToString();
+
+    float barsWidth = Mathf.Abs(playerXpBar.rect.width) - 8f;
+    float xpPercent = Mathf.Clamp01((float)player.Experience / player.XPForNextLevel);
+    playerXpBarFill.sizeDelta = new Vector2(barsWidth * xpPercent, playerXpBarFill.sizeDelta.y);
+    float famePercent = Mathf.Clamp01((float)player.Fame / player.MaxFame);
+    playerFameBarFill.sizeDelta = new Vector2(barsWidth * famePercent, playerFameBarFill.sizeDelta.y);
 
     ShowInfo(hero);
   }
@@ -198,6 +243,7 @@ public class PlayerMenuUI : MonoBehaviour {
   public static void SelectUnitsTab() {
     Clear();
     navUnits.interactable = false;
+    ShowSlots(true);
     leftSlotsTitle.text = "Army";
     rightSlotsTitle.text = "Workers";
 
@@ -226,6 +272,7 @@ public class PlayerMenuUI : MonoBehaviour {
   private static void SelectInventoryTab() {
     Clear();
     navInventory.interactable = false;
+    ShowSlots(true);
     leftSlotsTitle.text = "Equipment";
     rightSlotsTitle.text = "Key items";
 
@@ -290,7 +337,7 @@ public class PlayerMenuUI : MonoBehaviour {
     }
 
     infoStrength.text = "<color=#F61010>" + unit.Strength.ToString() + "</color>";
-    infoDexterity.text = "<color=#498500>" + unit.Dexterity.ToString() + "</color>";
+    infoDexterity.text = "<color=#81D11F>" + unit.Dexterity.ToString() + "</color>";
     infoIntelligence.text = "<color=#2B8EF3>" + unit.Intelligence.ToString() + "</color>";
     infoDescription.text = unit.Description;
 
@@ -313,7 +360,7 @@ public class PlayerMenuUI : MonoBehaviour {
   }
 
   private static void SwitchUnitInSquad() {
-    selectedUnit.InSquad = false;
+    selectedUnit.InSquad = !selectedUnit.InSquad;
     inSquadMark.SetActive(selectedUnit.InSquad);
     if (selectedSlot != null) selectedSlot.SwitchActiveFrame();
   }

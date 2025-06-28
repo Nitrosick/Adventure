@@ -14,6 +14,9 @@ public class Player : MonoBehaviour {
   public int Fame { get; private set; }
   public int Level { get; private set; } = 1;
 
+  public int MaxFame { get; private set; } = 10000;
+  public int MaxLevel { get; private set; } = 30;
+
   private void Awake() {
     Instance = this;
     move = transform.GetComponent<PlayerMove>();
@@ -57,7 +60,7 @@ public class Player : MonoBehaviour {
     StateManager.experience = Experience;
   }
 
-  private int XPForNextLevel => GetXPForLevel(Level + 1);
+  public int XPForNextLevel => GetXPForLevel(Level);
 
   private int GetXPForLevel(int lvl) {
     float baseXP = 50f;
@@ -77,7 +80,7 @@ public class Player : MonoBehaviour {
   }
 
   public void SetFame(int value) {
-    // FIXME: Условия прибавления и отнимания признания + Рассчет MaxVillagers
+    // FIXME: Рассчет MaxVillagers
     Fame += value;
     if (Fame < 0) Fame = 0;
     StateManager.fame = Fame;
