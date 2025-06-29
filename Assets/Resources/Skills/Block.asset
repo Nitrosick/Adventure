@@ -13,7 +13,12 @@ MonoBehaviour:
   m_Name: Block
   m_EditorClassIdentifier: 
   displayName: Block
+  description: The unit raises a shield in front of itself and ends its turn. This
+    grants it a namesake effect that allows it to reflect flying projectiles and
+    block some physical damage.
   skillName: 0
   skillButton: {fileID: 7219696775182885065, guid: 0080bb2f0480d30448f9a71653666868,
     type: 3}
   skillPhases: 0000000001000000
+  uiIcon: {fileID: 21300000, guid: 7317b4785be6ffb4cb1dbe470a491eec, type: 3}
+  uiIconColor: {r: 0.8784314, g: 0.76862746, b: 0.5411765, a: 1}

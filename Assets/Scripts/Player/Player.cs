@@ -5,6 +5,7 @@ public class Player : MonoBehaviour {
   public static Player Instance;
   private PlayerMove move;
   public PlayerArmy Army { get; private set; }
+  public PlayerInventory Inventory { get; private set; }
 
   public int Gold { get; private set; }
   public int[] Resources { get; private set; } = { 0, 0, 0 };
@@ -21,8 +22,9 @@ public class Player : MonoBehaviour {
     Instance = this;
     move = transform.GetComponent<PlayerMove>();
     Army = transform.GetComponent<PlayerArmy>();
+    Inventory = transform.GetComponent<PlayerInventory>();
 
-    if (move == null || Army == null) {
+    if (move == null || Army == null || Inventory == null) {
       Debug.LogError("Player components initialization error");
     }
   }

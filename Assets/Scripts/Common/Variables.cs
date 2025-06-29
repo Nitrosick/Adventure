@@ -106,3 +106,10 @@ public enum EquipmentWeight {
   Medium,
   Heavy
 }
+
+public enum EquipmentRarity {
+  Common,
+  Rare,
+  Epic,
+  Legendary
+}

@@ -14,8 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 5
   itemName: Woodman's axe
+  description: A simple woodcutter's axe. Besides its direct purpose, it can be used
+    in combat or to break objects on the battlefield. The weapon handles heavy enemy
+    armor quite well.
   type: 0
   weight: 0
+  rarity: 0
   effect: {fileID: 0}
   skill: {fileID: 0}
   icon: {fileID: 21300000, guid: 7085738a3de2182428fc221c8539454c, type: 3}
@@ -24,5 +28,6 @@ MonoBehaviour:
   armorPenetration: 20
   effectChance: 0
   range: 1
+  attackType: 1
   prefab: {fileID: 4488025506255365708, guid: a7ad7d5fd73867246ad827f397cf5480, type: 3}
   damageType: 3

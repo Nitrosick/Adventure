@@ -14,14 +14,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 4
   itemName: Guard's crossbow
-  icon: {fileID: 21300000, guid: e751a46b98115114da90c97f8504cfcc, type: 3}
+  description: This is a rather heavy, but devastating weapon. It is inconvenient
+    to move with, so it is most often used from a protected firing position. It fires
+    projectiles in a straight trajectory, so be careful when allied forces are in
+    front of the target.
   type: 1
   weight: 1
+  rarity: 0
+  effect: {fileID: 0}
+  skill: {fileID: 0}
+  icon: {fileID: 21300000, guid: e751a46b98115114da90c97f8504cfcc, type: 3}
   damage: 6
   critModifier: 1.5
   armorPenetration: 0
   effectChance: 0
   range: 5
+  attackType: 1
   prefab: {fileID: 6922152233134387554, guid: 63cf8d8150182d6498e206770fcb5447, type: 3}
-  onHitEffect: {fileID: 0}
   damageType: 2

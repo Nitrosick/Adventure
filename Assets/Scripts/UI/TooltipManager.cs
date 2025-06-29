@@ -13,6 +13,7 @@ public class TooltipManager : MonoBehaviour {
   }
 
   public void ShowTooltip(string message) {
+    if (message == null || message == "") return;
     tooltipText.text = message;
     tooltipPanel.SetActive(true);
   }

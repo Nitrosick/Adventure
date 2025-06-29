@@ -67,6 +67,13 @@ public class UnitEquipment : MonoBehaviour {
     return result;
   }
 
+  public List<Equipment> GetEquipmentList() {
+    List<Equipment> result = new() { primaryWeapon, armor };
+    if (secondaryWeapon != null) result.Add(secondaryWeapon);
+    if (shield != null) result.Add(shield);
+    return result;
+  }
+
   public bool HasAttackPhaseSkills() {
     if (unit.SkillCharges <= 0) return false;
     foreach (Skill skill in GetSkills()) {

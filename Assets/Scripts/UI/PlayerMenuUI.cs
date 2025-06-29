@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TMPro;
@@ -38,6 +39,7 @@ public class PlayerMenuUI : MonoBehaviour {
   private static TextMeshProUGUI infoLevel;
   private static TextMeshProUGUI infoType;
   private static GameObject inSquadMark;
+  private static GameObject equippedMark;
   private static Transform infoAvatar;
   private static GameObject infoActions;
   private static Button unitInSquad;
@@ -54,6 +56,22 @@ public class PlayerMenuUI : MonoBehaviour {
   private static TextMeshProUGUI infoUnitDamage;
   private static TextMeshProUGUI infoUnitDefense;
   private static TextMeshProUGUI infoUnitRange;
+  private static GameObject infoWeaponParams;
+  private static TextMeshProUGUI infoWeaponDamage;
+  private static TextMeshProUGUI infoWeaponDamageType;
+  private static TextMeshProUGUI infoWeaponRange;
+  private static TextMeshProUGUI infoWeaponCritMod;
+  private static TextMeshProUGUI infoWeaponArmorPen;
+  private static GameObject infoArmorParams;
+  private static TextMeshProUGUI infoArmorDefense;
+  private static GameObject infoEquipParams;
+  private static TextMeshProUGUI infoEquipWeight;
+  private static TextMeshProUGUI infoEquipEffect;
+  private static Image infoEquipEffectIcon;
+  private static TooltipTrigger effectTip;
+  private static TextMeshProUGUI infoEquipSkill;
+  private static Image infoEquipSkillIcon;
+  private static TooltipTrigger skillTip;
 
   private static readonly int slotColumns = 5;
   private static readonly float slotsGap = 4f;
@@ -90,6 +108,7 @@ public class PlayerMenuUI : MonoBehaviour {
     infoLevel = info.Find("Head/Data/Level").GetComponent<TextMeshProUGUI>();
     infoType = info.Find("Head/Data/Type").GetComponent<TextMeshProUGUI>();
     inSquadMark = info.Find("Head/Data/InSquadMark").gameObject;
+    equippedMark = info.Find("Head/Data/EquippedMark").gameObject;
     infoAvatar = info.Find("Head/Image").GetComponent<Transform>();
     infoActions = info.Find("Actions").gameObject;
     unitInSquad = info.Find("Actions/Activity").GetComponent<Button>();
@@ -106,6 +125,22 @@ public class PlayerMenuUI : MonoBehaviour {
     infoUnitDamage = info.Find("UnitParameters/Damage/Value").GetComponent<TextMeshProUGUI>();
     infoUnitDefense = info.Find("UnitParameters/Defense/Value").GetComponent<TextMeshProUGUI>();
     infoUnitRange = info.Find("UnitParameters/Range/Value").GetComponent<TextMeshProUGUI>();
+    infoWeaponParams = info.Find("WeaponParameters").gameObject;
+    infoWeaponDamage = info.Find("WeaponParameters/Damage/Value").GetComponent<TextMeshProUGUI>();
+    infoWeaponDamageType = info.Find("WeaponParameters/DamageType/Value").GetComponent<TextMeshProUGUI>();
+    infoWeaponRange = info.Find("WeaponParameters/Range/Value").GetComponent<TextMeshProUGUI>();
+    infoWeaponCritMod = info.Find("WeaponParameters/CritModifier/Value").GetComponent<TextMeshProUGUI>();
+    infoWeaponArmorPen = info.Find("WeaponParameters/ArmorPen/Value").GetComponent<TextMeshProUGUI>();
+    infoArmorParams = info.Find("ArmorParameters").gameObject;
+    infoArmorDefense = info.Find("ArmorParameters/Defense/Value").GetComponent<TextMeshProUGUI>();
+    infoEquipParams = info.Find("EquipParameters").gameObject;
+    infoEquipWeight = info.Find("EquipParameters/Weight/Value").GetComponent<TextMeshProUGUI>();
+    infoEquipEffect = info.Find("EquipParameters/Effect/Value/Text").GetComponent<TextMeshProUGUI>();
+    infoEquipEffectIcon = info.Find("EquipParameters/Effect/Value/Icon").GetComponent<Image>();
+    effectTip = info.Find("EquipParameters/Effect/Value").GetComponent<TooltipTrigger>();
+    infoEquipSkill = info.Find("EquipParameters/Skill/Value/Text").GetComponent<TextMeshProUGUI>();
+    infoEquipSkillIcon = info.Find("EquipParameters/Skill/Value/Icon").GetComponent<Image>();
+    skillTip = info.Find("EquipParameters/Skill/Value").GetComponent<TooltipTrigger>();
 
     if (!ComponentsInitialized()) {
       Debug.LogError("Player menu UI components initialization error");
@@ -137,7 +172,13 @@ public class PlayerMenuUI : MonoBehaviour {
     infoUnitDamage != null && infoUnitDefense != null && infoUnitRange != null &&
     inSquadMark != null && playerProgress != null && playerXpValue != null &&
     playerXpBar != null && playerXpBarFill != null && playerFameValue != null &&
-    playerFameBar != null && playerFameBarFill != null;
+    playerFameBar != null && playerFameBarFill != null && equippedMark != null &&
+    infoWeaponParams != null && infoWeaponDamage != null && infoWeaponDamageType != null &&
+    infoWeaponRange != null && infoWeaponCritMod != null && infoWeaponArmorPen != null &&
+    infoEquipParams != null && infoEquipWeight != null && infoEquipEffect != null &&
+    infoEquipSkill != null && infoArmorParams != null && infoArmorDefense != null &&
+    infoEquipEffectIcon != null && infoEquipSkillIcon != null && effectTip != null &&
+    skillTip != null;
   }
 
   private void OnDestroy() {
@@ -172,10 +213,14 @@ public class PlayerMenuUI : MonoBehaviour {
     infoDescription.text = "";
 
     inSquadMark.SetActive(false);
+    equippedMark.SetActive(false);
     infoActions.SetActive(false);
     infoEquipment.gameObject.SetActive(false);
     infoCoreStats.SetActive(false);
     infoUnitParams.SetActive(false);
+    infoWeaponParams.SetActive(false);
+    infoArmorParams.SetActive(false);
+    infoEquipParams.SetActive(false);
 
     foreach (Transform child in infoAvatar) {
       Destroy(child.gameObject);
@@ -206,7 +251,7 @@ public class PlayerMenuUI : MonoBehaviour {
     r.SetActive(on);
   }
 
-  private static void SelectHeroTab() {
+  private async static void SelectHeroTab() {
     Clear();
     navHero.interactable = false;
     leftSlotsTitle.text = "Progress";
@@ -237,10 +282,11 @@ public class PlayerMenuUI : MonoBehaviour {
     float famePercent = Mathf.Clamp01((float)player.Fame / player.MaxFame);
     playerFameBarFill.sizeDelta = new Vector2(barsWidth * famePercent, playerFameBarFill.sizeDelta.y);
 
+    await Task.Yield();
     ShowInfo(hero);
   }
 
-  public static void SelectUnitsTab() {
+  public async static void SelectUnitsTab() {
     Clear();
     navUnits.interactable = false;
     ShowSlots(true);
@@ -265,31 +311,52 @@ public class PlayerMenuUI : MonoBehaviour {
     infoCoreStats.SetActive(true);
     infoUnitParams.SetActive(true);
 
-    if (units.Length > 0) ShowInfo(units[0]);
+    await Task.Yield();
     selectedSlot = leftSlots.GetChild(0).GetComponent<MenuSlot>();
+    if (selectedSlot != null) ShowInfo(selectedSlot.UnitItem);
   }
 
-  private static void SelectInventoryTab() {
+  private async static void SelectInventoryTab() {
     Clear();
     navInventory.interactable = false;
     ShowSlots(true);
     leftSlotsTitle.text = "Equipment";
     rightSlotsTitle.text = "Key items";
 
-    RenderEmptySlots(leftSlots, 0);
+    List<Equipment> unequipped = Player.Instance.Inventory.Equip;
+    List<Equipment> equipped = new() { };
+
+    foreach (Unit unit in Player.Instance.Army.Units) equipped.AddRange(unit.Equip.GetEquipmentList());
+
+    foreach (Equipment e in unequipped) {
+      GameObject slot = Instantiate(Instance.menuSlotPrefab, leftSlots);
+      slot.GetComponent<MenuSlot>().Init(e);
+    }
+
+    foreach (Equipment e in equipped) {
+      GameObject slot = Instantiate(Instance.menuSlotPrefab, leftSlots);
+      MenuSlot slotScript = slot.GetComponent<MenuSlot>();
+      slotScript.Init(e);
+      slotScript.SwitchActiveMark();
+    }
+
+    RenderEmptySlots(leftSlots, equipped.Count + unequipped.Count);
     RenderEmptySlots(rightSlots, 0);
+    infoEquipParams.SetActive(true);
+
+    await Task.Yield();
+    selectedSlot = leftSlots.GetChild(0).GetComponent<MenuSlot>();
+    if (selectedSlot != null) ShowInfo(selectedSlot.EquipmentItem);
   }
 
   private static void RenderEmptySlots(RectTransform panel, int filled) {
     if (filled == defaultSlotsCount) {
       return;
-    }
-    else if (filled < defaultSlotsCount) {
+    } else if (filled < defaultSlotsCount) {
       for (int i = filled; i < defaultSlotsCount; i++) {
         Instantiate(Instance.menuEmptySlotPrefab, panel);
       }
-    }
-    else {
+    } else {
       int remainder = filled % slotColumns;
       int placeholders = remainder == 0 ? 0 : slotColumns - remainder;
 
@@ -300,9 +367,8 @@ public class PlayerMenuUI : MonoBehaviour {
   }
 
   public static void ShowInfo(Unit unit) {
-    foreach (Transform child in infoAvatar) {
-      Destroy(child.gameObject);
-    }
+    foreach (Transform child in infoAvatar) Destroy(child.gameObject);
+    FrameSlot();
 
     selectedUnit = unit;
     infoName.text = unit.Name;
@@ -356,13 +422,73 @@ public class PlayerMenuUI : MonoBehaviour {
   }
 
   public static void ShowInfo(Equipment equip) {
+    foreach (Transform child in infoAvatar) Destroy(child.gameObject);
+    FrameSlot();
 
+    infoName.text = equip.itemName;
+    infoLevel.text = "Rarity: " + equip.rarity.ToString();
+    infoType.text = "Type: " + equip.type.ToString();
+    equippedMark.SetActive(selectedSlot.ActiveMark.activeSelf);
+
+    GameObject icon = Instantiate(Instance.menuSlotPrefab, infoAvatar);
+    icon.GetComponent<MenuSlot>().Init(equip, true);
+
+    if (equip is Weapon weapon) {
+      infoWeaponParams.SetActive(true);
+      infoArmorParams.SetActive(false);
+
+      infoWeaponDamage.text = weapon.damage.ToString();
+      infoWeaponDamageType.text = weapon.damageType.ToString();
+      infoWeaponRange.text = weapon.range.ToString();
+      infoWeaponCritMod.text = weapon.critModifier.ToString();
+      infoWeaponArmorPen.text = weapon.armorPenetration.ToString() + "%";
+    } else if (equip is Armor armor) {
+      infoArmorParams.SetActive(true);
+      infoWeaponParams.SetActive(false);
+
+      infoArmorDefense.text = armor.defense.ToString();
+    }
+
+    infoEquipWeight.text = equip.weight.ToString();
+    infoDescription.text = equip.description;
+
+    if (equip.effect != null) {
+      infoEquipEffect.text = equip.effect.effectName;
+      infoEquipEffectIcon.gameObject.SetActive(true);
+      infoEquipEffectIcon.sprite = equip.effect.uiIcon;
+      infoEquipEffectIcon.color = equip.effect.uiIconColor;
+      effectTip.message = equip.effect.description;
+    } else {
+      infoEquipEffect.text = "";
+      infoEquipEffectIcon.gameObject.SetActive(false);
+      effectTip.message = "";
+    }
+
+    if (equip.skill != null) {
+      infoEquipSkill.text = equip.skill.displayName;
+      infoEquipSkillIcon.gameObject.SetActive(true);
+      infoEquipSkillIcon.sprite = equip.skill.uiIcon;
+      infoEquipSkillIcon.color = equip.skill.uiIconColor;
+      skillTip.message = equip.skill.description;
+    } else {
+      infoEquipSkill.text = "";
+      infoEquipSkillIcon.gameObject.SetActive(false);
+      skillTip.message = "";
+    }
+  }
+
+  private static void FrameSlot() {
+    MenuSlot[] allSlots = FindObjectsOfType<MenuSlot>();
+    if (allSlots.Length > 0) {
+      foreach (MenuSlot slot in allSlots) slot.SwitchActiveFrame(false);
+      if (selectedSlot != null) selectedSlot.SwitchActiveFrame(true);
+    }
   }
 
   private static void SwitchUnitInSquad() {
     selectedUnit.InSquad = !selectedUnit.InSquad;
     inSquadMark.SetActive(selectedUnit.InSquad);
-    if (selectedSlot != null) selectedSlot.SwitchActiveFrame();
+    if (selectedSlot != null) selectedSlot.SwitchActiveMark();
   }
 
   private static void DismissConfirmation() {

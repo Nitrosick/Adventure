@@ -14,14 +14,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 1
   itemName: Old sword
-  icon: {fileID: 21300000, guid: d0b4cc2057f2d9b4aa230db733619641, type: 3}
+  description: An old iron sword, inherited from your father. It's rusted in places,
+    but it's still a formidable weapon with a high critical damage modifier.
   type: 0
   weight: 0
+  rarity: 0
+  effect: {fileID: 11400000, guid: 19ac65e2e41cb3c40bff7534d5e20d42, type: 2}
+  skill: {fileID: 0}
+  icon: {fileID: 21300000, guid: d0b4cc2057f2d9b4aa230db733619641, type: 3}
   damage: 6
   critModifier: 1.8
   armorPenetration: 0
   effectChance: 7
   range: 1
+  attackType: 1
   prefab: {fileID: 432409815444410632, guid: 6396ad9ff95fbe6489ac7d7f915802e0, type: 3}
-  onHitEffect: {fileID: 11400000, guid: 19ac65e2e41cb3c40bff7534d5e20d42, type: 2}
   damageType: 1

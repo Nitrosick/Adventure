@@ -9,7 +9,10 @@ public class Effect : ScriptableObject {
   public bool cancelAttack;
   public bool isStackable;
   public bool isNegative;
+  [TextArea] public string description;
 
   public DamageType damageType;
   public GameObject icon;
+  public Sprite uiIcon;
+  public Color uiIconColor;
 }
