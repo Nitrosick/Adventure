@@ -33,6 +33,8 @@ public class Unit : MonoBehaviour {
   public UnitType Type { get; protected set; }
   public UnitRelation Relation { get; private set; }
   public BattleReward killReward;
+  public EquipmentType AllowedWeapon { get; protected set; }
+  public bool ShieldIsAllow { get; protected set; } = false;
 
   public int Level { get; protected set; } = 1;
   public int Initiative { get; protected set; }

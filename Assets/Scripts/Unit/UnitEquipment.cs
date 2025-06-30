@@ -74,6 +74,19 @@ public class UnitEquipment : MonoBehaviour {
     return result;
   }
 
+  public void UnequipAll() {
+    List<Equipment> inventory = Player.Instance.Inventory.Equip;
+    inventory.Add(primaryWeapon);
+    inventory.Add(armor);
+    if (secondaryWeapon != null) inventory.Add(secondaryWeapon);
+    if (shield != null) inventory.Add(shield);
+
+    primaryWeapon = null;
+    secondaryWeapon = null;
+    armor = null;
+    shield = null;
+  }
+
   public bool HasAttackPhaseSkills() {
     if (unit.SkillCharges <= 0) return false;
     foreach (Skill skill in GetSkills()) {

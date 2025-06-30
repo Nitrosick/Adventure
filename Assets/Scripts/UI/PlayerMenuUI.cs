@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,7 +11,6 @@ public class PlayerMenuUI : MonoBehaviour {
   public GameObject menuSlotPrefab;
   public GameObject menuEmptySlotPrefab;
   private static Transform menu;
-  private static Transform info;
 
   // Navigation
   private static Button navHero;
@@ -34,57 +32,18 @@ public class PlayerMenuUI : MonoBehaviour {
   private static RectTransform playerFameBar;
   private static RectTransform playerFameBarFill;
 
-  // Info
-  private static TextMeshProUGUI infoName;
-  private static TextMeshProUGUI infoLevel;
-  private static TextMeshProUGUI infoType;
-  private static GameObject inSquadMark;
-  private static GameObject equippedMark;
-  private static Transform infoAvatar;
-  private static GameObject infoActions;
-  private static Button unitInSquad;
-  private static Button unitDismiss;
-  private static Transform infoEquipment;
-  private static GameObject infoCoreStats;
-  private static TextMeshProUGUI infoStrength;
-  private static TextMeshProUGUI infoDexterity;
-  private static TextMeshProUGUI infoIntelligence;
-  private static TextMeshProUGUI infoDescription;
-  private static GameObject infoUnitParams;
-  private static TextMeshProUGUI infoUnitHp;
-  private static TextMeshProUGUI infoUnitMp;
-  private static TextMeshProUGUI infoUnitDamage;
-  private static TextMeshProUGUI infoUnitDefense;
-  private static TextMeshProUGUI infoUnitRange;
-  private static GameObject infoWeaponParams;
-  private static TextMeshProUGUI infoWeaponDamage;
-  private static TextMeshProUGUI infoWeaponDamageType;
-  private static TextMeshProUGUI infoWeaponRange;
-  private static TextMeshProUGUI infoWeaponCritMod;
-  private static TextMeshProUGUI infoWeaponArmorPen;
-  private static GameObject infoArmorParams;
-  private static TextMeshProUGUI infoArmorDefense;
-  private static GameObject infoEquipParams;
-  private static TextMeshProUGUI infoEquipWeight;
-  private static TextMeshProUGUI infoEquipEffect;
-  private static Image infoEquipEffectIcon;
-  private static TooltipTrigger effectTip;
-  private static TextMeshProUGUI infoEquipSkill;
-  private static Image infoEquipSkillIcon;
-  private static TooltipTrigger skillTip;
-
   private static readonly int slotColumns = 5;
   private static readonly float slotsGap = 4f;
   private static readonly float scrollWidth = 15f;
   private static readonly int defaultSlotsCount = 25;
+  private static float slotSize = 0;
 
   public static MenuSlot selectedSlot;
-  private static Unit selectedUnit;
+  public static Unit selectedUnit;
 
   private void Awake() {
     Instance = this;
     menu = transform.Find("PlayerMenu/Panel");
-    info = transform.Find("PlayerMenu/Panel/Right/Viewport/Content");
 
     navHero = menu.Find("Left/Navigation/Hero").GetComponent<Button>();
     navUnits = menu.Find("Left/Navigation/Units").GetComponent<Button>();
@@ -104,44 +63,6 @@ public class PlayerMenuUI : MonoBehaviour {
     playerFameBar = progressContent.Find("FameBar").GetComponent<RectTransform>();
     playerFameBarFill = progressContent.Find("FameBar/Fill").GetComponent<RectTransform>();
 
-    infoName = info.Find("Head/Data/Name").GetComponent<TextMeshProUGUI>();
-    infoLevel = info.Find("Head/Data/Level").GetComponent<TextMeshProUGUI>();
-    infoType = info.Find("Head/Data/Type").GetComponent<TextMeshProUGUI>();
-    inSquadMark = info.Find("Head/Data/InSquadMark").gameObject;
-    equippedMark = info.Find("Head/Data/EquippedMark").gameObject;
-    infoAvatar = info.Find("Head/Image").GetComponent<Transform>();
-    infoActions = info.Find("Actions").gameObject;
-    unitInSquad = info.Find("Actions/Activity").GetComponent<Button>();
-    unitDismiss = info.Find("Actions/Dismiss").GetComponent<Button>();
-    infoEquipment = info.Find("Equipment").GetComponent<Transform>();
-    infoCoreStats = info.Find("CoreStats").gameObject;
-    infoStrength = info.Find("CoreStats/Strength/Value").GetComponent<TextMeshProUGUI>();
-    infoDexterity = info.Find("CoreStats/Dexterity/Value").GetComponent<TextMeshProUGUI>();
-    infoIntelligence = info.Find("CoreStats/Intelligence/Value").GetComponent<TextMeshProUGUI>();
-    infoDescription = info.Find("Description").GetComponent<TextMeshProUGUI>();
-    infoUnitParams = info.Find("UnitParameters").gameObject;
-    infoUnitHp = info.Find("UnitParameters/HP/Value").GetComponent<TextMeshProUGUI>();
-    infoUnitMp = info.Find("UnitParameters/MP/Value").GetComponent<TextMeshProUGUI>();
-    infoUnitDamage = info.Find("UnitParameters/Damage/Value").GetComponent<TextMeshProUGUI>();
-    infoUnitDefense = info.Find("UnitParameters/Defense/Value").GetComponent<TextMeshProUGUI>();
-    infoUnitRange = info.Find("UnitParameters/Range/Value").GetComponent<TextMeshProUGUI>();
-    infoWeaponParams = info.Find("WeaponParameters").gameObject;
-    infoWeaponDamage = info.Find("WeaponParameters/Damage/Value").GetComponent<TextMeshProUGUI>();
-    infoWeaponDamageType = info.Find("WeaponParameters/DamageType/Value").GetComponent<TextMeshProUGUI>();
-    infoWeaponRange = info.Find("WeaponParameters/Range/Value").GetComponent<TextMeshProUGUI>();
-    infoWeaponCritMod = info.Find("WeaponParameters/CritModifier/Value").GetComponent<TextMeshProUGUI>();
-    infoWeaponArmorPen = info.Find("WeaponParameters/ArmorPen/Value").GetComponent<TextMeshProUGUI>();
-    infoArmorParams = info.Find("ArmorParameters").gameObject;
-    infoArmorDefense = info.Find("ArmorParameters/Defense/Value").GetComponent<TextMeshProUGUI>();
-    infoEquipParams = info.Find("EquipParameters").gameObject;
-    infoEquipWeight = info.Find("EquipParameters/Weight/Value").GetComponent<TextMeshProUGUI>();
-    infoEquipEffect = info.Find("EquipParameters/Effect/Value/Text").GetComponent<TextMeshProUGUI>();
-    infoEquipEffectIcon = info.Find("EquipParameters/Effect/Value/Icon").GetComponent<Image>();
-    effectTip = info.Find("EquipParameters/Effect/Value").GetComponent<TooltipTrigger>();
-    infoEquipSkill = info.Find("EquipParameters/Skill/Value/Text").GetComponent<TextMeshProUGUI>();
-    infoEquipSkillIcon = info.Find("EquipParameters/Skill/Value/Icon").GetComponent<Image>();
-    skillTip = info.Find("EquipParameters/Skill/Value").GetComponent<TooltipTrigger>();
-
     if (!ComponentsInitialized()) {
       Debug.LogError("Player menu UI components initialization error");
     }
@@ -149,8 +70,6 @@ public class PlayerMenuUI : MonoBehaviour {
     navHero.onClick.AddListener(SelectHeroTab);
     navUnits.onClick.AddListener(SelectUnitsTab);
     navInventory.onClick.AddListener(SelectInventoryTab);
-    unitInSquad.onClick.AddListener(SwitchUnitInSquad);
-    unitDismiss.onClick.AddListener(DismissConfirmation);
   }
 
   private async void Start() {
@@ -158,35 +77,21 @@ public class PlayerMenuUI : MonoBehaviour {
     await Task.Delay(10);
     UpdateSlotsSize(leftSlots);
     UpdateSlotsSize(rightSlots);
+    PlayerMenuUIInfo.UpdateSlotsSize(slotSize);
   }
 
   private static bool ComponentsInitialized() {
-    return menu != null && info != null && leftSlots != null &&
-    rightSlots != null && leftSlotsTitle != null && rightSlotsTitle != null &&
-    navHero != null && navUnits != null && navInventory != null &&
-    infoName != null && infoLevel != null && infoType != null &&
-    infoAvatar != null && infoActions != null && unitInSquad != null &&
-    unitDismiss != null && infoEquipment != null && infoCoreStats != null &&
-    infoStrength != null && infoDexterity != null && infoIntelligence != null &&
-    infoDescription != null && infoUnitParams != null && infoUnitMp != null &&
-    infoUnitDamage != null && infoUnitDefense != null && infoUnitRange != null &&
-    inSquadMark != null && playerProgress != null && playerXpValue != null &&
-    playerXpBar != null && playerXpBarFill != null && playerFameValue != null &&
-    playerFameBar != null && playerFameBarFill != null && equippedMark != null &&
-    infoWeaponParams != null && infoWeaponDamage != null && infoWeaponDamageType != null &&
-    infoWeaponRange != null && infoWeaponCritMod != null && infoWeaponArmorPen != null &&
-    infoEquipParams != null && infoEquipWeight != null && infoEquipEffect != null &&
-    infoEquipSkill != null && infoArmorParams != null && infoArmorDefense != null &&
-    infoEquipEffectIcon != null && infoEquipSkillIcon != null && effectTip != null &&
-    skillTip != null;
+    return menu != null && leftSlots != null && rightSlots != null &&
+    leftSlotsTitle != null && rightSlotsTitle != null && navHero != null &&
+    navUnits != null && navInventory != null && playerProgress != null &&
+    playerXpValue != null && playerXpBar != null && playerXpBarFill != null &&
+    playerFameValue != null && playerFameBar != null && playerFameBarFill != null;
   }
 
   private void OnDestroy() {
     navHero.onClick.RemoveListener(SelectHeroTab);
     navUnits.onClick.RemoveListener(SelectUnitsTab);
     navInventory.onClick.RemoveListener(SelectInventoryTab);
-    unitInSquad.onClick.RemoveListener(SwitchUnitInSquad);
-    unitDismiss.onClick.RemoveListener(DismissConfirmation);
   }
 
   public static void Switch() {
@@ -207,24 +112,7 @@ public class PlayerMenuUI : MonoBehaviour {
 
     leftSlotsTitle.text = "";
     rightSlotsTitle.text = "";
-    infoName.text = "-";
-    infoLevel.text = "Level: -";
-    infoType.text = "Type: -";
-    infoDescription.text = "";
-
-    inSquadMark.SetActive(false);
-    equippedMark.SetActive(false);
-    infoActions.SetActive(false);
-    infoEquipment.gameObject.SetActive(false);
-    infoCoreStats.SetActive(false);
-    infoUnitParams.SetActive(false);
-    infoWeaponParams.SetActive(false);
-    infoArmorParams.SetActive(false);
-    infoEquipParams.SetActive(false);
-
-    foreach (Transform child in infoAvatar) {
-      Destroy(child.gameObject);
-    }
+    PlayerMenuUIInfo.Clear();
 
     selectedSlot = null;
     selectedUnit = null;
@@ -232,16 +120,10 @@ public class PlayerMenuUI : MonoBehaviour {
 
   private static void UpdateSlotsSize(RectTransform slots) {
     GridLayoutGroup gridGroup = slots.GetComponent<GridLayoutGroup>();
-
     float totalWidth = slots.rect.width - scrollWidth * 2;
     float totalSpacing = slotsGap * (slotColumns - 1) + slotsGap * 2;
-    float cellSize = (totalWidth - totalSpacing) / slotColumns;
-
-    gridGroup.cellSize = new Vector2(cellSize, cellSize);
-
-    foreach (RectTransform slot in infoEquipment) {
-      slot.sizeDelta = new Vector2(cellSize, cellSize);
-    }
+    slotSize = (totalWidth - totalSpacing) / slotColumns;
+    gridGroup.cellSize = new Vector2(slotSize, slotSize);
   }
 
   private static void ShowSlots(bool on) {
@@ -259,13 +141,11 @@ public class PlayerMenuUI : MonoBehaviour {
 
     Player player = Player.Instance;
     if (player == null) return;
-    infoLevel.text = "Level: " + player.Level.ToString();
     Unit hero = player.Army.Units.FirstOrDefault(u => u.IsHero);
     if (hero == null) return;
 
-    infoEquipment.gameObject.SetActive(true);
-    infoCoreStats.SetActive(true);
-    infoUnitParams.SetActive(true);
+    PlayerMenuUIInfo.Level.text = "Level: " + player.Level.ToString();
+    PlayerMenuUIInfo.SelectHeroTab();
     playerProgress.gameObject.SetActive(true);
 
     playerXpValue.text = string.Format(
@@ -283,7 +163,7 @@ public class PlayerMenuUI : MonoBehaviour {
     playerFameBarFill.sizeDelta = new Vector2(barsWidth * famePercent, playerFameBarFill.sizeDelta.y);
 
     await Task.Yield();
-    ShowInfo(hero);
+    PlayerMenuUIInfo.ShowInfo(hero);
   }
 
   public async static void SelectUnitsTab() {
@@ -296,8 +176,7 @@ public class PlayerMenuUI : MonoBehaviour {
     Unit[] units = Player.Instance.Army.Units
       .Where(u => !u.IsHero).ToArray();
 
-    if (units.Length <= 1) unitDismiss.interactable = false;
-    else unitDismiss.interactable = true;
+    PlayerMenuUIInfo.UnitDismiss.interactable = units.Length > 1;
 
     foreach (Unit unit in units) {
       GameObject slot = Instantiate(Instance.menuSlotPrefab, leftSlots);
@@ -306,14 +185,11 @@ public class PlayerMenuUI : MonoBehaviour {
 
     RenderEmptySlots(leftSlots, units.Length);
     RenderEmptySlots(rightSlots, 0);
-    infoActions.SetActive(true);
-    infoEquipment.gameObject.SetActive(true);
-    infoCoreStats.SetActive(true);
-    infoUnitParams.SetActive(true);
+    PlayerMenuUIInfo.SelectUnitsTab();
 
     await Task.Yield();
     selectedSlot = leftSlots.GetChild(0).GetComponent<MenuSlot>();
-    if (selectedSlot != null) ShowInfo(selectedSlot.UnitItem);
+    if (selectedSlot != null) PlayerMenuUIInfo.ShowInfo(selectedSlot.UnitItem);
   }
 
   private async static void SelectInventoryTab() {
@@ -342,11 +218,11 @@ public class PlayerMenuUI : MonoBehaviour {
 
     RenderEmptySlots(leftSlots, equipped.Count + unequipped.Count);
     RenderEmptySlots(rightSlots, 0);
-    infoEquipParams.SetActive(true);
+    PlayerMenuUIInfo.SelectInventoryTab();
 
     await Task.Yield();
     selectedSlot = leftSlots.GetChild(0).GetComponent<MenuSlot>();
-    if (selectedSlot != null) ShowInfo(selectedSlot.EquipmentItem);
+    if (selectedSlot != null) PlayerMenuUIInfo.ShowInfo(selectedSlot.EquipmentItem);
   }
 
   private static void RenderEmptySlots(RectTransform panel, int filled) {
@@ -366,142 +242,11 @@ public class PlayerMenuUI : MonoBehaviour {
     }
   }
 
-  public static void ShowInfo(Unit unit) {
-    foreach (Transform child in infoAvatar) Destroy(child.gameObject);
-    FrameSlot();
-
-    selectedUnit = unit;
-    infoName.text = unit.Name;
-    if (!unit.IsHero) infoLevel.text = "Level: " + unit.Level.ToString();
-    infoType.text = "Type: " + unit.Type.ToString();
-    inSquadMark.SetActive(unit.InSquad);
-
-    GameObject avatar = Instantiate(Instance.menuSlotPrefab, infoAvatar);
-    avatar.GetComponent<MenuSlot>().Init(unit, true);
-
-    unitInSquad.transform.Find("Text").GetComponent<TextMeshProUGUI>().text = unit.InSquad
-      ? "Remove from squad"
-      : "Add to squad";
-
-    UnitEquipment equip = unit.Equip;
-    Image primarySlot = infoEquipment.Find("Primary/Image").GetComponent<Image>();
-    Image armorSlot = infoEquipment.Find("Armor/Image").GetComponent<Image>();
-    Image secondarySlot = infoEquipment.Find("Secondary/Image").GetComponent<Image>();
-    primarySlot.sprite = equip.primaryWeapon.icon;
-    armorSlot.sprite = equip.armor.icon;
-
-    if (equip.secondaryWeapon != null) {
-      secondarySlot.enabled = true;
-      secondarySlot.sprite = equip.secondaryWeapon.icon;
-    }
-    else if (equip.shield != null) {
-      secondarySlot.enabled = true;
-      secondarySlot.sprite = equip.shield.icon;
-    }
-    else {
-      secondarySlot.enabled = false;
-    }
-
-    infoStrength.text = "<color=#F61010>" + unit.Strength.ToString() + "</color>";
-    infoDexterity.text = "<color=#81D11F>" + unit.Dexterity.ToString() + "</color>";
-    infoIntelligence.text = "<color=#2B8EF3>" + unit.Intelligence.ToString() + "</color>";
-    infoDescription.text = unit.Description;
-
-    float totalHp = unit.TotalHealth;
-    float hp = unit.CurrentHealth;
-    infoUnitHp.text = string.Format(
-      "{0} / {1}",
-      totalHp / 3 > hp ? "<color=#F61010>" + Math.Ceiling(hp).ToString() + "</color>" : Math.Ceiling(hp).ToString(),
-      totalHp.ToString()
-    );
-
-    infoUnitMp.text = unit.DefaultMovePoints.ToString();
-    infoUnitDamage.text = (unit.Equip.primaryWeapon.damage + unit.Strength).ToString();
-    infoUnitDefense.text = unit.Equip.GetTotalDefense().ToString();
-    infoUnitRange.text = unit.Equip.primaryWeapon.range.ToString();
-  }
-
-  public static void ShowInfo(Equipment equip) {
-    foreach (Transform child in infoAvatar) Destroy(child.gameObject);
-    FrameSlot();
-
-    infoName.text = equip.itemName;
-    infoLevel.text = "Rarity: " + equip.rarity.ToString();
-    infoType.text = "Type: " + equip.type.ToString();
-    equippedMark.SetActive(selectedSlot.ActiveMark.activeSelf);
-
-    GameObject icon = Instantiate(Instance.menuSlotPrefab, infoAvatar);
-    icon.GetComponent<MenuSlot>().Init(equip, true);
-
-    if (equip is Weapon weapon) {
-      infoWeaponParams.SetActive(true);
-      infoArmorParams.SetActive(false);
-
-      infoWeaponDamage.text = weapon.damage.ToString();
-      infoWeaponDamageType.text = weapon.damageType.ToString();
-      infoWeaponRange.text = weapon.range.ToString();
-      infoWeaponCritMod.text = weapon.critModifier.ToString();
-      infoWeaponArmorPen.text = weapon.armorPenetration.ToString() + "%";
-    } else if (equip is Armor armor) {
-      infoArmorParams.SetActive(true);
-      infoWeaponParams.SetActive(false);
-
-      infoArmorDefense.text = armor.defense.ToString();
-    }
-
-    infoEquipWeight.text = equip.weight.ToString();
-    infoDescription.text = equip.description;
-
-    if (equip.effect != null) {
-      infoEquipEffect.text = equip.effect.effectName;
-      infoEquipEffectIcon.gameObject.SetActive(true);
-      infoEquipEffectIcon.sprite = equip.effect.uiIcon;
-      infoEquipEffectIcon.color = equip.effect.uiIconColor;
-      effectTip.message = equip.effect.description;
-    } else {
-      infoEquipEffect.text = "";
-      infoEquipEffectIcon.gameObject.SetActive(false);
-      effectTip.message = "";
-    }
-
-    if (equip.skill != null) {
-      infoEquipSkill.text = equip.skill.displayName;
-      infoEquipSkillIcon.gameObject.SetActive(true);
-      infoEquipSkillIcon.sprite = equip.skill.uiIcon;
-      infoEquipSkillIcon.color = equip.skill.uiIconColor;
-      skillTip.message = equip.skill.description;
-    } else {
-      infoEquipSkill.text = "";
-      infoEquipSkillIcon.gameObject.SetActive(false);
-      skillTip.message = "";
-    }
-  }
-
-  private static void FrameSlot() {
+  public static void FrameSlot() {
     MenuSlot[] allSlots = FindObjectsOfType<MenuSlot>();
     if (allSlots.Length > 0) {
       foreach (MenuSlot slot in allSlots) slot.SwitchActiveFrame(false);
       if (selectedSlot != null) selectedSlot.SwitchActiveFrame(true);
     }
-  }
-
-  private static void SwitchUnitInSquad() {
-    selectedUnit.InSquad = !selectedUnit.InSquad;
-    inSquadMark.SetActive(selectedUnit.InSquad);
-    if (selectedSlot != null) selectedSlot.SwitchActiveMark();
-  }
-
-  private static void DismissConfirmation() {
-    Dialog.Confirmation(
-      DismissUnit,
-      "Unit dismissing",
-      "Are you sure you want to dismiss this unit?\nIt will become a regular villager and lose all accumulated levels.\nIts equipment will be moved to the player's inventory."
-    );
-  }
-
-  private static void DismissUnit(bool accepted) {
-    if (!accepted) return;
-    Player.Instance.Army.DeleteUnit(selectedUnit);
-    SelectUnitsTab();
   }
 }

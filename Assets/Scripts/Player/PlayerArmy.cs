@@ -38,6 +38,7 @@ public class PlayerArmy : MonoBehaviour {
   public void DeleteUnit(Unit unit) {
     for (int i = 0; i < Units.Count; i++) {
       if (Units[i] == unit) {
+        unit.Equip.UnequipAll();
         Destroy(Units[i]);
         Units.RemoveAt(i);
         return;

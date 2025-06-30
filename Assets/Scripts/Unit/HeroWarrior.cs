@@ -11,6 +11,8 @@ public class HeroWarrior : Unit {
     IsHero = true;
     prefabId = 1;
     Type = UnitType.Melee;
+    AllowedWeapon = EquipmentType.OneHandWeapon;
+    ShieldIsAllow = true;
     TotalHealth = 40f;
     MoveSpeed = 3f;
     DefaultMovePoints = 6;

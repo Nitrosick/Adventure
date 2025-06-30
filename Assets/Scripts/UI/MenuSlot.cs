@@ -66,12 +66,12 @@ public class MenuSlot : MonoBehaviour, IPointerClickHandler {
     PlayerMenuUI.selectedSlot = this;
 
     if (UnitItem != null) {
-      PlayerMenuUI.ShowInfo(UnitItem);
+      PlayerMenuUIInfo.ShowInfo(UnitItem);
       return;
     }
 
     if (EquipmentItem != null) {
-      PlayerMenuUI.ShowInfo(EquipmentItem);
+      PlayerMenuUIInfo.ShowInfo(EquipmentItem);
       return;
     }
   }

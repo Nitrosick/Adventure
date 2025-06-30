@@ -4,6 +4,8 @@ public abstract class Equipment : ScriptableObject {
   public int id;
   public string itemName;
   [TextArea] public string description;
+  public int[] requirementStats = { 0, 0, 0 };
+  public int requirementLevel = 1;
 
   public EquipmentType type;
   public EquipmentWeight weight;

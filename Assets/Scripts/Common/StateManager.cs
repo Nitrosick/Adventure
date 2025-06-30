@@ -29,7 +29,7 @@ public static class StateManager
   public static int level;
 
   public static Dictionary<int, bool> clearedZones = new();
-  // FIXME: Сохранение юнитов в отряде
+  // FIXME: Сохранение юнитов в отряде + Инвентарь
   public static UnitData[] reserve = { };
 
   public static void WriteUnitsData(Unit[] units, string to) {

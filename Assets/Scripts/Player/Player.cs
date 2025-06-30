@@ -112,11 +112,10 @@ public class Player : MonoBehaviour {
     } else {
       BattleReward reward = StateManager.battleReward;
       if (reward == null) return;
-
-      // FIXME: Предметы из награды
       SetGold(reward.Gold);
       SetResources(reward.resources);
       AddExpirience(reward.experience);
+      Inventory.AddItems(reward.items);
       MapUI.UpdateResources(Gold, Resources, Villagers, MaxVillagers);
     }
   }

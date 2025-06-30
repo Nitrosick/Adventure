@@ -97,6 +97,8 @@ public enum UnitRelation {
 public enum EquipmentType {
   OneHandWeapon,
   TwoHandWeapon,
+  Crossbow,
+  Bow,
   Shield,
   Armor
 }
