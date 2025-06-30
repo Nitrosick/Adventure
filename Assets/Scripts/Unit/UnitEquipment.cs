@@ -51,6 +51,63 @@ public class UnitEquipment : MonoBehaviour {
     // FIXME: Обновление доп. предмета
   }
 
+  public void EquipItem(Equipment item) {
+    List<Equipment> inventory = Player.Instance.Inventory.Equip;
+    if (!inventory.Contains(item)) return;
+    Equipment oldItem = null;
+
+    switch (item) {
+      case Weapon newWeapon:
+        switch (newWeapon.slot) {
+          case UnitEquipSlot.Primary:
+            oldItem = primaryWeapon;
+            primaryWeapon = newWeapon;
+            break;
+          case UnitEquipSlot.Secondary:
+            oldItem = secondaryWeapon;
+            secondaryWeapon = newWeapon;
+            break;
+        }
+        break;
+
+      case Armor newArmor:
+        switch (newArmor.slot) {
+          case UnitEquipSlot.Armor:
+            oldItem = armor;
+            armor = newArmor;
+            break;
+          case UnitEquipSlot.Secondary:
+            oldItem = shield;
+            shield = newArmor;
+            break;
+        }
+        break;
+    }
+
+    inventory.Remove(item);
+    if (oldItem != null) inventory.Add(oldItem);
+  }
+
+  public void UnequipAll() {
+    List<Equipment> inventory = Player.Instance.Inventory.Equip;
+    inventory.Add(primaryWeapon);
+    inventory.Add(armor);
+    if (secondaryWeapon != null) inventory.Add(secondaryWeapon);
+    if (shield != null) inventory.Add(shield);
+
+    primaryWeapon = null;
+    secondaryWeapon = null;
+    armor = null;
+    shield = null;
+  }
+
+  public List<Equipment> GetEquipmentList() {
+    List<Equipment> result = new() { primaryWeapon, armor };
+    if (secondaryWeapon != null) result.Add(secondaryWeapon);
+    if (shield != null) result.Add(shield);
+    return result;
+  }
+
   public float GetTotalDefense() {
     float result = 0;
     if (armor != null) result += armor.defense;
@@ -67,26 +124,6 @@ public class UnitEquipment : MonoBehaviour {
     return result;
   }
 
-  public List<Equipment> GetEquipmentList() {
-    List<Equipment> result = new() { primaryWeapon, armor };
-    if (secondaryWeapon != null) result.Add(secondaryWeapon);
-    if (shield != null) result.Add(shield);
-    return result;
-  }
-
-  public void UnequipAll() {
-    List<Equipment> inventory = Player.Instance.Inventory.Equip;
-    inventory.Add(primaryWeapon);
-    inventory.Add(armor);
-    if (secondaryWeapon != null) inventory.Add(secondaryWeapon);
-    if (shield != null) inventory.Add(shield);
-
-    primaryWeapon = null;
-    secondaryWeapon = null;
-    armor = null;
-    shield = null;
-  }
-
   public bool HasAttackPhaseSkills() {
     if (unit.SkillCharges <= 0) return false;
     foreach (Skill skill in GetSkills()) {
@@ -97,5 +134,40 @@ public class UnitEquipment : MonoBehaviour {
 
   public bool CanBreakObjects() {
     return primaryWeapon.damageType == DamageType.Chop || primaryWeapon.damageType == DamageType.Crash;
+  }
+
+  public bool CanEquip(Equipment item, UnitEquipSlot slot) {
+    float[] unitStats = { unit.Strength, unit.Dexterity, unit.Intelligence };
+
+    for (int i = 0; i < item.requirementStats.Length; i++) {
+      if (item.requirementStats[i] > unitStats[i]) return false;
+    }
+    if (item.requirementLevel > unit.Level) return false;
+    if (item.slot != slot) return false;
+
+    switch (slot) {
+      case UnitEquipSlot.Primary:
+        if (item is Weapon weapon1) {
+          if (unit.AllowedWeapon == weapon1.type) return true;
+        }
+        return false;
+      case UnitEquipSlot.Armor:
+        if (item is Armor armor1) {
+          foreach (ArmorSet set in armorSets) {
+            if (set.id == armor1.id) return true;
+          }
+        }
+        return false;
+      case UnitEquipSlot.Secondary:
+        if (item is Weapon weapon2) {
+          // FIXME: Проверка на оружие для левой руки
+        }
+        else if (item is Armor armor2) {
+          if (unit.ShieldIsAllow) return true;
+        }
+        return false;
+      default:
+        return false;
+    }
   }
 }

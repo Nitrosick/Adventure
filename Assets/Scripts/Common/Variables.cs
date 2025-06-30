@@ -79,7 +79,7 @@ public enum PopupType {
   Inactive
 }
 
-// Common
+// Units
 public enum UnitType {
   Melee,
   Range,
@@ -91,6 +91,12 @@ public enum UnitRelation {
   Ally,
   Emeny,
   Neutral
+}
+
+public enum UnitEquipSlot {
+  Primary,
+  Secondary,
+  Armor
 }
 
 // Items

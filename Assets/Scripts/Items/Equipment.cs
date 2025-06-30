@@ -8,6 +8,7 @@ public abstract class Equipment : ScriptableObject {
   public int requirementLevel = 1;
 
   public EquipmentType type;
+  public UnitEquipSlot slot;
   public EquipmentWeight weight;
   public EquipmentRarity rarity;
   // FIXME: Переделать на массив эффектов

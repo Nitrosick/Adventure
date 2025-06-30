@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -98,9 +99,9 @@ public class PlayerMenuUIInfo : MonoBehaviour {
 
     unitInSquad.onClick.AddListener(SwitchUnitInSquad);
     UnitDismiss.onClick.AddListener(DismissConfirmation);
-    equipmentPrimary.onClick.AddListener(() => OpenSelector("primary"));
-    equipmentArmor.onClick.AddListener(() => OpenSelector("armor"));
-    equipmentSecondary.onClick.AddListener(() => OpenSelector("secondary"));
+    equipmentPrimary.onClick.AddListener(() => OpenSelector(UnitEquipSlot.Primary));
+    equipmentArmor.onClick.AddListener(() => OpenSelector(UnitEquipSlot.Armor));
+    equipmentSecondary.onClick.AddListener(() => OpenSelector(UnitEquipSlot.Secondary));
   }
 
   private static bool ComponentsInitialized() {
@@ -189,24 +190,7 @@ public class PlayerMenuUIInfo : MonoBehaviour {
       ? "Remove from squad"
       : "Add to squad";
 
-    UnitEquipment equip = unit.Equip;
-    Image primarySlot = equipment.Find("Primary/Image").GetComponent<Image>();
-    Image armorSlot = equipment.Find("Armor/Image").GetComponent<Image>();
-    Image secondarySlot = equipment.Find("Secondary/Image").GetComponent<Image>();
-    primarySlot.sprite = equip.primaryWeapon.icon;
-    armorSlot.sprite = equip.armor.icon;
-
-    if (equip.secondaryWeapon != null) {
-      secondarySlot.enabled = true;
-      secondarySlot.sprite = equip.secondaryWeapon.icon;
-    }
-    else if (equip.shield != null) {
-      secondarySlot.enabled = true;
-      secondarySlot.sprite = equip.shield.icon;
-    }
-    else {
-      secondarySlot.enabled = false;
-    }
+    UpdateUnitEquipment(unit);
 
     strength.text = "<color=#F61010>" + unit.Strength.ToString() + "</color>";
     dexterity.text = "<color=#81D11F>" + unit.Dexterity.ToString() + "</color>";
@@ -286,6 +270,25 @@ public class PlayerMenuUIInfo : MonoBehaviour {
     }
   }
 
+  private static void UpdateUnitEquipment(Unit unit) {
+    UnitEquipment equip = unit.Equip;
+    Image primarySlot = equipment.Find("Primary/Image").GetComponent<Image>();
+    Image armorSlot = equipment.Find("Armor/Image").GetComponent<Image>();
+    Image secondarySlot = equipment.Find("Secondary/Image").GetComponent<Image>();
+    primarySlot.sprite = equip.primaryWeapon.icon;
+    armorSlot.sprite = equip.armor.icon;
+
+    if (equip.secondaryWeapon != null) {
+      secondarySlot.enabled = true;
+      secondarySlot.sprite = equip.secondaryWeapon.icon;
+    } else if (equip.shield != null) {
+      secondarySlot.enabled = true;
+      secondarySlot.sprite = equip.shield.icon;
+    } else {
+      secondarySlot.enabled = false;
+    }
+  }
+
   private static void SwitchUnitInSquad() {
     Unit unit = PlayerMenuUI.selectedUnit;
     MenuSlot slot = PlayerMenuUI.selectedSlot;
@@ -309,33 +312,26 @@ public class PlayerMenuUIInfo : MonoBehaviour {
     PlayerMenuUI.SelectUnitsTab();
   }
 
-  private static void OpenSelector(string slot) {
+  private static void OpenSelector(UnitEquipSlot slot) {
     Unit unit = PlayerMenuUI.selectedUnit;
     if (unit == null) return;
-    List<Equipment> list = new() { };
     List<Equipment> inventory = Player.Instance.Inventory.Equip;
+
+    List<Equipment> list = new() { };
     string title = "";
+    list.AddRange(inventory.Where(i => unit.Equip.CanEquip(i, slot)));
 
     switch (slot) {
-      // FIXME: Фильтрация списка по требованиям
-      case "primary":
-        list.AddRange(inventory);
-        title = "Change weapon";
-        break;
-      case "armor":
-        list.AddRange(inventory);
-        title = "Change armor";
-        break;
-      case "secondary":
-        list.AddRange(inventory);
-        title = "Change left-hand item";
-        break;
+      case UnitEquipSlot.Primary: title = "Change weapon"; break;
+      case UnitEquipSlot.Armor: title = "Change armor"; break;
+      case UnitEquipSlot.Secondary: title = "Change left-hand item"; break;
     }
 
     Selector.List(ChangeEquipment, list, title);
   }
 
   private static void ChangeEquipment(object item) {
-    // FIXME: Смена снаряжения
+    if (item is Equipment equipment) PlayerMenuUI.selectedUnit.Equip.EquipItem(equipment);
+    UpdateUnitEquipment(PlayerMenuUI.selectedUnit);
   }
 }
