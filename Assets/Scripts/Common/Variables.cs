@@ -80,6 +80,12 @@ public enum PopupType {
 }
 
 // Units
+public enum CoreStat {
+  Strength,
+  Dexterity,
+  Intelligence
+}
+
 public enum UnitType {
   Melee,
   Range,

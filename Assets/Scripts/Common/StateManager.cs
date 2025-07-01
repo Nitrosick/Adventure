@@ -20,13 +20,14 @@ public static class StateManager
 
   // Global
   public static int currentPlayerZoneId;
-  public static int gold;
+  public static int gold = 0;
   public static int[] resources = { 0, 0, 0 };
-  public static int villagers;
-  // public static int maxVillagers;
-  public static int experience;
-  public static int fame;
-  public static int level;
+  public static int villagers = 0;
+  public static int maxVillagers = 5;
+  public static int experience = 0;
+  public static int fame = 0;
+  public static int level = 1;
+  public static int statPoints = 0;
 
   public static Dictionary<int, bool> clearedZones = new();
   // FIXME: Сохранение юнитов в отряде + Инвентарь

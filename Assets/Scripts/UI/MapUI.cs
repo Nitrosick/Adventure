@@ -82,13 +82,20 @@ public class MapUI : MonoBehaviour
     zoneInfoGuardedMark.SetActive(false);
   }
 
-  public static void UpdateResources(int gold, int[] resources, int villagers, int max) {
+  public static void UpdateResources(int gold, int[] resources, int[] totalPeople, int max) {
     goldValue.text = gold.ToString();
     woodValue.text = resources[0].ToString();
     stoneValue.text = resources[1].ToString();
     metalsValue.text = resources[2].ToString();
+
     villagersValue.text = string.Format(
-      "{0} / {1}", villagers.ToString(), max.ToString()
+      "{0} ({1}) / {2}",
+      totalPeople[0].ToString(),
+      totalPeople[1].ToString(),
+      max.ToString()
     );
+    if (totalPeople[0] + totalPeople[1] > max) {
+      villagersValue.text = "<color=#F61010>" + villagersValue.text + "</color>";
+    }
   }
 }

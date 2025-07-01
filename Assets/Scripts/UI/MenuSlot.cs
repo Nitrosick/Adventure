@@ -9,6 +9,7 @@ public class MenuSlot : MonoBehaviour, IPointerClickHandler {
   private Image image;
   private GameObject activeFrame;
   public GameObject ActiveMark { get; private set; }
+  public GameObject DeathMark { get; private set; }
   private RectTransform healthBar;
   private RectTransform healthBarFill;
   private bool preventPointerEvents;
@@ -17,10 +18,14 @@ public class MenuSlot : MonoBehaviour, IPointerClickHandler {
     image = transform.Find("Image").GetComponent<Image>();
     activeFrame = transform.Find("FrameActive").gameObject;
     ActiveMark = transform.Find("ActiveMark").gameObject;
+    DeathMark = transform.Find("Dead").gameObject;
     healthBar = transform.Find("HealthBar").GetComponent<RectTransform>();
     healthBarFill = transform.Find("HealthBar/Fill").GetComponent<RectTransform>();
 
-    if (activeFrame == null || ActiveMark == null || healthBar == null || healthBarFill == null)  {
+    if (
+      activeFrame == null || ActiveMark == null || DeathMark == null ||
+      healthBar == null || healthBarFill == null
+    )  {
       Debug.LogError("Menu slot components initialization error");
     }
   }
@@ -39,10 +44,13 @@ public class MenuSlot : MonoBehaviour, IPointerClickHandler {
     if (!preventPointerEvents) {
       if (unit.InSquad) ActiveMark.SetActive(true);
       if (unit.TotalHealth == unit.CurrentHealth) return;
-      healthBar.gameObject.SetActive(true);
-      float barWidth = Mathf.Abs(healthBar.rect.width);
-      float percent = Mathf.Clamp01(unit.CurrentHealth / unit.TotalHealth);
-      healthBarFill.sizeDelta = new Vector2(barWidth * percent, healthBarFill.sizeDelta.y);
+      if (unit.CurrentHealth <= 0) DeathMark.SetActive(true);
+      else {
+        healthBar.gameObject.SetActive(true);
+        float barWidth = Mathf.Abs(healthBar.rect.width);
+        float percent = Mathf.Clamp01(unit.CurrentHealth / unit.TotalHealth);
+        healthBarFill.sizeDelta = new Vector2(barWidth * percent, healthBarFill.sizeDelta.y);
+      }
     }
   }
 

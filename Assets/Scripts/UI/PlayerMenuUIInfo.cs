@@ -12,6 +12,7 @@ public class PlayerMenuUIInfo : MonoBehaviour {
   public static TextMeshProUGUI Level { get; set; }
   private static TextMeshProUGUI type;
   private static GameObject inSquadMark;
+  private static GameObject deathMark;
   private static GameObject equippedMark;
   private static Transform avatar;
   private static GameObject actions;
@@ -22,9 +23,14 @@ public class PlayerMenuUIInfo : MonoBehaviour {
   private static Button equipmentArmor;
   private static Button equipmentSecondary;
   private static GameObject coreStats;
+  private static GameObject statPointsRow;
+  private static TextMeshProUGUI statPoints;
   private static TextMeshProUGUI strength;
   private static TextMeshProUGUI dexterity;
   private static TextMeshProUGUI intelligence;
+  private static Button strengthUp;
+  private static Button dexterityUp;
+  private static Button intelligenceUp;
   private static TextMeshProUGUI description;
   private static GameObject unitParams;
   private static TextMeshProUGUI unitHp;
@@ -32,6 +38,9 @@ public class PlayerMenuUIInfo : MonoBehaviour {
   private static TextMeshProUGUI unitDamage;
   private static TextMeshProUGUI unitDefense;
   private static TextMeshProUGUI unitRange;
+  private static GameObject equipRequirements;
+  private static TextMeshProUGUI equipRequiredStats;
+  private static TextMeshProUGUI equipRequiredLevel;
   private static GameObject weaponParams;
   private static TextMeshProUGUI weaponDamage;
   private static TextMeshProUGUI weaponDamageType;
@@ -56,6 +65,7 @@ public class PlayerMenuUIInfo : MonoBehaviour {
     Level = panel.Find("Head/Data/Level").GetComponent<TextMeshProUGUI>();
     type = panel.Find("Head/Data/Type").GetComponent<TextMeshProUGUI>();
     inSquadMark = panel.Find("Head/Data/InSquadMark").gameObject;
+    deathMark = panel.Find("Head/Data/DeathMark").gameObject;
     equippedMark = panel.Find("Head/Data/EquippedMark").gameObject;
     avatar = panel.Find("Head/Image").GetComponent<Transform>();
     actions = panel.Find("Actions").gameObject;
@@ -66,9 +76,14 @@ public class PlayerMenuUIInfo : MonoBehaviour {
     equipmentArmor = panel.Find("Equipment/Armor").GetComponent<Button>();
     equipmentSecondary = panel.Find("Equipment/Secondary").GetComponent<Button>();
     coreStats = panel.Find("CoreStats").gameObject;
+    statPointsRow = panel.Find("CoreStats/Points").gameObject;
+    statPoints = panel.Find("CoreStats/Points/Value").GetComponent<TextMeshProUGUI>();
     strength = panel.Find("CoreStats/Strength/Value").GetComponent<TextMeshProUGUI>();
     dexterity = panel.Find("CoreStats/Dexterity/Value").GetComponent<TextMeshProUGUI>();
     intelligence = panel.Find("CoreStats/Intelligence/Value").GetComponent<TextMeshProUGUI>();
+    strengthUp = panel.Find("CoreStats/Strength/Plus").GetComponent<Button>();
+    dexterityUp = panel.Find("CoreStats/Dexterity/Plus").GetComponent<Button>();
+    intelligenceUp = panel.Find("CoreStats/Intelligence/Plus").GetComponent<Button>();
     description = panel.Find("Description").GetComponent<TextMeshProUGUI>();
     unitParams = panel.Find("UnitParameters").gameObject;
     unitHp = panel.Find("UnitParameters/HP/Value").GetComponent<TextMeshProUGUI>();
@@ -76,6 +91,9 @@ public class PlayerMenuUIInfo : MonoBehaviour {
     unitDamage = panel.Find("UnitParameters/Damage/Value").GetComponent<TextMeshProUGUI>();
     unitDefense = panel.Find("UnitParameters/Defense/Value").GetComponent<TextMeshProUGUI>();
     unitRange = panel.Find("UnitParameters/Range/Value").GetComponent<TextMeshProUGUI>();
+    equipRequirements = panel.Find("EquipRequirements").gameObject;
+    equipRequiredStats = panel.Find("EquipRequirements/Stats/Value").GetComponent<TextMeshProUGUI>();
+    equipRequiredLevel = panel.Find("EquipRequirements/Level/Value").GetComponent<TextMeshProUGUI>();
     weaponParams = panel.Find("WeaponParameters").gameObject;
     weaponDamage = panel.Find("WeaponParameters/Damage/Value").GetComponent<TextMeshProUGUI>();
     weaponDamageType = panel.Find("WeaponParameters/DamageType/Value").GetComponent<TextMeshProUGUI>();
@@ -102,6 +120,9 @@ public class PlayerMenuUIInfo : MonoBehaviour {
     equipmentPrimary.onClick.AddListener(() => OpenSelector(UnitEquipSlot.Primary));
     equipmentArmor.onClick.AddListener(() => OpenSelector(UnitEquipSlot.Armor));
     equipmentSecondary.onClick.AddListener(() => OpenSelector(UnitEquipSlot.Secondary));
+    strengthUp.onClick.AddListener(() => IncreaseStat(CoreStat.Strength));
+    dexterityUp.onClick.AddListener(() => IncreaseStat(CoreStat.Dexterity));
+    intelligenceUp.onClick.AddListener(() => IncreaseStat(CoreStat.Intelligence));
   }
 
   private static bool ComponentsInitialized() {
@@ -118,7 +139,10 @@ public class PlayerMenuUIInfo : MonoBehaviour {
     equipSkill != null && armorParams != null && armorDefense != null &&
     equipEffectIcon != null && equipSkillIcon != null && effectTip != null &&
     skillTip != null && equipmentPrimary != null && equipmentArmor != null &&
-    equipmentSecondary != null;
+    equipmentSecondary != null && equipRequirements != null && equipRequiredStats != null &&
+    equipRequiredLevel != null && statPoints != null && strengthUp != null &&
+    dexterityUp != null && intelligenceUp != null && statPointsRow != null &&
+    deathMark != null;
   }
 
   private void OnDestroy() {
@@ -127,6 +151,9 @@ public class PlayerMenuUIInfo : MonoBehaviour {
     equipmentPrimary.onClick.RemoveListener(() => { });
     equipmentArmor.onClick.RemoveListener(() => { });
     equipmentSecondary.onClick.RemoveListener(() => { });
+    strengthUp.onClick.RemoveListener(() => { });
+    dexterityUp.onClick.RemoveListener(() => { });
+    intelligenceUp.onClick.RemoveListener(() => { });
   }
 
   public static void Clear() {
@@ -136,11 +163,17 @@ public class PlayerMenuUIInfo : MonoBehaviour {
     description.text = "";
 
     inSquadMark.SetActive(false);
+    deathMark.SetActive(false);
     equippedMark.SetActive(false);
     actions.SetActive(false);
     equipment.gameObject.SetActive(false);
     coreStats.SetActive(false);
+    strengthUp.gameObject.SetActive(false);
+    dexterityUp.gameObject.SetActive(false);
+    intelligenceUp.gameObject.SetActive(false);
+    statPointsRow.SetActive(false);
     unitParams.SetActive(false);
+    equipRequirements.SetActive(false);
     weaponParams.SetActive(false);
     armorParams.SetActive(false);
     equipParams.SetActive(false);
@@ -159,6 +192,14 @@ public class PlayerMenuUIInfo : MonoBehaviour {
   public static void SelectHeroTab() {
     equipment.gameObject.SetActive(true);
     coreStats.SetActive(true);
+
+    if (Player.Instance.StatPoints > 0) {
+      strengthUp.gameObject.SetActive(true);
+      dexterityUp.gameObject.SetActive(true);
+      intelligenceUp.gameObject.SetActive(true);
+    }
+
+    statPointsRow.SetActive(true);
     unitParams.SetActive(true);
   }
 
@@ -170,6 +211,7 @@ public class PlayerMenuUIInfo : MonoBehaviour {
   }
 
   public static void SelectInventoryTab() {
+    equipRequirements.SetActive(true);
     equipParams.SetActive(true);
   }
 
@@ -181,17 +223,21 @@ public class PlayerMenuUIInfo : MonoBehaviour {
     displayName.text = unit.Name;
     if (!unit.IsHero) Level.text = "Level: " + unit.Level.ToString();
     type.text = "Type: " + unit.Type.ToString();
+
+    deathMark.SetActive(unit.CurrentHealth <= 0);
     inSquadMark.SetActive(unit.InSquad);
 
     GameObject unitAvatar = Instantiate(PlayerMenuUI.Instance.menuSlotPrefab, avatar);
     unitAvatar.GetComponent<MenuSlot>().Init(unit, true);
 
+    unitInSquad.interactable = unit.CurrentHealth > 0;
     unitInSquad.transform.Find("Text").GetComponent<TextMeshProUGUI>().text = unit.InSquad
       ? "Remove from squad"
       : "Add to squad";
 
     UpdateUnitEquipment(unit);
 
+    statPoints.text = Player.Instance.StatPoints.ToString();
     strength.text = "<color=#F61010>" + unit.Strength.ToString() + "</color>";
     dexterity.text = "<color=#81D11F>" + unit.Dexterity.ToString() + "</color>";
     intelligence.text = "<color=#2B8EF3>" + unit.Intelligence.ToString() + "</color>";
@@ -223,6 +269,13 @@ public class PlayerMenuUIInfo : MonoBehaviour {
     GameObject icon = Instantiate(PlayerMenuUI.Instance.menuSlotPrefab, avatar);
     icon.GetComponent<MenuSlot>().Init(equip, true);
 
+    int[] reqStats = equip.requirementStats;
+    equipRequiredStats.text = string.Format(
+      "<color=#F61010>{0}</color> / <color=#81D11F>{1}</color> / <color=#2B8EF3>{2}</color>",
+      reqStats[0], reqStats[1], reqStats[2]
+    );
+    equipRequiredLevel.text = equip.requirementLevel.ToString();
+
     if (equip is Weapon weapon) {
       weaponParams.SetActive(true);
       armorParams.SetActive(false);
@@ -232,8 +285,7 @@ public class PlayerMenuUIInfo : MonoBehaviour {
       weaponRange.text = weapon.range.ToString();
       weaponCritMod.text = weapon.critModifier.ToString();
       weaponArmorPen.text = weapon.armorPenetration.ToString() + "%";
-    }
-    else if (equip is Armor armor) {
+    } else if (equip is Armor armor) {
       armorParams.SetActive(true);
       weaponParams.SetActive(false);
 
@@ -249,8 +301,7 @@ public class PlayerMenuUIInfo : MonoBehaviour {
       equipEffectIcon.sprite = equip.effect.uiIcon;
       equipEffectIcon.color = equip.effect.uiIconColor;
       effectTip.message = equip.effect.description;
-    }
-    else {
+    } else {
       equipEffect.text = "";
       equipEffectIcon.gameObject.SetActive(false);
       effectTip.message = "";
@@ -262,8 +313,7 @@ public class PlayerMenuUIInfo : MonoBehaviour {
       equipSkillIcon.sprite = equip.skill.uiIcon;
       equipSkillIcon.color = equip.skill.uiIconColor;
       skillTip.message = equip.skill.description;
-    }
-    else {
+    } else {
       equipSkill.text = "";
       equipSkillIcon.gameObject.SetActive(false);
       skillTip.message = "";
@@ -281,10 +331,12 @@ public class PlayerMenuUIInfo : MonoBehaviour {
     if (equip.secondaryWeapon != null) {
       secondarySlot.enabled = true;
       secondarySlot.sprite = equip.secondaryWeapon.icon;
-    } else if (equip.shield != null) {
+    }
+    else if (equip.shield != null) {
       secondarySlot.enabled = true;
       secondarySlot.sprite = equip.shield.icon;
-    } else {
+    }
+    else {
       secondarySlot.enabled = false;
     }
   }
@@ -333,5 +385,21 @@ public class PlayerMenuUIInfo : MonoBehaviour {
   private static void ChangeEquipment(object item) {
     if (item is Equipment equipment) PlayerMenuUI.selectedUnit.Equip.EquipItem(equipment);
     UpdateUnitEquipment(PlayerMenuUI.selectedUnit);
+  }
+
+  private static void IncreaseStat(CoreStat stat) {
+    Unit hero = Player.Instance.Army.Units.FirstOrDefault(u => u.IsHero);
+    if (hero == null) return;
+    int[] increase = { 0, 0, 0 };
+
+    switch (stat) {
+      case CoreStat.Strength: increase[0] = 1; break;
+      case CoreStat.Dexterity: increase[1] = 1; break;
+      case CoreStat.Intelligence: increase[2] = 1; break;
+    }
+
+    Player.Instance.SetStatPoints(-1);
+    hero.IncreaseStats(increase);
+    PlayerMenuUI.SelectHeroTab();
   }
 }

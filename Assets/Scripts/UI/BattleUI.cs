@@ -152,9 +152,7 @@ public class BattleUI : MonoBehaviour {
     );
     unitStats.text = string.Format(
       "<color=#F61010>{0}</color> / <color=#81D11F>{1}</color> / <color=#2B8EF3>{2}</color>",
-      stats[0],
-      stats[1],
-      stats[2]
+      stats[0], stats[1], stats[2]
     );
     unitMP.text = mp.ToString();
     unitDamage.text = damage.ToString();

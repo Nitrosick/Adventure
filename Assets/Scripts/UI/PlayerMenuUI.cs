@@ -133,14 +133,13 @@ public class PlayerMenuUI : MonoBehaviour {
     r.SetActive(on);
   }
 
-  private async static void SelectHeroTab() {
+  public async static void SelectHeroTab() {
     Clear();
     navHero.interactable = false;
     leftSlotsTitle.text = "Progress";
     rightSlotsTitle.text = "Skills";
 
     Player player = Player.Instance;
-    if (player == null) return;
     Unit hero = player.Army.Units.FirstOrDefault(u => u.IsHero);
     if (hero == null) return;
 

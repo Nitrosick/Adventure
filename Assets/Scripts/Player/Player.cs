@@ -10,13 +10,19 @@ public class Player : MonoBehaviour {
   public int Gold { get; private set; }
   public int[] Resources { get; private set; } = { 0, 0, 0 };
   public int Villagers { get; private set; }
-  public int MaxVillagers { get; private set; }
+  public int MaxVillagers { get; private set; } = 5;
   public int Experience { get; private set; }
   public int Fame { get; private set; }
   public int Level { get; private set; } = 1;
+  public int StatPoints { get; private set; } = 1;
 
   public int MaxFame { get; private set; } = 10000;
   public int MaxLevel { get; private set; } = 30;
+
+  private readonly int baseMaxVillagers = 5;
+  private readonly int bonusVillagersPerStep = 5;
+  private readonly int fameStepSize = 500;
+  private readonly int villagersLimit = 100;
 
   private void Awake() {
     Instance = this;
@@ -53,6 +59,12 @@ public class Player : MonoBehaviour {
     StateManager.villagers = Villagers;
   }
 
+  private void SetMaxVillagers() {
+    int bonusUnits = Fame / fameStepSize * bonusVillagersPerStep;
+    MaxVillagers = Mathf.Min(baseMaxVillagers + bonusUnits, villagersLimit);
+    StateManager.maxVillagers = MaxVillagers;
+  }
+
   public void AddExpirience(int value) {
     Experience += value;
     while (Experience >= XPForNextLevel) {
@@ -74,7 +86,7 @@ public class Player : MonoBehaviour {
 
   private void LevelUp() {
     Level++;
-    Debug.Log($"{name} повысил уровень до {Level}!");
+    if (Level > 1) SetStatPoints(1);
     StateManager.level = Level;
 
     // if (Level % 5 == 0) BoostUnitsLevel();
@@ -82,23 +94,38 @@ public class Player : MonoBehaviour {
   }
 
   public void SetFame(int value) {
-    // FIXME: Рассчет MaxVillagers
     Fame += value;
     if (Fame < 0) Fame = 0;
+    SetMaxVillagers();
     StateManager.fame = Fame;
+  }
+
+  public void SetStatPoints(int value) {
+    StatPoints += value;
+    if (StatPoints < 0) StatPoints = 0;
+    StateManager.statPoints = StatPoints;
+  }
+
+  public int[] GetTotalPeople() {
+    // FIXME: Прибавить supports юнитов
+    return new int[] { Villagers, Army.Units.Count };
   }
 
   private void GetStateData() {
     // FIXME: перенос данных между локациями
-    BattleResult? result = StateManager.battleResult;
-    if (result == null) return;
-
     Gold = StateManager.gold;
     Resources = StateManager.resources;
     Villagers = StateManager.villagers;
+    MaxVillagers = StateManager.maxVillagers;
     Experience = StateManager.experience;
     Fame = StateManager.fame;
     Level = StateManager.level;
+    StatPoints = StateManager.statPoints;
+
+    MapUI.UpdateResources(Gold, Resources, GetTotalPeople(), MaxVillagers);
+
+    BattleResult? result = StateManager.battleResult;
+    if (result == null) return;
 
     UnitData[] units = StateManager.allies;
     UnitData[] reserve = StateManager.reserve;
@@ -108,15 +135,15 @@ public class Player : MonoBehaviour {
     if (result == BattleResult.Defeat) {
       transform.position = move.startZone.playerPosition;
       move.CurrentZone = move.startZone;
-      Army.UpdateUnitsHPAfterDefeat();
-    } else {
+    }
+    else {
       BattleReward reward = StateManager.battleReward;
       if (reward == null) return;
       SetGold(reward.Gold);
       SetResources(reward.resources);
       AddExpirience(reward.experience);
       Inventory.AddItems(reward.items);
-      MapUI.UpdateResources(Gold, Resources, Villagers, MaxVillagers);
+      MapUI.UpdateResources(Gold, Resources, GetTotalPeople(), MaxVillagers);
     }
   }
 }

@@ -83,6 +83,7 @@ public class Unit : MonoBehaviour {
     _ = Animator.RotateTowards(direction, true);
 
     if (Relation == UnitRelation.Ally) Ui.MarkAsAlly();
+    if (CurrentHealth <= 0) IsDead = true;
     Ui.UpdateHealth(TotalHealth, CurrentHealth);
     return true;
   }
@@ -139,6 +140,13 @@ public class Unit : MonoBehaviour {
     else if (CurrentHealth < TotalHealth / 2) result *= 1.5f;
     if (Effects.HasEffect("Block")) result /= 3;
     return result;
+  }
+
+  public void IncreaseStats(int[] stats) {
+    if (stats == null || stats.Length != 3) return;
+    Strength += stats[0];
+    Dexterity += stats[1];
+    Intelligence += stats[2];
   }
 
   // Attack and damage
@@ -253,11 +261,9 @@ public class Unit : MonoBehaviour {
     UnitEquipment equipment = transform.GetComponent<UnitEquipment>();
 
     // FIXME: Добавить все сериализуемые поля
-    // FIXME: Возможно надо убрать IsDead
     return new UnitData {
       prefabId = prefabId,
       currentHealth = health,
-      isDead = IsDead,
       inSquad = InSquad,
       strength = Strength,
       dexterity = Dexterity,
@@ -274,7 +280,6 @@ public class Unit : MonoBehaviour {
     UnitEquipment equipment = transform.GetComponent<UnitEquipment>();
 
     CurrentHealth = data.currentHealth;
-    IsDead = data.isDead;
     InSquad = data.inSquad;
     Strength = data.strength;
     Dexterity = data.dexterity;

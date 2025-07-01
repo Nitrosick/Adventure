@@ -26,12 +26,12 @@ public class PlayerArmy : MonoBehaviour {
       unit.FromData(data);
       return unit;
     }).ToList();
-  }
 
-  public void UpdateUnitsHPAfterDefeat() {
-    Unit[] active = Units.Where(u => u.InSquad).ToArray();
-    foreach (Unit unit in active) {
-      unit.CurrentHealth = 1;
+    foreach (Unit unit in Units) {
+      if (unit.CurrentHealth <= 0) {
+        if (unit.IsHero) unit.CurrentHealth = 1f;
+        else unit.InSquad = false;
+      }
     }
   }
 
