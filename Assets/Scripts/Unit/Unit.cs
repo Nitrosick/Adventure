@@ -45,7 +45,8 @@ public class Unit : MonoBehaviour {
   public float TotalHealth { get; protected set; }
   public float CurrentHealth { get; set; }
   // FIXME: Управление зарядами скиллов
-  public int SkillCharges { get; protected set; } = 3;
+  public int TotalSkillCharges { get; protected set; } = 3;
+  public int SkillCharges { get; protected set; }
 
   protected readonly int objectDestroyTime = 10;
 
@@ -85,6 +86,8 @@ public class Unit : MonoBehaviour {
     if (Relation == UnitRelation.Ally) Ui.MarkAsAlly();
     if (CurrentHealth <= 0) IsDead = true;
     Ui.UpdateHealth(TotalHealth, CurrentHealth);
+    SkillCharges = TotalSkillCharges;
+    if (Equip.GetSkills().Count > 0) Ui.UpdateCharges(TotalSkillCharges, SkillCharges);
     return true;
   }
 
@@ -209,8 +212,7 @@ public class Unit : MonoBehaviour {
     if (modifier > 1f) {
       Ui.ShowPopup(totalDamage.ToString(), PopupType.Crit);
       if (!isTickDamage) CameraController.Shake(1.2f);
-    }
-    else {
+    } else {
       Ui.ShowPopup(totalDamage.ToString(), PopupType.Negative);
       if (!isTickDamage) CameraController.Shake(0.8f);
     }
@@ -218,8 +220,7 @@ public class Unit : MonoBehaviour {
     if (totalDamage >= CurrentHealth) {
       CurrentHealth = 0;
       Die();
-    }
-    else {
+    } else {
       CurrentHealth -= totalDamage;
       Ui.UpdateHealth(TotalHealth, CurrentHealth);
       if (!isTickDamage) Animator.TakeDamage();

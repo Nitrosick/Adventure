@@ -283,8 +283,8 @@ public class PlayerMenuUIInfo : MonoBehaviour {
       weaponDamage.text = weapon.damage.ToString();
       weaponDamageType.text = weapon.damageType.ToString();
       weaponRange.text = weapon.range.ToString();
-      weaponCritMod.text = weapon.critModifier.ToString();
-      weaponArmorPen.text = weapon.armorPenetration.ToString() + "%";
+      weaponCritMod.text = "x" + weapon.critModifier;
+      weaponArmorPen.text = weapon.armorPenetration + "%";
     } else if (equip is Armor armor) {
       armorParams.SetActive(true);
       weaponParams.SetActive(false);

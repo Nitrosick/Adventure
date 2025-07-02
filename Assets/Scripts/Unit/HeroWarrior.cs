@@ -27,6 +27,7 @@ public class HeroWarrior : Unit {
     Animator.SetBlocking(true);
     SkillCharges -= 1;
     if (SkillCharges <= 0) BattleUI.DisableSkills();
+    if (Equip.GetSkills().Count > 0) Ui.UpdateCharges(TotalSkillCharges, SkillCharges);
     FinishAction();
   }
 }

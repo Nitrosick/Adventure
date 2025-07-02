@@ -10,6 +10,7 @@ public class UnitUI : MonoBehaviour {
   private GameObject markerActive;
   private GameObject healthBar;
   private RectTransform healthBarFill;
+  private Transform skillChargesBar;
   private Transform effectsPanel;
 
   private readonly Dictionary<PopupType, string> PopupColors = new() {
@@ -27,12 +28,13 @@ public class UnitUI : MonoBehaviour {
     markerActive = transform.Find("MarkerActive").gameObject;
     healthBar = transform.Find("UI/HealthBar").gameObject;
     healthBarFill = transform.Find("UI/HealthBar/Fill").GetComponent<RectTransform>();
+    skillChargesBar = transform.Find("UI/Charges").GetComponent<Transform>();
     effectsPanel = transform.Find("UI/Effects").GetComponent<Transform>();
 
     if (
       unit == null || canvas == null || marker == null ||
       markerActive == null || healthBar == null || healthBarFill == null ||
-      effectsPanel == null
+      effectsPanel == null || skillChargesBar == null
     ) {
       Debug.LogError("Unit UI components initialization error");
       return;
@@ -67,17 +69,32 @@ public class UnitUI : MonoBehaviour {
     markerActive.SetActive(false);
   }
 
-  public void ShowHealthBar() {
-    healthBar.SetActive(true);
-  }
-
-  public void HideHealthBar() {
-    healthBar.SetActive(false);
-  }
+  public void ShowHealthBar() { healthBar.SetActive(true); }
+  public void HideHealthBar() { healthBar.SetActive(false); }
+  public void ShowChargesBar() { skillChargesBar.gameObject.SetActive(true); }
+  public void HideChargesBar() { skillChargesBar.gameObject.SetActive(false); }
 
   public void UpdateHealth(float total, float current) {
     float percent = Mathf.Clamp01(current / total);
     healthBarFill.sizeDelta = new Vector2(1f * percent, healthBarFill.sizeDelta.y);
+  }
+
+  public void UpdateCharges(int total, int current) {
+    if (current < 1) {
+      HideChargesBar();
+      return;
+    } else {
+      ShowChargesBar();
+    }
+
+    foreach (Transform child in skillChargesBar) {
+      Destroy(child.gameObject);
+    }
+
+    for (int i = 1; i <= total; i++) {
+      if (current >= i) Instantiate(BattleUI.Instance.skillChargePrefab, skillChargesBar);
+      else Instantiate(BattleUI.Instance.skillChargeEmptyPrefab, skillChargesBar);
+    }
   }
 
   public void UpdateEffects() {
@@ -96,8 +113,7 @@ public class UnitUI : MonoBehaviour {
   public void ShowPopup(string value, PopupType type = PopupType.Neutral) {
     GameObject popup = Instantiate(BattleUI.Instance.damagePopupPrefab, canvas.transform);
     if (popup == null) return;
-    TextMeshProUGUI text = popup.GetComponent<TextMeshProUGUI>();
-    if (text == null) return;
+    if (!popup.TryGetComponent<TextMeshProUGUI>(out var text)) return;
 
     bool isNumber = float.TryParse(value, out float number);
     string resultValue = value;

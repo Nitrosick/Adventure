@@ -7,8 +7,12 @@ using UnityEngine.UI;
 
 public class BattleUI : MonoBehaviour {
   public static BattleUI Instance;
+
+  // Prefabs
   [SerializeField] private GameObject avatarPrefab;
   public GameObject damagePopupPrefab;
+  public GameObject skillChargePrefab;
+  public GameObject skillChargeEmptyPrefab;
 
   // Panels
   private static Transform queuePanel;
@@ -63,7 +67,8 @@ public class BattleUI : MonoBehaviour {
       queuePanel == null || actionsPanel == null || skillsPanel == null || unitInfoPanel == null ||
       unitName == null || unitDescription == null || unitHP == null || unitStats == null ||
       unitMP == null || unitDamage == null || unitDefense == null || unitRange == null ||
-      unitEffects == null || phaseSkipButton == null || phaseAttackLabel == null || phaseMoveLabel == null
+      unitEffects == null || phaseSkipButton == null || phaseAttackLabel == null || phaseMoveLabel == null ||
+      damagePopupPrefab == null || skillChargePrefab == null || skillChargeEmptyPrefab == null
     ) {
       Debug.LogError("Battle UI components initialization error");
       return;
@@ -141,7 +146,7 @@ public class BattleUI : MonoBehaviour {
     }
   }
 
-  public static void ShowUnitInfo(string name, string desc, float[] stats, float mp, float totalHp, float hp, int damage, float def, int range, List<EffectInstance> effects) {
+  public static void ShowUnitInfo(string name, string desc, float[] stats, float mp, float totalHp, float hp, float damage, float def, int range, List<EffectInstance> effects) {
     unitInfoPanel.SetActive(true);
     unitName.text = name;
     unitDescription.text = desc;

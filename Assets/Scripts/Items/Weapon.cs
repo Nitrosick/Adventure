@@ -2,7 +2,7 @@ using UnityEngine;
 
 [CreateAssetMenu(menuName = "Equipment/Weapon")]
 public class Weapon : Equipment {
-  public int damage;
+  public float damage;
   public float critModifier;
   public float armorPenetration;
   public float effectChance;
@@ -11,4 +11,5 @@ public class Weapon : Equipment {
 
   public GameObject prefab;
   public DamageType damageType;
+  public CoreStat[] scalingStats;
 }

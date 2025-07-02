@@ -115,6 +115,19 @@ public class UnitEquipment : MonoBehaviour {
     return result;
   }
 
+  public float GetTotalDamage() {
+    // FIXME: Учет предмета во второй руке
+    float result = primaryWeapon.damage;
+    foreach (CoreStat stat in primaryWeapon.scalingStats) {
+      switch (stat) {
+        case CoreStat.Strength: result += unit.Strength; break;
+        case CoreStat.Dexterity: result += unit.Dexterity; break;
+        case CoreStat.Intelligence: result += unit.Intelligence; break;
+      }
+    }
+    return result;
+  }
+
   public List<Skill> GetSkills() {
     List<Skill> result = new() { };
     if (primaryWeapon != null && primaryWeapon.skill != null) result.Add(primaryWeapon.skill);

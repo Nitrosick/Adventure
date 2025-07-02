@@ -123,9 +123,7 @@ public class BattleManager : MonoBehaviour
   public static float CalculateDamage(Unit attacker, Unit target) {
     Weapon attackerWeapon = attacker.Equip.primaryWeapon;
     Armor targetArmor = target.Equip.armor;
-
-    float damage = attackerWeapon.damage + attacker.Strength;
-    // FIXME: Учет предмета во второй руке
+    float damage = attacker.Equip.GetTotalDamage();
     float defense = target.Equip.GetTotalDefense();
 
     if (attackerWeapon.armorPenetration > 0 && (targetArmor.weight != EquipmentWeight.Light)) {
