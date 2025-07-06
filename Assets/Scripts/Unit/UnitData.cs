@@ -1,7 +1,7 @@
 [System.Serializable]
 public class UnitData {
   // FIXME: Добавить все сериализуемые поля
-  public int prefabId = 1;
+  public string prefabId;
   public float currentHealth;
   public bool inSquad;
   public float strength;

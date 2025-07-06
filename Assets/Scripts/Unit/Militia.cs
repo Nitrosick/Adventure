@@ -7,7 +7,7 @@ public class Militia : Unit
 
     Name = "Militia";
     Description = "Yesterday's peasant is today's armed infantryman. An inexperienced and poorly equipped fighter, but always ready for battle.";
-    prefabId = 2;
+    prefabId = "u2";
     Type = UnitType.Melee;
     AllowedWeapon = EquipmentType.OneHandWeapon;
     TotalHealth = 25f;

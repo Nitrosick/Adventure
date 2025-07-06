@@ -10,7 +10,7 @@ public class Unit : MonoBehaviour {
   public UnitEquipment Equip { get; private set; }
   public UnitEffects Effects { get; private set; }
   public Sprite avatar;
-  protected int prefabId;
+  protected string prefabId;
 
   // Temporary
   public Tile CurrentTile { get; set; }

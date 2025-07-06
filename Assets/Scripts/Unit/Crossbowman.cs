@@ -11,7 +11,7 @@ public class Crossbowman : Unit
 
     Name = "Crossbowman";
     Description = "Extremely immobile, well-protected shooter. Effective at medium ranges.";
-    prefabId = 4;
+    prefabId = "u4";
     Type = UnitType.Range;
     AllowedWeapon = EquipmentType.Crossbow;
     TotalHealth = 20f;

@@ -11,9 +11,9 @@ public class PlayerArmy : MonoBehaviour {
     if (Units.Count > 0 || result != null) return;
 
     PrefabDatabase database = Resources.Load<PrefabDatabase>("Databases/PrefabDatabase");
-    int[] unitIds = { 1, 2, 2 };
+    string[] unitIds = { "u1", "u2", "u2" };
 
-    foreach (int id in unitIds) {
+    foreach (string id in unitIds) {
       Unit prefab = database.GetPrefab(id, true);
       Units.Add(prefab);
     }
