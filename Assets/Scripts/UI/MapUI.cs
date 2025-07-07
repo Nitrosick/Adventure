@@ -18,7 +18,8 @@ public class MapUI : MonoBehaviour
   private static TextMeshProUGUI goldValue;
   private static TextMeshProUGUI woodValue;
   private static TextMeshProUGUI stoneValue;
-  private static TextMeshProUGUI metalsValue;
+  private static TextMeshProUGUI metalValue;
+  private static TextMeshProUGUI leatherValue;
   private static TextMeshProUGUI villagersValue;
 
   private void Awake() {
@@ -34,7 +35,8 @@ public class MapUI : MonoBehaviour
     goldValue = resources.Find("Gold/Value").GetComponent<TextMeshProUGUI>();
     woodValue = resources.Find("Wood/Value").GetComponent<TextMeshProUGUI>();
     stoneValue = resources.Find("Stone/Value").GetComponent<TextMeshProUGUI>();
-    metalsValue = resources.Find("Metals/Value").GetComponent<TextMeshProUGUI>();
+    metalValue = resources.Find("Metal/Value").GetComponent<TextMeshProUGUI>();
+    leatherValue = resources.Find("Leather/Value").GetComponent<TextMeshProUGUI>();
     villagersValue = resources.Find("Villagers/Value").GetComponent<TextMeshProUGUI>();
 
     if (!ComponentsInitialized()) {
@@ -49,7 +51,7 @@ public class MapUI : MonoBehaviour
     return zoneInfoPanel != null && zoneInfoTitle != null && zoneInfoDescription != null &&
     zoneInfoGuardedMark != null && mainMenuButton != null && playerMenuButton != null &&
     goldValue != null && woodValue != null && stoneValue != null &&
-    metalsValue != null && villagersValue != null;
+    metalValue != null && villagersValue != null && leatherValue != null;
   }
 
   private void OnDestroy() {
@@ -86,7 +88,8 @@ public class MapUI : MonoBehaviour
     goldValue.text = gold.ToString();
     woodValue.text = resources[0].ToString();
     stoneValue.text = resources[1].ToString();
-    metalsValue.text = resources[2].ToString();
+    metalValue.text = resources[2].ToString();
+    leatherValue.text = resources[3].ToString();
 
     villagersValue.text = string.Format(
       "{0} ({1}) / {2}",

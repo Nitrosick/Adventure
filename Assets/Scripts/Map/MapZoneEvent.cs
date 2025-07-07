@@ -11,12 +11,21 @@ public class MapZoneEvent : MonoBehaviour
   }
 
   public void CheckEvents() {
-    if (zone == null) return;
+    if (zone == null || zone.events.Count < 1) return;
 
-    if (zone.guard != null && zone.guard.Length > 0) StartBattle();
+    switch (zone.events[0]) {
+      case MapZoneType.InstantBattle:
+        StartBattle();
+        break;
+    }
   }
 
   private void StartBattle() {
+    if (zone.guard == null || zone.guard.Length < 1) {
+      Debug.LogError("Zone guard is not specified");
+      return;
+    }
+
     Unit[] allies = Player.Instance.Army.Units
       .Where(u => u.InSquad).ToArray();
     Unit[] reserve = Player.Instance.Army.Units

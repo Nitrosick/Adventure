@@ -8,7 +8,7 @@ public class Player : MonoBehaviour {
   public PlayerInventory Inventory { get; private set; }
 
   public int Gold { get; private set; }
-  public int[] Resources { get; private set; } = { 0, 0, 0 };
+  public int[] Resources { get; private set; } = { 0, 0, 0, 0 };
   public int Villagers { get; private set; }
   public int MaxVillagers { get; private set; } = 5;
   public int Experience { get; private set; }
@@ -126,6 +126,7 @@ public class Player : MonoBehaviour {
 
     BattleResult? result = StateManager.battleResult;
     if (result == null) return;
+    BattleReward fixedReward = move.CurrentZone.fixedReward;
 
     UnitData[] units = StateManager.allies;
     UnitData[] reserve = StateManager.reserve;
@@ -135,13 +136,17 @@ public class Player : MonoBehaviour {
     if (result == BattleResult.Defeat) {
       transform.position = move.startZone.playerPosition;
       move.CurrentZone = move.startZone;
-    }
-    else {
+      SetFame(fixedReward.fame / 2 * -1);
+    } else {
       BattleReward reward = StateManager.battleReward;
       if (reward == null) return;
+      reward.Add(fixedReward);
+      move.CurrentZone.fixedReward = new BattleReward();
+
       SetGold(reward.Gold);
       SetResources(reward.resources);
       AddExpirience(reward.experience);
+      SetFame(reward.fame);
       Inventory.AddItems(reward.items);
       MapUI.UpdateResources(Gold, Resources, GetTotalPeople(), MaxVillagers);
     }

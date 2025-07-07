@@ -21,7 +21,7 @@ public static class StateManager
   // Global
   public static int currentPlayerZoneId;
   public static int gold = 0;
-  public static int[] resources = { 0, 0, 0 };
+  public static int[] resources = { 0, 0, 0, 0 };
   public static int villagers = 0;
   public static int maxVillagers = 5;
   public static int experience = 0;

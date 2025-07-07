@@ -42,11 +42,8 @@ public class MapZoneManager : MonoBehaviour
     if (currentZone == null) return;
 
     if (result == BattleResult.Victory) {
-      Player.Instance.SetFame(currentZone.fameReward);
       currentZone.SetCleared();
       StateManager.clearedZones[currentZone.id] = true;
-    } else {
-      Player.Instance.SetFame(currentZone.fameReward / 2 * -1);
     }
   }
 }

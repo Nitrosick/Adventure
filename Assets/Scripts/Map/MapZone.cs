@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -10,6 +11,7 @@ public class MapZone : MonoBehaviour
   public string zoneName;
   public string description;
   public string descriptionCleared;
+  public List<MapZoneType> events;
 
   [Header("Materials and components")]
   public Material defaultMaterial;
@@ -26,7 +28,7 @@ public class MapZone : MonoBehaviour
   public Unit[] guard;
   public string battlefieldName;
   public int armySlots;
-  public int fameReward;
+  public BattleReward fixedReward;
 
   [Header("State")]
   private bool isCleared = false;
@@ -67,11 +69,15 @@ public class MapZone : MonoBehaviour
   }
 
   public void SetCleared() {
-    isCleared = true;
-    guard = new Unit[] {};
-    battlefieldName = "";
-    armySlots = 0;
-    fameReward = 0;
+    events.RemoveAt(0);
+
+    if (events.Count < 1) {
+      isCleared = true;
+      guard = new Unit[] {};
+      battlefieldName = "";
+      armySlots = 0;
+    }
+
     if (markIcon != null) markIcon.material = stoneMaterial;
 
     if (interactiveObjects != null && interactiveObjects.Length > 0) {
