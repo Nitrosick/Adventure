@@ -67,14 +67,8 @@ public class CameraController : MonoBehaviour {
     }
 
     Vector3 newPosition = instance.transform.position + moveDirection * speed;
-
-    // float camHalfWidth = Camera.main.orthographicSize * Screen.width / Screen.height;
-    // float camHalfHeight = Camera.main.orthographicSize;
-
-    // newPosition.x = Mathf.Clamp(newPosition.x, bounds.bounds.min.x + camHalfWidth + cameraMargin, bounds.bounds.max.x - camHalfWidth - cameraMargin);
-    // newPosition.z = Mathf.Clamp(newPosition.z, bounds.bounds.min.z + camHalfHeight + cameraMargin, bounds.bounds.max.z - camHalfHeight - cameraMargin);
-
     instance.transform.position = newPosition;
+    // FIXME: Ограничить передвижение камеры
   }
 
   private static void CalculateFocusDistance() {

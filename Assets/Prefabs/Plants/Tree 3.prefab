@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &6868523046828360187
+--- !u!1001 &5234690807491620965
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -11,22 +11,22 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: f0dbc846cb49d6444b6b78b6776b29c6,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.13
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: f0dbc846cb49d6444b6b78b6776b29c6,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.34
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: f0dbc846cb49d6444b6b78b6776b29c6,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.13
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: f0dbc846cb49d6444b6b78b6776b29c6,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: f0dbc846cb49d6444b6b78b6776b29c6,
         type: 3}
@@ -85,27 +85,21 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: f0dbc846cb49d6444b6b78b6776b29c6,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: -8376977467742422294}
+      addedObject: {fileID: 6521977914691953039}
   m_SourcePrefab: {fileID: 100100000, guid: f0dbc846cb49d6444b6b78b6776b29c6, type: 3}
---- !u!23 &5228803344065846655 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: f0dbc846cb49d6444b6b78b6776b29c6,
-    type: 3}
-  m_PrefabInstance: {fileID: 6868523046828360187}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &6021467183543286954 stripped
+--- !u!1 &4928119279838514484 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: f0dbc846cb49d6444b6b78b6776b29c6,
     type: 3}
-  m_PrefabInstance: {fileID: 6868523046828360187}
+  m_PrefabInstance: {fileID: 5234690807491620965}
   m_PrefabAsset: {fileID: 0}
---- !u!205 &-8376977467742422294
+--- !u!205 &6521977914691953039
 LODGroup:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6021467183543286954}
+  m_GameObject: {fileID: 4928119279838514484}
   serializedVersion: 2
   m_LocalReferencePoint: {x: 0, y: 0, z: 0}
   m_Size: 1
@@ -116,5 +110,11 @@ LODGroup:
   - screenRelativeHeight: 0.003
     fadeTransitionWidth: 0
     renderers:
-    - renderer: {fileID: 5228803344065846655}
+    - renderer: {fileID: 6873845636209896673}
   m_Enabled: 1
+--- !u!23 &6873845636209896673 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: f0dbc846cb49d6444b6b78b6776b29c6,
+    type: 3}
+  m_PrefabInstance: {fileID: 5234690807491620965}
+  m_PrefabAsset: {fileID: 0}

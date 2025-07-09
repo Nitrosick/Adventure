@@ -8,9 +8,10 @@ public class TileBrush : GridBrushBase {
   public enum TileRotation { Random, Left, Top, Right, Bottom }
 
   [SerializeField, HideInInspector] private int selectedSetIndex = 0;
-  [SerializeField, HideInInspector] public TileRotation tileRotation;
+  [HideInInspector] public TileRotation tileRotation;
+  [HideInInspector, Range(-2, 2)] public int tileOffset = 0;
 
-  private List<TileBrushSet> availableSets = new();
+  private readonly List<TileBrushSet> availableSets = new();
   private List<GameObject> currentPrefabs = new();
 
 #if UNITY_EDITOR
@@ -28,6 +29,7 @@ public class TileBrush : GridBrushBase {
 
       brush.selectedSetIndex = EditorGUILayout.Popup("Brush Set", brush.selectedSetIndex, names);
       brush.tileRotation = (TileRotation)EditorGUILayout.EnumPopup("Rotation", brush.tileRotation);
+      brush.tileOffset = EditorGUILayout.IntSlider("Offset", brush.tileOffset, -2, 2);
 
       if (GUI.changed) {
         brush.ApplySelectedSet();
@@ -67,6 +69,7 @@ public class TileBrush : GridBrushBase {
 
     Vector3 worldPos = grid.CellToWorld(position);
     worldPos.x += 0.5f;
+    worldPos.y += tileOffset;
     worldPos.z += 0.5f;
 
     foreach (Transform child in brushTarget.transform) {

@@ -5,8 +5,8 @@ public class BattleReward {
   public int experience;
   public int fame;
   public int Gold { get; private set; } = 0;
-  public int[] goldRange = { 0, 0 };
-  public int[] resources = { 0, 0, 0, 0 };
+  public int[] goldRange = { 0, 0 }; // Min, Max
+  public int[] resources = { 0, 0, 0, 0 }; // Wood, Stone, Metal, Leather
   public List<Equipment> items = new();
 
   public void Add(BattleReward other) {
