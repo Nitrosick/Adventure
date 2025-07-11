@@ -381,6 +381,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Cliff x3 Grass 2
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 85d0a6f7444740a418ae55c8c7810b7d,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 85d0a6f7444740a418ae55c8c7810b7d,
+        type: 3}
+      propertyPath: m_TagString
+      value: BattlefieldTile
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -401,6 +411,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: -464065785654598408}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 85d0a6f7444740a418ae55c8c7810b7d,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -8166163568725504459}
   m_SourcePrefab: {fileID: 100100000, guid: 85d0a6f7444740a418ae55c8c7810b7d, type: 3}
 --- !u!1 &107677961908978246 stripped
 GameObject:
@@ -434,6 +448,27 @@ MonoBehaviour:
   allyFocusPoint: 0
   enemyFocusPoint: 0
   lootDropChance: 0
+--- !u!65 &-8166163568725504459
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 107677961908978246}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.5500448, y: 6, z: 2.0000005}
+  m_Center: {x: 0.27502227, y: 3, z: -0.000000059604645}
 --- !u!4 &735595431199332604 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 85d0a6f7444740a418ae55c8c7810b7d,

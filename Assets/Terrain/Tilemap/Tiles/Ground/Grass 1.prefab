@@ -381,6 +381,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Grass 1
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 2563881f810aee14d99cad8ab8a7b9be,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 2563881f810aee14d99cad8ab8a7b9be,
+        type: 3}
+      propertyPath: m_TagString
+      value: BattlefieldTile
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -401,6 +411,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: -1324321242819876401}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 2563881f810aee14d99cad8ab8a7b9be,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3404086112312600569}
   m_SourcePrefab: {fileID: 100100000, guid: 2563881f810aee14d99cad8ab8a7b9be, type: 3}
 --- !u!4 &505888490738871905 stripped
 Transform:
@@ -440,3 +454,24 @@ MonoBehaviour:
   allyFocusPoint: 0
   enemyFocusPoint: 0
   lootDropChance: 0
+--- !u!65 &3404086112312600569
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 886811423102121179}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2, y: 2, z: 2}
+  m_Center: {x: 0, y: 1, z: 0}

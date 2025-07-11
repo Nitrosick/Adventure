@@ -86,6 +86,7 @@ public class UnitEquipment : MonoBehaviour {
 
     inventory.Remove(item);
     if (oldItem != null) inventory.Add(oldItem);
+    if (unit.IsHero) Player.Instance.Inventory.UpdateEquipment();
   }
 
   public void UnequipAll() {
