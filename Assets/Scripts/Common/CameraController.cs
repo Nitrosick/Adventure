@@ -1,7 +1,6 @@
 using System.Threading.Tasks;
 using Cinemachine;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 public class CameraController : MonoBehaviour {
@@ -18,9 +17,9 @@ public class CameraController : MonoBehaviour {
   private static bool isShaking = false;
   private static float focusDistance;
 
-  [SerializeField]
-  private InputActionReference moveInput;
-  public BoxCollider bounds;
+  [SerializeField] private InputActionReference moveInput;
+  [SerializeField] private float[] xLimits = { -100, 100 };
+  [SerializeField] private float[] zLimits = { -100, 100 };
 
   private void Awake() {
     instance = this;
@@ -35,9 +34,21 @@ public class CameraController : MonoBehaviour {
     CalculateFocusDistance();
   }
 
+  private void Start() {
+    float angleX = transform.eulerAngles.x;
+    float angleY = transform.eulerAngles.y;
+    float height = transform.position.y;
+    float offsetZ = height / Mathf.Tan(angleX * Mathf.Deg2Rad);
+    float offsetX = offsetZ * Mathf.Tan(angleY * Mathf.Deg2Rad);
+
+    instance.xLimits[0] += offsetX / 2;
+    instance.xLimits[1] += offsetX / 2;
+    instance.zLimits[0] += offsetZ / 2;
+    instance.zLimits[1] += offsetZ / 2;
+  }
+
   private void Update() {
     if (isFocusing || SceneController.Locked) return;
-    if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject()) return;
     if (ShouldMove()) Move();
   }
 
@@ -74,6 +85,7 @@ public class CameraController : MonoBehaviour {
     if (mousePos.y <= edgeSize) moveDirection += -forward;
     if (mousePos.y >= Screen.height - edgeSize) moveDirection += forward;
 
+    if (moveDirection == Vector3.zero) return;
     moveDirection.Normalize();
 
     float speed = moveSpeed * Time.deltaTime;
@@ -82,17 +94,21 @@ public class CameraController : MonoBehaviour {
       speed = edgeScrollSpeed * Time.deltaTime;
     }
 
-    Vector3 newPosition = instance.transform.position + moveDirection * speed;
-    Debug.Log(instance.bounds);
-    Bounds bounds = instance.bounds.bounds;
+    Vector3 position = instance.transform.position;
+    Vector3 desiredMove = moveDirection * speed;
+    Vector3 targetPosition = position + desiredMove;
 
-    float cameraHalfHeight = Camera.main.orthographicSize;
-    float cameraHalfWidth = cameraHalfHeight * Camera.main.aspect;
+    if ((targetPosition.x < instance.xLimits[0] && desiredMove.x < 0) ||
+        (targetPosition.x > instance.xLimits[1] && desiredMove.x > 0)) {
+      desiredMove.x = 0;
+    }
 
-    newPosition.x = Mathf.Clamp(newPosition.x, bounds.min.x + cameraHalfWidth, bounds.max.x - cameraHalfWidth);
-    newPosition.z = Mathf.Clamp(newPosition.z, bounds.min.z + cameraHalfHeight, bounds.max.z - cameraHalfHeight);
+    if ((targetPosition.z < instance.zLimits[0] && desiredMove.z < 0) ||
+        (targetPosition.z > instance.zLimits[1] && desiredMove.z > 0)) {
+      desiredMove.z = 0;
+    }
 
-    instance.transform.position = newPosition;
+    instance.transform.position += desiredMove;
   }
 
   private static void CalculateFocusDistance() {

@@ -33,13 +33,11 @@ public class MapZoneEvent : MonoBehaviour
 
     if (allies == null || allies.Length == 0) {
       Debug.LogError("Player doesn't have an army");
-      // FIXME: Открыть окно перераспределения войск
       return;
     }
 
     if (allies.Length > zone.armySlots) {
-      Debug.Log("Too many units for this battle");
-      // FIXME: Открыть окно перераспределения войск
+      SquadOverwhelmed.Open(zone.armySlots, this, zone.events[0] != MapZoneType.InstantBattle);
       return;
     }
 
