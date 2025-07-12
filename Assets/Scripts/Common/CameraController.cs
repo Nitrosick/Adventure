@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Cinemachine;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 public class CameraController : MonoBehaviour {
@@ -16,11 +17,10 @@ public class CameraController : MonoBehaviour {
   private static bool isFocusing = false;
   private static bool isShaking = false;
   private static float focusDistance;
-  // private static readonly float cameraMargin = 2f;
 
   [SerializeField]
   private InputActionReference moveInput;
-  // public BoxCollider bounds;
+  public BoxCollider bounds;
 
   private void Awake() {
     instance = this;
@@ -37,7 +37,23 @@ public class CameraController : MonoBehaviour {
 
   private void Update() {
     if (isFocusing || SceneController.Locked) return;
-    Move();
+    if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject()) return;
+    if (ShouldMove()) Move();
+  }
+
+  private bool ShouldMove() {
+    Vector2 move = instance.moveInput.action.ReadValue<Vector2>();
+    Vector2 mousePos = Mouse.current.position.ReadValue();
+
+    bool keyboardInput = move.sqrMagnitude > 0.01f;
+
+    bool edgeInput =
+      mousePos.x <= edgeSize ||
+      mousePos.x >= Screen.width - edgeSize ||
+      mousePos.y <= edgeSize ||
+      mousePos.y >= Screen.height - edgeSize;
+
+    return keyboardInput || edgeInput;
   }
 
   private static void Move() {
@@ -51,8 +67,8 @@ public class CameraController : MonoBehaviour {
 
     Vector2 move = instance.moveInput.action.ReadValue<Vector2>();
     Vector3 moveDirection = (right * move.x + forward * move.y).normalized;
-    Vector2 mousePos = Mouse.current.position.ReadValue();
 
+    Vector2 mousePos = Mouse.current.position.ReadValue();
     if (mousePos.x <= edgeSize) moveDirection += -right;
     if (mousePos.x >= Screen.width - edgeSize) moveDirection += right;
     if (mousePos.y <= edgeSize) moveDirection += -forward;
@@ -67,8 +83,16 @@ public class CameraController : MonoBehaviour {
     }
 
     Vector3 newPosition = instance.transform.position + moveDirection * speed;
+    Debug.Log(instance.bounds);
+    Bounds bounds = instance.bounds.bounds;
+
+    float cameraHalfHeight = Camera.main.orthographicSize;
+    float cameraHalfWidth = cameraHalfHeight * Camera.main.aspect;
+
+    newPosition.x = Mathf.Clamp(newPosition.x, bounds.min.x + cameraHalfWidth, bounds.max.x - cameraHalfWidth);
+    newPosition.z = Mathf.Clamp(newPosition.z, bounds.min.z + cameraHalfHeight, bounds.max.z - cameraHalfHeight);
+
     instance.transform.position = newPosition;
-    // FIXME: Ограничить передвижение камеры
   }
 
   private static void CalculateFocusDistance() {

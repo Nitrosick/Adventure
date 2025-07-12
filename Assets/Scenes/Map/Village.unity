@@ -8610,6 +8610,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveInput: {fileID: -107690438857076586, guid: d4e6bac820a202e46bf2fe966a0e4314,
     type: 3}
+  bounds: {fileID: 1957346885}
 --- !u!114 &437023236
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8626,7 +8627,7 @@ MonoBehaviour:
   m_BoundingVolume: {fileID: 1957346885}
   m_BoundingShape2D: {fileID: 0}
   m_ConfineScreenEdges: 1
-  m_Damping: 0
+  m_Damping: 0.5
 --- !u!1 &441319638
 GameObject:
   m_ObjectHideFlags: 0
@@ -33591,7 +33592,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1957346884
 Transform:
   m_ObjectHideFlags: 0
@@ -33627,7 +33628,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 51.5, y: 29, z: 50}
-  m_Center: {x: 3.88, y: 5.741989, z: -6.0699043}
+  m_Center: {x: 3.9, y: 5.7, z: -6}
 --- !u!1 &1959293718
 GameObject:
   m_ObjectHideFlags: 0
