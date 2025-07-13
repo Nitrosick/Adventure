@@ -28,6 +28,13 @@ Icons
 Default size: 25x25
 Event size: 30x30
 Color: #4B4A47
+
+Scrollbars
+----------
+Width: 15
+Default: #5C523F
+Highlighted / Pressed / Selected: #938569
+Disabled: #5C523F o-128
 */
 
 // Battle

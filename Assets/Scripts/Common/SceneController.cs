@@ -10,7 +10,8 @@ public class SceneController : MonoBehaviour
   private static IconDatabase IconDatabase;
   public static bool Locked { get; private set; } = false;
 
-  // Overlay
+  // Background
+  private static GameObject background;
   private static Image overlay;
   private static readonly float fadeDuration = 2f;
 
@@ -22,12 +23,13 @@ public class SceneController : MonoBehaviour
   private void Awake() {
     IconDatabase = Resources.Load<IconDatabase>("Databases/IconDatabase");
 
+    background = transform.Find("Background/Image").gameObject;
     overlay = transform.Find("Overlay/Image").GetComponent<Image>();
     eventPanel = transform.Find("Event/Panel").gameObject;
     eventIcon = transform.Find("Event/Panel/IconPlace/Icon").GetComponent<Image>();
     eventText = transform.Find("Event/Panel/Text").GetComponent<TextMeshProUGUI>();
 
-    if (overlay == null || eventPanel == null || eventIcon == null || eventText == null) {
+    if (background == null || overlay == null || eventPanel == null || eventIcon == null || eventText == null) {
       Debug.LogError("Scene controller components initialization error");
       return;
     }
@@ -40,6 +42,9 @@ public class SceneController : MonoBehaviour
 
   public static void Lock() { Locked = true; }
   public static void Unlock() { Locked = false; }
+
+  public static void ShowBackground() { background.SetActive(true); }
+  public static void HideBackground() { background.SetActive(false); }
 
   public static void SwitchScene(string name) {
     Lock();

@@ -39,12 +39,14 @@ public class Selector : MonoBehaviour {
   private static void Open() {
     window.gameObject.SetActive(true);
     background.SetActive(true);
+    SceneController.ShowBackground();
   }
 
   public static void Close() {
     foreach (Transform child in list.transform) Destroy(child.gameObject);
     window.gameObject.SetActive(false);
     background.SetActive(false);
+    SceneController.HideBackground();
     placeholder.SetActive(false);
     list.SetActive(false);
     title.text = "";

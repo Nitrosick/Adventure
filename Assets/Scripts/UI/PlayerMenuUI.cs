@@ -97,8 +97,14 @@ public class PlayerMenuUI : MonoBehaviour {
   public static void Switch() {
     GameObject menuObj = menu.gameObject;
     menuObj.SetActive(!menuObj.activeSelf);
-    if (menuObj.activeSelf) SelectHeroTab();
-    else Clear();
+
+    if (menuObj.activeSelf) {
+      SelectHeroTab();
+      SceneController.ShowBackground();
+    } else {
+      Clear();
+      SceneController.HideBackground();
+    }
   }
 
   private static void Clear() {

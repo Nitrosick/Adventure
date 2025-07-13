@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 public class PlayerMove : MonoBehaviour
@@ -45,6 +46,7 @@ public class PlayerMove : MonoBehaviour
   }
 
   private async void DetectZone() {
+    if (EventSystem.current.IsPointerOverGameObject()) return;
     Ray ray = mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
 
     if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, zoneLayer)) {

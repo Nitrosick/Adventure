@@ -68,11 +68,13 @@ public class SquadOverwhelmed : MonoBehaviour {
     Recalculate();
     window.gameObject.SetActive(true);
     background.SetActive(true);
+    SceneController.ShowBackground();
   }
 
   private static void Close() {
     window.gameObject.SetActive(false);
     background.SetActive(false);
+    SceneController.HideBackground();
     limit = 0;
     text.text = "";
 
