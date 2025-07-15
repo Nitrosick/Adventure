@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 1726ca63a36730042b0bfb60372fc43a
+guid: 6535725dfcf4b574e8267d8bfb9b0849
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -12,8 +12,18 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: Chainmail
+    second: {fileID: 2100000, guid: 431ac0bfa70087149ad7c180dba4f6e0, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: Eyes
     second: {fileID: 2100000, guid: 6eadcd32c7e69264097636094e8a00a4, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Fabric 2
+    second: {fileID: 2100000, guid: 9b109798c4214bc499909912d9603de2, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
@@ -37,8 +47,13 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Shirt
-    second: {fileID: 2100000, guid: 431ac0bfa70087149ad7c180dba4f6e0, type: 2}
+      name: Patches
+    second: {fileID: 2100000, guid: d41c4a1cafab111488edc05f77c5cfb4, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Rope
+    second: {fileID: 2100000, guid: 92ca5d38dbd90fb47a506bfa0857f4ee, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
@@ -48,12 +63,7 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Suit
-    second: {fileID: 2100000, guid: 431ac0bfa70087149ad7c180dba4f6e0, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Underwear
-    second: {fileID: 2100000, guid: 431ac0bfa70087149ad7c180dba4f6e0, type: 2}
+    second: {fileID: 2100000, guid: d27a38d02940367409794b2db45e45a5, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

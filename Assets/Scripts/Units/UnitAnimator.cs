@@ -27,6 +27,10 @@ public class UnitAnimator : MonoBehaviour {
     animator.SetBool("IsBlocking", active);
   }
 
+  public void SetStunned(bool active) {
+    animator.SetBool("IsStunned", active);
+  }
+
   public void SetAttackType(int number) {
     animator.SetInteger("AttackType", number);
   }
@@ -51,6 +55,7 @@ public class UnitAnimator : MonoBehaviour {
     SetMoving(false);
     SetCrouching(false);
     SetBlocking(false);
+    SetStunned(false);
   }
 
   public async Task RotateTowards(Vector3 direction, bool immediate = false, float intensity = 720f) {

@@ -369,17 +369,23 @@ public class PlayerMenuUIInfo : MonoBehaviour {
     if (unit == null) return;
     List<Equipment> inventory = Player.Instance.Inventory.Equip;
 
-    List<Equipment> list = new() { };
-    string title = "";
-    list.AddRange(inventory.Where(i => unit.Equip.CanEquip(i, slot)));
+    List<Equipment> canEquip = new() { };
+    List<Equipment> notEnoughStats = new() { };
+    foreach (Equipment item in inventory) {
+      int allowed = unit.Equip.CanEquip(item, slot);
+      if (allowed < 0) continue;
+      else if (allowed == 0) notEnoughStats.Add(item);
+      else canEquip.Add(item);
+    }
 
+    string title = "";
     switch (slot) {
       case UnitEquipSlot.Primary: title = "Change weapon"; break;
       case UnitEquipSlot.Armor: title = "Change armor"; break;
       case UnitEquipSlot.Secondary: title = "Change left-hand item"; break;
     }
 
-    Selector.List(ChangeEquipment, list, title);
+    Selector.List(ChangeEquipment, canEquip, notEnoughStats, title);
   }
 
   private static void ChangeEquipment(object item) {

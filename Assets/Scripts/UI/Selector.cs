@@ -52,14 +52,23 @@ public class Selector : MonoBehaviour {
     title.text = "";
   }
 
-  public static void List(Action<object> action, List<Equipment> items, string _title = "") {
-    if (items.Count == 0) {
+  public static void List(
+    Action<object> action,
+    List<Equipment> canEquip,
+    List<Equipment> cantEquip,
+    string _title = ""
+  ) {
+    if (canEquip.Count == 0 && cantEquip.Count == 0) {
       placeholder.SetActive(true);
     } else {
       list.SetActive(true);
-      foreach (Equipment item in items) {
+      foreach (Equipment item in canEquip) {
         GameObject obj = Instantiate(Instance.itemPrefab, list.transform);
-        obj.GetComponent<SelectorItem>().Init(item, action);
+        obj.GetComponent<SelectorItem>().Init(item, action, false);
+      }
+      foreach (Equipment item in cantEquip) {
+        GameObject obj = Instantiate(Instance.itemPrefab, list.transform);
+        obj.GetComponent<SelectorItem>().Init(item, action, true);
       }
     }
     title.text = _title;

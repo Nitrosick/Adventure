@@ -27,7 +27,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 1, z: 0}
-  m_LocalScale: {x: 0.05, y: 0.05, z: 0.05}
+  m_LocalScale: {x: 0.04, y: 0.04, z: 0.04}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4230487241263318494}
@@ -238,12 +238,20 @@ MonoBehaviour:
   zoneName: 
   description: 
   descriptionCleared: 
+  events: 
   defaultMaterial: {fileID: 2100000, guid: 2ed285ca696469c4a9fc8deaec1dcb3f, type: 2}
   highlightMaterial: {fileID: 2100000, guid: 5d1468dcb9d7304449728f352c70b54b, type: 2}
   stoneMaterial: {fileID: 2100000, guid: bfb2818b653746240a7d515a6ec2bc84, type: 2}
   interactiveObjects: []
   guard: []
   battlefieldName: 
+  armySlots: 0
+  fixedReward:
+    experience: 0
+    fame: 0
+    goldRange: 0000000000000000
+    resources: 00000000000000000000000000000000
+    items: []
 --- !u!114 &5457183953313169839
 MonoBehaviour:
   m_ObjectHideFlags: 0

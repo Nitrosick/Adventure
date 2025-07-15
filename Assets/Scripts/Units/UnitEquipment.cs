@@ -150,38 +150,45 @@ public class UnitEquipment : MonoBehaviour {
     return primaryWeapon.damageType == DamageType.Chop || primaryWeapon.damageType == DamageType.Crash;
   }
 
-  public bool CanEquip(Equipment item, UnitEquipSlot slot) {
-    float[] unitStats = { unit.Strength, unit.Dexterity, unit.Intelligence };
-
-    for (int i = 0; i < item.requirementStats.Length; i++) {
-      if (item.requirementStats[i] > unitStats[i]) return false;
-    }
-    if (item.requirementLevel > unit.Level) return false;
-    if (item.slot != slot) return false;
+  public int CanEquip(Equipment item, UnitEquipSlot slot) {
+    int result = -1;
+    if (item.slot != slot) return result;
 
     switch (slot) {
       case UnitEquipSlot.Primary:
         if (item is Weapon weapon1) {
-          if (unit.AllowedWeapon == weapon1.type) return true;
+          if (unit.AllowedWeapon == weapon1.type) result = 0;
         }
-        return false;
+        break;
       case UnitEquipSlot.Armor:
         if (item is Armor armor1) {
           foreach (ArmorSet set in armorSets) {
-            if (set.id == armor1.id) return true;
+            if (set.id == armor1.id) result = 0;
           }
         }
-        return false;
+        break;
       case UnitEquipSlot.Secondary:
         if (item is Weapon weapon2) {
           // FIXME: Проверка на оружие для левой руки
+        } else if (item is Armor armor2) {
+          if (unit.ShieldIsAllow) result = 0;
         }
-        else if (item is Armor armor2) {
-          if (unit.ShieldIsAllow) return true;
-        }
-        return false;
-      default:
-        return false;
+        break;
     }
+
+    if (result < 0) return result;
+
+    float[] unitStats = { unit.Strength, unit.Dexterity, unit.Intelligence };
+
+    bool enoughStats = true;
+    for (int i = 0; i < item.requirementStats.Length; i++) {
+      if (item.requirementStats[i] > unitStats[i]) {
+        enoughStats = false;
+        break;
+      }
+    }
+    if (item.requirementLevel <= unit.Level && enoughStats) result = 1;
+
+    return result;
   }
 }

@@ -19,11 +19,12 @@ public class UnitEffects : MonoBehaviour {
 
     if (existing != null && !effect.isStackable) {
       existing.remainingTurns = effect.duration;
-    }
-    else {
+    } else {
       if (duration == 0 && damage == 0) ActiveEffects.Add(new EffectInstance(effect));
       else ActiveEffects.Add(new EffectInstance(effect, duration, damage));
     }
+
+    if (effect.effectName == "Stun") unit.Animator.SetStunned(true);
     unit.Ui.UpdateEffects();
   }
 
@@ -46,11 +47,13 @@ public class UnitEffects : MonoBehaviour {
 
   public void ClearEffect(string effectName) {
     ActiveEffects.RemoveAll(e => e.effectData != null && e.effectData.name == effectName);
+    if (effectName == "Stun") unit.Animator.SetStunned(false);
     unit.Ui.UpdateEffects();
   }
 
   public void ClearEffects() {
     ActiveEffects.Clear();
+    unit.Animator.SetStunned(false);
     unit.Ui.UpdateEffects();
   }
 }

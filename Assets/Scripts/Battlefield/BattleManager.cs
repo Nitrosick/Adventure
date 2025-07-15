@@ -20,7 +20,7 @@ public class BattleManager : MonoBehaviour
   private static readonly float minHitChance = 5f;
   private static readonly float defaultCritChance = 5f;
   private static readonly float minDamage = 0.5f;
-  private static readonly float resistanceFactor = 10f;
+  private static readonly float defenseFactor = 10f;
 
   private void Awake() {
     Instance = this;
@@ -123,14 +123,17 @@ public class BattleManager : MonoBehaviour
   public static float CalculateDamage(Unit attacker, Unit target) {
     Weapon attackerWeapon = attacker.Equip.primaryWeapon;
     Armor targetArmor = target.Equip.armor;
+
+    float resist = targetArmor.resists[attackerWeapon.damageType];
     float damage = attacker.Equip.GetTotalDamage();
+    if (resist != 0) damage *= 1f - (resist / 100f);
     float defense = target.Equip.GetTotalDefense();
 
     if (attackerWeapon.armorPenetration > 0 && (targetArmor.weight != EquipmentWeight.Light)) {
       defense *= 1f - (attackerWeapon.armorPenetration / 100f);
     }
 
-    float total = damage * Mathf.Exp(-defense / resistanceFactor);
+    float total = damage * Mathf.Exp(-defense / defenseFactor);
     if (target.Effects.HasEffect("Block")) total /= 2;
     return total < minDamage ? minDamage : total;
   }
