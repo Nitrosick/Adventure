@@ -124,10 +124,12 @@ public class Player : MonoBehaviour {
 
     MapUI.UpdateResources(Gold, Resources, GetTotalPeople(), MaxVillagers);
 
+    if (move.CurrentZone is not MapZoneBattle battleZone) return;
     BattleResult? result = StateManager.battleResult;
     if (result == null) return;
-    BattleReward fixedReward = move.CurrentZone.fixedReward;
+    BattleReward fixedReward = battleZone.fixedReward;
 
+    // FIXME: Перезаписывать юнитов до проверки типа зоны
     UnitData[] units = StateManager.allies;
     UnitData[] reserve = StateManager.reserve;
     UnitData[] allUnit = units.Concat(reserve).ToArray();
@@ -141,7 +143,7 @@ public class Player : MonoBehaviour {
       BattleReward reward = StateManager.battleReward;
       if (reward == null) return;
       reward.Add(fixedReward);
-      move.CurrentZone.fixedReward = new BattleReward();
+      battleZone.fixedReward = new BattleReward();
 
       SetGold(reward.Gold);
       SetResources(reward.resources);

@@ -12,28 +12,20 @@ public class MapZone : MonoBehaviour
   public string description;
   public string descriptionCleared;
   public List<MapZoneType> events;
+  public bool isEmpty = false;
 
   [Header("Materials and components")]
   public Material defaultMaterial;
   public Material highlightMaterial;
   public Material stoneMaterial;
   public GameObject[] interactiveObjects;
-  private Renderer render;
-  private SpriteRenderer markerRender;
-  private MeshRenderer markIcon;
-  private Way[] ways;
-  private Color markerHighlightColor = new(255, 255, 255, 255);
+  protected Renderer render;
+  protected SpriteRenderer markerRender;
+  protected MeshRenderer markIcon;
+  protected Way[] ways;
+  protected Color markerHighlightColor = new(255, 255, 255, 255);
 
-  [Header("Battle")]
-  public Unit[] guard;
-  public string battlefieldName;
-  public int armySlots;
-  public BattleReward fixedReward;
-
-  [Header("State")]
-  private bool isCleared = false;
-
-  private void Awake() {
+  protected void Awake() {
     render = GetComponent<Renderer>();
     render.material = defaultMaterial;
     markerRender = transform.Find("Marker").GetComponent<SpriteRenderer>();
@@ -51,9 +43,9 @@ public class MapZone : MonoBehaviour
     }
   }
 
-  private void OnMouseEnter() {
+  protected void OnMouseEnter() {
     if (SceneController.Locked || EventSystem.current.IsPointerOverGameObject()) return;
-    MapUI.ShowZoneInfo(zoneName, isCleared, description, descriptionCleared, guard.Length > 0);
+    MapUI.ShowZoneInfo(zoneName, description, descriptionCleared, events, isEmpty);
 
     MapZone playerZone = Player.Instance.GetComponent<PlayerMove>().CurrentZone;
     int[] wayIds = ways.Select(way => way.id).ToArray();
@@ -62,27 +54,20 @@ public class MapZone : MonoBehaviour
     markerRender.color = markerHighlightColor;
   }
 
-  private void OnMouseExit() {
+  protected void OnMouseExit() {
     MapUI.HideZoneInfo();
     render.material = defaultMaterial;
     markerRender.color = new Color(255, 255, 255, 170);
   }
 
-  public void SetCleared() {
+  public virtual void SetCleared() {
+    // FIXME: Продумать загрузку данных из стейта
     events.RemoveAt(0);
-
-    if (events.Count < 1) {
-      isCleared = true;
-      guard = new Unit[] {};
-      battlefieldName = "";
-      armySlots = 0;
-    }
-
     if (markIcon != null) markIcon.material = stoneMaterial;
 
     if (interactiveObjects != null && interactiveObjects.Length > 0) {
       foreach (GameObject obj in interactiveObjects) {
-        obj.SetActive(false);
+        obj.SetActive(!obj.activeSelf);
       }
     }
   }

@@ -21,7 +21,8 @@ public class MapZoneEvent : MonoBehaviour
   }
 
   private void StartBattle() {
-    if (zone.guard == null || zone.guard.Length < 1) {
+    if (zone is not MapZoneBattle battleZone) return;
+    if (battleZone.guard == null || battleZone.guard.Length < 1) {
       Debug.LogError("Zone guard is not specified");
       return;
     }
@@ -36,8 +37,8 @@ public class MapZoneEvent : MonoBehaviour
       return;
     }
 
-    if (allies.Length > zone.armySlots) {
-      SquadOverwhelmed.Open(zone.armySlots, this, zone.events[0] != MapZoneType.InstantBattle);
+    if (allies.Length > battleZone.armySlots) {
+      SquadOverwhelmed.Open(battleZone.armySlots, this, battleZone.events[0] != MapZoneType.InstantBattle);
       return;
     }
 
@@ -45,8 +46,8 @@ public class MapZoneEvent : MonoBehaviour
     StateManager.enterScene = SceneManager.GetActiveScene().name;
     StateManager.WriteUnitsData(allies, "allies");
     StateManager.WriteUnitsData(reserve, "reserve");
-    StateManager.WriteUnitsData(zone.guard, "enemies");
+    StateManager.WriteUnitsData(battleZone.guard, "enemies");
     SceneController.ShowEventInfo("battle", "Battle is starting");
-    SceneController.SwitchScene(zone.battlefieldName);
+    SceneController.SwitchScene(battleZone.battlefieldName);
   }
 }
