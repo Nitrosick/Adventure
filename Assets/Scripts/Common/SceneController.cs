@@ -48,8 +48,7 @@ public class SceneController : MonoBehaviour
 
   public static void SwitchScene(string name) {
     Lock();
-    MapUI.DisableUI();
-    MapUI.HideZoneInfo();
+    overlay.raycastTarget = true;
     _ = FadeIn(() => SceneManager.LoadScene(name));
   }
 

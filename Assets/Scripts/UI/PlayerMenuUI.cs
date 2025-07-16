@@ -65,6 +65,7 @@ public class PlayerMenuUI : MonoBehaviour {
 
     if (!ComponentsInitialized()) {
       Debug.LogError("Player menu UI components initialization error");
+      return;
     }
 
     navHero.onClick.AddListener(SelectHeroTab);

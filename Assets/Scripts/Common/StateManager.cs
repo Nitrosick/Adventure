@@ -1,9 +1,10 @@
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using UnityEngine;
 
-public static class StateManager
-{
+public static class StateManager {
   public static PrefabDatabase PrefabDatabase;
 
   [RuntimeInitializeOnLoadMethod]
@@ -48,16 +49,26 @@ public static class StateManager
     battleReward = null;
   }
 
-  // public static bool WriteData(string key, object data) {
-  //   string json = JsonUtility.ToJson(data);
-  //   PlayerPrefs.SetString(key, json);
-  //   PlayerPrefs.Save();
-  //   return true;
-  // }
+  // Save / Load
+  private static string GetSavePath(int slot) => Path.Combine(Application.persistentDataPath, $"save_{slot}.json");
 
-  // public static object ReadData(string key) {
-  //   string json = PlayerPrefs.GetString(key);
-  //   if (string.IsNullOrEmpty(json)) return null;
-  //   return JsonUtility.FromJson<object>(json);
-  // }
+  public static void SaveGame(SaveData data, int slot) {
+    data.saveTime = DateTime.Now.ToString();
+    string json = JsonUtility.ToJson(data, true);
+    File.WriteAllText(GetSavePath(slot), json);
+  }
+
+  public static SaveData LoadGame(int slot) {
+    string path = GetSavePath(slot);
+    if (!File.Exists(path)) return null;
+    string json = File.ReadAllText(path);
+    return JsonUtility.FromJson<SaveData>(json);
+  }
+
+  public static bool SaveExists(int slot) => File.Exists(GetSavePath(slot));
+
+  public static void DeleteSave(int slot) {
+    string path = GetSavePath(slot);
+    if (File.Exists(path)) File.Delete(path);
+  }
 }

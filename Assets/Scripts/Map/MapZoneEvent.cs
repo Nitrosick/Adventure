@@ -47,6 +47,9 @@ public class MapZoneEvent : MonoBehaviour
     StateManager.WriteUnitsData(allies, "allies");
     StateManager.WriteUnitsData(reserve, "reserve");
     StateManager.WriteUnitsData(battleZone.guard, "enemies");
+
+    MapUI.DisableUI();
+    MapUI.HideZoneInfo();
     SceneController.ShowEventInfo("battle", "Battle is starting");
     SceneController.SwitchScene(battleZone.battlefieldName);
   }

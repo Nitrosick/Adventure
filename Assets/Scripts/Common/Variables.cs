@@ -22,6 +22,7 @@ Gap: 30
 Screen padding: 75
 Panel padding: 25
 Panel gap: 15
+Elements shadow: 0 / -3
 
 Icons
 -----
