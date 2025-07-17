@@ -348,6 +348,7 @@ public class PlayerMenuUIInfo : MonoBehaviour {
     unit.InSquad = !unit.InSquad;
     inSquadMark.SetActive(unit.InSquad);
     if (slot != null) slot.SwitchActiveMark();
+    Player.Instance.Army.UpdateState();
   }
 
   private static void DismissConfirmation() {

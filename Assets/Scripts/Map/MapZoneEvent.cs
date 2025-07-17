@@ -27,25 +27,22 @@ public class MapZoneEvent : MonoBehaviour
       return;
     }
 
-    Unit[] allies = Player.Instance.Army.Units
-      .Where(u => u.InSquad).ToArray();
-    Unit[] reserve = Player.Instance.Army.Units
-      .Where(u => !u.InSquad).ToArray();
+    Unit[] playerUnits = Player.Instance.Army.Units.ToArray();
+    Unit[] unitsInSquad = Player.Instance.Army.Units.Where(u => u.InSquad).ToArray();
 
-    if (allies == null || allies.Length == 0) {
+    if (playerUnits == null || playerUnits.Length == 0) {
       Debug.LogError("Player doesn't have an army");
       return;
     }
 
-    if (allies.Length > battleZone.armySlots) {
+    if (unitsInSquad.Length > battleZone.armySlots) {
       SquadOverwhelmed.Open(battleZone.armySlots, this, battleZone.events[0] != MapZoneType.InstantBattle);
       return;
     }
 
     StateManager.Reset();
     StateManager.enterScene = SceneManager.GetActiveScene().name;
-    StateManager.WriteUnitsData(allies, "allies");
-    StateManager.WriteUnitsData(reserve, "reserve");
+    StateManager.WriteUnitsData(playerUnits, "allies");
     StateManager.WriteUnitsData(battleZone.guard, "enemies");
 
     MapUI.DisableUI();

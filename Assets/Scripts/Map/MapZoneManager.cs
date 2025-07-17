@@ -11,10 +11,9 @@ public class MapZoneManager : MonoBehaviour
       .Where(zone => zone != null)
       .ToArray();
 
-    // FIXME: Загружить из файла
-    if (StateManager.clearedZones.Count == 0) {
+    if (StateManager.zonesState.Count == 0) {
       foreach (MapZone zone in Zones) {
-        StateManager.clearedZones.Add(zone.id, false);
+        StateManager.zonesState.Add(zone.id, zone.events);
       }
     }
   }
@@ -42,8 +41,9 @@ public class MapZoneManager : MonoBehaviour
     if (currentZone == null) return;
 
     if (result == BattleResult.Victory) {
-      currentZone.SetCleared();
-      StateManager.clearedZones[currentZone.id] = true;
+      currentZone.events.RemoveAt(0);
+      if (currentZone.events.Count == 0) currentZone.SetCleared();
+      StateManager.zonesState[currentZone.id] = currentZone.events;
     }
   }
 }

@@ -38,8 +38,10 @@ public class MapZone : MonoBehaviour
       return;
     }
 
-    if (StateManager.clearedZones.Count > 0) {
-      if (!!StateManager.clearedZones[id]) SetCleared();
+    Dictionary<int, List<MapZoneType>> state = StateManager.zonesState;
+    if (state.Count > 0 && state[id] != null) {
+      if (state[id].Count > 0) events = state[id];
+      else SetCleared();
     }
   }
 
@@ -61,8 +63,6 @@ public class MapZone : MonoBehaviour
   }
 
   public virtual void SetCleared() {
-    // FIXME: Продумать загрузку данных из стейта
-    events.RemoveAt(0);
     if (markIcon != null) markIcon.material = stoneMaterial;
 
     if (interactiveObjects != null && interactiveObjects.Length > 0) {

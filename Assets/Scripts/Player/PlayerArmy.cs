@@ -17,6 +17,8 @@ public class PlayerArmy : MonoBehaviour {
       Unit prefab = database.GetPrefab(id, true);
       Units.Add(prefab);
     }
+
+    UpdateState();
   }
 
   public void UpdateUnits(UnitData[] array) {
@@ -33,6 +35,8 @@ public class PlayerArmy : MonoBehaviour {
         else unit.InSquad = false;
       }
     }
+
+    UpdateState();
   }
 
   public void DeleteUnit(Unit unit) {
@@ -44,5 +48,11 @@ public class PlayerArmy : MonoBehaviour {
         return;
       }
     }
+
+    UpdateState();
+  }
+
+  public void UpdateState() {
+    StateManager.WriteUnitsData(Units.ToArray(), "allies");
   }
 }

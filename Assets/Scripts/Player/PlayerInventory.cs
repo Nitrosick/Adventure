@@ -17,9 +17,10 @@ public class PlayerInventory : MonoBehaviour {
 
     if (army == null || armorSets.Length == 0) {
       Debug.LogError("Unit equipment components initialization error");
-      return;
     }
+  }
 
+  private void Start() {
     UpdateEquipment();
   }
 
@@ -46,13 +47,23 @@ public class PlayerInventory : MonoBehaviour {
     shieldObj.transform.SetParent(shieldBracing, false);
   }
 
+  public void UpdateInventory(Equipment[] items) {
+    Equip = items.ToList();
+  }
+
   public void AddItems(List<Equipment> items) {
     if (items == null || items.Count == 0) return;
     Equip.AddRange(items);
+    UpdateState();
   }
 
   public void AddItems(Equipment item) {
     if (item == null) return;
     Equip.Add(item);
+    UpdateState();
+  }
+
+  public void UpdateState() {
+    StateManager.inventoryEquipment = Equip.ToArray();
   }
 }

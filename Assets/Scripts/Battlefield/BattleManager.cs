@@ -7,8 +7,8 @@ public class BattleManager : MonoBehaviour
 {
   public static BattleManager Instance;
 
-  private UnitData[] allies = StateManager.allies;
-  private UnitData[] enemies = StateManager.enemies;
+  private UnitData[] allies;
+  private UnitData[] enemies;
   private static List<Tile> allySpawns;
   private static List<Tile> enemySpawns;
   public static BattleResult? battleResult;
@@ -26,6 +26,8 @@ public class BattleManager : MonoBehaviour
     Instance = this;
     battleResult = null;
     Reward = new BattleReward();
+    allies = StateManager.playerUnits.Where(u => u.inSquad).ToArray();
+    enemies = StateManager.enemies;
 
     if (allies == null || allies.Length == 0) {
       Debug.LogError("Ally units not found");
@@ -164,7 +166,8 @@ public class BattleManager : MonoBehaviour
       QueueManager.Queue
         .Where(unit => unit.Relation == UnitRelation.Ally)
         .ToArray(),
-      "allies"
+      "allies",
+      false
     );
 
     if (battleResult == BattleResult.Victory) {
@@ -172,7 +175,6 @@ public class BattleManager : MonoBehaviour
         if (unit.Relation == UnitRelation.Emeny) Reward.Add(unit.killReward);
       }
     }
-    // FIXME: Подсчет популярности за бой
 
     StateManager.battleReward = Reward;
     StateManager.battleResult = battleResult;

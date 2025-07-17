@@ -121,6 +121,8 @@ public class Player : MonoBehaviour {
     Fame = StateManager.fame;
     Level = StateManager.level;
     StatPoints = StateManager.statPoints;
+    if (StateManager.playerUnits.Length > 0) Army.UpdateUnits(StateManager.playerUnits);
+    if (StateManager.inventoryEquipment.Length > 0) Inventory.UpdateInventory(StateManager.inventoryEquipment);
 
     MapUI.UpdateResources(Gold, Resources, GetTotalPeople(), MaxVillagers);
 
@@ -128,12 +130,6 @@ public class Player : MonoBehaviour {
     BattleResult? result = StateManager.battleResult;
     if (result == null) return;
     BattleReward fixedReward = battleZone.fixedReward;
-
-    // FIXME: Перезаписывать юнитов до проверки типа зоны
-    UnitData[] units = StateManager.allies;
-    UnitData[] reserve = StateManager.reserve;
-    UnitData[] allUnit = units.Concat(reserve).ToArray();
-    Army.UpdateUnits(allUnit);
 
     if (result == BattleResult.Defeat) {
       transform.position = move.startZone.playerPosition;
@@ -150,6 +146,7 @@ public class Player : MonoBehaviour {
       AddExpirience(reward.experience);
       SetFame(reward.fame);
       Inventory.AddItems(reward.items);
+
       MapUI.UpdateResources(Gold, Resources, GetTotalPeople(), MaxVillagers);
     }
   }

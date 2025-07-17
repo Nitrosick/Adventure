@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
+using Newtonsoft.Json;
 
 public static class StateManager {
   public static PrefabDatabase PrefabDatabase;
@@ -14,7 +15,6 @@ public static class StateManager {
 
   // Moving between scenes
   public static string enterScene;
-  public static UnitData[] allies;
   public static UnitData[] enemies;
   public static BattleResult? battleResult;
   public static BattleReward battleReward;
@@ -30,20 +30,32 @@ public static class StateManager {
   public static int level = 1;
   public static int statPoints = 0;
 
-  public static Dictionary<int, bool> clearedZones = new();
-  // FIXME: Сохранение юнитов в отряде + Инвентарь
-  public static UnitData[] reserve = { };
+  public static Dictionary<int, List<MapZoneType>> zonesState = new();
+  public static UnitData[] playerUnits = { };
+  public static Equipment[] inventoryEquipment = { };
 
-  public static void WriteUnitsData(Unit[] units, string to) {
-    if (to == "allies") allies = units.Select(u => u.ToData()).ToArray();
-    else if (to == "enemies") enemies = units.Select(u => u.ToData()).ToArray();
-    else if (to == "reserve") reserve = units.Select(u => u.ToData()).ToArray();
-    else Debug.LogError("Invalid units type");
+  public static void WriteUnitsData(Unit[] units, string to, bool rewrite = true) {
+    if (to != "allies" && to != "enemies") {
+      Debug.LogError("Invalid units type");
+      return;
+    }
+
+    UnitData[] newUnits = units.Select(u => u.ToData()).ToArray();
+
+    if (rewrite) {
+      if (to == "allies") playerUnits = newUnits;
+      else enemies = newUnits;
+    } else {
+      if (to == "allies") {
+        UnitData[] reserveUnits = playerUnits.Where(u => !u.inSquad).ToArray();
+        playerUnits = newUnits.Concat(reserveUnits).ToArray();
+      }
+      else enemies = newUnits;
+    }
   }
 
   public static void Reset() {
     enterScene = "";
-    allies = null;
     enemies = null;
     battleResult = null;
     battleReward = null;
@@ -54,7 +66,7 @@ public static class StateManager {
 
   public static void SaveGame(SaveData data, int slot) {
     data.saveTime = DateTime.Now.ToString();
-    string json = JsonUtility.ToJson(data, true);
+    string json = JsonConvert.SerializeObject(data, Formatting.Indented);
     File.WriteAllText(GetSavePath(slot), json);
   }
 
@@ -62,7 +74,7 @@ public static class StateManager {
     string path = GetSavePath(slot);
     if (!File.Exists(path)) return null;
     string json = File.ReadAllText(path);
-    return JsonUtility.FromJson<SaveData>(json);
+    return JsonConvert.DeserializeObject<SaveData>(json);
   }
 
   public static bool SaveExists(int slot) => File.Exists(GetSavePath(slot));

@@ -19,9 +19,10 @@ public class UnitEquipment : MonoBehaviour {
 
     if (unit == null || armorSets.Length == 0) {
       Debug.LogError("Unit equipment components initialization error");
-      return;
     }
+  }
 
+  private void Start() {
     UpdateEquipment();
   }
 
@@ -87,6 +88,8 @@ public class UnitEquipment : MonoBehaviour {
     inventory.Remove(item);
     if (oldItem != null) inventory.Add(oldItem);
     if (unit.IsHero) Player.Instance.Inventory.UpdateEquipment();
+    Player.Instance.Army.UpdateState();
+    Player.Instance.Inventory.UpdateState();
   }
 
   public void UnequipAll() {
@@ -100,6 +103,9 @@ public class UnitEquipment : MonoBehaviour {
     secondaryWeapon = null;
     armor = null;
     shield = null;
+
+    Player.Instance.Army.UpdateState();
+    Player.Instance.Inventory.UpdateState();
   }
 
   public List<Equipment> GetEquipmentList() {
