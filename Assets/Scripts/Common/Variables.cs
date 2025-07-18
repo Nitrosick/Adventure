@@ -38,6 +38,9 @@ Highlighted / Pressed / Selected: #938569
 Disabled: #5C523F o-128
 */
 
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+
 // Battle
 public enum TileType {
   Open,
@@ -137,6 +140,7 @@ public enum EquipmentRarity {
 }
 
 // Map
+[JsonConverter(typeof(StringEnumConverter))]
 public enum MapZoneType {
   Home,
   InstantBattle,

@@ -40,7 +40,7 @@ public class MapZoneEvent : MonoBehaviour
       return;
     }
 
-    StateManager.Reset();
+    StateManager.ResetTemp();
     StateManager.enterScene = SceneManager.GetActiveScene().name;
     StateManager.WriteUnitsData(playerUnits, "allies");
     StateManager.WriteUnitsData(battleZone.guard, "enemies");

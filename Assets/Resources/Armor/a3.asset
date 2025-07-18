@@ -10,32 +10,31 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 637e9a84f7a72294a949cb41532886b0, type: 3}
-  m_Name: Iron armor
+  m_Name: a3
   m_EditorClassIdentifier: 
-  id: a6
-  itemName: Iron armor
-  description: Good, strong, and reliable, but very heavy iron armor. The key to
-    a long life for any warrior on the front lines. It perfectly protects against
-    almost any damage, although it does not cover the entire body.
-  requirementStats: 050000000100000000000000
-  requirementLevel: 2
+  id: a3
+  itemName: Light bandit's clothes
+  description: Light armor, mostly assembled from improvised means. Serves more for
+    appearance than for protection, but is maximally comfortable.
+  requirementStats: 020000000200000000000000
+  requirementLevel: 1
   type: 5
   slot: 2
-  weight: 2
+  weight: 0
   rarity: 0
   effect: {fileID: 0}
   skill: {fileID: 0}
-  icon: {fileID: 21300000, guid: 377c8d4ff97527140bf623d34da90563, type: 3}
-  defense: 6
+  icon: {fileID: 21300000, guid: 86fe922a8efb05e4b9707a12467b3cb9, type: 3}
+  defense: 1
   prefab: {fileID: 0}
   resistsMap:
   - type: 1
-    value: 12
+    value: 0
   - type: 2
-    value: 23
+    value: 5
   - type: 3
     value: 0
   - type: 4
-    value: 0
+    value: 5
   - type: 5
     value: 0

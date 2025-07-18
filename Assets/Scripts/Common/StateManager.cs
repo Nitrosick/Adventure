@@ -20,19 +20,47 @@ public static class StateManager {
   public static BattleReward battleReward;
 
   // Global
-  public static int currentPlayerZoneId;
-  public static int gold = 0;
-  public static int[] resources = { 0, 0, 0, 0 };
-  public static int villagers = 0;
-  public static int maxVillagers = 5;
-  public static int experience = 0;
-  public static int fame = 0;
-  public static int level = 1;
-  public static int statPoints = 0;
+  public static int saveSlot;
+  private readonly static string[] defaultArmyIds = { "u1", "u2", "u2" };
 
-  public static Dictionary<int, List<MapZoneType>> zonesState = new();
-  public static UnitData[] playerUnits = { };
-  public static Equipment[] inventoryEquipment = { };
+  public static int currentPlayerZoneId;
+  public static int gold;
+  public static int[] resources;
+  public static int villagers;
+  public static int maxVillagers;
+  public static int experience;
+  public static int fame;
+  public static int level;
+  public static int statPoints;
+
+  public static Dictionary<int, List<MapZoneType>> zonesState;
+  public static UnitData[] playerUnits;
+  public static Equipment[] inventoryEquipment;
+
+  public static void ResetTemp() {
+    enterScene = "";
+    enemies = null;
+    battleResult = null;
+    battleReward = null;
+  }
+
+  public static void ResetPlayerData() {
+    saveSlot = 0;
+    currentPlayerZoneId = 1;
+    gold = 0;
+    resources = new int[] { 0, 0, 0, 0 };
+    villagers = 0;
+    maxVillagers = 5;
+    experience = 0;
+    fame = 0;
+    level = 1;
+    statPoints = 0;
+
+    zonesState = new Dictionary<int, List<MapZoneType>> { };
+    playerUnits = new UnitData[] { };
+    inventoryEquipment = new Equipment[] { };
+    ResetTemp();
+  }
 
   public static void WriteUnitsData(Unit[] units, string to, bool rewrite = true) {
     if (to != "allies" && to != "enemies") {
@@ -45,7 +73,8 @@ public static class StateManager {
     if (rewrite) {
       if (to == "allies") playerUnits = newUnits;
       else enemies = newUnits;
-    } else {
+    }
+    else {
       if (to == "allies") {
         UnitData[] reserveUnits = playerUnits.Where(u => !u.inSquad).ToArray();
         playerUnits = newUnits.Concat(reserveUnits).ToArray();
@@ -54,27 +83,26 @@ public static class StateManager {
     }
   }
 
-  public static void Reset() {
-    enterScene = "";
-    enemies = null;
-    battleResult = null;
-    battleReward = null;
-  }
-
   // Save / Load
   private static string GetSavePath(int slot) => Path.Combine(Application.persistentDataPath, $"save_{slot}.json");
 
-  public static void SaveGame(SaveData data, int slot) {
-    data.saveTime = DateTime.Now.ToString();
+  public static void SaveGame() {
+    if (saveSlot <= 0) {
+      Debug.LogError("Save slot is not specified");
+      return;
+    }
+    SaveData data = GetSaveData();
     string json = JsonConvert.SerializeObject(data, Formatting.Indented);
-    File.WriteAllText(GetSavePath(slot), json);
+    File.WriteAllText(GetSavePath(saveSlot), json);
   }
 
-  public static SaveData LoadGame(int slot) {
+  public static SaveData LoadGame(int slot, bool setData = true) {
     string path = GetSavePath(slot);
     if (!File.Exists(path)) return null;
     string json = File.ReadAllText(path);
-    return JsonConvert.DeserializeObject<SaveData>(json);
+    SaveData data = JsonConvert.DeserializeObject<SaveData>(json);
+    if (setData) SetLoadedData(data);
+    return data;
   }
 
   public static bool SaveExists(int slot) => File.Exists(GetSavePath(slot));
@@ -82,5 +110,54 @@ public static class StateManager {
   public static void DeleteSave(int slot) {
     string path = GetSavePath(slot);
     if (File.Exists(path)) File.Delete(path);
+  }
+
+  public static SaveData GetSaveData() {
+    string[] equipIds = inventoryEquipment.Select(o => o.id).ToArray();
+
+    SaveData data = new() {
+      // FIXME: Установка имени сохранения
+      saveName = "New game",
+      saveTime = DateTime.Now.ToString(),
+      currentPlayerZoneId = currentPlayerZoneId,
+      gold = gold,
+      resources = resources,
+      villagers = villagers,
+      maxVillagers = maxVillagers,
+      experience = experience,
+      fame = fame,
+      level = level,
+      statPoints = statPoints,
+      zonesState = zonesState,
+      playerUnits = playerUnits,
+      inventoryEquipmentIds = equipIds
+    };
+    return data;
+  }
+
+  private static void SetLoadedData(SaveData data) {
+    currentPlayerZoneId = data.currentPlayerZoneId;
+    gold = data.gold;
+    resources = data.resources;
+    villagers = data.villagers;
+    maxVillagers = data.maxVillagers;
+    experience = data.experience;
+    fame = data.fame;
+    level = data.level;
+    statPoints = data.statPoints;
+    zonesState = data.zonesState;
+    playerUnits = data.playerUnits;
+    inventoryEquipment = Factory.CreateById(data.inventoryEquipmentIds);
+  }
+
+  public static void InitPlayerArmy() {
+    List<UnitData> defaultArmy = new() { };
+
+    foreach (string id in defaultArmyIds) {
+      Unit prefab = PrefabDatabase.GetPrefab(id, true);
+      defaultArmy.Add(prefab.ToData());
+    }
+
+    playerUnits = defaultArmy.ToArray();
   }
 }

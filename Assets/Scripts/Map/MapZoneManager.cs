@@ -1,8 +1,8 @@
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class MapZoneManager : MonoBehaviour
-{
+public class MapZoneManager : MonoBehaviour {
   public static MapZone[] Zones { get; private set; }
 
   private void Awake() {
@@ -33,8 +33,7 @@ public class MapZoneManager : MonoBehaviour
     return null;
   }
 
-  private static void GetStateData() {
-    BattleResult? result = StateManager.battleResult;
+  public static void UpdateAfterBattle(BattleResult? result) {
     if (result == null) return;
 
     MapZone currentZone = FindById(StateManager.currentPlayerZoneId);
@@ -44,6 +43,20 @@ public class MapZoneManager : MonoBehaviour
       currentZone.events.RemoveAt(0);
       if (currentZone.events.Count == 0) currentZone.SetCleared();
       StateManager.zonesState[currentZone.id] = currentZone.events;
+    }
+  }
+
+  public static void GetStateData() {
+    Dictionary<int, List<MapZoneType>> state = StateManager.zonesState;
+
+    if (state.Count > 0) {
+      foreach (int id in state.Keys) {
+        if (state[id] != null) {
+          MapZone zone = FindById(id);
+          if (zone == null) continue;
+          zone.events = state[id];
+        }
+      }
     }
   }
 }

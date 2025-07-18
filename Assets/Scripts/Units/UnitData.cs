@@ -9,8 +9,8 @@ public class UnitData {
   public float intelligence;
   public int level;
 
-  public Weapon primaryWeapon;
-  public Weapon secondaryWeapon;
-  public Armor shield;
-  public Armor armor;
+  public string primaryWeaponId;
+  public string secondaryWeaponId;
+  public string shieldId;
+  public string armorId;
 }

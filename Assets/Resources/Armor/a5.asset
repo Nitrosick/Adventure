@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 637e9a84f7a72294a949cb41532886b0, type: 3}
-  m_Name: Light bandit's clothes
+  m_Name: a5
   m_EditorClassIdentifier: 
-  id: a3
-  itemName: Light bandit's clothes
-  description: Light armor, mostly assembled from improvised means. Serves more for
-    appearance than for protection, but is maximally comfortable.
-  requirementStats: 020000000200000000000000
+  id: a5
+  itemName: Peasant's clothes
+  description: Simple peasant clothing made of burlap. Comfortable, light, and warm
+    enough. It's not suitable for battle, but perfect for working in the garden.
+  requirementStats: 000000000000000000000000
   requirementLevel: 1
   type: 5
   slot: 2
@@ -24,17 +24,6 @@ MonoBehaviour:
   rarity: 0
   effect: {fileID: 0}
   skill: {fileID: 0}
-  icon: {fileID: 21300000, guid: 86fe922a8efb05e4b9707a12467b3cb9, type: 3}
-  defense: 1
+  icon: {fileID: 21300000, guid: b21e8cdedef4fe648a65f0ab63e21b33, type: 3}
+  defense: 0
   prefab: {fileID: 0}
-  resistsMap:
-  - type: 1
-    value: 0
-  - type: 2
-    value: 5
-  - type: 3
-    value: 0
-  - type: 4
-    value: 5
-  - type: 5
-    value: 0

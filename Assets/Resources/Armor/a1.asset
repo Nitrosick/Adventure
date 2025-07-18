@@ -10,31 +10,32 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 637e9a84f7a72294a949cb41532886b0, type: 3}
-  m_Name: Crossbowman's armor
+  m_Name: a1
   m_EditorClassIdentifier: 
-  id: a4
-  itemName: Crossbowman's armor
-  description: Standard medium armor for city guard crossbowmen. Not the most comfortable
-    for movement, but provides good protection.
-  requirementStats: 030000000100000000000000
+  id: a1
+  itemName: Father's armor
+  description: This armor was inherited by the hero from his father and has seen
+    many battles. Many of the fastenings have rusted, but if a master armorer can
+    be found, it can be given new life.
+  requirementStats: 050000000100000000000000
   requirementLevel: 1
   type: 5
   slot: 2
-  weight: 1
+  weight: 2
   rarity: 0
   effect: {fileID: 0}
   skill: {fileID: 0}
-  icon: {fileID: 21300000, guid: 8cef2af88564dd14db89e72938a372d5, type: 3}
-  defense: 2
+  icon: {fileID: 21300000, guid: 6a99dae8760fd204eab4769d4a75921f, type: 3}
+  defense: 4
   prefab: {fileID: 0}
   resistsMap:
   - type: 1
-    value: 3
+    value: 10
   - type: 2
-    value: 3
+    value: 20
   - type: 3
-    value: 3
+    value: 0
   - type: 4
-    value: 3
+    value: 0
   - type: 5
     value: 0

@@ -5,22 +5,6 @@ using UnityEngine;
 public class PlayerArmy : MonoBehaviour {
   public List<Unit> Units { get; private set; } = new();
 
-  private void Awake() {
-    // Default player army
-    BattleResult? result = StateManager.battleResult;
-    if (Units.Count > 0 || result != null) return;
-
-    PrefabDatabase database = Resources.Load<PrefabDatabase>("Databases/PrefabDatabase");
-    string[] unitIds = { "u1", "u2", "u2" };
-
-    foreach (string id in unitIds) {
-      Unit prefab = database.GetPrefab(id, true);
-      Units.Add(prefab);
-    }
-
-    UpdateState();
-  }
-
   public void UpdateUnits(UnitData[] array) {
     Units = array.Select(data => {
       Unit unit = StateManager.PrefabDatabase.GetPrefab(data.prefabId);

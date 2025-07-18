@@ -1,4 +1,3 @@
-using System.Linq;
 using UnityEngine;
 
 public class Player : MonoBehaviour {
@@ -121,6 +120,7 @@ public class Player : MonoBehaviour {
     Fame = StateManager.fame;
     Level = StateManager.level;
     StatPoints = StateManager.statPoints;
+
     if (StateManager.playerUnits.Length > 0) Army.UpdateUnits(StateManager.playerUnits);
     if (StateManager.inventoryEquipment.Length > 0) Inventory.UpdateInventory(StateManager.inventoryEquipment);
 
@@ -129,13 +129,16 @@ public class Player : MonoBehaviour {
     if (move.CurrentZone is not MapZoneBattle battleZone) return;
     BattleResult? result = StateManager.battleResult;
     if (result == null) return;
+
+    MapZoneManager.UpdateAfterBattle(result);
     BattleReward fixedReward = battleZone.fixedReward;
 
     if (result == BattleResult.Defeat) {
       transform.position = move.startZone.playerPosition;
       move.CurrentZone = move.startZone;
       SetFame(fixedReward.fame / 2 * -1);
-    } else {
+    }
+    else {
       BattleReward reward = StateManager.battleReward;
       if (reward == null) return;
       reward.Add(fixedReward);
@@ -149,5 +152,7 @@ public class Player : MonoBehaviour {
 
       MapUI.UpdateResources(Gold, Resources, GetTotalPeople(), MaxVillagers);
     }
+
+    StateManager.SaveGame();
   }
 }

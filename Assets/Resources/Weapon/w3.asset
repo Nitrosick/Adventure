@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: eb13a142f8c484a44b9b8c61360ca04b, type: 3}
-  m_Name: Old sword
+  m_Name: w3
   m_EditorClassIdentifier: 
-  id: w1
-  itemName: Old sword
-  description: An old iron sword, inherited from your father. It's rusted in places,
-    but it's still a formidable weapon with a high critical damage modifier.
-  requirementStats: 040000000100000000000000
+  id: w3
+  itemName: Iron short sword
+  description: Light and convenient weapon. Despite its low damage, it has an impressive
+    critical damage modifier and can cause bleeding on hit.
+  requirementStats: 020000000200000000000000
   requirementLevel: 1
   type: 0
   slot: 0
@@ -24,13 +24,13 @@ MonoBehaviour:
   rarity: 0
   effect: {fileID: 11400000, guid: 19ac65e2e41cb3c40bff7534d5e20d42, type: 2}
   skill: {fileID: 0}
-  icon: {fileID: 21300000, guid: d0b4cc2057f2d9b4aa230db733619641, type: 3}
-  damage: 6
-  critModifier: 1.8
+  icon: {fileID: 21300000, guid: e2545fc3403b736409828b3304ec8c45, type: 3}
+  damage: 4
+  critModifier: 2
   armorPenetration: 0
-  effectChance: 7
+  effectChance: 10
   range: 1
-  attackType: 1
-  prefab: {fileID: 432409815444410632, guid: 6396ad9ff95fbe6489ac7d7f915802e0, type: 3}
+  attackType: 2
+  prefab: {fileID: 8078070449173333099, guid: 4d3629c5a46a2ed4087228f9908494d4, type: 3}
   damageType: 1
-  scalingStats: 00000000
+  scalingStats: 0000000001000000

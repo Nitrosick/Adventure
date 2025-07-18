@@ -1,4 +1,3 @@
-using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -41,19 +40,15 @@ public class SaveSlot : MonoBehaviour {
   }
 
   public void OnClick() {
+    StateManager.saveSlot = index;
     if (hasSave) StateManager.LoadGame(index);
-    else  InitNewGame();
+    else InitNewGame();
     SceneController.SwitchScene("Scenes/Map/Village");
   }
 
   private void InitNewGame() {
-    SaveData newSave = new() {
-      saveName = "New game",
-      saveTime = DateTime.Now.ToString()
-      // ...
-    };
-
-    StateManager.SaveGame(newSave, index);
-    Init(newSave);
+    StateManager.SaveGame();
+    StateManager.InitPlayerArmy();
+    Init(StateManager.GetSaveData());
   }
 }

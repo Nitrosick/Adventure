@@ -33,10 +33,12 @@ public class MainMenu : MonoBehaviour {
 
     foreach (SaveSlot slot in activeSlots) {
       var data = StateManager.SaveExists(slot.index)
-        ? StateManager.LoadGame(slot.index)
+        ? StateManager.LoadGame(slot.index, false)
         : null;
       slot.Init(data);
     }
+
+    StateManager.ResetPlayerData();
   }
 
   private void OnDestroy() {

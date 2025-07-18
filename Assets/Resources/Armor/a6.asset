@@ -10,32 +10,32 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 637e9a84f7a72294a949cb41532886b0, type: 3}
-  m_Name: Light leather armor
+  m_Name: a6
   m_EditorClassIdentifier: 
-  id: a2
-  itemName: Light leather armor
-  description: Simple, light, and cheap to manufacture armor. This is given to all
-    new recruits. It provides almost no protection against physical attacks, but
-    it is comfortable to move in, which is very important in combat.
-  requirementStats: 020000000100000000000000
-  requirementLevel: 1
+  id: a6
+  itemName: Iron armor
+  description: Good, strong, and reliable, but very heavy iron armor. The key to
+    a long life for any warrior on the front lines. It perfectly protects against
+    almost any damage, although it does not cover the entire body.
+  requirementStats: 050000000100000000000000
+  requirementLevel: 2
   type: 5
   slot: 2
-  weight: 0
+  weight: 2
   rarity: 0
   effect: {fileID: 0}
   skill: {fileID: 0}
-  icon: {fileID: 21300000, guid: cda0ea9c53d73cd4b8ea11b2910af51e, type: 3}
-  defense: 1
+  icon: {fileID: 21300000, guid: 377c8d4ff97527140bf623d34da90563, type: 3}
+  defense: 6
   prefab: {fileID: 0}
   resistsMap:
   - type: 1
-    value: 0
+    value: 12
   - type: 2
-    value: 5
+    value: 23
   - type: 3
     value: 0
   - type: 4
-    value: 5
+    value: 0
   - type: 5
     value: 0

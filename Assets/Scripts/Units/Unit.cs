@@ -270,15 +270,20 @@ public class Unit : MonoBehaviour {
       dexterity = Dexterity,
       intelligence = Intelligence,
       level = Level,
-      primaryWeapon = equipment.primaryWeapon,
-      secondaryWeapon = equipment.secondaryWeapon,
-      shield = equipment.shield,
-      armor = equipment.armor,
+      primaryWeaponId = equipment.primaryWeapon != null ? equipment.primaryWeapon.id : null,
+      secondaryWeaponId = equipment.secondaryWeapon != null ? equipment.secondaryWeapon.id : null,
+      shieldId = equipment.shield != null ? equipment.shield.id : null,
+      armorId = equipment.armor != null ? equipment.armor.id : null,
     };
   }
 
   public void FromData(UnitData data) {
     UnitEquipment equipment = transform.GetComponent<UnitEquipment>();
+
+    Weapon primaryWeapon = Factory.CreateById(data.primaryWeaponId) as Weapon;
+    Weapon secondaryWeapon = Factory.CreateById(data.secondaryWeaponId) as Weapon;
+    Armor shield = Factory.CreateById(data.shieldId) as Armor;
+    Armor armor = Factory.CreateById(data.armorId) as Armor;
 
     CurrentHealth = data.currentHealth;
     InSquad = data.inSquad;
@@ -286,10 +291,10 @@ public class Unit : MonoBehaviour {
     Dexterity = data.dexterity;
     Intelligence = data.intelligence;
     Level = data.level;
-    equipment.primaryWeapon = data.primaryWeapon;
-    equipment.secondaryWeapon = data.secondaryWeapon;
-    equipment.shield = data.shield;
-    equipment.armor = data.armor;
+    equipment.primaryWeapon = primaryWeapon;
+    equipment.secondaryWeapon = secondaryWeapon;
+    equipment.shield = shield;
+    equipment.armor = armor;
   }
 
   // Overloaded
