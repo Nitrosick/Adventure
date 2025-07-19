@@ -65,7 +65,8 @@ public enum BattlePhase {
 
 public enum BattleResult {
   Victory,
-  Defeat
+  Defeat,
+  Retreat
 }
 
 public enum DamageType {

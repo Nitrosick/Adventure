@@ -32,6 +32,7 @@ public class BattleUI : MonoBehaviour {
   private static TextMeshProUGUI unitEffects;
 
   // Buttons and labels
+  private static Button mainMenuButton;
   private static Button phaseSkipButton;
   private static Image phaseAttackLabel;
   private static Image phaseMoveLabel;
@@ -59,6 +60,7 @@ public class BattleUI : MonoBehaviour {
     unitRange = parameters.Find("Range/Value").GetComponent<TextMeshProUGUI>();
     unitEffects = transform.Find("Info/UnitInfoPanel/Effects").GetComponent<TextMeshProUGUI>();
 
+    mainMenuButton = transform.Find("Top/MainMenu/Main").GetComponent<Button>();
     phaseSkipButton = actionsPanel.Find("SkipPhase").GetComponent<Button>();
     phaseAttackLabel = actionsPanel.Find("PhaseAttack").GetComponent<Image>();
     phaseMoveLabel = actionsPanel.Find("PhaseMovement").GetComponent<Image>();
@@ -68,7 +70,8 @@ public class BattleUI : MonoBehaviour {
       unitName == null || unitDescription == null || unitHP == null || unitStats == null ||
       unitMP == null || unitDamage == null || unitDefense == null || unitRange == null ||
       unitEffects == null || phaseSkipButton == null || phaseAttackLabel == null || phaseMoveLabel == null ||
-      damagePopupPrefab == null || skillChargePrefab == null || skillChargeEmptyPrefab == null
+      damagePopupPrefab == null || skillChargePrefab == null || skillChargeEmptyPrefab == null ||
+      mainMenuButton == null
     ) {
       Debug.LogError("Battle UI components initialization error");
       return;
@@ -79,10 +82,12 @@ public class BattleUI : MonoBehaviour {
     ColorUtility.TryParseHtmlString("#FFFFFF", out activeColor);
     ColorUtility.TryParseHtmlString("#989898", out inactiveColor);
 
+    mainMenuButton.onClick.AddListener(() => PauseMenu.Open());
     phaseSkipButton.onClick.AddListener(SkipPhase);
   }
 
   private void OnDestroy() {
+    mainMenuButton.onClick.RemoveListener(() => PauseMenu.Open());
     phaseSkipButton.onClick.RemoveListener(SkipPhase);
   }
 

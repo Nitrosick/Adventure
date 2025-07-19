@@ -178,9 +178,23 @@ public class BattleManager : MonoBehaviour
 
     StateManager.battleReward = Reward;
     StateManager.battleResult = battleResult;
+    string icon = "";
+    string text = "";
 
-    string icon = battleResult == BattleResult.Victory ? "victory" : "defeat";
-    string text = battleResult == BattleResult.Victory ? "Victory" : "Defeat";
+    switch (battleResult) {
+      case BattleResult.Victory:
+        icon = "victory";
+        text = "Victory!";
+        break;
+      case BattleResult.Defeat:
+        icon = "defeat";
+        text = "Defeat!";
+        break;
+      case BattleResult.Retreat:
+        icon = "move";
+        text = "Retreat";
+        break;
+    }
 
     SceneController.ShowEventInfo(icon, text);
     SceneController.SwitchScene(StateManager.enterScene);

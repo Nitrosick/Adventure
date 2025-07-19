@@ -362,6 +362,7 @@ public class PlayerMenuUIInfo : MonoBehaviour {
   private static void DismissUnit(bool accepted) {
     if (!accepted) return;
     Player.Instance.Army.DeleteUnit(PlayerMenuUI.selectedUnit);
+    _ = InfoPopup.Show("info", "Unit dismissed");
     PlayerMenuUI.SelectUnitsTab();
   }
 

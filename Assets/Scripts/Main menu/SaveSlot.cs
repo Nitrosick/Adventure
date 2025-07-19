@@ -8,6 +8,7 @@ public class SaveSlot : MonoBehaviour {
   private GameObject emptyPanel;
   private TextMeshProUGUI saveName;
   private TextMeshProUGUI saveDate;
+  private Button deleteButton;
 
   public int index;
   private bool hasSave;
@@ -18,8 +19,12 @@ public class SaveSlot : MonoBehaviour {
     emptyPanel = transform.Find("Empty").gameObject;
     saveName = transform.Find("Active/Name").GetComponent<TextMeshProUGUI>();
     saveDate = transform.Find("Active/Date").GetComponent<TextMeshProUGUI>();
+    deleteButton = transform.Find("Delete").GetComponent<Button>();
 
-    if (button == null || activePanel == null || emptyPanel == null || saveName == null || saveDate == null) {
+    if (
+      button == null || activePanel == null || emptyPanel == null ||
+      saveName == null || saveDate == null || deleteButton == null
+    ) {
       Debug.LogError("Save slot components initialization error");
     }
   }
@@ -31,7 +36,12 @@ public class SaveSlot : MonoBehaviour {
       saveDate.text = data.saveTime;
       emptyPanel.SetActive(false);
       activePanel.SetActive(true);
-    } else {
+      deleteButton.gameObject.SetActive(true);
+
+      deleteButton.onClick.RemoveAllListeners();
+      deleteButton.onClick.AddListener(DeleteConfirmation);
+    }
+    else {
       hasSave = false;
     }
 
@@ -47,8 +57,28 @@ public class SaveSlot : MonoBehaviour {
   }
 
   private void InitNewGame() {
-    StateManager.SaveGame();
     StateManager.InitPlayerArmy();
+    StateManager.SaveGame();
     Init(StateManager.GetSaveData());
+  }
+
+  private void DeleteConfirmation() {
+    Dialog.Confirmation(
+      DeleteSlot,
+      "Save slot deleting",
+      "Do you really want to delete this save slot?\nAll progress will be lost and cannot be recovered."
+    );
+  }
+
+  private void DeleteSlot(bool accepted) {
+    if (!accepted) return;
+    StateManager.DeleteSave(index);
+    _ = InfoPopup.Show("info", "Save deleted");
+    hasSave = false;
+    saveName.text = "";
+    saveDate.text = "";
+    emptyPanel.SetActive(true);
+    activePanel.SetActive(false);
+    deleteButton.gameObject.SetActive(false);
   }
 }

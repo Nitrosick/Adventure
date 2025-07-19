@@ -133,24 +133,27 @@ public class Player : MonoBehaviour {
     MapZoneManager.UpdateAfterBattle(result);
     BattleReward fixedReward = battleZone.fixedReward;
 
-    if (result == BattleResult.Defeat) {
-      transform.position = move.startZone.playerPosition;
-      move.CurrentZone = move.startZone;
-      SetFame(fixedReward.fame / 2 * -1);
-    }
-    else {
-      BattleReward reward = StateManager.battleReward;
-      if (reward == null) return;
-      reward.Add(fixedReward);
-      battleZone.fixedReward = new BattleReward();
+    switch (result) {
+      case BattleResult.Victory:
+        BattleReward reward = StateManager.battleReward;
+        if (reward == null) return;
+        reward.Add(fixedReward);
+        battleZone.fixedReward = new BattleReward();
 
-      SetGold(reward.Gold);
-      SetResources(reward.resources);
-      AddExpirience(reward.experience);
-      SetFame(reward.fame);
-      Inventory.AddItems(reward.items);
+        SetGold(reward.Gold);
+        SetResources(reward.resources);
+        AddExpirience(reward.experience);
+        SetFame(reward.fame);
+        Inventory.AddItems(reward.items);
 
-      MapUI.UpdateResources(Gold, Resources, GetTotalPeople(), MaxVillagers);
+        MapUI.UpdateResources(Gold, Resources, GetTotalPeople(), MaxVillagers);
+        break;
+      case BattleResult.Defeat:
+      case BattleResult.Retreat:
+        transform.position = move.startZone.playerPosition;
+        move.CurrentZone = move.startZone;
+        SetFame(fixedReward.fame / 2 * -1);
+        break;
     }
 
     StateManager.SaveGame();

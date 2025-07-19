@@ -48,6 +48,7 @@ public class MapUI : MonoBehaviour
       Debug.LogError("Map UI components initialization error");
     }
 
+    mainMenuButton.onClick.AddListener(() => PauseMenu.Open());
     playerMenuButton.onClick.AddListener(() => PlayerMenuUI.Switch());
     EnableUI();
   }
@@ -61,6 +62,7 @@ public class MapUI : MonoBehaviour
   }
 
   private void OnDestroy() {
+    mainMenuButton.onClick.RemoveListener(() => PauseMenu.Open());
     playerMenuButton.onClick.RemoveListener(() => PlayerMenuUI.Switch());
   }
 
