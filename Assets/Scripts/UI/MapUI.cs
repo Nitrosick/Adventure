@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class MapUI : MonoBehaviour
@@ -12,10 +14,12 @@ public class MapUI : MonoBehaviour
   private static GameObject zoneInfoBattleMark;
   private static GameObject zoneInfoGuardedMark;
   private static GameObject zoneInfoClearedMark;
+  private static GameObject zoneInfoRecruitMark;
 
   // Buttons
   private static Button mainMenuButton;
   private static Button playerMenuButton;
+  private static Button interactButton;
 
   // Resources
   private static TextMeshProUGUI goldValue;
@@ -32,9 +36,11 @@ public class MapUI : MonoBehaviour
     zoneInfoBattleMark = transform.Find("Info/ZoneInfoPanel/Markers/Battle").gameObject;
     zoneInfoGuardedMark = transform.Find("Info/ZoneInfoPanel/Markers/Guard").gameObject;
     zoneInfoClearedMark = transform.Find("Info/ZoneInfoPanel/Markers/Clear").gameObject;
+    zoneInfoRecruitMark = transform.Find("Info/ZoneInfoPanel/Markers/Recruitment").gameObject;
 
     mainMenuButton = transform.Find("Top/MainMenu/Main").GetComponent<Button>();
     playerMenuButton = transform.Find("Top/MainMenu/Player").GetComponent<Button>();
+    interactButton = transform.Find("Actions/Interact").GetComponent<Button>();
 
     Transform resources = transform.Find("Top/Resources").GetComponent<Transform>();
     goldValue = resources.Find("Gold/Value").GetComponent<TextMeshProUGUI>();
@@ -58,7 +64,8 @@ public class MapUI : MonoBehaviour
       zoneInfoGuardedMark != null && mainMenuButton != null && playerMenuButton != null &&
       goldValue != null && woodValue != null && stoneValue != null &&
       metalValue != null && villagersValue != null && leatherValue != null &&
-      zoneInfoBattleMark != null && zoneInfoClearedMark != null;
+      zoneInfoBattleMark != null && zoneInfoClearedMark != null && zoneInfoRecruitMark != null &&
+      interactButton != null;
   }
 
   private void OnDestroy() {
@@ -90,6 +97,7 @@ public class MapUI : MonoBehaviour
     if (events.Count == 0) zoneInfoClearedMark.SetActive(true);
     else if (events.Contains(MapZoneType.InstantBattle)) zoneInfoBattleMark.SetActive(true);
     else if (events.Contains(MapZoneType.Guard)) zoneInfoGuardedMark.SetActive(true);
+    else if (events.Contains(MapZoneType.Recruitment)) zoneInfoRecruitMark.SetActive(true);
   }
 
   public static void HideZoneInfo() {
@@ -100,22 +108,36 @@ public class MapUI : MonoBehaviour
     zoneInfoBattleMark.SetActive(false);
     zoneInfoGuardedMark.SetActive(false);
     zoneInfoClearedMark.SetActive(false);
+    zoneInfoRecruitMark.SetActive(false);
   }
 
-  public static void UpdateResources(int gold, int[] resources, int[] totalPeople, int max) {
-    goldValue.text = gold.ToString();
-    woodValue.text = resources[0].ToString();
-    stoneValue.text = resources[1].ToString();
-    metalValue.text = resources[2].ToString();
-    leatherValue.text = resources[3].ToString();
+  public static void ShowInteractableButton(UnityAction callback) {
+    interactButton.onClick.AddListener(callback);
+    interactButton.gameObject.SetActive(true);
+  }
 
+  public static void HideInteractableButton() {
+    interactButton.gameObject.SetActive(false);
+    interactButton.onClick.RemoveAllListeners();
+  }
+
+  public static void UpdateResources() {
+    Player player = Player.Instance;
+
+    goldValue.text = player.Gold.ToString();
+    woodValue.text = player.Resources[0].ToString();
+    stoneValue.text = player.Resources[1].ToString();
+    metalValue.text = player.Resources[2].ToString();
+    leatherValue.text = player.Resources[3].ToString();
+
+    int[] totalPeople = player.GetTotalPeople();
     villagersValue.text = string.Format(
       "{0} ({1}) / {2}",
       totalPeople[0].ToString(),
       totalPeople[1].ToString(),
-      max.ToString()
+      player.MaxVillagers.ToString()
     );
-    if (totalPeople[0] + totalPeople[1] > max) {
+    if (totalPeople[0] + totalPeople[1] > player.MaxVillagers) {
       villagersValue.text = "<color=#F61010>" + villagersValue.text + "</color>";
     }
   }

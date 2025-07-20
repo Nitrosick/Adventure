@@ -3,8 +3,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class MapZone : MonoBehaviour
-{
+public class MapZone : MonoBehaviour {
   [Header("Common")]
   public int id;
   public Vector3 playerPosition;

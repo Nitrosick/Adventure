@@ -57,6 +57,7 @@ public class PlayerMove : MonoBehaviour
 
       _ = CameraController.FocusOn(target.playerPosition);
 
+      MapUI.HideInteractableButton();
       await Move(path);
       CurrentZone = target;
       StateManager.currentPlayerZoneId = target.id;

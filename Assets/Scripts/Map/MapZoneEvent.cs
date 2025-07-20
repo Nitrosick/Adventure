@@ -17,6 +17,11 @@ public class MapZoneEvent : MonoBehaviour
       case MapZoneType.InstantBattle:
         StartBattle();
         break;
+      case MapZoneType.Recruitment:
+        MapZoneRecruitment component = transform.GetComponent<MapZoneRecruitment>();
+        if (component == null) return;
+        MapUI.ShowInteractableButton(component.OpenRecruitmentPanel);
+        break;
     }
   }
 

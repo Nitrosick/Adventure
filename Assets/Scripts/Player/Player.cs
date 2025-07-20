@@ -124,7 +124,7 @@ public class Player : MonoBehaviour {
     if (StateManager.playerUnits.Length > 0) Army.UpdateUnits(StateManager.playerUnits);
     if (StateManager.inventoryEquipment.Length > 0) Inventory.UpdateInventory(StateManager.inventoryEquipment);
 
-    MapUI.UpdateResources(Gold, Resources, GetTotalPeople(), MaxVillagers);
+    MapUI.UpdateResources();
 
     if (move.CurrentZone is not MapZoneBattle battleZone) return;
     BattleResult? result = StateManager.battleResult;
@@ -146,7 +146,7 @@ public class Player : MonoBehaviour {
         SetFame(reward.fame);
         Inventory.AddItems(reward.items);
 
-        MapUI.UpdateResources(Gold, Resources, GetTotalPeople(), MaxVillagers);
+        MapUI.UpdateResources();
         break;
       case BattleResult.Defeat:
       case BattleResult.Retreat:
