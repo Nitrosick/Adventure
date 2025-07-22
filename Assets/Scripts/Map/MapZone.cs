@@ -70,4 +70,13 @@ public class MapZone : MonoBehaviour {
       }
     }
   }
+
+  public void UnshiftEvent() {
+    events.RemoveAt(0);
+    if (events.Count == 0) {
+      SetCleared();
+      MapUI.HideInteractableButton();
+    }
+    StateManager.zonesState[id] = events;
+  }
 }

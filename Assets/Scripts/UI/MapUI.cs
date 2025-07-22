@@ -112,6 +112,7 @@ public class MapUI : MonoBehaviour
   }
 
   public static void ShowInteractableButton(UnityAction callback) {
+    // FIXME: Смена текста и иконки
     interactButton.onClick.AddListener(callback);
     interactButton.gameObject.SetActive(true);
   }

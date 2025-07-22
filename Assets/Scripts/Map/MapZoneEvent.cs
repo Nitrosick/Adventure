@@ -12,15 +12,17 @@ public class MapZoneEvent : MonoBehaviour
 
   public void CheckEvents() {
     if (zone == null || zone.events.Count < 1) return;
+    T Get<T>() where T : Component => transform.GetComponent<T>();
 
     switch (zone.events[0]) {
       case MapZoneType.InstantBattle:
         StartBattle();
         break;
+      case MapZoneType.Home:
+        MapUI.ShowInteractableButton(Get<MapZoneHome>().OpenHomeMenu);
+        break;
       case MapZoneType.Recruitment:
-        MapZoneRecruitment component = transform.GetComponent<MapZoneRecruitment>();
-        if (component == null) return;
-        MapUI.ShowInteractableButton(component.OpenRecruitmentPanel);
+        MapUI.ShowInteractableButton(Get<MapZoneRecruitment>().OpenRecruitmentPanel);
         break;
     }
   }

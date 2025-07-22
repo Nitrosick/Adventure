@@ -37,13 +37,9 @@ public class MapZoneManager : MonoBehaviour {
     if (result == null) return;
 
     MapZone currentZone = FindById(StateManager.currentPlayerZoneId);
-    if (currentZone == null) return;
 
-    if (result == BattleResult.Victory) {
-      currentZone.events.RemoveAt(0);
-      if (currentZone.events.Count == 0) currentZone.SetCleared();
-      StateManager.zonesState[currentZone.id] = currentZone.events;
-    }
+    if (currentZone == null) return;
+    if (result == BattleResult.Victory) currentZone.UnshiftEvent();
   }
 
   public static void GetStateData() {

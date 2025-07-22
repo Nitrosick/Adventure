@@ -1,8 +1,10 @@
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class RecruitingUI : MonoBehaviour {
+  private static Player player;
   private static Transform window;
   private static Button submit;
   private static Button cancel;
@@ -10,7 +12,8 @@ public class RecruitingUI : MonoBehaviour {
   private static TextMeshProUGUI description;
   private static Transform villagersPanel;
   private static TextMeshProUGUI villagersCount;
-  private static GameObject notEnough;
+  private static GameObject notEnoughRes;
+  private static GameObject notEnoughSlots;
   private static MapZoneRecruitment mapZone;
 
   // Requirements
@@ -41,7 +44,8 @@ public class RecruitingUI : MonoBehaviour {
     description = Get<TextMeshProUGUI>("Description");
     villagersPanel = Find("Reward/Villagers");
     villagersCount = Get<TextMeshProUGUI>("Reward/Villagers/Value");
-    notEnough = Find("NotEnough").gameObject;
+    notEnoughRes = Find("NotEnoughRes").gameObject;
+    notEnoughSlots = Find("NotEnoughSlots").gameObject;
 
     reqPlayerLevel = Find("Requirements/PlayerLevel");
     reqPlayerLevelValue = Get<TextMeshProUGUI>("Requirements/PlayerLevel/Value");
@@ -67,13 +71,17 @@ public class RecruitingUI : MonoBehaviour {
       reqGoldValue == null || reqWood == null || reqWoodValue == null ||
       reqStone == null || reqStoneValue == null || reqMetal == null ||
       reqMetalValue == null || reqLeather == null || reqLeatherValue == null ||
-      reqEquipment == null || notEnough == null
+      reqEquipment == null || notEnoughRes == null || notEnoughSlots == null
     ) {
       Debug.LogError("Recruiting UI components initialization error");
     }
 
     submit.onClick.AddListener(OnSubmit);
     cancel.onClick.AddListener(Close);
+  }
+
+  private void Start() {
+    player = Player.Instance;
   }
 
   private void OnDestroy() {
@@ -92,8 +100,11 @@ public class RecruitingUI : MonoBehaviour {
       villagersPanel.gameObject.SetActive(true);
     }
 
-    if (!MeetsRequirements(zone.requirements)) {
-      notEnough.SetActive(true);
+    if (!EnoughSlots(zone.recruitVillagers)) {
+      notEnoughSlots.SetActive(true);
+      submit.interactable = false;
+    } else if (!MeetsRequirements(zone.requirements)) {
+      notEnoughRes.SetActive(true);
       submit.interactable = false;
     }
 
@@ -109,7 +120,8 @@ public class RecruitingUI : MonoBehaviour {
     title.text = "";
     description.text = "";
     villagersPanel.gameObject.SetActive(false);
-    notEnough.SetActive(false);
+    notEnoughRes.SetActive(false);
+    notEnoughSlots.SetActive(false);
     submit.interactable = true;
 
     reqPlayerLevel.gameObject.SetActive(false);
@@ -123,27 +135,25 @@ public class RecruitingUI : MonoBehaviour {
   }
 
   private static void ShowRequirements(Requirements req) {
-    static void Check(int value, GameObject obj, TextMeshProUGUI text = null) {
+    static void Check(int value, GameObject obj, int current, TextMeshProUGUI field = null) {
       if (value > 0) {
         obj.SetActive(true);
-        if (text != null) text.text = value.ToString();
+        field.text = current < value ? "<color=#F61010>" + value.ToString() + "</color>" : value.ToString();
       }
     }
 
-    Check(req.playerLevel, reqPlayerLevel.gameObject, reqPlayerLevelValue);
-    Check(req.playerFame, reqPlayerFame.gameObject, reqPlayerFameValue);
-    Check(req.gold, reqGold.gameObject, reqGoldValue);
-    Check(req.resources[0], reqWood.gameObject, reqWoodValue);
-    Check(req.resources[1], reqStone.gameObject, reqStoneValue);
-    Check(req.resources[2], reqMetal.gameObject, reqMetalValue);
-    Check(req.resources[3], reqLeather.gameObject, reqLeatherValue);
+    Check(req.playerLevel, reqPlayerLevel.gameObject, player.Level, reqPlayerLevelValue);
+    Check(req.playerFame, reqPlayerFame.gameObject, player.Fame, reqPlayerFameValue);
+    Check(req.gold, reqGold.gameObject, player.Gold, reqGoldValue);
+    Check(req.resources[0], reqWood.gameObject, player.Resources[0], reqWoodValue);
+    Check(req.resources[1], reqStone.gameObject, player.Resources[1], reqStoneValue);
+    Check(req.resources[2], reqMetal.gameObject, player.Resources[2], reqMetalValue);
+    Check(req.resources[3], reqLeather.gameObject, player.Resources[3], reqLeatherValue);
 
     if (req.equipment.Length > 0) reqEquipment.gameObject.SetActive(true);
   }
 
   private static bool MeetsRequirements(Requirements req) {
-    Player player = Player.Instance;
-
     if (req.playerLevel > player.Level) return false;
     if (req.playerFame > player.Fame) return false;
     if (req.gold > player.Gold) return false;
@@ -156,15 +166,20 @@ public class RecruitingUI : MonoBehaviour {
     return true;
   }
 
-  private static void OnSubmit() {
-    Player player = Player.Instance;
+  private static bool EnoughSlots(int count) {
+    return player.GetTotalPeople().Sum() + count <= player.MaxVillagers;
+  }
 
+  private static void OnSubmit() {
     if (mapZone.recruitVillagers > 0) {
       player.SetVillagers(mapZone.recruitVillagers);
       MapUI.UpdateResources();
       mapZone.SetCleared();
     }
 
-    // FIXME: Закрыть окно и отключить кнопку взаимодействия
+    // FIXME: Отнять ресурсы
+    mapZone.UnshiftEvent();
+    Close();
+    _ = InfoPopup.Show("success", "People have joined you");
   }
 }

@@ -8,13 +8,21 @@ Title: Size 30 / Grenze-Bold / Letter spacing -5
 Text: Size 24 / Oswald / Letter spacing -5
 Parameter key: Size 24 / Oswald / Letter spacing -5 / Opacity 200
 
-Colors
-------
+Common colors
+-------------
 Main blue: #2B8EF3 / #174E87
 Negative: #F61010 / #781010
 Positive: #81D11F
 Warning: #EFBF0D
 Inactive: #A0A0A0
+
+Rarity colors
+-------------
+Novice: #A0A0A0
+Apprentice: #618C2D
+Adept: #306DAB
+Expert: #6948A4
+Master: #CF8F0B
 
 Common
 ------
@@ -117,6 +125,14 @@ public enum UnitEquipSlot {
   Armor
 }
 
+public enum MasteryLevel {
+  Novice,
+  Apprentice,
+  Adept,
+  Expert,
+  Master
+}
+
 // Items
 public enum EquipmentType {
   OneHandWeapon,
@@ -150,4 +166,8 @@ public enum MapZoneType {
   Constructing,
   Recruitment
   // ...
+}
+
+public enum MapZoneFeature {
+  Healing
 }

@@ -137,7 +137,7 @@ public class Unit : MonoBehaviour {
 
   public float GetPriority() {
     float result = Priority;
-    // FIXME: Проверка на блок или другие защитные эффекты
+    // FIXME: Проверка на разные защитные эффекты и условия окружения
     if (Effects.HasEffect("Cover")) result -= 2;
     if (CurrentHealth < TotalHealth / 3) result *= 2;
     else if (CurrentHealth < TotalHealth / 2) result *= 1.5f;

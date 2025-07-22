@@ -45,23 +45,27 @@ public class PlayerMenuUI : MonoBehaviour {
     Instance = this;
     menu = transform.Find("PlayerMenu/Panel");
 
-    navHero = menu.Find("Left/Navigation/Hero").GetComponent<Button>();
-    navUnits = menu.Find("Left/Navigation/Units").GetComponent<Button>();
-    navInventory = menu.Find("Left/Navigation/Inventory").GetComponent<Button>();
+    Transform Find(string path) => menu.Find(path);
+    T Get<T>(string path) where T : Component => Find(path).GetComponent<T>();
 
-    leftSlots = menu.Find("Left/Blocks/Left/Slots/Viewport/Content").GetComponent<RectTransform>();
-    rightSlots = menu.Find("Left/Blocks/Right/Slots/Viewport/Content").GetComponent<RectTransform>();
-    leftSlotsTitle = menu.Find("Left/Blocks/Left/Title").GetComponent<TextMeshProUGUI>();
-    rightSlotsTitle = menu.Find("Left/Blocks/Right/Title").GetComponent<TextMeshProUGUI>();
+    navHero = Get<Button>("Left/Navigation/Hero");
+    navUnits = Get<Button>("Left/Navigation/Units");
+    navInventory = Get<Button>("Left/Navigation/Inventory");
 
-    playerProgress = menu.Find("Left/Blocks/Left/PlayerProgress").GetComponent<Transform>();
-    Transform progressContent = playerProgress.Find("Viewport/Content").GetComponent<Transform>();
-    playerXpValue = progressContent.Find("Experience/Value").GetComponent<TextMeshProUGUI>();
-    playerXpBar = progressContent.Find("ExperienceBar").GetComponent<RectTransform>();
-    playerXpBarFill = progressContent.Find("ExperienceBar/Fill").GetComponent<RectTransform>();
-    playerFameValue = progressContent.Find("Fame/Value").GetComponent<TextMeshProUGUI>();
-    playerFameBar = progressContent.Find("FameBar").GetComponent<RectTransform>();
-    playerFameBarFill = progressContent.Find("FameBar/Fill").GetComponent<RectTransform>();
+    leftSlots = Get<RectTransform>("Left/Blocks/Left/Slots/Viewport/Content");
+    rightSlots = Get<RectTransform>("Left/Blocks/Right/Slots/Viewport/Content");
+    leftSlotsTitle = Get<TextMeshProUGUI>("Left/Blocks/Left/Title");
+    rightSlotsTitle = Get<TextMeshProUGUI>("Left/Blocks/Right/Title");
+    playerProgress = Find("Left/Blocks/Left/PlayerProgress");
+
+    Transform progressContent = Get<Transform>("Left/Blocks/Left/PlayerProgress/Viewport/Content");
+
+    playerXpValue = Get<TextMeshProUGUI>("Left/Blocks/Left/PlayerProgress/Viewport/Content/Experience/Value");
+    playerXpBar = Get<RectTransform>("Left/Blocks/Left/PlayerProgress/Viewport/Content/ExperienceBar");
+    playerXpBarFill = Get<RectTransform>("Left/Blocks/Left/PlayerProgress/Viewport/Content/ExperienceBar/Fill");
+    playerFameValue = Get<TextMeshProUGUI>("Left/Blocks/Left/PlayerProgress/Viewport/Content/Fame/Value");
+    playerFameBar = Get<RectTransform>("Left/Blocks/Left/PlayerProgress/Viewport/Content/FameBar");
+    playerFameBarFill = Get<RectTransform>("Left/Blocks/Left/PlayerProgress/Viewport/Content/FameBar/Fill");
 
     if (!ComponentsInitialized()) {
       Debug.LogError("Player menu UI components initialization error");

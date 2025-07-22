@@ -111,7 +111,7 @@ public class Player : MonoBehaviour {
   }
 
   private void GetStateData() {
-    // FIXME: перенос данных между локациями
+    // FIXME: Перенос данных между локациями
     Gold = StateManager.gold;
     Resources = StateManager.resources;
     Villagers = StateManager.villagers;
@@ -125,6 +125,9 @@ public class Player : MonoBehaviour {
     if (StateManager.inventoryEquipment.Length > 0) Inventory.UpdateInventory(StateManager.inventoryEquipment);
 
     MapUI.UpdateResources();
+
+    MapZoneEvent events = move.CurrentZone.GetComponent<MapZoneEvent>();
+    events.CheckEvents();
 
     if (move.CurrentZone is not MapZoneBattle battleZone) return;
     BattleResult? result = StateManager.battleResult;
@@ -152,6 +155,9 @@ public class Player : MonoBehaviour {
       case BattleResult.Retreat:
         transform.position = move.startZone.playerPosition;
         move.CurrentZone = move.startZone;
+        // FIXME: Не факт что сработает
+        events.CheckEvents();
+        _ = CameraController.FocusOn(transform.position, true);
         SetFame(fixedReward.fame / 2 * -1);
         break;
     }
