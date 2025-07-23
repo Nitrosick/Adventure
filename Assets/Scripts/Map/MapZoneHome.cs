@@ -12,12 +12,4 @@ public class MapZoneHome : MapZone {
     if (features.Length < 1) return;
     HomeMenuUI.Open(this);
   }
-
-  public override void SetCleared() {
-    base.SetCleared();
-
-    if (events.Count < 1) {
-
-    }
-  }
 }

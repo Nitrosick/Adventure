@@ -173,7 +173,6 @@ public class RecruitingUI : MonoBehaviour {
   private static void OnSubmit() {
     if (mapZone.recruitVillagers > 0) {
       player.SetVillagers(mapZone.recruitVillagers);
-      MapUI.UpdateResources();
       mapZone.SetCleared();
     }
 

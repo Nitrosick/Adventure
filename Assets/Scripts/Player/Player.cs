@@ -42,6 +42,7 @@ public class Player : MonoBehaviour {
     Gold += value;
     if (Gold < 0) Gold = 0;
     StateManager.gold = Gold;
+    MapUI.UpdateResources();
   }
 
   public void SetResources(int[] array) {
@@ -50,18 +51,21 @@ public class Player : MonoBehaviour {
       if (Resources[i] < 0) Resources[i] = 0;
     }
     StateManager.resources = Resources;
+    MapUI.UpdateResources();
   }
 
   public void SetVillagers(int value) {
     Villagers += value;
     if (Villagers < 0) Villagers = 0;
     StateManager.villagers = Villagers;
+    MapUI.UpdateResources();
   }
 
   private void SetMaxVillagers() {
     int bonusUnits = Fame / fameStepSize * bonusVillagersPerStep;
     MaxVillagers = Mathf.Min(baseMaxVillagers + bonusUnits, villagersLimit);
     StateManager.maxVillagers = MaxVillagers;
+    MapUI.UpdateResources();
   }
 
   public void AddExpirience(int value) {
@@ -71,6 +75,7 @@ public class Player : MonoBehaviour {
       LevelUp();
     }
     StateManager.experience = Experience;
+    MapUI.UpdateResources();
   }
 
   public int XPForNextLevel => GetXPForLevel(Level);
@@ -127,7 +132,7 @@ public class Player : MonoBehaviour {
     MapUI.UpdateResources();
 
     MapZoneEvent events = move.CurrentZone.GetComponent<MapZoneEvent>();
-    events.CheckEvents();
+    events.CheckEvents(true);
 
     if (move.CurrentZone is not MapZoneBattle battleZone) return;
     BattleResult? result = StateManager.battleResult;
@@ -148,15 +153,13 @@ public class Player : MonoBehaviour {
         AddExpirience(reward.experience);
         SetFame(reward.fame);
         Inventory.AddItems(reward.items);
-
-        MapUI.UpdateResources();
         break;
       case BattleResult.Defeat:
       case BattleResult.Retreat:
         transform.position = move.startZone.playerPosition;
         move.CurrentZone = move.startZone;
         // FIXME: Не факт что сработает
-        events.CheckEvents();
+        events.CheckEvents(true);
         _ = CameraController.FocusOn(transform.position, true);
         SetFame(fixedReward.fame / 2 * -1);
         break;

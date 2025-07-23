@@ -94,24 +94,24 @@ public static class StateManager {
     }
     SaveData data = GetSaveData();
 
-    string json = JsonConvert.SerializeObject(data);
-    string encrypted = Encryption.Encrypt(json);
-    File.WriteAllText(GetSavePath(saveSlot), encrypted);
+    // string json = JsonConvert.SerializeObject(data);
+    // string encrypted = Encryption.Encrypt(json);
+    // File.WriteAllText(GetSavePath(saveSlot), encrypted);
 
-    // string json = JsonConvert.SerializeObject(data, Formatting.Indented);
-    // File.WriteAllText(GetSavePath(saveSlot), json);
+    string json = JsonConvert.SerializeObject(data, Formatting.Indented);
+    File.WriteAllText(GetSavePath(saveSlot), json);
   }
 
   public static SaveData LoadGame(int slot, bool setData = true) {
     string path = GetSavePath(slot);
     if (!File.Exists(path)) return null;
 
-    string encrypted = File.ReadAllText(path);
-    string json = Encryption.Decrypt(encrypted);
-    SaveData data = JsonConvert.DeserializeObject<SaveData>(json);
-
-    // string json = File.ReadAllText(path);
+    // string encrypted = File.ReadAllText(path);
+    // string json = Encryption.Decrypt(encrypted);
     // SaveData data = JsonConvert.DeserializeObject<SaveData>(json);
+
+    string json = File.ReadAllText(path);
+    SaveData data = JsonConvert.DeserializeObject<SaveData>(json);
 
     if (setData) SetLoadedData(data);
     return data;

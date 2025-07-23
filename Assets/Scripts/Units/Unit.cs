@@ -152,7 +152,7 @@ public class Unit : MonoBehaviour {
     Intelligence += stats[2];
   }
 
-  // Attack and damage
+  // Attack
   public async virtual void OnAttack(Unit target = null) {
     BattleUI.DisableUI();
     if (target != null) Target = target;
@@ -206,13 +206,15 @@ public class Unit : MonoBehaviour {
     }
   }
 
+  // Getting damage and Health
   public void TakeDamage(float damage, float modifier, bool isTickDamage = false) {
     float totalDamage = damage * modifier;
 
     if (modifier > 1f) {
       Ui.ShowPopup(totalDamage.ToString(), PopupType.Crit);
       if (!isTickDamage) CameraController.Shake(1.2f);
-    } else {
+    }
+    else {
       Ui.ShowPopup(totalDamage.ToString(), PopupType.Negative);
       if (!isTickDamage) CameraController.Shake(0.8f);
     }
@@ -220,7 +222,8 @@ public class Unit : MonoBehaviour {
     if (totalDamage >= CurrentHealth) {
       CurrentHealth = 0;
       Die();
-    } else {
+    }
+    else {
       CurrentHealth -= totalDamage;
       Ui.UpdateHealth(TotalHealth, CurrentHealth);
       if (!isTickDamage) Animator.TakeDamage();
@@ -236,6 +239,12 @@ public class Unit : MonoBehaviour {
     Effects.ClearEffects();
     Animator.Die();
     _ = MakeCorpse();
+  }
+
+  public void Heal(float value, bool inBattle = true) {
+    CurrentHealth += value;
+    if (CurrentHealth > TotalHealth) CurrentHealth = TotalHealth;
+    if (!inBattle) Player.Instance.Army.UpdateState();
   }
 
   private async Task MakeCorpse() {

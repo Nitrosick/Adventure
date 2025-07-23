@@ -18,16 +18,26 @@ public class HealingMenuUI : MonoBehaviour {
   private TextMeshProUGUI reanimationCost;
   private RectTransform deadSlots;
 
+  private Button healButton;
+  private Button reanimateButton;
+
   private readonly Dictionary<MasteryLevel, Color> palette = new();
   private readonly Dictionary<MasteryLevel, int[]> healValues = new();
   private readonly Dictionary<MasteryLevel, int> reanimationChances = new();
+  private MasteryLevel masteryLevel;
 
-  private static readonly float baseHealCost = 3f;
-  private static readonly float healCostModifier = 1.4f;
-  private static readonly float baseReanimationCost = 6f;
-  private static readonly float reanimationCostModifier = 1.3f;
-  private static readonly int slotColumns = 5;
-  private static readonly float slotsGap = 4f;
+  private readonly int baseHealCost = 3;
+  private readonly float healCostModifier = 1.4f;
+  private readonly int baseReanimationCost = 6;
+  private readonly float reanimationCostModifier = 1.3f;
+  private readonly int slotColumns = 5;
+  private readonly float slotsGap = 4f;
+
+  private int woundedTotal;
+  private int deadTotal;
+  private List<Unit> playerArmy;
+  private Unit[] wounded;
+  private Unit[] dead;
 
   private void Awake() {
     T Get<T>(string path) where T : Component => transform.Find(path).GetComponent<T>();
@@ -41,6 +51,8 @@ public class HealingMenuUI : MonoBehaviour {
     woundedSlots = Get<RectTransform>("WoundedSlots");
     reanimationCost = Get<TextMeshProUGUI>("DeadHead/Value");
     deadSlots = Get<RectTransform>("DeadSlots");
+    healButton = Get<Button>("WoundedControl/Heal");
+    reanimateButton = Get<Button>("DeadControl/Reanimate");
 
     if (!ComponentsInitialized()) {
       Debug.LogError("Healing menu UI components initialization error");
@@ -50,12 +62,21 @@ public class HealingMenuUI : MonoBehaviour {
     InitPalette();
     InitHealValues();
     InitReanimationChances();
+
+    healButton.onClick.AddListener(HealUnits);
+    reanimateButton.onClick.AddListener(ReanimateUnits);
   }
 
   private bool ComponentsInitialized() {
     return title != null && level != null && avatarBackground != null &&
     intensity != null && reanimationChance != null && healCost != null &&
-    woundedSlots != null && reanimationCost != null && deadSlots != null;
+    woundedSlots != null && reanimationCost != null && deadSlots != null &&
+    healButton != null && reanimateButton != null;
+  }
+
+  private void OnDestroy() {
+    healButton.onClick.RemoveListener(HealUnits);
+    reanimateButton.onClick.RemoveListener(ReanimateUnits);
   }
 
   private void InitPalette() {
@@ -87,11 +108,7 @@ public class HealingMenuUI : MonoBehaviour {
   }
 
   public void Init(string name, MasteryLevel lvl) {
-    List<Unit> army = Player.Instance.Army.Units;
-    if (army == null || army.Count == 0) return;
-    Unit[] wounded = army.Where(u => u.CurrentHealth < u.TotalHealth && u.CurrentHealth > 0).ToArray();
-    Unit[] dead = army.Where(u => u.CurrentHealth <= 0).ToArray();
-
+    masteryLevel = lvl;
     title.text = name;
     level.text = "Level: " + lvl;
     int[] intensityValues = healValues[lvl];
@@ -104,40 +121,82 @@ public class HealingMenuUI : MonoBehaviour {
     reanimationChance.text = "Reanimation chance: " + reanimationChances[lvl] + "%";
     avatarBackground.color = palette[lvl];
 
+    UpdateSlotsSize(woundedSlots);
+    UpdateSlotsSize(deadSlots);
+    UpdateUnitsData();
+  }
+
+  private void UpdateUnitsData() {
+    ClearSlots();
+    woundedTotal = 0;
+    deadTotal = 0;
+    healButton.interactable = false;
+    reanimateButton.interactable = false;
+    healCost.text = "0";
+    reanimationCost.text = "0";
+
+    playerArmy = Player.Instance.Army.Units;
+    int balance = Player.Instance.Gold;
+    if (playerArmy == null || playerArmy.Count == 0) return;
+    wounded = playerArmy.Where(u => u.CurrentHealth < u.TotalHealth && u.CurrentHealth > 0).ToArray();
+    dead = playerArmy.Where(u => u.CurrentHealth <= 0).ToArray();
+
     if (wounded.Length > 0) {
+      int woundedCost = GetCost(baseHealCost, healCostModifier);
+      woundedTotal = wounded.Length * woundedCost;
+      string totalText = balance >= woundedTotal ? woundedTotal.ToString() : "<color=#F61010>" + woundedTotal + "</color>";
+
       healCost.text = string.Format(
-        "{0} unit(s) x {1}",
-        wounded.Length, GetCost(baseHealCost, healCostModifier)
+        "{0} unit(s) x {1} = {2}",
+        wounded.Length, woundedCost, totalText
       );
-    }
-    if (dead.Length > 0) {
-      reanimationCost.text = string.Format(
-        "{0} unit(s) x {1}",
-        dead.Length, GetCost(baseReanimationCost, reanimationCostModifier)
-      );
+
+      foreach (Unit unit in wounded) {
+        GameObject slot = Instantiate(slotPrefab, woundedSlots);
+        slot.GetComponent<HealingMenuSlot>().Init(unit, true);
+      }
+
+      healButton.interactable = balance >= woundedTotal;
     }
 
-    foreach (Unit unit in wounded) {
-      GameObject slot = Instantiate(slotPrefab, woundedSlots);
-      slot.GetComponent<HealingMenuSlot>().Init(unit, true);
-    }
-    foreach (Unit unit in dead) {
-      GameObject slot = Instantiate(slotPrefab, deadSlots);
-      slot.GetComponent<HealingMenuSlot>().Init(unit);
+    if (dead.Length > 0) {
+      int deadCost = GetCost(baseReanimationCost, reanimationCostModifier);
+      deadTotal = dead.Length * deadCost;
+      string totalText = balance >= deadTotal ? deadTotal.ToString() : "<color=#F61010>" + deadTotal + "</color>";
+
+      reanimationCost.text = string.Format(
+        "{0} unit(s) x {1} = {2}",
+        dead.Length, deadCost, totalText
+      );
+
+      foreach (Unit unit in dead) {
+        GameObject slot = Instantiate(slotPrefab, deadSlots);
+        slot.GetComponent<HealingMenuSlot>().Init(unit);
+      }
+
+      reanimateButton.interactable = balance >= deadTotal;
     }
 
     RenderEmptySlots(woundedSlots, wounded.Length);
     RenderEmptySlots(deadSlots, dead.Length);
-    UpdateSlotsSize(woundedSlots);
-    UpdateSlotsSize(deadSlots);
   }
 
   public void Clear() {
     if (!ComponentsInitialized()) return;
     ClearSlots();
+    masteryLevel = MasteryLevel.Novice;
     title.text = "";
     level.text = "";
     healCost.text = "0";
+
+    woundedTotal = 0;
+    deadTotal = 0;
+    playerArmy = null;
+    wounded = null;
+    dead = null;
+
+    healButton.interactable = false;
+    reanimateButton.interactable = false;
     gameObject.SetActive(false);
   }
 
@@ -162,8 +221,30 @@ public class HealingMenuUI : MonoBehaviour {
     for (int i = 0; i < placeholders; i++) Instantiate(slotEmptyPrefab, panel);
   }
 
-  private float GetCost(float value, float modifier) {
+  private int GetCost(int value, float modifier) {
     int level = Player.Instance.Level;
     return Mathf.RoundToInt(value * Mathf.Pow(level, modifier));
+  }
+
+  private void HealUnits() {
+    foreach (Unit unit in wounded) {
+      int[] intensity = healValues[masteryLevel];
+      int value = Utils.GetRandomInRange(intensity[0], intensity[1]);
+      unit.Heal(value, false);
+    }
+    Player.Instance.SetGold(woundedTotal * -1);
+    UpdateUnitsData();
+    StateManager.SaveGame();
+  }
+
+  private void ReanimateUnits() {
+    foreach (Unit unit in dead) {
+      bool success = Utils.RollChance(reanimationChances[masteryLevel]);
+      if (!success) _ = InfoPopup.Show("warning", "Unit couldn't be reanimated");
+      else unit.Heal(5, false);
+    }
+    Player.Instance.SetGold(deadTotal * -1);
+    UpdateUnitsData();
+    StateManager.SaveGame();
   }
 }

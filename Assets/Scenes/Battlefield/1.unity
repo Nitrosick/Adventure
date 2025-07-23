@@ -39499,6 +39499,27 @@ PrefabInstance:
       propertyPath: m_Name
       value: Chest 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8368173233444314805, guid: 5047cad96e6038548bdd45ac6b01f29c,
+        type: 3}
+      propertyPath: loot.items.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8368173233444314805, guid: 5047cad96e6038548bdd45ac6b01f29c,
+        type: 3}
+      propertyPath: loot.items.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: 6f922fca9d8e831499a870924f838f2f,
+        type: 2}
+    - target: {fileID: 8368173233444314805, guid: 5047cad96e6038548bdd45ac6b01f29c,
+        type: 3}
+      propertyPath: loot.goldRange.Array.data[0]
+      value: 75
+      objectReference: {fileID: 0}
+    - target: {fileID: 8368173233444314805, guid: 5047cad96e6038548bdd45ac6b01f29c,
+        type: 3}
+      propertyPath: loot.goldRange.Array.data[1]
+      value: 100
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

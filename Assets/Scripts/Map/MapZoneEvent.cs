@@ -10,12 +10,13 @@ public class MapZoneEvent : MonoBehaviour
     zone = transform.GetComponent<MapZone>();
   }
 
-  public void CheckEvents() {
+  public void CheckEvents(bool ignoreBattle = false) {
     if (zone == null || zone.events.Count < 1) return;
     T Get<T>() where T : Component => transform.GetComponent<T>();
 
     switch (zone.events[0]) {
       case MapZoneType.InstantBattle:
+        if (ignoreBattle) return;
         StartBattle();
         break;
       case MapZoneType.Home:
