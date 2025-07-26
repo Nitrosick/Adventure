@@ -1,46 +1,48 @@
-using System.Collections.Generic;
+using System;
+using System.Linq;
 using UnityEngine;
 
 public static class Factory {
-  public static Equipment CreateById(string id) {
-    if (string.IsNullOrEmpty(id)) return null;
-
-    string path = "";
-
-    if (id.StartsWith("a") || id.StartsWith("s")) path = "Armor/" + id;
-    else if (id.StartsWith("w")) path = "Weapon/" + id;
-    else {
-      Debug.LogError("Item not found");
-      return null;
-    }
-
-    Equipment item = Resources.Load<Equipment>(path);
-    if (item == null) Debug.LogError("Item not found");
-    return item;
+  public static Equipment CreateEquipById(string id) {
+    return Load<Equipment>(GetPath(id));
   }
 
-  public static Equipment[] CreateById(string[] ids) {
-    List<Equipment> result = new ();
-    if (ids == null || ids.Length == 0) return result.ToArray();
+  public static Equipment[] CreateEquipById(string[] ids) {
+    if (ids == null || ids.Length == 0) return Array.Empty<Equipment>();
 
-    foreach (string id in ids) {
-      string path = "";
+    return ids
+      .Select(id => Load<Equipment>(GetPath(id)))
+      .Where(e => e != null)
+      .ToArray();
+  }
 
-      if (id.StartsWith("a") || id.StartsWith("s")) path = "Armor/" + id;
-      else if (id.StartsWith("w")) path = "Weapon/" + id;
-      else {
-        Debug.LogError("Item not found");
-        continue;
-      }
+  public static Item CreateItemById(string id) {
+    return Load<Item>(GetPath(id));
+  }
 
-      Equipment item = Resources.Load<Equipment>(path);
-      if (item == null) {
-        Debug.LogError("Item not found");
-        continue;
-      }
-      result.Add(item);
-    }
+  public static Item[] CreateItemById(string[] ids) {
+    if (ids == null || ids.Length == 0) return Array.Empty<Item>();
 
-    return result.ToArray();
+    return ids
+      .Select(id => Load<Item>(GetPath(id)))
+      .Where(i => i != null)
+      .ToArray();
+  }
+
+  private static string GetPath(string id) {
+    if (string.IsNullOrEmpty(id)) return null;
+    if (id.StartsWith("a") || id.StartsWith("s")) return "Armor/" + id;
+    if (id.StartsWith("w")) return "Weapon/" + id;
+    if (id.StartsWith("mi")) return "Medicine/" + id;
+    // FIXME: Добавить все каталоги предметов
+    Debug.LogError($"Unknown equipment id: {id}");
+    return null;
+  }
+
+  private static T Load<T>(string path) where T : UnityEngine.Object {
+    if (string.IsNullOrEmpty(path)) return null;
+    T asset = Resources.Load<T>(path);
+    if (asset == null) Debug.LogError("Failed to load resource");
+    return asset;
   }
 }

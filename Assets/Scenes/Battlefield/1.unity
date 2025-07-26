@@ -30972,6 +30972,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Barrels 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8368173233444314805, guid: cfa519c8665a1a8488d6680f5cf567ba,
+        type: 3}
+      propertyPath: lootDropChance
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 8368173233444314805, guid: cfa519c8665a1a8488d6680f5cf567ba,
+        type: 3}
+      propertyPath: loot.resources.Array.data[1]
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -39502,11 +39512,22 @@ PrefabInstance:
     - target: {fileID: 8368173233444314805, guid: 5047cad96e6038548bdd45ac6b01f29c,
         type: 3}
       propertyPath: loot.items.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8368173233444314805, guid: 5047cad96e6038548bdd45ac6b01f29c,
         type: 3}
       propertyPath: loot.items.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: 6f922fca9d8e831499a870924f838f2f,
+        type: 2}
+    - target: {fileID: 8368173233444314805, guid: 5047cad96e6038548bdd45ac6b01f29c,
+        type: 3}
+      propertyPath: loot.equipment.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8368173233444314805, guid: 5047cad96e6038548bdd45ac6b01f29c,
+        type: 3}
+      propertyPath: loot.equipment.Array.data[0]
       value: 
       objectReference: {fileID: 11400000, guid: 6f922fca9d8e831499a870924f838f2f,
         type: 2}

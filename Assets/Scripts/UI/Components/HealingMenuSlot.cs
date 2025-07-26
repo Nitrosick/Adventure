@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class HealingMenuSlot : MonoBehaviour {
   private Image image;
-  public GameObject deathMark;
+  private GameObject deathMark;
   private RectTransform healthBar;
   private RectTransform healthBarFill;
 

@@ -128,6 +128,7 @@ public class Player : MonoBehaviour {
 
     if (StateManager.playerUnits.Length > 0) Army.UpdateUnits(StateManager.playerUnits);
     if (StateManager.inventoryEquipment.Length > 0) Inventory.UpdateInventory(StateManager.inventoryEquipment);
+    if (StateManager.inventoryItems.Length > 0) Inventory.UpdateInventory(StateManager.inventoryItems);
 
     MapUI.UpdateResources();
 
@@ -152,6 +153,7 @@ public class Player : MonoBehaviour {
         SetResources(reward.resources);
         AddExpirience(reward.experience);
         SetFame(reward.fame);
+        Inventory.AddItems(reward.equipment);
         Inventory.AddItems(reward.items);
         break;
       case BattleResult.Defeat:

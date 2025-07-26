@@ -5,5 +5,5 @@ public class Requirements {
   public int gold;
   public int[] resources = { 0, 0, 0, 0 };
   public Equipment[] equipment;
-  // FIXME: Обычные предметы
+  public Item[] items;
 }

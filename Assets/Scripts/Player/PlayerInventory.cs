@@ -8,7 +8,7 @@ public class PlayerInventory : MonoBehaviour {
   public Transform shieldBracing;
 
   public List<Equipment> Equip { get; private set; } = new() { };
-  // FIXME: Отдельный список для предметов
+  public List<Item> Items { get; private set; } = new() { };
   private ArmorSet[] armorSets;
 
   private void Awake() {
@@ -16,7 +16,7 @@ public class PlayerInventory : MonoBehaviour {
     armorSets = GetComponentsInChildren<ArmorSet>();
 
     if (army == null || armorSets.Length == 0) {
-      Debug.LogError("Unit equipment components initialization error");
+      Debug.LogError("Unit inventory components initialization error");
     }
   }
 
@@ -47,9 +47,8 @@ public class PlayerInventory : MonoBehaviour {
     shieldObj.transform.SetParent(shieldBracing, false);
   }
 
-  public void UpdateInventory(Equipment[] items) {
-    Equip = items.ToList();
-  }
+  public void UpdateInventory(Equipment[] items) { Equip = items.ToList(); }
+  public void UpdateInventory(Item[] items) { Items = items.ToList(); }
 
   public void AddItems(List<Equipment> items) {
     if (items == null || items.Count == 0) return;
@@ -63,7 +62,20 @@ public class PlayerInventory : MonoBehaviour {
     UpdateState();
   }
 
+  public void AddItems(List<Item> items) {
+    if (items == null || items.Count == 0) return;
+    Items.AddRange(items);
+    UpdateState();
+  }
+
+  public void AddItems(Item item) {
+    if (item == null) return;
+    Items.Add(item);
+    UpdateState();
+  }
+
   public void UpdateState() {
     StateManager.inventoryEquipment = Equip.ToArray();
+    StateManager.inventoryItems = Items.ToArray();
   }
 }

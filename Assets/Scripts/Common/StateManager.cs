@@ -37,6 +37,7 @@ public static class StateManager {
   public static Dictionary<int, List<MapZoneType>> zonesState;
   public static UnitData[] playerUnits;
   public static Equipment[] inventoryEquipment;
+  public static Item[] inventoryItems;
 
   public static void ResetTemp() {
     enterScene = "";
@@ -60,6 +61,7 @@ public static class StateManager {
     zonesState = new Dictionary<int, List<MapZoneType>> { };
     playerUnits = new UnitData[] { };
     inventoryEquipment = new Equipment[] { };
+    inventoryItems = new Item[] { };
     ResetTemp();
   }
 
@@ -125,7 +127,8 @@ public static class StateManager {
   }
 
   public static SaveData GetSaveData() {
-    string[] equipIds = inventoryEquipment.Select(o => o.id).ToArray();
+    string[] equipIds = inventoryEquipment.Select(e => e.id).ToArray();
+    string[] itemIds = inventoryItems.Select(i => i.id).ToArray();
 
     SaveData data = new() {
       // FIXME: Установка имени сохранения
@@ -142,7 +145,8 @@ public static class StateManager {
       statPoints = statPoints,
       zonesState = zonesState,
       playerUnits = playerUnits,
-      inventoryEquipmentIds = equipIds
+      inventoryEquipmentIds = equipIds,
+      inventoryItemIds = itemIds
     };
     return data;
   }
@@ -159,7 +163,8 @@ public static class StateManager {
     statPoints = data.statPoints;
     zonesState = data.zonesState;
     playerUnits = data.playerUnits;
-    inventoryEquipment = Factory.CreateById(data.inventoryEquipmentIds);
+    inventoryEquipment = Factory.CreateEquipById(data.inventoryEquipmentIds);
+    inventoryItems = Factory.CreateItemById(data.inventoryItemIds);
   }
 
   public static void InitPlayerArmy() {

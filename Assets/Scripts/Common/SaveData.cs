@@ -17,4 +17,5 @@ public class SaveData {
   public Dictionary<int, List<MapZoneType>> zonesState;
   public UnitData[] playerUnits;
   public string[] inventoryEquipmentIds;
+  public string[] inventoryItemIds;
 }

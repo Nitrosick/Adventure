@@ -4,15 +4,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HealingMenuUI : MonoBehaviour {
-  public GameObject slotPrefab;
-  public GameObject slotEmptyPrefab;
-
-  private TextMeshProUGUI title;
-  private TextMeshProUGUI level;
+public class HealingMenuUI : HomeMenuFeature {
   private TextMeshProUGUI intensity;
   private TextMeshProUGUI reanimationChance;
-  private Image avatarBackground;
   private TextMeshProUGUI healCost;
   private RectTransform woundedSlots;
   private TextMeshProUGUI reanimationCost;
@@ -21,17 +15,13 @@ public class HealingMenuUI : MonoBehaviour {
   private Button healButton;
   private Button reanimateButton;
 
-  private readonly Dictionary<MasteryLevel, Color> palette = new();
   private readonly Dictionary<MasteryLevel, int[]> healValues = new();
   private readonly Dictionary<MasteryLevel, int> reanimationChances = new();
-  private MasteryLevel masteryLevel;
 
   private readonly int baseHealCost = 3;
   private readonly float healCostModifier = 1.4f;
   private readonly int baseReanimationCost = 6;
   private readonly float reanimationCostModifier = 1.3f;
-  private readonly int slotColumns = 5;
-  private readonly float slotsGap = 4f;
 
   private int woundedTotal;
   private int deadTotal;
@@ -39,14 +29,13 @@ public class HealingMenuUI : MonoBehaviour {
   private Unit[] wounded;
   private Unit[] dead;
 
-  private void Awake() {
+  protected override void Awake() {
+    base.Awake();
+
     T Get<T>(string path) where T : Component => transform.Find(path).GetComponent<T>();
 
-    title = Get<TextMeshProUGUI>("Head/Data/Name");
-    level = Get<TextMeshProUGUI>("Head/Data/Level");
     intensity = Get<TextMeshProUGUI>("Head/Data/Intensity");
     reanimationChance = Get<TextMeshProUGUI>("Head/Data/Chance");
-    avatarBackground = Get<Image>("Head/Avatar/Background");
     healCost = Get<TextMeshProUGUI>("WoundedHead/Value");
     woundedSlots = Get<RectTransform>("WoundedSlots");
     reanimationCost = Get<TextMeshProUGUI>("DeadHead/Value");
@@ -59,7 +48,6 @@ public class HealingMenuUI : MonoBehaviour {
       return;
     }
 
-    InitPalette();
     InitHealValues();
     InitReanimationChances();
 
@@ -68,8 +56,7 @@ public class HealingMenuUI : MonoBehaviour {
   }
 
   private bool ComponentsInitialized() {
-    return title != null && level != null && avatarBackground != null &&
-    intensity != null && reanimationChance != null && healCost != null &&
+    return intensity != null && reanimationChance != null && healCost != null &&
     woundedSlots != null && reanimationCost != null && deadSlots != null &&
     healButton != null && reanimateButton != null;
   }
@@ -77,18 +64,6 @@ public class HealingMenuUI : MonoBehaviour {
   private void OnDestroy() {
     healButton.onClick.RemoveListener(HealUnits);
     reanimateButton.onClick.RemoveListener(ReanimateUnits);
-  }
-
-  private void InitPalette() {
-    AddColor(MasteryLevel.Novice, "#A0A0A0");
-    AddColor(MasteryLevel.Apprentice, "#618C2D");
-    AddColor(MasteryLevel.Adept, "#306DAB");
-    AddColor(MasteryLevel.Expert, "#6948A4");
-    AddColor(MasteryLevel.Master, "#CF8F0B");
-  }
-
-  private void AddColor(MasteryLevel lvl, string hex) {
-    if (ColorUtility.TryParseHtmlString(hex, out var color)) palette[lvl] = color;
   }
 
   private void InitHealValues() {
@@ -108,9 +83,8 @@ public class HealingMenuUI : MonoBehaviour {
   }
 
   public void Init(string name, MasteryLevel lvl) {
-    masteryLevel = lvl;
-    title.text = name;
-    level.text = "Level: " + lvl;
+    InitHeader(name, lvl);
+
     int[] intensityValues = healValues[lvl];
 
     intensity.text = string.Format(
@@ -119,7 +93,6 @@ public class HealingMenuUI : MonoBehaviour {
     );
 
     reanimationChance.text = "Reanimation chance: " + reanimationChances[lvl] + "%";
-    avatarBackground.color = palette[lvl];
 
     UpdateSlotsSize(woundedSlots);
     UpdateSlotsSize(deadSlots);
@@ -127,7 +100,9 @@ public class HealingMenuUI : MonoBehaviour {
   }
 
   private void UpdateUnitsData() {
-    ClearSlots();
+    ClearSlots(woundedSlots);
+    ClearSlots(deadSlots);
+
     woundedTotal = 0;
     deadTotal = 0;
     healButton.interactable = false;
@@ -181,14 +156,14 @@ public class HealingMenuUI : MonoBehaviour {
     RenderEmptySlots(deadSlots, dead.Length);
   }
 
-  public void Clear() {
-    if (!ComponentsInitialized()) return;
-    ClearSlots();
-    masteryLevel = MasteryLevel.Novice;
-    title.text = "";
-    level.text = "";
-    healCost.text = "0";
+  public override void Clear() {
+    base.Clear();
 
+    if (!ComponentsInitialized()) return;
+    ClearSlots(woundedSlots);
+    ClearSlots(deadSlots);
+
+    healCost.text = "0";
     woundedTotal = 0;
     deadTotal = 0;
     playerArmy = null;
@@ -197,28 +172,6 @@ public class HealingMenuUI : MonoBehaviour {
 
     healButton.interactable = false;
     reanimateButton.interactable = false;
-    gameObject.SetActive(false);
-  }
-
-  private void ClearSlots() {
-    foreach (Transform child in woundedSlots) Destroy(child.gameObject);
-    foreach (Transform child in deadSlots) Destroy(child.gameObject);
-  }
-
-  private void UpdateSlotsSize(RectTransform slots) {
-    GridLayoutGroup gridGroup = slots.GetComponent<GridLayoutGroup>();
-    float totalWidth = slots.rect.width;
-    float totalSpacing = slotsGap * (slotColumns - 1) + slotsGap * 2;
-    float size = (totalWidth - totalSpacing) / slotColumns;
-    gridGroup.cellSize = new Vector2(size, size);
-  }
-
-  private void RenderEmptySlots(RectTransform panel, int filled) {
-    int placeholders = filled == 0
-      ? slotColumns
-      : (filled % slotColumns == 0 ? 0 : slotColumns - (filled % slotColumns));
-
-    for (int i = 0; i < placeholders; i++) Instantiate(slotEmptyPrefab, panel);
   }
 
   private int GetCost(int value, float modifier) {

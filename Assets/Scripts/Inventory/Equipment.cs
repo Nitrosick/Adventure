@@ -10,9 +10,10 @@ public abstract class Equipment : ScriptableObject {
   public EquipmentType type;
   public UnitEquipSlot slot;
   public EquipmentWeight weight;
-  public EquipmentRarity rarity;
+  public Rarity rarity;
   // FIXME: Переделать на массив эффектов
   public Effect effect;
   public Skill skill;
   public Sprite icon;
+  public int price;
 }

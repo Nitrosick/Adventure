@@ -289,10 +289,10 @@ public class Unit : MonoBehaviour {
   public void FromData(UnitData data) {
     UnitEquipment equipment = transform.GetComponent<UnitEquipment>();
 
-    Weapon primaryWeapon = Factory.CreateById(data.primaryWeaponId) as Weapon;
-    Weapon secondaryWeapon = Factory.CreateById(data.secondaryWeaponId) as Weapon;
-    Armor shield = Factory.CreateById(data.shieldId) as Armor;
-    Armor armor = Factory.CreateById(data.armorId) as Armor;
+    Weapon primaryWeapon = Factory.CreateEquipById(data.primaryWeaponId) as Weapon;
+    Weapon secondaryWeapon = Factory.CreateEquipById(data.secondaryWeaponId) as Weapon;
+    Armor shield = Factory.CreateEquipById(data.shieldId) as Armor;
+    Armor armor = Factory.CreateEquipById(data.armorId) as Armor;
 
     CurrentHealth = data.currentHealth;
     InSquad = data.inSquad;
