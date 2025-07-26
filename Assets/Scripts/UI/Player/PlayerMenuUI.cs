@@ -8,6 +8,7 @@ using UnityEngine.UI;
 public class PlayerMenuUI : MonoBehaviour {
   // Components
   public static PlayerMenuUI Instance;
+
   public GameObject menuSlotPrefab;
   public GameObject menuEmptySlotPrefab;
   private static Transform menu;
@@ -40,6 +41,7 @@ public class PlayerMenuUI : MonoBehaviour {
 
   public static MenuSlot selectedSlot;
   public static Unit selectedUnit;
+  public static Item selectedItem;
 
   private void Awake() {
     Instance = this;
@@ -127,6 +129,7 @@ public class PlayerMenuUI : MonoBehaviour {
 
     selectedSlot = null;
     selectedUnit = null;
+    selectedItem = null;
   }
 
   private static void UpdateSlotsSize(RectTransform slots) {
@@ -183,7 +186,8 @@ public class PlayerMenuUI : MonoBehaviour {
     leftSlotsTitle.text = "Army";
     rightSlotsTitle.text = "Workers";
 
-    Unit[] units = Player.Instance.Army.Units
+    Player player = Player.Instance;
+    Unit[] units = player.Army.Units
       .Where(u => !u.IsHero).ToArray();
 
     PlayerMenuUIInfo.UnitDismiss.interactable = units.Length > 1;
@@ -195,24 +199,24 @@ public class PlayerMenuUI : MonoBehaviour {
 
     RenderEmptySlots(leftSlots, units.Length);
     RenderEmptySlots(rightSlots, 0);
-    PlayerMenuUIInfo.SelectUnitsTab();
 
     await Task.Yield();
     selectedSlot = leftSlots.GetChild(0).GetComponent<MenuSlot>();
     if (selectedSlot != null) PlayerMenuUIInfo.ShowInfo(selectedSlot.UnitItem);
   }
 
-  private async static void SelectInventoryTab() {
+  public async static void SelectInventoryTab() {
     Clear();
     navInventory.interactable = false;
     ShowSlots(true);
     leftSlotsTitle.text = "Equipment";
-    rightSlotsTitle.text = "Key items";
+    rightSlotsTitle.text = "Miscellaneous items";
 
-    List<Equipment> unequipped = Player.Instance.Inventory.Equip;
+    Player player = Player.Instance;
+    List<Equipment> unequipped = player.Inventory.Equip;
     List<Equipment> equipped = new() { };
 
-    foreach (Unit unit in Player.Instance.Army.Units) equipped.AddRange(unit.Equip.GetEquipmentList());
+    foreach (Unit unit in player.Army.Units) equipped.AddRange(unit.Equip.GetEquipmentList());
 
     foreach (Equipment e in unequipped) {
       GameObject slot = Instantiate(Instance.menuSlotPrefab, leftSlots);
@@ -226,9 +230,13 @@ public class PlayerMenuUI : MonoBehaviour {
       slotScript.SwitchActiveMark();
     }
 
+    foreach (Item i in player.Inventory.Items) {
+      GameObject slot = Instantiate(Instance.menuSlotPrefab, rightSlots);
+      slot.GetComponent<MenuSlot>().Init(i);
+    }
+
     RenderEmptySlots(leftSlots, equipped.Count + unequipped.Count);
-    RenderEmptySlots(rightSlots, 0);
-    PlayerMenuUIInfo.SelectInventoryTab();
+    RenderEmptySlots(rightSlots, player.Inventory.Items.Count);
 
     await Task.Yield();
     selectedSlot = leftSlots.GetChild(0).GetComponent<MenuSlot>();

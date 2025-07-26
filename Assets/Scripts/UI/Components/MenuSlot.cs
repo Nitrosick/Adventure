@@ -6,6 +6,8 @@ using UnityEngine.EventSystems;
 public class MenuSlot : MonoBehaviour, IPointerClickHandler {
   public Unit UnitItem { get; private set; }
   public Equipment EquipmentItem { get; private set; }
+  public Item InventoryItem { get; private set; }
+
   private Image image;
   private GameObject activeFrame;
   public GameObject ActiveMark { get; private set; }
@@ -33,6 +35,7 @@ public class MenuSlot : MonoBehaviour, IPointerClickHandler {
   private void OnDestroy() {
     UnitItem = null;
     EquipmentItem = null;
+    InventoryItem = null;
   }
 
   public void Init(Unit unit, bool noPointer = false) {
@@ -61,6 +64,13 @@ public class MenuSlot : MonoBehaviour, IPointerClickHandler {
     image.sprite = equip.icon;
   }
 
+  public void Init(Item item, bool noPointer = false) {
+    if (image == null) return;
+    preventPointerEvents = noPointer;
+    InventoryItem = item;
+    image.sprite = item.icon;
+  }
+
   public void SwitchActiveFrame(bool on) {
     activeFrame.SetActive(on);
   }
@@ -73,14 +83,8 @@ public class MenuSlot : MonoBehaviour, IPointerClickHandler {
     if (preventPointerEvents) return;
     PlayerMenuUI.selectedSlot = this;
 
-    if (UnitItem != null) {
-      PlayerMenuUIInfo.ShowInfo(UnitItem);
-      return;
-    }
-
-    if (EquipmentItem != null) {
-      PlayerMenuUIInfo.ShowInfo(EquipmentItem);
-      return;
-    }
+    if (UnitItem != null) PlayerMenuUIInfo.ShowInfo(UnitItem);
+    else if (EquipmentItem != null) PlayerMenuUIInfo.ShowInfo(EquipmentItem);
+    else if (InventoryItem != null) PlayerMenuUIInfo.ShowInfo(InventoryItem);
   }
 }

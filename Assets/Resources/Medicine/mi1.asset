@@ -15,8 +15,10 @@ MonoBehaviour:
   id: mi1
   itemName: Medical herbs
   description: Herbs and bandages - the simplest medical kit. It will help heal small
-    wounds of your soldiers.
+    wounds of your soldiers. (When used, restores a certain amount of health to all
+    your units, both active and in reserve)
   usable: 1
+  disposable: 1
   rarity: 0
   icon: {fileID: 21300000, guid: ea616de233b2b194f9b7f3f621046716, type: 3}
   price: 15

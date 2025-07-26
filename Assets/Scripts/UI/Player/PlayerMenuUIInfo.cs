@@ -15,9 +15,11 @@ public class PlayerMenuUIInfo : MonoBehaviour {
   private static GameObject deathMark;
   private static GameObject equippedMark;
   private static Transform avatar;
-  private static GameObject actions;
+  private static GameObject unitActions;
+  private static GameObject itemActions;
   private static Button unitInSquad;
   public static Button UnitDismiss { get; set; }
+  private static Button useItem;
   private static Transform equipment;
   private static Button equipmentPrimary;
   private static Button equipmentArmor;
@@ -57,59 +59,78 @@ public class PlayerMenuUIInfo : MonoBehaviour {
   private static TextMeshProUGUI equipSkill;
   private static Image equipSkillIcon;
   private static TooltipTrigger skillTip;
+  private static GameObject itemParams;
+  private static TextMeshProUGUI itemIntensity;
+
+  private T Find<T>(string path) where T : Component => panel.Find(path).GetComponent<T>();
+  private GameObject FindGO(string path) => panel.Find(path).gameObject;
 
   private void Awake() {
     panel = transform.Find("PlayerMenu/Panel/Right/Viewport/Content");
 
-    displayName = panel.Find("Head/Data/Name").GetComponent<TextMeshProUGUI>();
-    Level = panel.Find("Head/Data/Level").GetComponent<TextMeshProUGUI>();
-    type = panel.Find("Head/Data/Type").GetComponent<TextMeshProUGUI>();
-    inSquadMark = panel.Find("Head/Data/InSquadMark").gameObject;
-    deathMark = panel.Find("Head/Data/DeathMark").gameObject;
-    equippedMark = panel.Find("Head/Data/EquippedMark").gameObject;
-    avatar = panel.Find("Head/Image").GetComponent<Transform>();
-    actions = panel.Find("Actions").gameObject;
-    unitInSquad = panel.Find("Actions/Activity").GetComponent<Button>();
-    UnitDismiss = panel.Find("Actions/Dismiss").GetComponent<Button>();
-    equipment = panel.Find("Equipment").GetComponent<Transform>();
-    equipmentPrimary = panel.Find("Equipment/Primary").GetComponent<Button>();
-    equipmentArmor = panel.Find("Equipment/Armor").GetComponent<Button>();
-    equipmentSecondary = panel.Find("Equipment/Secondary").GetComponent<Button>();
-    coreStats = panel.Find("CoreStats").gameObject;
-    statPointsRow = panel.Find("CoreStats/Points").gameObject;
-    statPoints = panel.Find("CoreStats/Points/Value").GetComponent<TextMeshProUGUI>();
-    strength = panel.Find("CoreStats/Strength/Value").GetComponent<TextMeshProUGUI>();
-    dexterity = panel.Find("CoreStats/Dexterity/Value").GetComponent<TextMeshProUGUI>();
-    intelligence = panel.Find("CoreStats/Intelligence/Value").GetComponent<TextMeshProUGUI>();
-    strengthUp = panel.Find("CoreStats/Strength/Plus").GetComponent<Button>();
-    dexterityUp = panel.Find("CoreStats/Dexterity/Plus").GetComponent<Button>();
-    intelligenceUp = panel.Find("CoreStats/Intelligence/Plus").GetComponent<Button>();
-    description = panel.Find("Description").GetComponent<TextMeshProUGUI>();
-    unitParams = panel.Find("UnitParameters").gameObject;
-    unitHp = panel.Find("UnitParameters/HP/Value").GetComponent<TextMeshProUGUI>();
-    unitMp = panel.Find("UnitParameters/MP/Value").GetComponent<TextMeshProUGUI>();
-    unitDamage = panel.Find("UnitParameters/Damage/Value").GetComponent<TextMeshProUGUI>();
-    unitDefense = panel.Find("UnitParameters/Defense/Value").GetComponent<TextMeshProUGUI>();
-    unitRange = panel.Find("UnitParameters/Range/Value").GetComponent<TextMeshProUGUI>();
-    equipRequirements = panel.Find("EquipRequirements").gameObject;
-    equipRequiredStats = panel.Find("EquipRequirements/Stats/Value").GetComponent<TextMeshProUGUI>();
-    equipRequiredLevel = panel.Find("EquipRequirements/Level/Value").GetComponent<TextMeshProUGUI>();
-    weaponParams = panel.Find("WeaponParameters").gameObject;
-    weaponDamage = panel.Find("WeaponParameters/Damage/Value").GetComponent<TextMeshProUGUI>();
-    weaponDamageType = panel.Find("WeaponParameters/DamageType/Value").GetComponent<TextMeshProUGUI>();
-    weaponRange = panel.Find("WeaponParameters/Range/Value").GetComponent<TextMeshProUGUI>();
-    weaponCritMod = panel.Find("WeaponParameters/CritModifier/Value").GetComponent<TextMeshProUGUI>();
-    weaponArmorPen = panel.Find("WeaponParameters/ArmorPen/Value").GetComponent<TextMeshProUGUI>();
-    armorParams = panel.Find("ArmorParameters").gameObject;
-    armorDefense = panel.Find("ArmorParameters/Defense/Value").GetComponent<TextMeshProUGUI>();
-    equipParams = panel.Find("EquipParameters").gameObject;
-    equipWeight = panel.Find("EquipParameters/Weight/Value").GetComponent<TextMeshProUGUI>();
-    equipEffect = panel.Find("EquipParameters/Effect/Value/Text").GetComponent<TextMeshProUGUI>();
-    equipEffectIcon = panel.Find("EquipParameters/Effect/Value/Icon").GetComponent<Image>();
-    effectTip = panel.Find("EquipParameters/Effect/Value").GetComponent<TooltipTrigger>();
-    equipSkill = panel.Find("EquipParameters/Skill/Value/Text").GetComponent<TextMeshProUGUI>();
-    equipSkillIcon = panel.Find("EquipParameters/Skill/Value/Icon").GetComponent<Image>();
-    skillTip = panel.Find("EquipParameters/Skill/Value").GetComponent<TooltipTrigger>();
+    displayName = Find<TextMeshProUGUI>("Head/Data/Name");
+    Level = Find<TextMeshProUGUI>("Head/Data/Level");
+    type = Find<TextMeshProUGUI>("Head/Data/Type");
+    inSquadMark = FindGO("Head/Data/InSquadMark");
+    deathMark = FindGO("Head/Data/DeathMark");
+    equippedMark = FindGO("Head/Data/EquippedMark");
+    avatar = panel.Find("Head/Image");
+
+    unitActions = FindGO("UnitActions");
+    itemActions = FindGO("ItemActions");
+    unitInSquad = Find<Button>("UnitActions/Activity");
+    UnitDismiss = Find<Button>("UnitActions/Dismiss");
+    useItem = Find<Button>("ItemActions/Use");
+
+    equipment = panel.Find("Equipment");
+    equipmentPrimary = Find<Button>("Equipment/Primary");
+    equipmentArmor = Find<Button>("Equipment/Armor");
+    equipmentSecondary = Find<Button>("Equipment/Secondary");
+
+    coreStats = FindGO("CoreStats");
+    statPointsRow = FindGO("CoreStats/Points");
+    statPoints = Find<TextMeshProUGUI>("CoreStats/Points/Value");
+    strength = Find<TextMeshProUGUI>("CoreStats/Strength/Value");
+    dexterity = Find<TextMeshProUGUI>("CoreStats/Dexterity/Value");
+    intelligence = Find<TextMeshProUGUI>("CoreStats/Intelligence/Value");
+
+    strengthUp = Find<Button>("CoreStats/Strength/Plus");
+    dexterityUp = Find<Button>("CoreStats/Dexterity/Plus");
+    intelligenceUp = Find<Button>("CoreStats/Intelligence/Plus");
+
+    description = Find<TextMeshProUGUI>("Description");
+
+    unitParams = FindGO("UnitParameters");
+    unitHp = Find<TextMeshProUGUI>("UnitParameters/HP/Value");
+    unitMp = Find<TextMeshProUGUI>("UnitParameters/MP/Value");
+    unitDamage = Find<TextMeshProUGUI>("UnitParameters/Damage/Value");
+    unitDefense = Find<TextMeshProUGUI>("UnitParameters/Defense/Value");
+    unitRange = Find<TextMeshProUGUI>("UnitParameters/Range/Value");
+
+    equipRequirements = FindGO("EquipRequirements");
+    equipRequiredStats = Find<TextMeshProUGUI>("EquipRequirements/Stats/Value");
+    equipRequiredLevel = Find<TextMeshProUGUI>("EquipRequirements/Level/Value");
+
+    weaponParams = FindGO("WeaponParameters");
+    weaponDamage = Find<TextMeshProUGUI>("WeaponParameters/Damage/Value");
+    weaponDamageType = Find<TextMeshProUGUI>("WeaponParameters/DamageType/Value");
+    weaponRange = Find<TextMeshProUGUI>("WeaponParameters/Range/Value");
+    weaponCritMod = Find<TextMeshProUGUI>("WeaponParameters/CritModifier/Value");
+    weaponArmorPen = Find<TextMeshProUGUI>("WeaponParameters/ArmorPen/Value");
+
+    armorParams = FindGO("ArmorParameters");
+    armorDefense = Find<TextMeshProUGUI>("ArmorParameters/Defense/Value");
+
+    equipParams = FindGO("EquipParameters");
+    equipWeight = Find<TextMeshProUGUI>("EquipParameters/Weight/Value");
+    equipEffect = Find<TextMeshProUGUI>("EquipParameters/Effect/Value/Text");
+    equipEffectIcon = Find<Image>("EquipParameters/Effect/Value/Icon");
+    effectTip = Find<TooltipTrigger>("EquipParameters/Effect/Value");
+    equipSkill = Find<TextMeshProUGUI>("EquipParameters/Skill/Value/Text");
+    equipSkillIcon = Find<Image>("EquipParameters/Skill/Value/Icon");
+    skillTip = Find<TooltipTrigger>("EquipParameters/Skill/Value");
+    itemParams = FindGO("ItemParameters");
+    itemIntensity = Find<TextMeshProUGUI>("ItemParameters/Intensity/Value");
 
     if (!ComponentsInitialized()) {
       Debug.LogError("Player menu UI components initialization error");
@@ -117,6 +138,7 @@ public class PlayerMenuUIInfo : MonoBehaviour {
 
     unitInSquad.onClick.AddListener(SwitchUnitInSquad);
     UnitDismiss.onClick.AddListener(DismissConfirmation);
+    useItem.onClick.AddListener(UseItem);
     equipmentPrimary.onClick.AddListener(() => OpenSelector(UnitEquipSlot.Primary));
     equipmentArmor.onClick.AddListener(() => OpenSelector(UnitEquipSlot.Armor));
     equipmentSecondary.onClick.AddListener(() => OpenSelector(UnitEquipSlot.Secondary));
@@ -127,7 +149,7 @@ public class PlayerMenuUIInfo : MonoBehaviour {
 
   private static bool ComponentsInitialized() {
     return panel != null && displayName != null && Level != null &&
-    type != null && avatar != null && actions != null &&
+    type != null && avatar != null && unitActions != null &&
     unitInSquad != null && UnitDismiss != null && equipment != null &&
     coreStats != null && strength != null && dexterity != null &&
     intelligence != null && description != null && unitParams != null &&
@@ -142,12 +164,14 @@ public class PlayerMenuUIInfo : MonoBehaviour {
     equipmentSecondary != null && equipRequirements != null && equipRequiredStats != null &&
     equipRequiredLevel != null && statPoints != null && strengthUp != null &&
     dexterityUp != null && intelligenceUp != null && statPointsRow != null &&
-    deathMark != null;
+    deathMark != null && itemActions != null && useItem != null &&
+    itemParams != null && itemIntensity != null;
   }
 
   private void OnDestroy() {
     unitInSquad.onClick.RemoveListener(SwitchUnitInSquad);
     UnitDismiss.onClick.RemoveListener(DismissConfirmation);
+    useItem.onClick.RemoveListener(UseItem);
     equipmentPrimary.onClick.RemoveListener(() => { });
     equipmentArmor.onClick.RemoveListener(() => { });
     equipmentSecondary.onClick.RemoveListener(() => { });
@@ -165,7 +189,8 @@ public class PlayerMenuUIInfo : MonoBehaviour {
     inSquadMark.SetActive(false);
     deathMark.SetActive(false);
     equippedMark.SetActive(false);
-    actions.SetActive(false);
+    unitActions.SetActive(false);
+    itemActions.SetActive(false);
     equipment.gameObject.SetActive(false);
     coreStats.SetActive(false);
     strengthUp.gameObject.SetActive(false);
@@ -177,10 +202,9 @@ public class PlayerMenuUIInfo : MonoBehaviour {
     weaponParams.SetActive(false);
     armorParams.SetActive(false);
     equipParams.SetActive(false);
+    itemParams.SetActive(false);
 
-    foreach (Transform child in avatar) {
-      Destroy(child.gameObject);
-    }
+    foreach (Transform child in avatar) Destroy(child.gameObject);
   }
 
   public static void UpdateSlotsSize(float size) {
@@ -203,23 +227,16 @@ public class PlayerMenuUIInfo : MonoBehaviour {
     unitParams.SetActive(true);
   }
 
-  public static void SelectUnitsTab() {
-    actions.SetActive(true);
+  public static void ShowInfo(Unit unit) {
+    Clear();
+    unitActions.SetActive(true);
     equipment.gameObject.SetActive(true);
     coreStats.SetActive(true);
     unitParams.SetActive(true);
-  }
 
-  public static void SelectInventoryTab() {
-    equipRequirements.SetActive(true);
-    equipParams.SetActive(true);
-  }
-
-  public static void ShowInfo(Unit unit) {
-    foreach (Transform child in avatar) Destroy(child.gameObject);
     PlayerMenuUI.FrameSlot();
-
     PlayerMenuUI.selectedUnit = unit;
+
     displayName.text = unit.Name;
     if (!unit.IsHero) Level.text = "Level: " + unit.Level.ToString();
     type.text = "Type: " + unit.Type.ToString();
@@ -258,7 +275,9 @@ public class PlayerMenuUIInfo : MonoBehaviour {
   }
 
   public static void ShowInfo(Equipment equip) {
-    foreach (Transform child in avatar) Destroy(child.gameObject);
+    Clear();
+    equipRequirements.SetActive(true);
+    equipParams.SetActive(true);
     PlayerMenuUI.FrameSlot();
 
     displayName.text = equip.itemName;
@@ -320,6 +339,31 @@ public class PlayerMenuUIInfo : MonoBehaviour {
     }
   }
 
+  public static void ShowInfo(Item item) {
+    Clear();
+    itemActions.SetActive(true);
+    itemParams.SetActive(true);
+
+    PlayerMenuUI.FrameSlot();
+    PlayerMenuUI.selectedItem = item;
+
+    displayName.text = item.itemName;
+    Level.text = "Rarity: " + item.rarity.ToString();
+
+    if (item is MedicineItem medItem) {
+      type.text = "Type: Medicine item";
+      itemIntensity.text = medItem.intensity + " HP";
+    }
+    // FIXME: Добавить все типы предметов
+
+    GameObject icon = Instantiate(PlayerMenuUI.Instance.menuSlotPrefab, avatar);
+    icon.GetComponent<MenuSlot>().Init(item, true);
+
+    useItem.interactable = item.usable;
+    description.text = item.description;
+  }
+
+  // Outer actions
   private static void UpdateUnitEquipment(Unit unit) {
     UnitEquipment equip = unit.Equip;
     Image primarySlot = equipment.Find("Primary/Image").GetComponent<Image>();
@@ -409,5 +453,28 @@ public class PlayerMenuUIInfo : MonoBehaviour {
     Player.Instance.SetStatPoints(-1);
     hero.IncreaseStats(increase);
     PlayerMenuUI.SelectHeroTab();
+  }
+
+  private static void UseItem() {
+    Item item = PlayerMenuUI.selectedItem;
+    Unit[] woundedUnits = Player.Instance.Army.Units
+      .Where(u => u.CurrentHealth > 0 && u.CurrentHealth < u.TotalHealth)
+      .ToArray();
+
+    if (item == null) return;
+    if (woundedUnits == null || woundedUnits.Length == 0) {
+      _ = InfoPopup.Show("warning", "No wounded units");
+      return;
+    }
+
+    if (item is MedicineItem medItem) {
+      foreach (Unit unit in woundedUnits) unit.Heal(medItem.intensity);
+      _ = InfoPopup.Show("success", "Units are cured");
+    }
+
+    if (item.disposable) {
+      Player.Instance.Inventory.RemoveItem(item);
+      PlayerMenuUI.SelectInventoryTab();
+    }
   }
 }

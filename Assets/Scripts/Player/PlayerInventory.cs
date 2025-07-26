@@ -74,6 +74,18 @@ public class PlayerInventory : MonoBehaviour {
     UpdateState();
   }
 
+  public void RemoveItem(Equipment item) {
+    if (item == null) return;
+    Equip.Remove(item);
+    UpdateState();
+  }
+
+  public void RemoveItem(Item item) {
+    if (item == null) return;
+    Items.Remove(item);
+    UpdateState();
+  }
+
   public void UpdateState() {
     StateManager.inventoryEquipment = Equip.ToArray();
     StateManager.inventoryItems = Items.ToArray();
