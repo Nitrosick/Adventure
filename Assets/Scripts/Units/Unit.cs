@@ -112,20 +112,7 @@ public class Unit : MonoBehaviour {
 
   void OnMouseEnter() {
     if (EventSystem.current.IsPointerOverGameObject()) return;
-
-    BattleUI.ShowUnitInfo(
-      Name,
-      Description,
-      new float[] { Strength, Dexterity, Intelligence },
-      TotalMovePoints,
-      TotalHealth,
-      CurrentHealth,
-      Equip.primaryWeapon.damage,
-      Equip.GetTotalDefense(),
-      Equip.primaryWeapon.range,
-      Effects.ActiveEffects
-    );
-
+    BattleUI.ShowUnitInfo(this);
     if (PhaseManager.CurrentPhase != BattlePhase.Attack) return;
     CurrentTile.Hover();
   }

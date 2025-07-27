@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class TradingMenuSlot : MonoBehaviour, IPointerClickHandler {
+public class TradingMenuSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler {
   private Player player;
   private ItemType type;
   private Image image;
@@ -13,6 +13,9 @@ public class TradingMenuSlot : MonoBehaviour, IPointerClickHandler {
   private int itemPrice;
   private int resourceIndex;
   private string itemId;
+
+  private Item currentItem;
+  private Equipment currentEquip;
 
   private enum ItemType {
     Resource,
@@ -44,6 +47,7 @@ public class TradingMenuSlot : MonoBehaviour, IPointerClickHandler {
     image.sprite = item.icon;
     itemPrice = item.price;
     itemId = item.id;
+    currentEquip = item;
 
     UpdatePrice();
   }
@@ -53,6 +57,7 @@ public class TradingMenuSlot : MonoBehaviour, IPointerClickHandler {
     image.sprite = item.icon;
     itemPrice = item.price;
     itemId = item.id;
+    currentItem = item;
 
     UpdatePrice();
   }
@@ -61,6 +66,15 @@ public class TradingMenuSlot : MonoBehaviour, IPointerClickHandler {
     itemPriceText.text = itemPrice > player.Gold
       ? $"<color=#F61010>{itemPrice}</color>"
       : itemPrice.ToString();
+  }
+
+  public void OnPointerEnter(PointerEventData eventData) {
+    if (currentEquip != null) ItemInfo.Show(currentEquip);
+    else if (currentItem != null) ItemInfo.Show(currentItem);
+  }
+
+  public void OnPointerExit(PointerEventData eventData) {
+    ItemInfo.Hide();
   }
 
   public void OnPointerClick(PointerEventData eventData) {

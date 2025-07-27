@@ -24,11 +24,13 @@ public class BattleUI : MonoBehaviour {
   private static TextMeshProUGUI unitName;
   private static TextMeshProUGUI unitDescription;
   private static TextMeshProUGUI unitHP;
+  private static TextMeshProUGUI unitLevel;
   private static TextMeshProUGUI unitStats;
   private static TextMeshProUGUI unitMP;
   private static TextMeshProUGUI unitDamage;
   private static TextMeshProUGUI unitDefense;
   private static TextMeshProUGUI unitRange;
+  private static TextMeshProUGUI unitSkillCharges;
   private static TextMeshProUGUI unitEffects;
 
   // Buttons and labels
@@ -44,23 +46,32 @@ public class BattleUI : MonoBehaviour {
 
   private void Awake() {
     Instance = this;
-    queuePanel = transform.Find("TurnQueue/Panel").GetComponent<Transform>();
-    actionsPanel = transform.Find("Actions/Panel").GetComponent<Transform>();
-    skillsPanel = transform.Find("Actions/Panel/Skills").GetComponent<Transform>();
-    unitInfoPanel = transform.Find("Info/UnitInfoPanel").gameObject;
 
-    unitName = transform.Find("Info/UnitInfoPanel/Name").GetComponent<TextMeshProUGUI>();
-    unitDescription = transform.Find("Info/UnitInfoPanel/Description").GetComponent<TextMeshProUGUI>();
+    Transform Find(string path) => transform.Find(path);
+    T Get<T>(string path) where T : Component => Find(path).GetComponent<T>();
+
+    queuePanel = Get<Transform>("TurnQueue/Panel");
+    actionsPanel = Get<Transform>("Actions/Panel");
+    skillsPanel = Get<Transform>("Actions/Panel/Skills");
+    unitInfoPanel = Find("Info/UnitInfoPanel").gameObject;
+
+    unitName = Get<TextMeshProUGUI>("Info/UnitInfoPanel/Name");
+    unitDescription = Get<TextMeshProUGUI>("Info/UnitInfoPanel/Description");
+
     Transform parameters = transform.Find("Info/UnitInfoPanel/Parameters").GetComponent<Transform>();
-    unitHP = parameters.Find("HP/Value").GetComponent<TextMeshProUGUI>();
-    unitStats = parameters.Find("Stats/Value").GetComponent<TextMeshProUGUI>();
-    unitMP = parameters.Find("MP/Value").GetComponent<TextMeshProUGUI>();
-    unitDamage = parameters.Find("Damage/Value").GetComponent<TextMeshProUGUI>();
-    unitDefense = parameters.Find("Defense/Value").GetComponent<TextMeshProUGUI>();
-    unitRange = parameters.Find("Range/Value").GetComponent<TextMeshProUGUI>();
-    unitEffects = transform.Find("Info/UnitInfoPanel/Effects").GetComponent<TextMeshProUGUI>();
+    T GetInParams<T>(string path) where T : Component => parameters.Find(path).GetComponent<T>();
 
-    mainMenuButton = transform.Find("Top/MainMenu/Main").GetComponent<Button>();
+    unitHP = GetInParams<TextMeshProUGUI>("HP/Value");
+    unitLevel = GetInParams<TextMeshProUGUI>("Level/Value");
+    unitStats = GetInParams<TextMeshProUGUI>("Stats/Value");
+    unitMP = GetInParams<TextMeshProUGUI>("MP/Value");
+    unitDamage = GetInParams<TextMeshProUGUI>("Damage/Value");
+    unitDefense = GetInParams<TextMeshProUGUI>("Defense/Value");
+    unitRange = GetInParams<TextMeshProUGUI>("Range/Value");
+    unitSkillCharges = GetInParams<TextMeshProUGUI>("SkillCharges/Value");
+    unitEffects = GetInParams<TextMeshProUGUI>("Info/UnitInfoPanel/Effects");
+
+    mainMenuButton = Get<Button>("Top/MainMenu/Main");
     phaseSkipButton = actionsPanel.Find("SkipPhase").GetComponent<Button>();
     phaseAttackLabel = actionsPanel.Find("PhaseAttack").GetComponent<Image>();
     phaseMoveLabel = actionsPanel.Find("PhaseMovement").GetComponent<Image>();
@@ -71,7 +82,7 @@ public class BattleUI : MonoBehaviour {
       unitMP == null || unitDamage == null || unitDefense == null || unitRange == null ||
       unitEffects == null || phaseSkipButton == null || phaseAttackLabel == null || phaseMoveLabel == null ||
       damagePopupPrefab == null || skillChargePrefab == null || skillChargeEmptyPrefab == null ||
-      mainMenuButton == null
+      mainMenuButton == null || unitLevel == null || unitSkillCharges == null
     ) {
       Debug.LogError("Battle UI components initialization error");
       return;
@@ -153,28 +164,30 @@ public class BattleUI : MonoBehaviour {
     }
   }
 
-  public static void ShowUnitInfo(string name, string desc, float[] stats, float mp, float totalHp, float hp, float damage, float def, int range, List<EffectInstance> effects) {
+  public static void ShowUnitInfo(Unit unit) {
     unitInfoPanel.SetActive(true);
-    unitName.text = name;
-    unitDescription.text = desc;
+    unitName.text = unit.Name;
+    unitDescription.text = unit.Description;
     unitHP.text = string.Format(
       "{0} / {1}",
-      totalHp / 3 > hp ? "<color=#F61010>" + Math.Ceiling(hp).ToString() + "</color>" : Math.Ceiling(hp).ToString(),
-      totalHp.ToString()
+      unit.TotalHealth / 3 > unit.CurrentHealth ? "<color=#F61010>" + Math.Ceiling(unit.CurrentHealth) + "</color>" : Math.Ceiling(unit.CurrentHealth),
+      unit.TotalHealth
     );
+    unitLevel.text = unit.Level.ToString();
     unitStats.text = string.Format(
       "<color=#F61010>{0}</color> / <color=#81D11F>{1}</color> / <color=#2B8EF3>{2}</color>",
-      stats[0], stats[1], stats[2]
+      unit.Strength, unit.Dexterity, unit.Intelligence
     );
-    unitMP.text = mp.ToString();
-    unitDamage.text = damage.ToString();
-    unitDefense.text = def.ToString();
-    unitRange.text = range.ToString();
+    unitMP.text = unit.TotalMovePoints.ToString();
+    unitDamage.text = unit.Equip.primaryWeapon.damage.ToString();
+    unitDefense.text = unit.Equip.GetTotalDefense().ToString();
+    unitRange.text = unit.Equip.primaryWeapon.range.ToString();
+    unitSkillCharges.text = unit.SkillCharges.ToString();
 
     string effectsText = "Effects";
-    foreach (EffectInstance effect in effects) {
-      if (effect.effectData.isNegative) effectsText += "\n<color=#F61010>" + effect.effectData.effectName + "</color>";
-      else effectsText += "\n<color=#81D11F>" + effect.effectData.effectName + "</color>";
+    foreach (EffectInstance e in unit.Effects.ActiveEffects) {
+      if (e.effectData.isNegative) effectsText += "\n<color=#F61010>" + e.effectData.effectName + "</color>";
+      else effectsText += "\n<color=#81D11F>" + e.effectData.effectName + "</color>";
     }
     unitEffects.text = effectsText;
   }
@@ -184,11 +197,13 @@ public class BattleUI : MonoBehaviour {
     unitName.text = "";
     unitDescription.text = "";
     unitHP.text = "";
+    unitLevel.text = "";
     unitStats.text = "";
     unitMP.text = "";
     unitDamage.text = "";
     unitDefense.text = "";
     unitRange.text = "";
+    unitSkillCharges.text = "";
     unitEffects.text = "Effects";
   }
 

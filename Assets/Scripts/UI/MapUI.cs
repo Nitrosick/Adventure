@@ -27,26 +27,41 @@ public class MapUI : MonoBehaviour {
   private static TextMeshProUGUI leatherValue;
   private static TextMeshProUGUI villagersValue;
 
+  private T Get<T>(Transform parent, string path) where T : Component {
+    return parent.Find(path).GetComponent<T>();
+  }
+
+  private GameObject Find(Transform parent, string path) {
+    return parent.Find(path).gameObject;
+  }
+
   private void Awake() {
-    zoneInfoPanel = transform.Find("Info/ZoneInfoPanel").gameObject;
-    zoneInfoTitle = transform.Find("Info/ZoneInfoPanel/Title").GetComponent<TextMeshProUGUI>();
-    zoneInfoDescription = transform.Find("Info/ZoneInfoPanel/Description").GetComponent<TextMeshProUGUI>();
-    zoneInfoBattleMark = transform.Find("Info/ZoneInfoPanel/Markers/Battle").gameObject;
-    zoneInfoGuardedMark = transform.Find("Info/ZoneInfoPanel/Markers/Guard").gameObject;
-    zoneInfoClearedMark = transform.Find("Info/ZoneInfoPanel/Markers/Clear").gameObject;
-    zoneInfoRecruitMark = transform.Find("Info/ZoneInfoPanel/Markers/Recruitment").gameObject;
+    Transform infoPanel = transform.Find("Info/ZoneInfoPanel");
+    Transform markers = infoPanel.Find("Markers");
+    Transform top = transform.Find("Top");
+    Transform mainMenu = top.Find("MainMenu");
+    Transform resources = top.Find("Resources");
+    Transform actions = transform.Find("Actions");
 
-    mainMenuButton = transform.Find("Top/MainMenu/Main").GetComponent<Button>();
-    playerMenuButton = transform.Find("Top/MainMenu/Player").GetComponent<Button>();
-    interactButton = transform.Find("Actions/Interact").GetComponent<Button>();
+    zoneInfoPanel = infoPanel.gameObject;
+    zoneInfoTitle = Get<TextMeshProUGUI>(infoPanel, "Title");
+    zoneInfoDescription = Get<TextMeshProUGUI>(infoPanel, "Description");
 
-    Transform resources = transform.Find("Top/Resources").GetComponent<Transform>();
-    goldValue = resources.Find("Gold/Value").GetComponent<TextMeshProUGUI>();
-    woodValue = resources.Find("Wood/Value").GetComponent<TextMeshProUGUI>();
-    stoneValue = resources.Find("Stone/Value").GetComponent<TextMeshProUGUI>();
-    metalValue = resources.Find("Metal/Value").GetComponent<TextMeshProUGUI>();
-    leatherValue = resources.Find("Leather/Value").GetComponent<TextMeshProUGUI>();
-    villagersValue = resources.Find("Villagers/Value").GetComponent<TextMeshProUGUI>();
+    zoneInfoBattleMark = Find(markers, "Battle");
+    zoneInfoGuardedMark = Find(markers, "Guard");
+    zoneInfoClearedMark = Find(markers, "Clear");
+    zoneInfoRecruitMark = Find(markers, "Recruitment");
+
+    mainMenuButton = Get<Button>(mainMenu, "Main");
+    playerMenuButton = Get<Button>(mainMenu, "Player");
+    interactButton = Get<Button>(actions, "Interact");
+
+    goldValue = Get<TextMeshProUGUI>(resources, "Gold/Value");
+    woodValue = Get<TextMeshProUGUI>(resources, "Wood/Value");
+    stoneValue = Get<TextMeshProUGUI>(resources, "Stone/Value");
+    metalValue = Get<TextMeshProUGUI>(resources, "Metal/Value");
+    leatherValue = Get<TextMeshProUGUI>(resources, "Leather/Value");
+    villagersValue = Get<TextMeshProUGUI>(resources, "Villagers/Value");
 
     if (!ComponentsInitialized()) {
       Debug.LogError("Map UI components initialization error");
