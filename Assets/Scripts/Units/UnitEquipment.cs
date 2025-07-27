@@ -15,7 +15,7 @@ public class UnitEquipment : MonoBehaviour {
 
   private void Awake() {
     unit = transform.GetComponent<Unit>();
-    armorSets = GetComponentsInChildren<ArmorSet>();
+    armorSets = GetComponentsInChildren<ArmorSet>(true);
 
     if (unit == null || armorSets.Length == 0) {
       Debug.LogError("Unit equipment components initialization error");

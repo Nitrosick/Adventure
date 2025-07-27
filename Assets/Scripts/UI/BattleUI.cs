@@ -96,11 +96,13 @@ public class BattleUI : MonoBehaviour {
   }
 
   public static void DisableUI() {
+    mainMenuButton.interactable = false;
     phaseSkipButton.interactable = false;
     skillsPanel.gameObject.SetActive(false);
   }
 
   public static void EnableUI() {
+    mainMenuButton.interactable = true;
     phaseSkipButton.interactable = true;
     skillsPanel.gameObject.SetActive(true);
   }

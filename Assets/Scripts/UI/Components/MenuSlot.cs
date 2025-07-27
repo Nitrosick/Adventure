@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using TMPro;
 
 public class MenuSlot : MonoBehaviour, IPointerClickHandler {
   public Unit UnitItem { get; private set; }
@@ -14,6 +15,7 @@ public class MenuSlot : MonoBehaviour, IPointerClickHandler {
   public GameObject DeathMark { get; private set; }
   private RectTransform healthBar;
   private RectTransform healthBarFill;
+  private TextMeshProUGUI count;
   private bool preventPointerEvents;
 
   private void Awake() {
@@ -23,10 +25,12 @@ public class MenuSlot : MonoBehaviour, IPointerClickHandler {
     DeathMark = transform.Find("Dead").gameObject;
     healthBar = transform.Find("HealthBar").GetComponent<RectTransform>();
     healthBarFill = transform.Find("HealthBar/Fill").GetComponent<RectTransform>();
+    count = transform.Find("Count").GetComponent<TextMeshProUGUI>();
 
     if (
       activeFrame == null || ActiveMark == null || DeathMark == null ||
-      healthBar == null || healthBarFill == null
+      healthBar == null || healthBarFill == null || count == null ||
+      image == null
     )  {
       Debug.LogError("Menu slot components initialization error");
     }
@@ -39,7 +43,6 @@ public class MenuSlot : MonoBehaviour, IPointerClickHandler {
   }
 
   public void Init(Unit unit, bool noPointer = false) {
-    if (image == null) return;
     preventPointerEvents = noPointer;
     UnitItem = unit;
     image.sprite = UnitItem.avatar;
@@ -57,18 +60,24 @@ public class MenuSlot : MonoBehaviour, IPointerClickHandler {
     }
   }
 
-  public void Init(Equipment equip, bool noPointer = false) {
-    if (image == null) return;
+  public void Init(Equipment equip, bool noPointer = false, int cnt = 1) {
     preventPointerEvents = noPointer;
     EquipmentItem = equip;
     image.sprite = equip.icon;
+    if (cnt > 1) {
+      count.gameObject.SetActive(true);
+      count.text = cnt.ToString();
+    }
   }
 
-  public void Init(Item item, bool noPointer = false) {
-    if (image == null) return;
+  public void Init(Item item, bool noPointer = false, int cnt = 1) {
     preventPointerEvents = noPointer;
     InventoryItem = item;
     image.sprite = item.icon;
+    if (cnt > 1) {
+      count.gameObject.SetActive(true);
+      count.text = cnt.ToString();
+    }
   }
 
   public void SwitchActiveFrame(bool on) {

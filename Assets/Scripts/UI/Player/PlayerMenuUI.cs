@@ -101,17 +101,21 @@ public class PlayerMenuUI : MonoBehaviour {
     navInventory.onClick.RemoveListener(SelectInventoryTab);
   }
 
-  public static void Switch() {
-    GameObject menuObj = menu.gameObject;
-    menuObj.SetActive(!menuObj.activeSelf);
+  public static void Open() {
+    menu.gameObject.SetActive(true);
+    SceneController.ShowBackground();
+    SelectHeroTab();
+  }
 
-    if (menuObj.activeSelf) {
-      SelectHeroTab();
-      SceneController.ShowBackground();
-    } else {
-      Clear();
-      SceneController.HideBackground();
-    }
+  public static void Close() {
+    menu.gameObject.SetActive(false);
+    Clear();
+    SceneController.HideBackground();
+  }
+
+  public static void Switch() {
+    if (menu.gameObject.activeSelf) Close();
+    else Open();
   }
 
   private static void Clear() {
@@ -214,25 +218,48 @@ public class PlayerMenuUI : MonoBehaviour {
 
     Player player = Player.Instance;
     List<Equipment> unequipped = player.Inventory.Equip;
-    List<Equipment> equipped = new() { };
+    List<Equipment> equipped = new();
 
-    foreach (Unit unit in player.Army.Units) equipped.AddRange(unit.Equip.GetEquipmentList());
+    foreach (Unit unit in player.Army.Units)
+      equipped.AddRange(unit.Equip.GetEquipmentList());
 
-    foreach (Equipment e in unequipped) {
+    var groupedUnequipped = unequipped
+      .GroupBy(e => e.id)
+      .Select(g => new {
+        equip = g.First(),
+        count = g.Count()
+      });
+
+    foreach (var g in groupedUnequipped) {
       GameObject slot = Instantiate(Instance.menuSlotPrefab, leftSlots);
-      slot.GetComponent<MenuSlot>().Init(e);
+      slot.GetComponent<MenuSlot>().Init(g.equip, false, g.count);
     }
 
-    foreach (Equipment e in equipped) {
+    var groupedEquipped = equipped
+      .GroupBy(e => e.id)
+      .Select(g => new {
+        equip = g.First(),
+        count = g.Count()
+      });
+
+    foreach (var g in groupedEquipped) {
       GameObject slot = Instantiate(Instance.menuSlotPrefab, leftSlots);
       MenuSlot slotScript = slot.GetComponent<MenuSlot>();
-      slotScript.Init(e);
+      slotScript.Init(g.equip, false, g.count);
       slotScript.SwitchActiveMark();
     }
 
-    foreach (Item i in player.Inventory.Items) {
+    var groupedItems = player.Inventory.Items
+      .GroupBy(item => item.id)
+      .Select(group => new {
+        item = group.First(),
+        count = group.Count()
+      });
+
+    foreach (var g in groupedItems) {
       GameObject slot = Instantiate(Instance.menuSlotPrefab, rightSlots);
-      slot.GetComponent<MenuSlot>().Init(i);
+      var slotScript = slot.GetComponent<MenuSlot>();
+      slot.GetComponent<MenuSlot>().Init(g.item, false, g.count);
     }
 
     RenderEmptySlots(leftSlots, equipped.Count + unequipped.Count);
@@ -246,11 +273,13 @@ public class PlayerMenuUI : MonoBehaviour {
   private static void RenderEmptySlots(RectTransform panel, int filled) {
     if (filled == defaultSlotsCount) {
       return;
-    } else if (filled < defaultSlotsCount) {
+    }
+    else if (filled < defaultSlotsCount) {
       for (int i = filled; i < defaultSlotsCount; i++) {
         Instantiate(Instance.menuEmptySlotPrefab, panel);
       }
-    } else {
+    }
+    else {
       int remainder = filled % slotColumns;
       int placeholders = remainder == 0 ? 0 : slotColumns - remainder;
 

@@ -160,7 +160,7 @@ public class Player : MonoBehaviour {
       case BattleResult.Retreat:
         transform.position = move.startZone.playerPosition;
         move.CurrentZone = move.startZone;
-        // FIXME: Не факт что сработает
+        StateManager.currentPlayerZoneId = move.CurrentZone.id;
         events.CheckEvents(true);
         _ = CameraController.FocusOn(transform.position, true);
         SetFame(fixedReward.fame / 2 * -1);

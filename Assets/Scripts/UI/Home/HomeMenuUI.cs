@@ -73,7 +73,7 @@ public class HomeMenuUI : MonoBehaviour {
     SceneController.ShowBackground();
   }
 
-  private static void Close() {
+  public static void Close() {
     menu.gameObject.SetActive(false);
     SceneController.HideBackground();
     mapZone = null;

@@ -13,7 +13,7 @@ public class PlayerInventory : MonoBehaviour {
 
   private void Awake() {
     army = transform.GetComponent<PlayerArmy>();
-    armorSets = GetComponentsInChildren<ArmorSet>();
+    armorSets = GetComponentsInChildren<ArmorSet>(true);
 
     if (army == null || armorSets.Length == 0) {
       Debug.LogError("Unit inventory components initialization error");

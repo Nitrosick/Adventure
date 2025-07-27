@@ -113,7 +113,7 @@ public class RecruitingUI : MonoBehaviour {
     SceneController.ShowBackground();
   }
 
-  private static void Close() {
+  public static void Close() {
     window.gameObject.SetActive(false);
     SceneController.HideBackground();
     mapZone = null;

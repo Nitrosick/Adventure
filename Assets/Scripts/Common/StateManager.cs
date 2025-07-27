@@ -25,6 +25,7 @@ public static class StateManager {
 
   // Player data
   public static int currentPlayerZoneId;
+  // FIXME: Сохранять домашнюю зону игрока
   public static int gold;
   public static int[] resources;
   public static int villagers;
@@ -76,13 +77,11 @@ public static class StateManager {
     if (rewrite) {
       if (to == "allies") playerUnits = newUnits;
       else enemies = newUnits;
-    }
-    else {
+    } else {
       if (to == "allies") {
         UnitData[] reserveUnits = playerUnits.Where(u => !u.inSquad).ToArray();
         playerUnits = newUnits.Concat(reserveUnits).ToArray();
-      }
-      else enemies = newUnits;
+      } else enemies = newUnits;
     }
   }
 

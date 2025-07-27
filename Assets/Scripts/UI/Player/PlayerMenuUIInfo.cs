@@ -413,10 +413,11 @@ public class PlayerMenuUIInfo : MonoBehaviour {
   private static void OpenSelector(UnitEquipSlot slot) {
     Unit unit = PlayerMenuUI.selectedUnit;
     if (unit == null) return;
-    List<Equipment> inventory = Player.Instance.Inventory.Equip;
 
+    List<Equipment> inventory = Player.Instance.Inventory.Equip;
     List<Equipment> canEquip = new() { };
     List<Equipment> notEnoughStats = new() { };
+
     foreach (Equipment item in inventory) {
       int allowed = unit.Equip.CanEquip(item, slot);
       if (allowed < 0) continue;
@@ -437,6 +438,7 @@ public class PlayerMenuUIInfo : MonoBehaviour {
   private static void ChangeEquipment(object item) {
     if (item is Equipment equipment) PlayerMenuUI.selectedUnit.Equip.EquipItem(equipment);
     UpdateUnitEquipment(PlayerMenuUI.selectedUnit);
+    ShowInfo(PlayerMenuUI.selectedUnit);
   }
 
   private static void IncreaseStat(CoreStat stat) {

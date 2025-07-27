@@ -1,12 +1,10 @@
-using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-public class MapUI : MonoBehaviour
-{
+public class MapUI : MonoBehaviour {
   // Zone info
   private static GameObject zoneInfoPanel;
   private static TextMeshProUGUI zoneInfoTitle;
@@ -54,8 +52,8 @@ public class MapUI : MonoBehaviour
       Debug.LogError("Map UI components initialization error");
     }
 
-    mainMenuButton.onClick.AddListener(() => PauseMenu.Open());
-    playerMenuButton.onClick.AddListener(() => PlayerMenuUI.Switch());
+    mainMenuButton.onClick.AddListener(OpenPauseMenu);
+    playerMenuButton.onClick.AddListener(SwitchPlayerMenu);
     EnableUI();
   }
 
@@ -69,8 +67,8 @@ public class MapUI : MonoBehaviour
   }
 
   private void OnDestroy() {
-    mainMenuButton.onClick.RemoveListener(() => PauseMenu.Open());
-    playerMenuButton.onClick.RemoveListener(() => PlayerMenuUI.Switch());
+    mainMenuButton.onClick.RemoveListener(OpenPauseMenu);
+    playerMenuButton.onClick.RemoveListener(SwitchPlayerMenu);
   }
 
   public static void DisableUI() {
@@ -141,5 +139,21 @@ public class MapUI : MonoBehaviour
     if (totalPeople[0] + totalPeople[1] > player.MaxVillagers) {
       villagersValue.text = "<color=#F61010>" + villagersValue.text + "</color>";
     }
+  }
+
+  private static void OpenPauseMenu() {
+    CloseOtherWindows();
+    PlayerMenuUI.Close();
+    PauseMenu.Open();
+  }
+
+  private static void SwitchPlayerMenu() {
+    CloseOtherWindows();
+    PlayerMenuUI.Switch();
+  }
+
+  private static void CloseOtherWindows() {
+    RecruitingUI.Close();
+    HomeMenuUI.Close();
   }
 }
