@@ -6,7 +6,8 @@ public class SaveSlot : MonoBehaviour {
   private Button button;
   private GameObject activePanel;
   private GameObject emptyPanel;
-  private TextMeshProUGUI saveName;
+  private TextMeshProUGUI sceneName;
+  private TextMeshProUGUI hero;
   private TextMeshProUGUI saveDate;
   private Button deleteButton;
 
@@ -17,13 +18,15 @@ public class SaveSlot : MonoBehaviour {
     button = transform.GetComponent<Button>();
     activePanel = transform.Find("Active").gameObject;
     emptyPanel = transform.Find("Empty").gameObject;
-    saveName = transform.Find("Active/Name").GetComponent<TextMeshProUGUI>();
+    sceneName = transform.Find("Active/Scene").GetComponent<TextMeshProUGUI>();
+    hero = transform.Find("Active/Hero").GetComponent<TextMeshProUGUI>();
     saveDate = transform.Find("Active/Date").GetComponent<TextMeshProUGUI>();
     deleteButton = transform.Find("Delete").GetComponent<Button>();
 
     if (
       button == null || activePanel == null || emptyPanel == null ||
-      saveName == null || saveDate == null || deleteButton == null
+      sceneName == null || saveDate == null || deleteButton == null ||
+      hero == null
     ) {
       Debug.LogError("Save slot components initialization error");
     }
@@ -32,7 +35,8 @@ public class SaveSlot : MonoBehaviour {
   public void Init(SaveData data) {
     if (data != null) {
       hasSave = true;
-      saveName.text = data.saveName;
+      sceneName.text = data.currentScene;
+      hero.text = $"Warrior | Level {data.level}";
       saveDate.text = data.saveTime;
       emptyPanel.SetActive(false);
       activePanel.SetActive(true);
@@ -40,8 +44,7 @@ public class SaveSlot : MonoBehaviour {
 
       deleteButton.onClick.RemoveAllListeners();
       deleteButton.onClick.AddListener(DeleteConfirmation);
-    }
-    else {
+    } else {
       hasSave = false;
     }
 
@@ -53,7 +56,7 @@ public class SaveSlot : MonoBehaviour {
     StateManager.saveSlot = index;
     if (hasSave) StateManager.LoadGame(index);
     else InitNewGame();
-    SceneController.SwitchScene("Scenes/Map/Village");
+    SceneController.SwitchScene("Scenes/Map/Dunpine village");
   }
 
   private void InitNewGame() {
@@ -74,8 +77,10 @@ public class SaveSlot : MonoBehaviour {
     if (!accepted) return;
     StateManager.DeleteSave(index);
     _ = InfoPopup.Show("info", "Save deleted");
+
     hasSave = false;
-    saveName.text = "";
+    sceneName.text = "";
+    hero.text = "";
     saveDate.text = "";
     emptyPanel.SetActive(true);
     activePanel.SetActive(false);

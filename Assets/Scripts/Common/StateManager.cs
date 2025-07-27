@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using UnityEngine;
 using Newtonsoft.Json;
+using UnityEngine.SceneManagement;
 
 public static class StateManager {
   public static PrefabDatabase PrefabDatabase;
@@ -24,6 +25,7 @@ public static class StateManager {
   public static BattleReward battleReward;
 
   // Player data
+  public static string currentScene;
   public static int currentPlayerZoneId;
   // FIXME: Сохранять домашнюю зону игрока
   public static int gold;
@@ -49,6 +51,7 @@ public static class StateManager {
 
   public static void ResetPlayerData() {
     saveSlot = 0;
+    currentScene = "";
     currentPlayerZoneId = 1;
     gold = 0;
     resources = new int[] { 0, 0, 0, 0 };
@@ -128,11 +131,11 @@ public static class StateManager {
   public static SaveData GetSaveData() {
     string[] equipIds = inventoryEquipment.Select(e => e.id).ToArray();
     string[] itemIds = inventoryItems.Select(i => i.id).ToArray();
+    string scene = SceneManager.GetActiveScene().name;
 
     SaveData data = new() {
-      // FIXME: Установка имени сохранения
-      saveName = "New game",
       saveTime = DateTime.Now.ToString(),
+      currentScene = scene == "Menu" ? "Dunpine village" : scene,
       currentPlayerZoneId = currentPlayerZoneId,
       gold = gold,
       resources = resources,
@@ -151,6 +154,7 @@ public static class StateManager {
   }
 
   private static void SetLoadedData(SaveData data) {
+    currentScene = data.currentScene;
     currentPlayerZoneId = data.currentPlayerZoneId;
     gold = data.gold;
     resources = data.resources;

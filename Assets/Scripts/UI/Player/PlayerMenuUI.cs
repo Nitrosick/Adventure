@@ -262,8 +262,8 @@ public class PlayerMenuUI : MonoBehaviour {
       slot.GetComponent<MenuSlot>().Init(g.item, false, g.count);
     }
 
-    RenderEmptySlots(leftSlots, equipped.Count + unequipped.Count);
-    RenderEmptySlots(rightSlots, player.Inventory.Items.Count);
+    RenderEmptySlots(leftSlots, groupedEquipped.ToArray().Length + groupedUnequipped.ToArray().Length);
+    RenderEmptySlots(rightSlots, groupedItems.ToArray().Length);
 
     await Task.Yield();
     selectedSlot = leftSlots.GetChild(0).GetComponent<MenuSlot>();

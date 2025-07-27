@@ -3,8 +3,8 @@ using System.Collections.Generic;
 
 [Serializable]
 public class SaveData {
-  public string saveName;
   public string saveTime;
+  public string currentScene;
   public int currentPlayerZoneId;
   public int gold;
   public int[] resources;
