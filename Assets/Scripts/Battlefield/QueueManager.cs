@@ -24,8 +24,6 @@ public class QueueManager : MonoBehaviour
       case BattlePhase.Attack:
         HandleClick();
         break;
-      // case BattlePhase.Ability:
-      //   break;
     }
   }
 

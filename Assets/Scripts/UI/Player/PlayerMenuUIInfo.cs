@@ -237,6 +237,11 @@ public class PlayerMenuUIInfo : MonoBehaviour {
     PlayerMenuUI.FrameSlot();
     PlayerMenuUI.selectedUnit = unit;
 
+    if (unit.IsNew) {
+      unit.IsNew = false;
+      PlayerMenuUI.selectedSlot.HideNewMark();
+    }
+
     displayName.text = unit.Name;
     if (!unit.IsHero) Level.text = "Level: " + unit.Level.ToString();
     type.text = "Type: " + unit.Type.ToString();
@@ -279,6 +284,11 @@ public class PlayerMenuUIInfo : MonoBehaviour {
     equipRequirements.SetActive(true);
     equipParams.SetActive(true);
     PlayerMenuUI.FrameSlot();
+
+    if (equip.isNew) {
+      equip.isNew = false;
+      PlayerMenuUI.selectedSlot.HideNewMark();
+    }
 
     displayName.text = equip.itemName;
     Level.text = "Rarity: " + equip.rarity.ToString();
@@ -346,6 +356,11 @@ public class PlayerMenuUIInfo : MonoBehaviour {
 
     PlayerMenuUI.FrameSlot();
     PlayerMenuUI.selectedItem = item;
+
+    if (item.isNew) {
+      item.isNew = false;
+      PlayerMenuUI.selectedSlot.HideNewMark();
+    }
 
     displayName.text = item.itemName;
     Level.text = "Rarity: " + item.rarity.ToString();

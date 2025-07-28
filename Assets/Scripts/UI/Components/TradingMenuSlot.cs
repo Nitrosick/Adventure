@@ -92,10 +92,12 @@ public class TradingMenuSlot : MonoBehaviour, IPointerEnterHandler, IPointerExit
         break;
       case ItemType.Equipment:
         Equipment equip = Factory.CreateEquipById(itemId);
+        equip.isNew = true;
         if (equip != null) player.Inventory.AddItems(equip);
         break;
       case ItemType.Misc:
         Item item = Factory.CreateItemById(itemId);
+        item.isNew = true;
         if (item != null) player.Inventory.AddItems(item);
         break;
     }

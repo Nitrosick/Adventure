@@ -17,11 +17,9 @@ public class TradingMenuUI : HomeMenuFeature {
     base.Awake();
     Instance = this;
 
-    T Get<T>(string path) where T : Component => transform.Find(path).GetComponent<T>();
-
-    resourceSlots = Get<RectTransform>("ResourceSlots");
-    equipmentSlots = Get<RectTransform>("EquipmentSlots");
-    miscSlots = Get<RectTransform>("MiscSlots");
+    resourceSlots = transform.Find("ResourceSlots").GetComponent<RectTransform>();
+    equipmentSlots = transform.Find("EquipmentSlots").GetComponent<RectTransform>();
+    miscSlots = transform.Find("MiscSlots").GetComponent<RectTransform>();
 
     if (!ComponentsInitialized()) {
       Debug.LogError("Trading menu UI components initialization error");

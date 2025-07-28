@@ -34,35 +34,46 @@ public class InfoPopup : MonoBehaviour {
   private static TextMeshProUGUI unitSkillCharges;
   private static TextMeshProUGUI unitEffects;
 
-  private void Awake() {
-    panel = transform.Find("Info/ItemInfoPanel").GetComponent<Transform>();
-    unitParams = panel.Find("UnitParams").GetComponent<Transform>();
-    equipRequirements = panel.Find("EquipRequirements").GetComponent<Transform>();
-    weaponParams = panel.Find("WeaponParams").GetComponent<Transform>();
-    armorParams = panel.Find("ArmorParams").GetComponent<Transform>();
-    medicineParams = panel.Find("MedicineParams").GetComponent<Transform>();
-    pricePanel = panel.Find("Price").GetComponent<Transform>();
+  Transform Get(string path) => transform.Find(path);
+  Transform Find(Transform root, string path) => root.Find(path);
+  T Get<T>(Transform root, string path) where T : Component => root.Find(path).GetComponent<T>();
 
-    title = panel.Find("Name").GetComponent<TextMeshProUGUI>();
-    description = panel.Find("Description").GetComponent<TextMeshProUGUI>();
-    price = pricePanel.Find("Value").GetComponent<TextMeshProUGUI>();
-    reqStats = equipRequirements.Find("Stats/Value").GetComponent<TextMeshProUGUI>();
-    reqLevel = equipRequirements.Find("Level/Value").GetComponent<TextMeshProUGUI>();
-    weight = equipRequirements.Find("Weight/Value").GetComponent<TextMeshProUGUI>();
-    weaponDamage = weaponParams.Find("Damage/Value").GetComponent<TextMeshProUGUI>();
-    weaponDamageType = weaponParams.Find("DamageType/Value").GetComponent<TextMeshProUGUI>();
-    weaponRange = weaponParams.Find("Range/Value").GetComponent<TextMeshProUGUI>();
-    armorDefense = armorParams.Find("Defense/Value").GetComponent<TextMeshProUGUI>();
-    medIntensity = medicineParams.Find("Intensity/Value").GetComponent<TextMeshProUGUI>();
-    unitHP = unitParams.Find("HP/Value").GetComponent<TextMeshProUGUI>();
-    unitLevel = unitParams.Find("Level/Value").GetComponent<TextMeshProUGUI>();
-    unitStats = unitParams.Find("Stats/Value").GetComponent<TextMeshProUGUI>();
-    unitMP = unitParams.Find("MP/Value").GetComponent<TextMeshProUGUI>();
-    unitDamage = unitParams.Find("Damage/Value").GetComponent<TextMeshProUGUI>();
-    unitDefense = unitParams.Find("Defense/Value").GetComponent<TextMeshProUGUI>();
-    unitRange = unitParams.Find("Range/Value").GetComponent<TextMeshProUGUI>();
-    unitSkillCharges = unitParams.Find("SkillCharges/Value").GetComponent<TextMeshProUGUI>();
-    unitEffects = panel.Find("Effects").GetComponent<TextMeshProUGUI>();
+  private void Awake() {
+    panel = Get("Info/ItemInfoPanel");
+
+    unitParams = Find(panel, "UnitParams");
+    equipRequirements = Find(panel, "EquipRequirements");
+    weaponParams = Find(panel, "WeaponParams");
+    armorParams = Find(panel, "ArmorParams");
+    medicineParams = Find(panel, "MedicineParams");
+    pricePanel = Find(panel, "Price");
+
+    title = Get<TextMeshProUGUI>(panel, "Name");
+    description = Get<TextMeshProUGUI>(panel, "Description");
+    price = Get<TextMeshProUGUI>(pricePanel, "Value");
+
+    reqStats = Get<TextMeshProUGUI>(equipRequirements, "Stats/Value");
+    reqLevel = Get<TextMeshProUGUI>(equipRequirements, "Level/Value");
+    weight = Get<TextMeshProUGUI>(equipRequirements, "Weight/Value");
+
+    weaponDamage = Get<TextMeshProUGUI>(weaponParams, "Damage/Value");
+    weaponDamageType = Get<TextMeshProUGUI>(weaponParams, "DamageType/Value");
+    weaponRange = Get<TextMeshProUGUI>(weaponParams, "Range/Value");
+
+    armorDefense = Get<TextMeshProUGUI>(armorParams, "Defense/Value");
+
+    medIntensity = Get<TextMeshProUGUI>(medicineParams, "Intensity/Value");
+
+    unitHP = Get<TextMeshProUGUI>(unitParams, "HP/Value");
+    unitLevel = Get<TextMeshProUGUI>(unitParams, "Level/Value");
+    unitStats = Get<TextMeshProUGUI>(unitParams, "Stats/Value");
+    unitMP = Get<TextMeshProUGUI>(unitParams, "MP/Value");
+    unitDamage = Get<TextMeshProUGUI>(unitParams, "Damage/Value");
+    unitDefense = Get<TextMeshProUGUI>(unitParams, "Defense/Value");
+    unitRange = Get<TextMeshProUGUI>(unitParams, "Range/Value");
+    unitSkillCharges = Get<TextMeshProUGUI>(unitParams, "SkillCharges/Value");
+
+    unitEffects = Get<TextMeshProUGUI>(panel, "Effects");
 
     if (
       title == null || description == null || medicineParams == null ||

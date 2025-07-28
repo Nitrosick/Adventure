@@ -487,6 +487,7 @@ MonoBehaviour:
     fame: 0
     goldRange: 0000000000000000
     resources: 00000000000000000000000000000000
+    equipment: []
     items: []
   lootPickEffect: {fileID: 7421624496474942857, guid: d963e4f57afad6f4c956e7cfb36b4ba9,
     type: 3}
@@ -584,10 +585,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3211805249137726609, guid: 84c49e1e0de9d4c46b23fb5372beeaf4,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 5205693364233905449}
-    - targetCorrespondingSourceObject: {fileID: 3211805249137726609, guid: 84c49e1e0de9d4c46b23fb5372beeaf4,
-        type: 3}
-      insertIndex: -1
       addedObject: {fileID: 7047058899914869316}
   m_SourcePrefab: {fileID: 100100000, guid: 84c49e1e0de9d4c46b23fb5372beeaf4, type: 3}
 --- !u!1 &7243750335430772149 stripped
@@ -596,27 +593,6 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 5193889890980401444}
   m_PrefabAsset: {fileID: 0}
---- !u!65 &5205693364233905449
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7243750335430772149}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 3.6675751, y: 2.4799001, z: 2.3457403}
-  m_Center: {x: -0.00000005960465, y: 1.1292497, z: 0.057122078}
 --- !u!114 &7047058899914869316
 MonoBehaviour:
   m_ObjectHideFlags: 0

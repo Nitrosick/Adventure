@@ -18,11 +18,9 @@ public class HomeMenuFeature : MonoBehaviour {
   private readonly float slotsGap = 4f;
 
   protected virtual void Awake() {
-    T Get<T>(string path) where T : Component => transform.Find(path).GetComponent<T>();
-
-    title = Get<TextMeshProUGUI>("Head/Data/Name");
-    level = Get<TextMeshProUGUI>("Head/Data/Level");
-    avatarBackground = Get<Image>("Head/Avatar/Background");
+    title = transform.Find("Head/Data/Name").GetComponent<TextMeshProUGUI>();
+    level = transform.Find("Head/Data/Level").GetComponent<TextMeshProUGUI>();
+    avatarBackground = transform.Find("Head/Avatar/Background").GetComponent<Image>();
 
     if (!ComponentsInitialized()) {
       Debug.LogError("Trading menu UI components initialization error");

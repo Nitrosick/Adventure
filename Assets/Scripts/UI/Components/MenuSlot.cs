@@ -11,6 +11,7 @@ public class MenuSlot : MonoBehaviour, IPointerClickHandler {
 
   private Image image;
   private GameObject activeFrame;
+  public GameObject NewMark { get; private set; }
   public GameObject ActiveMark { get; private set; }
   public GameObject DeathMark { get; private set; }
   private RectTransform healthBar;
@@ -21,6 +22,7 @@ public class MenuSlot : MonoBehaviour, IPointerClickHandler {
   private void Awake() {
     image = transform.Find("Image").GetComponent<Image>();
     activeFrame = transform.Find("FrameActive").gameObject;
+    NewMark = transform.Find("NewMark").gameObject;
     ActiveMark = transform.Find("ActiveMark").gameObject;
     DeathMark = transform.Find("Dead").gameObject;
     healthBar = transform.Find("HealthBar").GetComponent<RectTransform>();
@@ -30,7 +32,7 @@ public class MenuSlot : MonoBehaviour, IPointerClickHandler {
     if (
       activeFrame == null || ActiveMark == null || DeathMark == null ||
       healthBar == null || healthBarFill == null || count == null ||
-      image == null
+      image == null || NewMark == null
     )  {
       Debug.LogError("Menu slot components initialization error");
     }
@@ -46,6 +48,7 @@ public class MenuSlot : MonoBehaviour, IPointerClickHandler {
     preventPointerEvents = noPointer;
     UnitItem = unit;
     image.sprite = UnitItem.avatar;
+    if (unit.IsNew) NewMark.SetActive(true);
 
     if (!preventPointerEvents) {
       if (unit.InSquad) ActiveMark.SetActive(true);
@@ -64,6 +67,7 @@ public class MenuSlot : MonoBehaviour, IPointerClickHandler {
     preventPointerEvents = noPointer;
     EquipmentItem = equip;
     image.sprite = equip.icon;
+    if (equip.isNew) NewMark.SetActive(true);
     if (cnt > 1) {
       count.gameObject.SetActive(true);
       count.text = cnt.ToString();
@@ -74,6 +78,7 @@ public class MenuSlot : MonoBehaviour, IPointerClickHandler {
     preventPointerEvents = noPointer;
     InventoryItem = item;
     image.sprite = item.icon;
+    if (item.isNew) NewMark.SetActive(true);
     if (cnt > 1) {
       count.gameObject.SetActive(true);
       count.text = cnt.ToString();
@@ -82,6 +87,10 @@ public class MenuSlot : MonoBehaviour, IPointerClickHandler {
 
   public void SwitchActiveFrame(bool on) {
     activeFrame.SetActive(on);
+  }
+
+  public void HideNewMark() {
+    NewMark.SetActive(false);
   }
 
   public void SwitchActiveMark() {

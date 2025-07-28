@@ -16,4 +16,5 @@ public abstract class Equipment : ScriptableObject {
   public Skill skill;
   public Sprite icon;
   public int price;
+  public bool isNew;
 }

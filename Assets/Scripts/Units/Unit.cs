@@ -53,6 +53,7 @@ public class Unit : MonoBehaviour {
   // State
   public bool IsDead { get; protected set; }
   public bool InSquad { get; set; } = true;
+  public bool IsNew { get; set; }
 
   protected void Awake() {
     Equip = transform.GetComponent<UnitEquipment>();

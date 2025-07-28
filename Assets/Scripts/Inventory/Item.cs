@@ -9,4 +9,5 @@ public abstract class Item : ScriptableObject {
   public Rarity rarity;
   public Sprite icon;
   public int price;
+  public bool isNew;
 }
