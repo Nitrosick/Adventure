@@ -112,13 +112,13 @@ public class Unit : MonoBehaviour {
 
   void OnMouseEnter() {
     if (EventSystem.current.IsPointerOverGameObject()) return;
-    BattleUI.ShowUnitInfo(this);
+    InfoPopup.Show(this);
     if (PhaseManager.CurrentPhase != BattlePhase.Attack) return;
     CurrentTile.Hover();
   }
 
   void OnMouseExit() {
-    BattleUI.HideUnitInfo();
+    InfoPopup.Hide();
     CurrentTile.Unhover();
   }
 

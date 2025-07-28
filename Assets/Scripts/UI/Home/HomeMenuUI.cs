@@ -94,7 +94,7 @@ public class HomeMenuUI : MonoBehaviour {
 
   private static async void SaveGame() {
     StateManager.SaveGame();
-    _ = InfoPopup.Show("success", "Game saved");
+    _ = Toast.Show("success", "Game saved");
     saveButton.interactable = false;
     await Task.Delay(saveDelay * 1000);
     saveButton.interactable = true;

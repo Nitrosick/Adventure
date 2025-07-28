@@ -76,7 +76,7 @@ public class SaveSlot : MonoBehaviour {
   private void DeleteSlot(bool accepted) {
     if (!accepted) return;
     StateManager.DeleteSave(index);
-    _ = InfoPopup.Show("info", "Save deleted");
+    _ = Toast.Show("info", "Save deleted");
 
     hasSave = false;
     sceneName.text = "";

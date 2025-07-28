@@ -236,8 +236,9 @@ GameObject:
   - component: {fileID: 7048047418638152216}
   - component: {fileID: 3112795234042051646}
   - component: {fileID: 8919186597256832102}
+  - component: {fileID: -1099765437059255782}
   m_Layer: 5
-  m_Name: Avatar
+  m_Name: QueueSlot
   m_TagString: UI
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -305,6 +306,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &-1099765437059255782
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7482175815702721502}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de50afbcabb6db545a0f773bd2c22f15, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8327753333223290568
 GameObject:
   m_ObjectHideFlags: 0

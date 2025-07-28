@@ -99,6 +99,6 @@ public class Tile : MonoBehaviour {
     Destroy(obj.gameObject);
     BattleManager.Reward.Add(loot);
     type = TileType.Open;
-    _ = InfoPopup.Show("success", "Loot picked up");
+    _ = Toast.Show("success", "Loot picked up");
   }
 }

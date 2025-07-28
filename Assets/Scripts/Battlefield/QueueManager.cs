@@ -55,14 +55,12 @@ public class QueueManager : MonoBehaviour
   }
 
   public static void NextUnit() {
-    orderNumber = (orderNumber + 1) % Queue.Count;
-    // if (orderNumber >= Queue.Count - 1) {
-    //   orderNumber = 0;
-    //   Round++;
-    // }
-    // else {
-    //   orderNumber++;
-    // }
+    if (orderNumber >= Queue.Count - 1) {
+      orderNumber = 0;
+      Round++;
+    } else {
+      orderNumber++;
+    }
 
     Unit nextUnit = Queue[orderNumber];
 

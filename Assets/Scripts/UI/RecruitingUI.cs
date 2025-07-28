@@ -179,6 +179,6 @@ public class RecruitingUI : MonoBehaviour {
     // FIXME: Отнять ресурсы
     mapZone.UnshiftEvent();
     Close();
-    _ = InfoPopup.Show("success", "People have joined you");
+    _ = Toast.Show("success", "People have joined you");
   }
 }

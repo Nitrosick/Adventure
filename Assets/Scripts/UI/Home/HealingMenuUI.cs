@@ -193,7 +193,7 @@ public class HealingMenuUI : HomeMenuFeature {
   private void ReanimateUnits() {
     foreach (Unit unit in dead) {
       bool success = Utils.RollChance(reanimationChances[masteryLevel]);
-      if (!success) _ = InfoPopup.Show("warning", "Unit couldn't be reanimated");
+      if (!success) _ = Toast.Show("warning", "Unit couldn't be reanimated");
       else unit.Heal(5, false);
     }
     Player.Instance.SetGold(deadTotal * -1);

@@ -69,17 +69,17 @@ public class TradingMenuSlot : MonoBehaviour, IPointerEnterHandler, IPointerExit
   }
 
   public void OnPointerEnter(PointerEventData eventData) {
-    if (currentEquip != null) ItemInfo.Show(currentEquip);
-    else if (currentItem != null) ItemInfo.Show(currentItem);
+    if (currentEquip != null) InfoPopup.Show(currentEquip);
+    else if (currentItem != null) InfoPopup.Show(currentItem);
   }
 
   public void OnPointerExit(PointerEventData eventData) {
-    ItemInfo.Hide();
+    InfoPopup.Hide();
   }
 
   public void OnPointerClick(PointerEventData eventData) {
     if (itemPrice > player.Gold) {
-      _ = InfoPopup.Show("warning", "Not enough money");
+      _ = Toast.Show("warning", "Not enough money");
       return;
     }
 
@@ -101,7 +101,7 @@ public class TradingMenuSlot : MonoBehaviour, IPointerEnterHandler, IPointerExit
     }
 
     player.SetGold(itemPrice * -1);
-    _ = InfoPopup.Show("success", "Product has been purchased");
+    _ = Toast.Show("success", "Product has been purchased");
     TradingMenuUI.Instance.CheckBalance();
   }
 }

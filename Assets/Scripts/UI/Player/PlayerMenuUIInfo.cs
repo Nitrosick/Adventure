@@ -406,7 +406,7 @@ public class PlayerMenuUIInfo : MonoBehaviour {
   private static void DismissUnit(bool accepted) {
     if (!accepted) return;
     Player.Instance.Army.DeleteUnit(PlayerMenuUI.selectedUnit);
-    _ = InfoPopup.Show("info", "Unit dismissed");
+    _ = Toast.Show("info", "Unit dismissed");
     PlayerMenuUI.SelectUnitsTab();
   }
 
@@ -465,13 +465,13 @@ public class PlayerMenuUIInfo : MonoBehaviour {
 
     if (item == null) return;
     if (woundedUnits == null || woundedUnits.Length == 0) {
-      _ = InfoPopup.Show("warning", "No wounded units");
+      _ = Toast.Show("warning", "No wounded units");
       return;
     }
 
     if (item is MedicineItem medItem) {
       foreach (Unit unit in woundedUnits) unit.Heal(medItem.intensity);
-      _ = InfoPopup.Show("success", "Units are cured");
+      _ = Toast.Show("success", "Units are cured");
     }
 
     if (item.disposable) {

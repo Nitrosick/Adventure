@@ -131,6 +131,7 @@ public class Player : MonoBehaviour {
     if (StateManager.inventoryItems.Length > 0) Inventory.UpdateInventory(StateManager.inventoryItems);
 
     MapUI.UpdateResources();
+    MapUI.UpdateLocation(StateManager.currentScene);
 
     MapZoneEvent events = move.CurrentZone.GetComponent<MapZoneEvent>();
     events.CheckEvents(true);

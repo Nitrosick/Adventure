@@ -27,6 +27,8 @@ public class MapUI : MonoBehaviour {
   private static TextMeshProUGUI leatherValue;
   private static TextMeshProUGUI villagersValue;
 
+  private static TextMeshProUGUI location;
+
   private T Get<T>(Transform parent, string path) where T : Component {
     return parent.Find(path).GetComponent<T>();
   }
@@ -62,6 +64,7 @@ public class MapUI : MonoBehaviour {
     metalValue = Get<TextMeshProUGUI>(resources, "Metal/Value");
     leatherValue = Get<TextMeshProUGUI>(resources, "Leather/Value");
     villagersValue = Get<TextMeshProUGUI>(resources, "Villagers/Value");
+    location = Get<TextMeshProUGUI>(resources, "Location");
 
     if (!ComponentsInitialized()) {
       Debug.LogError("Map UI components initialization error");
@@ -78,7 +81,7 @@ public class MapUI : MonoBehaviour {
       goldValue != null && woodValue != null && stoneValue != null &&
       metalValue != null && villagersValue != null && leatherValue != null &&
       zoneInfoBattleMark != null && zoneInfoClearedMark != null && zoneInfoRecruitMark != null &&
-      interactButton != null;
+      interactButton != null && location != null;
   }
 
   private void OnDestroy() {
@@ -154,6 +157,10 @@ public class MapUI : MonoBehaviour {
     if (totalPeople[0] + totalPeople[1] > player.MaxVillagers) {
       villagersValue.text = "<color=#F61010>" + villagersValue.text + "</color>";
     }
+  }
+
+  public static void UpdateLocation(string value) {
+    location.text = value;
   }
 
   private static void OpenPauseMenu() {
