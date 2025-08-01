@@ -76,14 +76,36 @@ public class PlayerInventory : MonoBehaviour {
 
   public void RemoveItem(Equipment item) {
     if (item == null) return;
-    Equip.Remove(item);
-    UpdateState();
+    Equipment itemToRemove = Equip.FirstOrDefault(e => e.id == item.id);
+    if (itemToRemove != null) {
+      Equip.Remove(itemToRemove);
+      UpdateState();
+    }
   }
 
   public void RemoveItem(Item item) {
     if (item == null) return;
-    Items.Remove(item);
-    UpdateState();
+    Item itemToRemove = Items.FirstOrDefault(i => i.id == item.id);
+    if (itemToRemove != null) {
+      Items.Remove(itemToRemove);
+      UpdateState();
+    }
+  }
+
+  public bool HasItem(Equipment item, bool onlyUnequipped = false) {
+    if (Equip.Any(i => i.id == item.id)) return true;
+
+    if (!onlyUnequipped) {
+      foreach (Unit unit in army.Units) {
+        if (unit.Equip.HasItem(item)) return true;
+      }
+    }
+
+    return false;
+  }
+
+  public bool HasItem(Item item) {
+    return Items.Any(i => i.id == item.id);
   }
 
   public void UpdateState() {

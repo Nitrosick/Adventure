@@ -172,6 +172,7 @@ public class InfoPopup : MonoBehaviour {
     weaponParams.gameObject.SetActive(false);
     armorParams.gameObject.SetActive(false);
     medicineParams.gameObject.SetActive(false);
+    pricePanel.gameObject.SetActive(false);
     title.text = "";
     description.text = "";
     price.text = "";

@@ -1,7 +1,6 @@
 [System.Serializable]
 public class CraftingRecipe {
   public Equipment sourceEquip;
-  public Item sourceItem;
 
   public Item[] componentItems;
   // FIXME: Стакать, если несколько одинаковых

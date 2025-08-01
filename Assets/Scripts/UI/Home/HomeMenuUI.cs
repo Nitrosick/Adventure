@@ -160,4 +160,10 @@ public class HomeMenuUI : MonoBehaviour {
     tradingSection.Clear();
     craftingSection.Clear();
   }
+
+  public static void RecalculateRecipes() {
+    foreach (CraftingRecipeUI recipe in content.GetComponentsInChildren<CraftingRecipeUI>()) {
+      recipe.CheckEnoughResources();
+    }
+  }
 }

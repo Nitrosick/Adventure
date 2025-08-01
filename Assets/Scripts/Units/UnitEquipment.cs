@@ -176,7 +176,8 @@ public class UnitEquipment : MonoBehaviour {
       case UnitEquipSlot.Secondary:
         if (item is Weapon weapon2) {
           // FIXME: Проверка на оружие для левой руки
-        } else if (item is Armor armor2) {
+        }
+        else if (item is Armor armor2) {
           if (unit.ShieldIsAllow) result = 0;
         }
         break;
@@ -196,5 +197,10 @@ public class UnitEquipment : MonoBehaviour {
     if (item.requirementLevel <= unit.Level && enoughStats) result = 1;
 
     return result;
+  }
+
+  public bool HasItem(Equipment item) {
+    return new Equipment[] { primaryWeapon, secondaryWeapon, shield, armor }
+      .Any(e => e != null && e.id == item.id);
   }
 }
