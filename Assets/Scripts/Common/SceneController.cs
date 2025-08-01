@@ -43,8 +43,15 @@ public class SceneController : MonoBehaviour
   public static void Lock() { Locked = true; }
   public static void Unlock() { Locked = false; }
 
-  public static void ShowBackground() { background.SetActive(true); }
-  public static void HideBackground() { background.SetActive(false); }
+  public static void OpenWindow(string name) {
+    StateManager.openedWindows.Add(name);
+    background.SetActive(StateManager.openedWindows.Count > 0);
+  }
+
+  public static void CloseWindow(string name) {
+    StateManager.openedWindows.Remove(name);
+    background.SetActive(StateManager.openedWindows.Count > 0);
+  }
 
   public static void SwitchScene(string name) {
     Lock();

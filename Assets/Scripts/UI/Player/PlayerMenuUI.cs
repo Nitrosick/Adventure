@@ -103,14 +103,14 @@ public class PlayerMenuUI : MonoBehaviour {
 
   public static void Open() {
     menu.gameObject.SetActive(true);
-    SceneController.ShowBackground();
     SelectHeroTab();
+    SceneController.OpenWindow("player");
   }
 
   public static void Close() {
     menu.gameObject.SetActive(false);
     Clear();
-    SceneController.HideBackground();
+    SceneController.CloseWindow("player");
   }
 
   public static void Switch() {

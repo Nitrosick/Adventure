@@ -81,16 +81,16 @@ public class HomeMenuUI : MonoBehaviour {
     mapZone = zone;
     EnableButtons(zone.features);
     menu.gameObject.SetActive(true);
-    SceneController.ShowBackground();
+    SceneController.OpenWindow("home");
   }
 
   public static void Close() {
     menu.gameObject.SetActive(false);
-    SceneController.HideBackground();
     mapZone = null;
     DisableButtons();
     HideSections();
     welcomeSection.gameObject.SetActive(true);
+    SceneController.CloseWindow("home");
   }
 
   private static void EnableButtons(MapZoneFeature[] features) {

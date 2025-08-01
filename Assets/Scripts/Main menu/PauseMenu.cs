@@ -52,13 +52,13 @@ public class PauseMenu : MonoBehaviour {
   public static void Open() {
     panel.gameObject.SetActive(true);
     background.SetActive(true);
-    SceneController.ShowBackground();
+    SceneController.OpenWindow("pause");
   }
 
   public static void Close() {
     panel.gameObject.SetActive(false);
     background.SetActive(false);
-    SceneController.HideBackground();
+    SceneController.CloseWindow("pause");
   }
 
   private static void ToMainMenu() {

@@ -110,12 +110,12 @@ public class RecruitingUI : MonoBehaviour {
 
     ShowRequirements(zone.requirements);
     window.gameObject.SetActive(true);
-    SceneController.ShowBackground();
+    SceneController.OpenWindow("recruiting");
   }
 
   public static void Close() {
     window.gameObject.SetActive(false);
-    SceneController.HideBackground();
+
     mapZone = null;
     title.text = "";
     description.text = "";
@@ -132,6 +132,8 @@ public class RecruitingUI : MonoBehaviour {
     reqMetal.gameObject.SetActive(false);
     reqLeather.gameObject.SetActive(false);
     reqEquipment.gameObject.SetActive(false);
+
+    SceneController.CloseWindow("recruiting");
   }
 
   private static void ShowRequirements(Requirements req) {

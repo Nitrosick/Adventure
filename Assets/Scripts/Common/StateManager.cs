@@ -17,6 +17,7 @@ public static class StateManager {
   // Global
   public static int saveSlot;
   private readonly static string[] defaultArmyIds = { "u1", "u2", "u2" };
+  public static HashSet<string> openedWindows = new ();
 
   // Moving between scenes
   public static string enterScene;

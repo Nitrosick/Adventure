@@ -37,16 +37,16 @@ public class Dialog : MonoBehaviour {
   private static void Open() {
     window.gameObject.SetActive(true);
     background.SetActive(true);
-    SceneController.ShowBackground();
+    SceneController.OpenWindow("dialog");
   }
 
   private static void Close() {
     callback = null;
     window.gameObject.SetActive(false);
     background.SetActive(false);
-    SceneController.HideBackground();
     title.text = "";
     text.text = "";
+    SceneController.CloseWindow("dialog");
   }
 
   private static void OnSubmit() {
