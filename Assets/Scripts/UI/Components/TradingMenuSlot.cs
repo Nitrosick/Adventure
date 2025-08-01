@@ -69,8 +69,8 @@ public class TradingMenuSlot : MonoBehaviour, IPointerEnterHandler, IPointerExit
   }
 
   public void OnPointerEnter(PointerEventData eventData) {
-    if (currentEquip != null) InfoPopup.Show(currentEquip);
-    else if (currentItem != null) InfoPopup.Show(currentItem);
+    if (currentEquip != null) InfoPopup.Show(currentEquip, true);
+    else if (currentItem != null) InfoPopup.Show(currentItem, true);
   }
 
   public void OnPointerExit(PointerEventData eventData) {

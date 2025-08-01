@@ -91,10 +91,11 @@ public class InfoPopup : MonoBehaviour {
     }
   }
 
-  public static void Show(Unit unit) {
+  public static void Show(Unit unit, bool showPrice = false) {
     panel.gameObject.SetActive(true);
     unitParams.gameObject.SetActive(true);
     unitEffects.gameObject.SetActive(true);
+    if (showPrice) pricePanel.gameObject.SetActive(true);
 
     title.text = unit.Name;
     description.text = unit.Description;
@@ -122,9 +123,10 @@ public class InfoPopup : MonoBehaviour {
     unitEffects.text = effectsText;
   }
 
-  public static void Show(Equipment item) {
+  public static void Show(Equipment item, bool showPrice = false) {
     panel.gameObject.SetActive(true);
     equipRequirements.gameObject.SetActive(true);
+    if (showPrice) pricePanel.gameObject.SetActive(true);
 
     title.text = item.itemName;
     description.text = item.description;
@@ -149,8 +151,9 @@ public class InfoPopup : MonoBehaviour {
     }
   }
 
-  public static void Show(Item item) {
+  public static void Show(Item item, bool showPrice = false) {
     panel.gameObject.SetActive(true);
+    if (showPrice) pricePanel.gameObject.SetActive(true);
 
     title.text = item.itemName;
     description.text = item.description;

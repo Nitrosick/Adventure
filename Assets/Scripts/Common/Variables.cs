@@ -155,7 +155,8 @@ public enum Rarity {
   Common,
   Rare,
   Epic,
-  Legendary
+  Legendary,
+  Relic
 }
 
 // Map
@@ -172,5 +173,7 @@ public enum MapZoneType {
 
 public enum MapZoneFeature {
   Healing,
-  Trading
+  Trading,
+  Weaponsmith,
+  Armorer
 }

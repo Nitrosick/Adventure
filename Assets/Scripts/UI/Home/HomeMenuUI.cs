@@ -13,6 +13,8 @@ public class HomeMenuUI : MonoBehaviour {
   private static Transform navigation;
   private static Button healingFeature;
   private static Button tradingFeature;
+  private static Button weaponUpFeature;
+  private static Button armorUpFeature;
   private static Button saveButton;
   private static Button closeButton;
 
@@ -20,6 +22,7 @@ public class HomeMenuUI : MonoBehaviour {
   private static Transform welcomeSection;
   private static HealingMenuUI healingSection;
   private static TradingMenuUI tradingSection;
+  private static CraftingMenuUI craftingSection;
 
   private static readonly int saveDelay = 3;
 
@@ -35,12 +38,15 @@ public class HomeMenuUI : MonoBehaviour {
     navigation = Find("Navigation/Features");
     healingFeature = Get<Button>("Navigation/Features/Healing");
     tradingFeature = Get<Button>("Navigation/Features/Trading");
+    weaponUpFeature = Get<Button>("Navigation/Features/WeaponUp");
+    armorUpFeature = Get<Button>("Navigation/Features/ArmorUp");
     saveButton = Get<Button>("Navigation/Control/Save");
     closeButton = Get<Button>("Navigation/Control/Close");
 
     welcomeSection = FindInContent("Scroll/Welcome");
     healingSection = GetInContent<HealingMenuUI>("Scroll/Healing");
     tradingSection = GetInContent<TradingMenuUI>("Scroll/Trading");
+    craftingSection = GetInContent<CraftingMenuUI>("Scroll/Crafting");
 
     if (!ComponentsInitialized()) {
       Debug.LogError("Home menu UI components initialization error");
@@ -49,6 +55,8 @@ public class HomeMenuUI : MonoBehaviour {
 
     healingFeature.onClick.AddListener(() => OpenSection(MapZoneFeature.Healing));
     tradingFeature.onClick.AddListener(() => OpenSection(MapZoneFeature.Trading));
+    weaponUpFeature.onClick.AddListener(() => OpenSection(MapZoneFeature.Weaponsmith));
+    armorUpFeature.onClick.AddListener(() => OpenSection(MapZoneFeature.Armorer));
     saveButton.onClick.AddListener(SaveGame);
     closeButton.onClick.AddListener(Close);
   }
@@ -56,12 +64,15 @@ public class HomeMenuUI : MonoBehaviour {
   private static bool ComponentsInitialized() {
     return menu != null && navigation != null && closeButton != null &&
     saveButton != null && healingFeature != null && healingSection != null &&
-    welcomeSection != null && tradingFeature != null && tradingSection != null;
+    welcomeSection != null && tradingFeature != null && tradingSection != null &&
+    weaponUpFeature != null && armorUpFeature != null && craftingSection != null;
   }
 
   private void OnDestroy() {
     healingFeature.onClick.RemoveListener(() => OpenSection(MapZoneFeature.Healing));
     tradingFeature.onClick.RemoveListener(() => OpenSection(MapZoneFeature.Trading));
+    weaponUpFeature.onClick.RemoveListener(() => OpenSection(MapZoneFeature.Weaponsmith));
+    armorUpFeature.onClick.RemoveListener(() => OpenSection(MapZoneFeature.Armorer));
     saveButton.onClick.RemoveListener(SaveGame);
     closeButton.onClick.RemoveListener(Close);
   }
@@ -85,11 +96,15 @@ public class HomeMenuUI : MonoBehaviour {
   private static void EnableButtons(MapZoneFeature[] features) {
     if (features.Contains(MapZoneFeature.Healing)) healingFeature.interactable = true;
     if (features.Contains(MapZoneFeature.Trading)) tradingFeature.interactable = true;
+    if (features.Contains(MapZoneFeature.Weaponsmith) && mapZone.weaponsmithRecipes.Length > 0) weaponUpFeature.interactable = true;
+    if (features.Contains(MapZoneFeature.Armorer) && mapZone.armorerRecipes.Length > 0) armorUpFeature.interactable = true;
   }
 
   private static void DisableButtons() {
     healingFeature.interactable = false;
     tradingFeature.interactable = false;
+    weaponUpFeature.interactable = false;
+    armorUpFeature.interactable = false;
   }
 
   private static async void SaveGame() {
@@ -118,6 +133,24 @@ public class HomeMenuUI : MonoBehaviour {
           mapZone.itemGoods
         );
         break;
+      case MapZoneFeature.Weaponsmith:
+        craftingSection.gameObject.SetActive(true);
+        craftingSection.Init(
+          mapZone.weaponsmithName,
+          mapZone.weaponsmithLevel,
+          feature,
+          mapZone.weaponsmithRecipes
+        );
+        break;
+      case MapZoneFeature.Armorer:
+        craftingSection.gameObject.SetActive(true);
+        craftingSection.Init(
+          mapZone.armorerName,
+          mapZone.armorerLevel,
+          feature,
+          mapZone.armorerRecipes
+        );
+        break;
     }
   }
 
@@ -125,5 +158,6 @@ public class HomeMenuUI : MonoBehaviour {
     welcomeSection.gameObject.SetActive(false);
     healingSection.Clear();
     tradingSection.Clear();
+    craftingSection.Clear();
   }
 }
