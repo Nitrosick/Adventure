@@ -32,6 +32,7 @@ public class InfoPopup : MonoBehaviour {
   private static TextMeshProUGUI unitDefense;
   private static TextMeshProUGUI unitRange;
   private static TextMeshProUGUI unitSkillCharges;
+  private static TextMeshProUGUI unitProjectiles;
   private static TextMeshProUGUI unitEffects;
 
   Transform Get(string path) => transform.Find(path);
@@ -72,6 +73,7 @@ public class InfoPopup : MonoBehaviour {
     unitDefense = Get<TextMeshProUGUI>(unitParams, "Defense/Value");
     unitRange = Get<TextMeshProUGUI>(unitParams, "Range/Value");
     unitSkillCharges = Get<TextMeshProUGUI>(unitParams, "SkillCharges/Value");
+    unitProjectiles = Get<TextMeshProUGUI>(unitParams, "Projectiles/Value");
 
     unitEffects = Get<TextMeshProUGUI>(panel, "Effects");
 
@@ -84,7 +86,7 @@ public class InfoPopup : MonoBehaviour {
       unitParams == null || unitHP == null || unitLevel == null ||
       unitStats == null || unitMP == null || unitDamage == null ||
       unitDefense == null || unitRange == null || unitSkillCharges == null ||
-      unitEffects == null || pricePanel == null
+      unitEffects == null || pricePanel == null || unitProjectiles == null
     ) {
       Debug.LogError("Item info components initialization error");
       return;
@@ -114,6 +116,10 @@ public class InfoPopup : MonoBehaviour {
     unitDefense.text = unit.Equip.GetTotalDefense().ToString();
     unitRange.text = unit.Equip.primaryWeapon.range.ToString();
     unitSkillCharges.text = unit.SkillCharges.ToString();
+
+    if (unit.Projectiles == 0) unitProjectiles.text = "-";
+    else if (unit.Projectiles == unit.CurrentProjectiles) unitProjectiles.text = unit.Projectiles.ToString();
+    else unitProjectiles.text = $"{unit.CurrentProjectiles} / {unit.Projectiles}";
 
     string effectsText = "Effects";
     foreach (EffectInstance e in unit.Effects.ActiveEffects) {
@@ -192,6 +198,7 @@ public class InfoPopup : MonoBehaviour {
     unitDefense.text = "";
     unitRange.text = "";
     unitSkillCharges.text = "";
+    unitProjectiles.text = "";
     unitEffects.text = "";
   }
 }

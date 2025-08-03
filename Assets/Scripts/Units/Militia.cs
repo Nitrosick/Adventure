@@ -15,5 +15,6 @@ public class Militia : Unit
     DefaultMovePoints = 5;
     Initiative = 5;
     Priority = 10;
+    BehaviorType = AIBehaviorType.PriorityTarget;
   }
 }

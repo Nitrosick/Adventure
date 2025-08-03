@@ -121,7 +121,8 @@ public class TileManager : MonoBehaviour
     foreach (Tile tile in highlightedTiles) {
       if (
         (tile.OccupiedBy != null && tile.OccupiedBy.Relation != unit.Relation) ||
-        (tile.type == TileType.Breakable && unit.Equip.CanBreakObjects())
+        (tile.type == TileType.Breakable && unit.Equip.CanBreakObjects()) ||
+        (tile.type == TileType.Tree && unit.Equip.CanChopTrees())
       ) targetsCount++;
       tile.ShowAttackGrid();
     }

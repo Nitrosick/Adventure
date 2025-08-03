@@ -92,6 +92,14 @@ public enum SkillName {
   Block
 }
 
+public enum AIBehaviorType {
+  Aggressive,
+  PriorityTarget,
+  KeepDistance,
+  Retreat,
+  Passive
+}
+
 // UI
 public enum PopupType {
   Negative,

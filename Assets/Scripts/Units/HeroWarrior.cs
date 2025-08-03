@@ -18,6 +18,7 @@ public class HeroWarrior : Unit {
     DefaultMovePoints = 6;
     Initiative = 7;
     Priority = 6;
+    BehaviorType = AIBehaviorType.Passive;
   }
 
   public override void Block() {

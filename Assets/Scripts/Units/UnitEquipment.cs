@@ -156,6 +156,10 @@ public class UnitEquipment : MonoBehaviour {
     return primaryWeapon.damageType == DamageType.Chop || primaryWeapon.damageType == DamageType.Crash;
   }
 
+  public bool CanChopTrees() {
+    return primaryWeapon.damageType == DamageType.Chop;
+  }
+
   public int CanEquip(Equipment item, UnitEquipSlot slot) {
     int result = -1;
     if (item.slot != slot) return result;

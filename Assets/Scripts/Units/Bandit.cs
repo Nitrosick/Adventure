@@ -15,5 +15,6 @@ public class Bandit : Unit
     DefaultMovePoints = 6;
     Initiative = 6;
     Priority = 12;
+    BehaviorType = AIBehaviorType.Aggressive;
   }
 }

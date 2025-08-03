@@ -62,6 +62,13 @@ public class PhaseManager : MonoBehaviour
           return;
         }
 
+        if (unit.Type == UnitType.Range && unit.CurrentProjectiles == 0) {
+          // FIXME: Проверка на доп. скиллы
+          _ = Toast.Show("warning", "No projectiles");
+          NextPhase();
+          return;
+        }
+
         if (unit.Relation == UnitRelation.Emeny) {
           if (unit.Target != null) unit.OnAttack();
           else NextPhase();

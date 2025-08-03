@@ -19,6 +19,8 @@ public class Crossbowman : Unit
     DefaultMovePoints = 5;
     Initiative = 4;
     Priority = 15;
+    Projectiles = 40;
+    BehaviorType = AIBehaviorType.KeepDistance;
   }
 
   public GameObject boltPrefab;
@@ -26,16 +28,17 @@ public class Crossbowman : Unit
   private Transform missleSpawner;
   private readonly int boltSpeed = 17;
 
-  public override bool Init(Tile tile, UnitRelation relation, Vector3 direction) {
-    if (!base.Init(tile, relation, direction)) return false;
+  public async override void Init(Tile tile, UnitRelation relation, Vector3 direction) {
+    base.Init(tile, relation, direction);
 
+    await Task.Yield();
     weapon = GetComponentsInChildren<Transform>(true).FirstOrDefault(c => c.CompareTag("Weapon"));
     missleSpawner = weapon.transform.Find("MissleSpawner").GetComponent<Transform>();
 
     if (weapon == null || missleSpawner == null) {
       Debug.LogError("Crossbowman components initialization error");
     }
-    return true;
+    return;
   }
 
   public async override void OnAttack(Unit target = null) {
@@ -54,6 +57,7 @@ public class Crossbowman : Unit
   }
 
   public override void Shoot() {
+    base.Shoot();
     Vector3 shootDirection = (Target.UnitCollider.bounds.center - missleSpawner.position).normalized;
 
     GameObject bolt = Instantiate(

@@ -2,15 +2,42 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public static class BattleAI
-{
-  private static readonly float unitPointOffset = 1.2f;
+public static class BattleAI {
+  private static Unit enemy;
+  private static UnitMove enemyMove;
+  private static List<Unit> playerUnits;
+  private static readonly float distanceWeight = 1.5f;
 
-  public static void EnemyMove(Unit enemy) {
-    if (enemy.Type == UnitType.Melee) EnemyMoveMelee(enemy);
-    else if (enemy.Type == UnitType.Range) EnemyMoveRange(enemy);
+  // Evaluation coefficients
+  private static readonly float coverWeight = 1.0f;
+  private static readonly float threatPenalty = 2.0f;
+  private static readonly float unitPointOffset = 1.8f;
+
+  public static void EnemyMove(Unit unit) {
+    enemy = unit;
+    enemyMove = enemy.GetComponent<UnitMove>();
+    playerUnits = GetPlayerUnits();
+
+    switch (enemy.BehaviorType) {
+      case AIBehaviorType.Aggressive:
+        MoveToClosestEnemy();
+        break;
+      case AIBehaviorType.PriorityTarget:
+        MoveToPriorityEnemy();
+        break;
+      case AIBehaviorType.KeepDistance:
+        KeepDistance();
+        break;
+      case AIBehaviorType.Retreat:
+        MoveAway();
+        break;
+      case AIBehaviorType.Passive:
+        PhaseManager.NextPhase();
+        break;
+    }
   }
 
+  // Support methods
   private static List<Unit> GetPlayerUnits() {
     return QueueManager.Queue
       .Where(unit => unit.Relation == UnitRelation.Ally && !unit.IsDead)
@@ -18,14 +45,7 @@ public static class BattleAI
       .ToList();
   }
 
-  private static float GetAttackDistance(Tile from, Tile to) {
-    Vector2Int diff = from.Coords - to.Coords;
-    int dx = Mathf.Abs(diff.x);
-    int dy = Mathf.Abs(diff.y);
-    return dx + dy == 0 ? 0 : (dx == 0 || dy == 0 ? dx + dy : dx + dy - 0.5f);
-  }
-
-  private static bool ComeCloser(Unit enemy, List<Unit> playerUnits) {
+  private static void ComeCloser() {
     List<Tile> allWalkableTiles = TileManager.GetAllWalkable();
     Tile closest = null;
     float closestDistance = Mathf.Infinity;
@@ -43,46 +63,17 @@ public static class BattleAI
       }
     }
 
-    if (closest != null) {
-      enemy.GetComponent<UnitMove>().OnMove(closest);
-      return true;
-    }
-    return false;
+    if (closest != null) enemyMove.OnMove(closest);
   }
 
-  private static bool LineOfSightClear(Vector3 from, Vector3 to, GameObject source) {
-    Vector3 fixedFrom = from + new Vector3(0, unitPointOffset, 0);
-    Vector3 fixedTo = to + new Vector3(0, unitPointOffset, 0);
-    Vector3 direction = (fixedTo - fixedFrom).normalized;
-    float distance = Vector3.Distance(from, fixedTo);
-
-    Ray ray = new (fixedFrom, direction);
-    RaycastHit[] hits = Physics.RaycastAll(ray, distance);
-
-    foreach (var hit in hits) {
-      GameObject hitObj = hit.collider.gameObject;
-      if (hitObj == source) continue;
-      Unit hitUnit = hitObj.GetComponent<Unit>();
-      if (hitUnit != null) {
-        if (hitUnit.Relation == UnitRelation.Emeny) return false;
-        else continue;
-      }
-      return false;
-    }
-
-    return true;
-  }
-
-  private static bool MoveAway(Unit enemy, List<Unit> playerUnits) {
+  private static void MoveAway() {
     List<Tile> allWalkableTiles = TileManager.GetAllWalkable();
     Tile safestTile = null;
     float furthest = float.NegativeInfinity;
 
     foreach (Tile tile in allWalkableTiles) {
       List<Tile> path = Pathfinding.FindPath(enemy.CurrentTile, tile, enemy.CurrentMovePoints);
-
       if (path == null) continue;
-
       float dist = playerUnits.Min(t => Vector2Int.Distance(tile.Coords, t.CurrentTile.Coords));
 
       if (dist > furthest) {
@@ -91,84 +82,156 @@ public static class BattleAI
       }
     }
 
-    if (safestTile != null) {
-      enemy.GetComponent<UnitMove>().OnMove(safestTile);
-      return true;
-    }
-    return false;
+    if (safestTile != null) enemyMove.OnMove(safestTile);
   }
 
-  private static void EnemyMoveMelee(Unit enemy) {
-    List<Unit> playerUnits = GetPlayerUnits();
-    List<(Unit target, Tile moveTile)> reachableTargets = new();
+  private static float GetAttackDistance(Tile from, Tile to) {
+    Vector2Int diff = from.Coords - to.Coords;
+    int dx = Mathf.Abs(diff.x);
+    int dy = Mathf.Abs(diff.y);
+    int range = enemy.Equip.primaryWeapon.range;
 
-    foreach (Unit unit in playerUnits) {
-      foreach (Tile neighbor in unit.CurrentTile.Neighbors) {
-        if (!TileManager.TileIsWalkable(neighbor) && enemy.CurrentTile != neighbor) continue;
+    if (range <= 3) return Mathf.Max(dx, dy);
+    return dx + dy == 0 ? 0 : (dx == 0 || dy == 0 ? dx + dy : dx + dy - 0.5f);
+  }
 
-        List<Tile> path = Pathfinding.FindPath(enemy.CurrentTile, neighbor, enemy.CurrentMovePoints);
+  private static bool LineOfSightClear(Vector3 from, Vector3 to, GameObject source) {
+    Vector3 fixedFrom = from + new Vector3(0, unitPointOffset, 0);
+    Vector3 fixedTo = to + new Vector3(0, unitPointOffset, 0);
+    Vector3 direction = (fixedTo - fixedFrom).normalized;
+    float distance = Vector3.Distance(from, fixedTo);
 
-        if (path != null) {
-          reachableTargets.Add((unit, neighbor));
-          break;
-        }
+    Ray ray = new(fixedFrom, direction);
+    RaycastHit[] hits = Physics.RaycastAll(ray, distance, ~0, QueryTriggerInteraction.Collide);
+
+    foreach (var hit in hits) {
+      GameObject hitObj = hit.collider.gameObject;
+      if (hitObj == source) continue;
+      Unit hitUnit = hitObj.GetComponent<Unit>();
+
+      if (hitUnit != null) {
+        Unit sourceUnit = source.GetComponent<Unit>();
+        if (hitUnit.Relation == sourceUnit.Relation) return false;
+        continue;
+      }
+
+      if (hitObj.layer == LayerMask.NameToLayer("Obstacle")) return false;
+    }
+
+    return true;
+  }
+
+  private static float EvaluateTileScore(Tile tile, Unit target) {
+    float distanceFromTarget = Vector2Int.Distance(tile.Coords, target.CurrentTile.Coords);
+    int nearbyEnemies = playerUnits.Count(u => Vector2Int.Distance(tile.Coords, u.CurrentTile.Coords) <= 2);
+    int coverBonus = tile.type == TileType.Cover ? 1 : 0;
+    bool hasLOS = LineOfSightClear(tile.transform.position, target.CurrentTile.transform.position, enemy.gameObject);
+
+    float score = 0;
+    score += distanceFromTarget * distanceWeight;
+    score += coverBonus * coverWeight;
+    score -= nearbyEnemies * threatPenalty;
+
+    return score;
+  }
+
+  private static void SetAttackTarget(Unit target) {
+    if (target == null) return;
+
+    float distance = GetAttackDistance(enemy.CurrentTile, target.CurrentTile);
+    int range = enemy.Equip.primaryWeapon.range;
+
+    if (distance <= range) enemy.Target = target;
+    else enemy.Target = null;
+  }
+
+  private static bool TryMoveToNeighborOf(Unit target) {
+    foreach (Tile neighbor in target.CurrentTile.Neighbors) {
+      if (!TileManager.TileIsWalkable(neighbor)) continue;
+
+      List<Tile> path = Pathfinding.FindPath(enemy.CurrentTile, neighbor, enemy.CurrentMovePoints);
+
+      if (path != null) {
+        enemyMove.OnMove(neighbor);
+        return true;
       }
     }
 
-    reachableTargets = reachableTargets
-      .OrderByDescending(pair => pair.target.GetPriority())
-      .ToList();
+    return false;
+  }
 
-    if (reachableTargets.Count > 0) {
-      enemy.Target = reachableTargets[0].target;
-      enemy.GetComponent<UnitMove>().OnMove(reachableTargets[0].moveTile);
+  // Unit behavior
+  private static void MoveToClosestEnemy() {
+    Unit closest = playerUnits
+      .OrderBy(u => Vector2Int.Distance(enemy.CurrentTile.Coords, u.CurrentTile.Coords))
+      .First();
+
+    if (TryMoveToNeighborOf(closest)) {
+      SetAttackTarget(closest);
       return;
     }
 
-    if (!ComeCloser(enemy, playerUnits)) PhaseManager.NextPhase();
+    ComeCloser();
   }
 
-  private static void EnemyMoveRange(Unit enemy) {
-    List<Unit> playerUnits = GetPlayerUnits();
+  private static void MoveToPriorityEnemy() {
+    foreach (Unit target in playerUnits) {
+      if (TryMoveToNeighborOf(target)) {
+        SetAttackTarget(target);
+        return;
+      }
+    }
+
+    ComeCloser();
+  }
+
+  private static void KeepDistance() {
     List<Tile> allWalkable = TileManager.GetAllWalkable();
     Tile bestTile = null;
-    float maxDist = float.NegativeInfinity;
+    Unit bestTarget = null;
+    float bestScore = float.NegativeInfinity;
 
     foreach (Tile tile in allWalkable) {
-      var path = Pathfinding.FindPath(enemy.CurrentTile, tile, enemy.CurrentMovePoints);
+      List<Tile> path = Pathfinding.FindPath(enemy.CurrentTile, tile, enemy.CurrentMovePoints);
       if (path == null) continue;
 
       foreach (Unit target in playerUnits) {
         float dist = GetAttackDistance(tile, target.CurrentTile);
+        if (dist < 2 || dist > enemy.Equip.primaryWeapon.range) continue;
+        if (!LineOfSightClear(tile.transform.position, target.CurrentTile.transform.position, enemy.gameObject)) continue;
+        float score = EvaluateTileScore(tile, target);
 
-        if (dist >= 2 && dist <= enemy.Equip.primaryWeapon.range) {
-          if (!LineOfSightClear(
-            tile.transform.position,
-            target.CurrentTile.transform.position,
-            enemy.gameObject
-          )) continue;
-
-          float nearestEnemyDist = playerUnits
-            .Min(u => Vector2Int.Distance(tile.Coords, u.CurrentTile.Coords));
-
-          if (nearestEnemyDist > maxDist) {
-            bestTile = tile;
-            maxDist = nearestEnemyDist;
-            enemy.Target = target;
-          }
+        if (score > bestScore) {
+          bestScore = score;
+          bestTile = tile;
+          bestTarget = target;
         }
       }
     }
 
     if (bestTile != null) {
-      enemy.GetComponent<UnitMove>().OnMove(bestTile);
+      SetAttackTarget(bestTarget);
+      enemyMove.OnMove(bestTile);
       return;
     }
 
-    if (enemy.CurrentHealth >= enemy.TotalHealth / 2) {
-      if (!ComeCloser(enemy, playerUnits)) PhaseManager.NextPhase();
-    } else {
-      if (!MoveAway(enemy, playerUnits)) PhaseManager.NextPhase();
+    Tile closest = null;
+    float closestDistance = Mathf.Infinity;
+    Unit priorityTarget = playerUnits.First();
+
+    foreach (Tile tile in allWalkable) {
+      List<Tile> path = Pathfinding.FindPath(enemy.CurrentTile, tile, enemy.CurrentMovePoints);
+      if (path == null) continue;
+
+      float dist = Vector2Int.Distance(tile.Coords, priorityTarget.CurrentTile.Coords);
+      if (dist < closestDistance) {
+        closest = tile;
+        closestDistance = dist;
+        SetAttackTarget(priorityTarget);
+      }
     }
+
+    if (closest != null) enemyMove.OnMove(closest);
+    else MoveAway();
   }
 }

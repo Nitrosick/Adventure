@@ -16,10 +16,12 @@ public class Unit : MonoBehaviour {
   public Tile CurrentTile { get; set; }
   public Unit Target { get; set; }
   public Breakable TargetObject { get; set; }
+  public TreeObject TargetTree { get; set; }
   protected bool successAttack = true;
 
   // AI
   protected int Priority;
+  public AIBehaviorType BehaviorType { get; protected set; }
 
   // Core stats
   public float Strength { get; protected set; } // Heavy items / Damage / Stun chance and protect
@@ -47,6 +49,8 @@ public class Unit : MonoBehaviour {
   // FIXME: Управление зарядами скиллов
   public int TotalSkillCharges { get; protected set; } = 3;
   public int SkillCharges { get; protected set; }
+  public int Projectiles { get; protected set; }
+  public int CurrentProjectiles { get; protected set; }
 
   protected readonly int objectDestroyTime = 10;
 
@@ -64,9 +68,10 @@ public class Unit : MonoBehaviour {
     CurrentTile = null;
     Target = null;
     TargetObject = null;
+    TargetTree = null;
   }
 
-  public virtual bool Init(Tile tile, UnitRelation relation, Vector3 direction) {
+  public virtual void Init(Tile tile, UnitRelation relation, Vector3 direction) {
     UnitCollider = transform.GetComponent<CapsuleCollider>();
     Ui = transform.GetComponent<UnitUI>();
     Animator = transform.GetComponent<UnitAnimator>();
@@ -75,7 +80,7 @@ public class Unit : MonoBehaviour {
 
     if (UnitCollider == null || Ui == null || Animator == null || Equip == null || Effects == null) {
       Debug.LogError("Unit components initialization error");
-      return false;
+      return;
     }
 
     CurrentTile = tile;
@@ -86,10 +91,13 @@ public class Unit : MonoBehaviour {
 
     if (Relation == UnitRelation.Ally) Ui.MarkAsAlly();
     if (CurrentHealth <= 0) IsDead = true;
+
     Ui.UpdateHealth(TotalHealth, CurrentHealth);
     SkillCharges = TotalSkillCharges;
+    CurrentProjectiles = Projectiles;
+
     if (Equip.GetSkills().Count > 0) Ui.UpdateCharges(TotalSkillCharges, SkillCharges);
-    return true;
+    return;
   }
 
   private void SetMovePoints() {
@@ -126,10 +134,11 @@ public class Unit : MonoBehaviour {
   public float GetPriority() {
     float result = Priority;
     // FIXME: Проверка на разные защитные эффекты и условия окружения
+    if (Type == UnitType.Range && CurrentProjectiles == 0) return 0;
     if (Effects.HasEffect("Cover")) result -= 2;
     if (CurrentHealth < TotalHealth / 3) result *= 2;
     else if (CurrentHealth < TotalHealth / 2) result *= 1.5f;
-    if (Effects.HasEffect("Block")) result /= 3;
+    if (Effects.HasEffect("Block") || Effects.HasEffect("Stun")) result /= 3;
     return result;
   }
 
@@ -173,6 +182,18 @@ public class Unit : MonoBehaviour {
     Animator.Attack();
   }
 
+  public async void ChopTree(TreeObject target) {
+    BattleUI.DisableUI();
+    TargetTree = target;
+
+    // FIXME: Скорректировать поворот
+    Vector3 dirToTarget = (TargetTree.transform.position - transform.position).normalized;
+    await Animator.RotateTowards(dirToTarget);
+
+    Animator.SetAttackType(Equip.primaryWeapon.attackType);
+    Animator.Attack();
+  }
+
   public void DealDamage() {
     if (Target != null) {
       if (successAttack) {
@@ -189,7 +210,15 @@ public class Unit : MonoBehaviour {
 
     if (TargetObject != null) {
       TargetObject.Break();
+      CameraController.Shake(0.8f);
       TargetObject = null;
+      FinishAction();
+    }
+
+    if (TargetTree != null) {
+      TargetTree.Chop();
+      CameraController.Shake(0.8f);
+      TargetTree = null;
       FinishAction();
     }
   }
@@ -295,6 +324,10 @@ public class Unit : MonoBehaviour {
   }
 
   // Overloaded
-  public virtual void Shoot() { }
+  public virtual void Shoot() {
+    CurrentProjectiles -= 1;
+    if (CurrentProjectiles == 0) BehaviorType = AIBehaviorType.Retreat;
+  }
+
   public virtual void Block() { }
 }

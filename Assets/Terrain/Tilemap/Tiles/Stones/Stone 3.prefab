@@ -491,6 +491,7 @@ MonoBehaviour:
     fame: 0
     goldRange: 0000000000000000
     resources: 00000000000000000000000000000000
+    equipment: []
     items: []
   lootPickEffect: {fileID: 7421624496474942857, guid: d963e4f57afad6f4c956e7cfb36b4ba9,
     type: 3}
@@ -578,6 +579,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8012860940670157759, guid: 8551d1870a02a654c97b99785fc9f302,
         type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 8012860940670157759, guid: 8551d1870a02a654c97b99785fc9f302,
+        type: 3}
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
@@ -636,6 +642,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Object
+      objectReference: {fileID: 0}
+    - target: {fileID: 518371733584800639, guid: 33d6a8e445b6b774e86f9c1d1b8af6b8,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 899155273105322437, guid: 33d6a8e445b6b774e86f9c1d1b8af6b8,
         type: 3}

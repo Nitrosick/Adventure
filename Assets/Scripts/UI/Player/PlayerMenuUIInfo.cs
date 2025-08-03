@@ -40,6 +40,7 @@ public class PlayerMenuUIInfo : MonoBehaviour {
   private static TextMeshProUGUI unitDamage;
   private static TextMeshProUGUI unitDefense;
   private static TextMeshProUGUI unitRange;
+  private static TextMeshProUGUI unitProjectiles;
   private static GameObject equipRequirements;
   private static TextMeshProUGUI equipRequiredStats;
   private static TextMeshProUGUI equipRequiredLevel;
@@ -106,6 +107,7 @@ public class PlayerMenuUIInfo : MonoBehaviour {
     unitDamage = Find<TextMeshProUGUI>("UnitParameters/Damage/Value");
     unitDefense = Find<TextMeshProUGUI>("UnitParameters/Defense/Value");
     unitRange = Find<TextMeshProUGUI>("UnitParameters/Range/Value");
+    unitProjectiles = Find<TextMeshProUGUI>("UnitParameters/Projectiles/Value");
 
     equipRequirements = FindGO("EquipRequirements");
     equipRequiredStats = Find<TextMeshProUGUI>("EquipRequirements/Stats/Value");
@@ -165,7 +167,7 @@ public class PlayerMenuUIInfo : MonoBehaviour {
     equipRequiredLevel != null && statPoints != null && strengthUp != null &&
     dexterityUp != null && intelligenceUp != null && statPointsRow != null &&
     deathMark != null && itemActions != null && useItem != null &&
-    itemParams != null && itemIntensity != null;
+    itemParams != null && itemIntensity != null && unitProjectiles != null;
   }
 
   private void OnDestroy() {
@@ -277,6 +279,10 @@ public class PlayerMenuUIInfo : MonoBehaviour {
     unitDamage.text = (unit.Equip.primaryWeapon.damage + unit.Strength).ToString();
     unitDefense.text = unit.Equip.GetTotalDefense().ToString();
     unitRange.text = unit.Equip.primaryWeapon.range.ToString();
+
+    if (unit.Projectiles == 0) unitProjectiles.text = "-";
+    else if (unit.Projectiles == unit.CurrentProjectiles) unitProjectiles.text = unit.Projectiles.ToString();
+    else unitProjectiles.text = $"{unit.CurrentProjectiles} / {unit.Projectiles}";
   }
 
   public static void ShowInfo(Equipment equip) {
