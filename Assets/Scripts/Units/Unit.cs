@@ -142,6 +142,10 @@ public class Unit : MonoBehaviour {
     return result;
   }
 
+  private Vector3 GetPosition() {
+    return transform.position + new Vector3(-0.5f, 0, -0.5f);
+  }
+
   public void IncreaseStats(int[] stats) {
     if (stats == null || stats.Length != 3) return;
     Strength += stats[0];
@@ -149,13 +153,19 @@ public class Unit : MonoBehaviour {
     Intelligence += stats[2];
   }
 
+  public void AddProjectiles(int value) {
+    if (Type != UnitType.Range) return;
+    CurrentProjectiles += value;
+    if (CurrentProjectiles > Projectiles) CurrentProjectiles = Projectiles;
+  }
+
   // Attack
   public async virtual void OnAttack(Unit target = null) {
     BattleUI.DisableUI();
     if (target != null) Target = target;
 
-    Vector3 dirToTarget = (Target.transform.position - transform.position).normalized;
-    Vector3 dirFromTarget = (transform.position - Target.transform.position).normalized;
+    Vector3 dirToTarget = (Target.GetPosition() - GetPosition()).normalized;
+    Vector3 dirFromTarget = (GetPosition() - Target.GetPosition()).normalized;
 
     await Task.WhenAll(
       Animator.RotateTowards(dirToTarget),
@@ -175,7 +185,7 @@ public class Unit : MonoBehaviour {
     BattleUI.DisableUI();
     TargetObject = target;
 
-    Vector3 dirToTarget = (TargetObject.transform.position - transform.position).normalized;
+    Vector3 dirToTarget = (TargetObject.ParentTile.transform.position - GetPosition()).normalized;
     await Animator.RotateTowards(dirToTarget);
 
     Animator.SetAttackType(Equip.primaryWeapon.attackType);
@@ -185,11 +195,9 @@ public class Unit : MonoBehaviour {
   public async void ChopTree(TreeObject target) {
     BattleUI.DisableUI();
     TargetTree = target;
+    Vector3 dirToTarget = (TargetTree.ParentTile.transform.position - GetPosition()).normalized;
 
-    // FIXME: Скорректировать поворот
-    Vector3 dirToTarget = (TargetTree.transform.position - transform.position).normalized;
     await Animator.RotateTowards(dirToTarget);
-
     Animator.SetAttackType(Equip.primaryWeapon.attackType);
     Animator.Attack();
   }
@@ -272,7 +280,7 @@ public class Unit : MonoBehaviour {
 
     Instantiate(
       BattleManager.Instance.corpsePrefab,
-      transform.position + new Vector3(-0.5f, 0, -0.5f),
+      GetPosition(),
       Quaternion.Euler(0, 65, 0)
     );
   }

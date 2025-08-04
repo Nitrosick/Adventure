@@ -3,14 +3,12 @@ using UnityEngine.EventSystems;
 
 public class TreeObject : MonoBehaviour {
   public Tile ParentTile { get; private set; }
-  private Animator animator;
   protected readonly int objectDestroyTime = 5;
 
   private void Awake() {
     ParentTile = transform.GetComponentInParent<Tile>();
-    animator = transform.GetComponent<Animator>();
 
-    if (ParentTile == null || animator == null) {
+    if (ParentTile == null) {
       Debug.LogError("Tree object components initialization error");
     }
   }
@@ -25,7 +23,12 @@ public class TreeObject : MonoBehaviour {
   }
 
   public void Chop() {
-    animator.SetTrigger("Fall");
+    foreach (Transform obj in transform) {
+      if (!obj.TryGetComponent<Animator>(out var animator)) continue;
+      animator.SetTrigger("Fall");
+    }
+
+    transform.GetComponent<BoxCollider>().enabled = false;
     ParentTile.type = TileType.Open;
     Destroy(gameObject, objectDestroyTime);
   }

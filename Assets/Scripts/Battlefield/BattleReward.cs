@@ -9,6 +9,7 @@ public class BattleReward {
   public int[] resources = { 0, 0, 0, 0 }; // Wood, Stone, Metal, Leather
   public List<Equipment> equipment = new();
   public List<Item> items = new();
+  public int projectiles;
 
   public void Add(BattleReward other) {
     experience += other.experience;

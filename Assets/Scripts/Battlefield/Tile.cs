@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -98,7 +99,15 @@ public class Tile : MonoBehaviour {
     Instantiate(lootPickEffect, obj.position, Quaternion.identity);
     Destroy(obj.gameObject);
     BattleManager.Reward.Add(loot);
+
+    if (loot.projectiles > 0) {
+      foreach (Unit unit in QueueManager.Queue.Where(u => u.Relation == UnitRelation.Ally)) {
+        unit.AddProjectiles(loot.projectiles);
+      }
+    }
+
     type = TileType.Open;
     _ = Toast.Show("success", "Loot picked up");
+    if (!transform.TryGetComponent<TooltipTrigger>(out var tooltip)) tooltip.message = "";
   }
 }
