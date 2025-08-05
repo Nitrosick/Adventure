@@ -523,6 +523,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 8368173233444314805}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 2563881f810aee14d99cad8ab8a7b9be,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1439883114709134081}
   m_SourcePrefab: {fileID: 100100000, guid: 2563881f810aee14d99cad8ab8a7b9be, type: 3}
 --- !u!4 &3951873779035540164 stripped
 Transform:
@@ -576,10 +580,30 @@ MonoBehaviour:
     fame: 0
     goldRange: 0000000000000000
     resources: 00000000000000000000000000000000
+    equipment: []
     items: []
+    projectiles: 0
   lootPickEffect: {fileID: 7421624496474942857, guid: d963e4f57afad6f4c956e7cfb36b4ba9,
     type: 3}
   height: 1
   allyFocusPoint: 0
   enemyFocusPoint: 0
   lootDropChance: 0
+--- !u!114 &1439883114709134081
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4439477135839088766}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85ae1c4c3e52d3e4fb35cc8072e38c05, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  message: '<b>Bush</b>
+
+    Here you can hide. Then a unit will become a lower priority
+    target
+
+    for the enemy and it will be harder to hit it with ranged attacks.'

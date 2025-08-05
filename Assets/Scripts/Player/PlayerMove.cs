@@ -34,6 +34,11 @@ public class PlayerMove : MonoBehaviour
     else {
       CurrentZone = startZone;
     }
+
+    if (StateManager.visitedZones.Count == 0) {
+      StateManager.visitedZones.Add(CurrentZone.id);
+      _ = CurrentZone.ShowPathLines();
+    }
   }
 
   private void Start() {
@@ -60,8 +65,7 @@ public class PlayerMove : MonoBehaviour
       MapUI.HideInteractableButton();
       await Move(path);
       CurrentZone = target;
-      StateManager.currentPlayerZoneId = target.id;
-      CurrentZone.GetComponent<MapZoneEvent>().CheckEvents();
+      CurrentZone.Visit();
     }
   }
 

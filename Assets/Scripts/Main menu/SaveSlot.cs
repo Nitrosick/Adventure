@@ -53,6 +53,7 @@ public class SaveSlot : MonoBehaviour {
   }
 
   public void OnClick() {
+    if (SceneController.Locked) return;
     StateManager.saveSlot = index;
     if (hasSave) StateManager.LoadGame(index);
     else InitNewGame();
@@ -66,6 +67,7 @@ public class SaveSlot : MonoBehaviour {
   }
 
   private void DeleteConfirmation() {
+    if (SceneController.Locked) return;
     Dialog.Confirmation(
       DeleteSlot,
       "Save slot deleting",

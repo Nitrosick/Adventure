@@ -28,6 +28,7 @@ public static class StateManager {
   // Player data
   public static string currentScene;
   public static int currentPlayerZoneId;
+  public static HashSet<int> visitedZones;
   // FIXME: Сохранять домашнюю зону игрока
   public static int gold;
   public static int[] resources;
@@ -53,7 +54,8 @@ public static class StateManager {
   public static void ResetPlayerData() {
     saveSlot = 0;
     currentScene = "";
-    currentPlayerZoneId = 1;
+    currentPlayerZoneId = 6;
+    visitedZones = new HashSet<int> { };
     gold = 0;
     resources = new int[] { 0, 0, 0, 0 };
     villagers = 0;
@@ -138,6 +140,7 @@ public static class StateManager {
       saveTime = DateTime.Now.ToString(),
       currentScene = scene == "Menu" ? "Dunpine village" : scene,
       currentPlayerZoneId = currentPlayerZoneId,
+      visitedZones = visitedZones,
       gold = gold,
       resources = resources,
       villagers = villagers,
@@ -157,6 +160,7 @@ public static class StateManager {
   private static void SetLoadedData(SaveData data) {
     currentScene = data.currentScene;
     currentPlayerZoneId = data.currentPlayerZoneId;
+    visitedZones = data.visitedZones;
     gold = data.gold;
     resources = data.resources;
     villagers = data.villagers;

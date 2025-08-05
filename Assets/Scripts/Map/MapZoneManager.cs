@@ -44,6 +44,7 @@ public class MapZoneManager : MonoBehaviour {
 
   public static void GetStateData() {
     Dictionary<int, List<MapZoneType>> state = StateManager.zonesState;
+    HashSet<int> visited = StateManager.visitedZones;
 
     if (state.Count > 0) {
       foreach (int id in state.Keys) {
@@ -52,6 +53,16 @@ public class MapZoneManager : MonoBehaviour {
           if (zone == null) continue;
           zone.events = state[id];
         }
+      }
+    }
+
+    if (visited.Count == 0) return;
+
+    foreach (MapZone zone in Zones) {
+      if (visited.Contains(zone.id)) {
+        _ = zone.ShowPathLines();
+        zone.secret = false;
+        zone.InitMarker();
       }
     }
   }

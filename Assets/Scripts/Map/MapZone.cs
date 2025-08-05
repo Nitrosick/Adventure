@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -11,31 +12,39 @@ public class MapZone : MonoBehaviour {
   public string description;
   public string descriptionCleared;
   public List<MapZoneType> events;
-  public bool isEmpty = false;
+  public bool isEmpty;
+  public bool secret;
 
   [Header("Materials and components")]
   public Material defaultMaterial;
   public Material highlightMaterial;
   public Material stoneMaterial;
   public GameObject[] interactiveObjects;
-  protected Renderer render;
+  protected Renderer auraRender;
   protected SpriteRenderer markerRender;
   protected MeshRenderer markIcon;
   protected Way[] ways;
-  protected Color markerHighlightColor = new(255, 255, 255, 255);
+  protected Transform pathLines;
+
+  private readonly float fadeDuration = 1f;
+  private readonly float linesTransparency = 0.6f;
 
   protected void Awake() {
-    render = GetComponent<Renderer>();
-    render.material = defaultMaterial;
+    auraRender = GetComponent<Renderer>();
+    auraRender.material = defaultMaterial;
     markerRender = transform.Find("Marker").GetComponent<SpriteRenderer>();
     Transform markIconObj = transform.Find("Mark/Icon");
     if (markIconObj != null) markIcon = markIconObj.GetComponent<MeshRenderer>();
     ways = transform.GetComponentsInChildren<Way>();
+    pathLines = transform.Find("Pathes");
 
-    if (render == null || markerRender == null || ways == null || ways.Length < 1) {
+    if (auraRender == null || markerRender == null || ways == null || pathLines == null || ways.Length < 1) {
       Debug.LogError("Map zone components initialization error");
       return;
     }
+
+    InitPathLines();
+    InitMarker();
 
     Dictionary<int, List<MapZoneType>> state = StateManager.zonesState;
     if (state.Count > 0 && state[id] != null) {
@@ -45,20 +54,24 @@ public class MapZone : MonoBehaviour {
   }
 
   protected void OnMouseEnter() {
-    if (SceneController.Locked || EventSystem.current.IsPointerOverGameObject()) return;
+    if (SceneController.Locked || EventSystem.current.IsPointerOverGameObject() || secret) return;
     MapUI.ShowZoneInfo(zoneName, description, descriptionCleared, events, isEmpty);
 
     MapZone playerZone = Player.Instance.GetComponent<PlayerMove>().CurrentZone;
     int[] wayIds = ways.Select(way => way.id).ToArray();
     if (playerZone == this || !wayIds.Contains(playerZone.id)) return;
-    render.material = highlightMaterial;
-    markerRender.color = markerHighlightColor;
+
+    auraRender.material = highlightMaterial;
+    Color color = markerRender.color;
+    color.a = linesTransparency + 0.3f;
+    markerRender.color = color;
   }
 
   protected void OnMouseExit() {
     MapUI.HideZoneInfo();
-    render.material = defaultMaterial;
-    markerRender.color = new Color(255, 255, 255, 170);
+
+    auraRender.material = defaultMaterial;
+    InitMarker();
   }
 
   public virtual void SetCleared() {
@@ -71,6 +84,22 @@ public class MapZone : MonoBehaviour {
     }
   }
 
+  public void Visit() {
+    if (secret) {
+      _ = Toast.Show("star", "Secret zone found");
+      secret = false;
+      InitMarker();
+    }
+
+    if (!StateManager.visitedZones.Contains(id)) {
+      _ = ShowPathLines();
+      StateManager.visitedZones.Add(id);
+    }
+
+    StateManager.currentPlayerZoneId = id;
+    transform.GetComponent<MapZoneEvent>().CheckEvents();
+  }
+
   public void UnshiftEvent() {
     events.RemoveAt(0);
     if (events.Count == 0) {
@@ -78,5 +107,40 @@ public class MapZone : MonoBehaviour {
       MapUI.HideInteractableButton();
     }
     StateManager.zonesState[id] = events;
+  }
+
+  public void InitMarker() {
+    Color color = markerRender.color;
+    color.a = secret ? 0f : linesTransparency;
+    markerRender.color = color;
+  }
+
+  private void InitPathLines() {
+    foreach (Transform path in pathLines) {
+      LineRenderer renderer = path.GetComponent<LineRenderer>();
+      renderer.material = new Material(renderer.material);
+      Color color = renderer.material.color;
+      color.a = 0;
+      renderer.material.color = color;
+    }
+  }
+
+  public async Task ShowPathLines() {
+    foreach (Transform path in pathLines) {
+      LineRenderer renderer = path.GetComponent<LineRenderer>();
+      Material mat = renderer.material;
+      Color color = mat.color;
+      float elapsed = 0f;
+
+      while (elapsed < fadeDuration) {
+        elapsed += Time.deltaTime;
+        color.a = Mathf.Lerp(0f, 1f, elapsed / fadeDuration);
+        mat.color = color;
+        await Task.Yield();
+      }
+
+      color.a = linesTransparency;
+      mat.color = color;
+    }
   }
 }

@@ -49,10 +49,12 @@ public class MainMenu : MonoBehaviour {
   }
 
   private void OpenSaveSlots() {
+    if (SceneController.Locked) return;
     savesPanel.alpha = 1f;
   }
 
   private void ExitGame() {
+    if (SceneController.Locked) return;
     Application.Quit();
   }
 }

@@ -223,6 +223,7 @@ GameObject:
   - component: {fileID: 8482108142673541301}
   - component: {fileID: 821630962214422659}
   - component: {fileID: 5059339280453950726}
+  - component: {fileID: 439040608526433128}
   m_Layer: 11
   m_Name: Objects
   m_TagString: Tree
@@ -280,6 +281,22 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.8414527, y: 2.103891, z: 1}
   m_Center: {x: -0.0012929438, y: 2.7412136, z: 2.7824545e-11}
+--- !u!114 &439040608526433128
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5237698648073187321}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85ae1c4c3e52d3e4fb35cc8072e38c05, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  message: '<b>Tree</b>
+
+    May be cut down with an axe or burned with fire to clear
+    the way'
 --- !u!1 &6468626732798960013
 GameObject:
   m_ObjectHideFlags: 0
@@ -695,6 +712,7 @@ MonoBehaviour:
     resources: 00000000000000000000000000000000
     equipment: []
     items: []
+    projectiles: 0
   lootPickEffect: {fileID: 7421624496474942857, guid: d963e4f57afad6f4c956e7cfb36b4ba9,
     type: 3}
   height: 1
