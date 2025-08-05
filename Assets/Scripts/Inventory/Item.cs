@@ -3,7 +3,7 @@ using UnityEngine;
 public abstract class Item : ScriptableObject {
   public string id;
   public string itemName;
-  [TextArea] public string description;
+  [TextArea(5, 20)] public string description;
   public bool usable;
   public bool disposable;
   public Rarity rarity;

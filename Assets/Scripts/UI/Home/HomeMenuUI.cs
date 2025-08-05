@@ -28,7 +28,7 @@ public class HomeMenuUI : MonoBehaviour {
 
   private void Awake() {
     menu = transform.Find("HomeMenu/Panel");
-    content = menu.Find("Content/Viewport");
+    content = menu.Find("Content/Viewport/Scroll");
 
     static Transform Find(string path) => menu.Find(path);
     static Transform FindInContent(string path) => content.Find(path);
@@ -43,10 +43,10 @@ public class HomeMenuUI : MonoBehaviour {
     saveButton = Get<Button>("Navigation/Control/Save");
     closeButton = Get<Button>("Navigation/Control/Close");
 
-    welcomeSection = FindInContent("Scroll/Welcome");
-    healingSection = GetInContent<HealingMenuUI>("Scroll/Healing");
-    tradingSection = GetInContent<TradingMenuUI>("Scroll/Trading");
-    craftingSection = GetInContent<CraftingMenuUI>("Scroll/Crafting");
+    welcomeSection = FindInContent("Welcome");
+    healingSection = GetInContent<HealingMenuUI>("Healing");
+    tradingSection = GetInContent<TradingMenuUI>("Trading");
+    craftingSection = GetInContent<CraftingMenuUI>("Crafting");
 
     if (!ComponentsInitialized()) {
       Debug.LogError("Home menu UI components initialization error");

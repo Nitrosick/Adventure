@@ -4,7 +4,7 @@ using UnityEngine.UI;
 [CreateAssetMenu(menuName = "Skill")]
 public class Skill : ScriptableObject {
   public string displayName;
-  [TextArea] public string description;
+  [TextArea(5, 20)] public string description;
 
   public SkillName skillName;
   public Button skillButton;

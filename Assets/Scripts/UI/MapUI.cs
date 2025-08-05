@@ -17,6 +17,7 @@ public class MapUI : MonoBehaviour {
   // Buttons
   private static Button mainMenuButton;
   private static Button playerMenuButton;
+  private static Button almanacButton;
   private static Button interactButton;
 
   // Resources
@@ -56,6 +57,7 @@ public class MapUI : MonoBehaviour {
 
     mainMenuButton = Get<Button>(mainMenu, "Main");
     playerMenuButton = Get<Button>(mainMenu, "Player");
+    almanacButton = Get<Button>(mainMenu, "Almanac");
     interactButton = Get<Button>(actions, "Interact");
 
     goldValue = Get<TextMeshProUGUI>(resources, "Gold/Value");
@@ -72,6 +74,7 @@ public class MapUI : MonoBehaviour {
 
     mainMenuButton.onClick.AddListener(OpenPauseMenu);
     playerMenuButton.onClick.AddListener(SwitchPlayerMenu);
+    almanacButton.onClick.AddListener(OpenAlmanac);
     EnableUI();
   }
 
@@ -81,22 +84,25 @@ public class MapUI : MonoBehaviour {
       goldValue != null && woodValue != null && stoneValue != null &&
       metalValue != null && villagersValue != null && leatherValue != null &&
       zoneInfoBattleMark != null && zoneInfoClearedMark != null && zoneInfoRecruitMark != null &&
-      interactButton != null && location != null;
+      interactButton != null && location != null && almanacButton != null;
   }
 
   private void OnDestroy() {
     mainMenuButton.onClick.RemoveListener(OpenPauseMenu);
     playerMenuButton.onClick.RemoveListener(SwitchPlayerMenu);
+    almanacButton.onClick.RemoveListener(OpenAlmanac);
   }
 
   public static void DisableUI() {
     mainMenuButton.interactable = false;
     playerMenuButton.interactable = false;
+    almanacButton.interactable = false;
   }
 
   public static void EnableUI() {
     mainMenuButton.interactable = true;
     playerMenuButton.interactable = true;
+    almanacButton.interactable = true;
   }
 
   public static void ShowZoneInfo(string title, string desc, string descCleared, List<MapZoneType> events, bool empty) {
@@ -166,12 +172,20 @@ public class MapUI : MonoBehaviour {
   private static void OpenPauseMenu() {
     CloseOtherWindows();
     PlayerMenuUI.Close();
+    AlmanacUI.Close();
     PauseMenu.Open();
   }
 
   private static void SwitchPlayerMenu() {
     CloseOtherWindows();
+    AlmanacUI.Close();
     PlayerMenuUI.Switch();
+  }
+
+  private static void OpenAlmanac() {
+    CloseOtherWindows();
+    PlayerMenuUI.Close();
+    AlmanacUI.Open();
   }
 
   private static void CloseOtherWindows() {

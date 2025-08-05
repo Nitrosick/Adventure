@@ -30,6 +30,7 @@ public static class StateManager {
   public static int currentPlayerZoneId;
   public static HashSet<int> visitedZones;
   public static HashSet<string> collectedZoneLoot;
+  public static HashSet<string> unlockedKnowledge;
   // FIXME: Сохранять домашнюю зону игрока
   public static int gold;
   public static int[] resources;
@@ -58,6 +59,7 @@ public static class StateManager {
     currentPlayerZoneId = 6;
     visitedZones = new HashSet<int> { };
     collectedZoneLoot = new HashSet<string> { };
+    unlockedKnowledge = new HashSet<string> { };
     gold = 0;
     resources = new int[] { 0, 0, 0, 0 };
     villagers = 0;
@@ -144,6 +146,7 @@ public static class StateManager {
       currentPlayerZoneId = currentPlayerZoneId,
       visitedZones = visitedZones,
       collectedZoneLoot = collectedZoneLoot,
+      unlockedKnowledge = unlockedKnowledge,
       gold = gold,
       resources = resources,
       villagers = villagers,
@@ -165,6 +168,7 @@ public static class StateManager {
     currentPlayerZoneId = data.currentPlayerZoneId;
     visitedZones = data.visitedZones;
     collectedZoneLoot = data.collectedZoneLoot;
+    unlockedKnowledge = data.unlockedKnowledge;
     gold = data.gold;
     resources = data.resources;
     villagers = data.villagers;

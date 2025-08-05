@@ -3,7 +3,7 @@ using UnityEngine;
 public abstract class Equipment : ScriptableObject {
   public string id;
   public string itemName;
-  [TextArea] public string description;
+  [TextArea(5, 20)] public string description;
   public int[] requirementStats = { 0, 0, 0 };
   public int requirementLevel = 1;
 

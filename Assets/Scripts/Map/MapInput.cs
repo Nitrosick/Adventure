@@ -35,7 +35,7 @@ public class MapInput : MonoBehaviour {
         case "MapZoneLoot":
           if (hit.collider.TryGetComponent<MapLoot>(out var loot)) {
             if (loot.ParentZone.id != player.Move.CurrentZone.id) return;
-            loot.TakeLoot();
+            _ = loot.TakeLoot();
           }
           break;
       }
