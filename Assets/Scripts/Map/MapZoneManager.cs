@@ -45,6 +45,7 @@ public class MapZoneManager : MonoBehaviour {
   public static void GetStateData() {
     Dictionary<int, List<MapZoneType>> state = StateManager.zonesState;
     HashSet<int> visited = StateManager.visitedZones;
+    HashSet<string> looted = StateManager.collectedZoneLoot;
 
     if (state.Count > 0) {
       foreach (int id in state.Keys) {
@@ -56,13 +57,21 @@ public class MapZoneManager : MonoBehaviour {
       }
     }
 
-    if (visited.Count == 0) return;
+    if (visited.Count > 0) {
+      foreach (MapZone zone in Zones) {
+        if (visited.Contains(zone.id)) {
+          _ = zone.ShowPathLines();
+          zone.secret = false;
+          zone.InitMarker();
+        }
+      }
+    }
 
-    foreach (MapZone zone in Zones) {
-      if (visited.Contains(zone.id)) {
-        _ = zone.ShowPathLines();
-        zone.secret = false;
-        zone.InitMarker();
+    if (looted.Count > 0) {
+      foreach (MapLoot loot in FindObjectsOfType<MapLoot>()) {
+        if (looted.Contains(loot.id)) {
+          Destroy(loot.gameObject);
+        }
       }
     }
   }

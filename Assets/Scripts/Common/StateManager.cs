@@ -23,12 +23,13 @@ public static class StateManager {
   public static string enterScene;
   public static UnitData[] enemies;
   public static BattleResult? battleResult;
-  public static BattleReward battleReward;
+  public static Reward battleReward;
 
   // Player data
   public static string currentScene;
   public static int currentPlayerZoneId;
   public static HashSet<int> visitedZones;
+  public static HashSet<string> collectedZoneLoot;
   // FIXME: Сохранять домашнюю зону игрока
   public static int gold;
   public static int[] resources;
@@ -56,6 +57,7 @@ public static class StateManager {
     currentScene = "";
     currentPlayerZoneId = 6;
     visitedZones = new HashSet<int> { };
+    collectedZoneLoot = new HashSet<string> { };
     gold = 0;
     resources = new int[] { 0, 0, 0, 0 };
     villagers = 0;
@@ -141,6 +143,7 @@ public static class StateManager {
       currentScene = scene == "Menu" ? "Dunpine village" : scene,
       currentPlayerZoneId = currentPlayerZoneId,
       visitedZones = visitedZones,
+      collectedZoneLoot = collectedZoneLoot,
       gold = gold,
       resources = resources,
       villagers = villagers,
@@ -161,6 +164,7 @@ public static class StateManager {
     currentScene = data.currentScene;
     currentPlayerZoneId = data.currentPlayerZoneId;
     visitedZones = data.visitedZones;
+    collectedZoneLoot = data.collectedZoneLoot;
     gold = data.gold;
     resources = data.resources;
     villagers = data.villagers;

@@ -1,18 +1,14 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
 
 public class PlayerMove : MonoBehaviour
 {
   private readonly float moveSpeed = 3f;
-
-  private bool isMoving = false;
+  public bool IsMoving { get; private set; }
 
   public MapZone startZone;
   public MapZone CurrentZone { get; set; }
-
   private LayerMask zoneLayer;
   private Camera mainCamera;
   private PlayerAnimator animator;
@@ -45,31 +41,7 @@ public class PlayerMove : MonoBehaviour
     _ = CameraController.FocusOn(transform.position, true);
   }
 
-  private void Update() {
-    if (isMoving || SceneController.Locked) return;
-    if (Mouse.current.leftButton.wasPressedThisFrame) DetectZone();
-  }
-
-  private async void DetectZone() {
-    if (EventSystem.current.IsPointerOverGameObject()) return;
-    Ray ray = mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
-
-    if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, zoneLayer)) {
-      MapZone target = hit.collider.GetComponent<MapZone>();
-
-      List<Vector3> path = CalculatePath(target);
-      if (path == null) return;
-
-      _ = CameraController.FocusOn(target.playerPosition);
-
-      MapUI.HideInteractableButton();
-      await Move(path);
-      CurrentZone = target;
-      CurrentZone.Visit();
-    }
-  }
-
-  private List<Vector3> CalculatePath(MapZone target) {
+  public List<Vector3> CalculatePath(MapZone target) {
     Way[] pathes = CurrentZone.GetComponentsInChildren<Way>();
     if (pathes == null || pathes.Length == 0) return null;
 
@@ -84,10 +56,10 @@ public class PlayerMove : MonoBehaviour
     return null;
   }
 
-  private async Task Move(List<Vector3> path) {
+  public async Task Move(List<Vector3> path) {
     if (path == null || path.Count == 0) return;
 
-    isMoving = true;
+    IsMoving = true;
     animator.SetMoving(true);
 
     for (int i = 0; i < path.Count; i++) {
@@ -114,7 +86,7 @@ public class PlayerMove : MonoBehaviour
       }
     }
 
-    isMoving = false;
+    IsMoving = false;
     animator.SetMoving(false);
   }
 }

@@ -7,6 +7,7 @@ public class SaveData {
   public string currentScene;
   public int currentPlayerZoneId;
   public HashSet<int> visitedZones;
+  public HashSet<string> collectedZoneLoot;
   public int gold;
   public int[] resources;
   public int villagers;

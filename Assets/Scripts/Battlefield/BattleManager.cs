@@ -12,7 +12,7 @@ public class BattleManager : MonoBehaviour
   private static List<Tile> allySpawns;
   private static List<Tile> enemySpawns;
   public static BattleResult? battleResult;
-  public static BattleReward Reward { get; private set; }
+  public static Reward Reward { get; private set; }
   public GameObject corpsePrefab;
 
   private static readonly float dexterityScaleUnit = 3.5f;
@@ -25,7 +25,7 @@ public class BattleManager : MonoBehaviour
   private void Awake() {
     Instance = this;
     battleResult = null;
-    Reward = new BattleReward();
+    Reward = new Reward();
     allies = StateManager.playerUnits.Where(u => u.inSquad).ToArray();
     enemies = StateManager.enemies;
 

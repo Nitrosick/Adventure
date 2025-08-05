@@ -5,7 +5,7 @@ public class MapZoneBattle : MapZone {
   public Unit[] guard;
   public string battlefieldName;
   public int armySlots;
-  public BattleReward fixedReward;
+  public Reward fixedReward;
 
   public override void SetCleared() {
     base.SetCleared();

@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour {
   public static Player Instance;
-  private PlayerMove move;
+  public PlayerMove Move { get; private set; }
   public PlayerArmy Army { get; private set; }
   public PlayerInventory Inventory { get; private set; }
 
@@ -25,11 +25,11 @@ public class Player : MonoBehaviour {
 
   private void Awake() {
     Instance = this;
-    move = transform.GetComponent<PlayerMove>();
+    Move = transform.GetComponent<PlayerMove>();
     Army = transform.GetComponent<PlayerArmy>();
     Inventory = transform.GetComponent<PlayerInventory>();
 
-    if (move == null || Army == null || Inventory == null) {
+    if (Move == null || Army == null || Inventory == null) {
       Debug.LogError("Player components initialization error");
     }
   }
@@ -115,6 +115,16 @@ public class Player : MonoBehaviour {
     return new int[] { Villagers, Army.Units.Count };
   }
 
+  public void CollectReward(Reward reward) {
+    AddExpirience(reward.experience);
+    SetFame(reward.fame);
+    SetGold(Utils.GetRandomInRange(reward.goldRange[0], reward.goldRange[1]));
+    SetResources(reward.resources);
+    Inventory.AddItems(reward.equipment);
+    Inventory.AddItems(reward.items);
+    MapUI.UpdateResources();
+  }
+
   private void GetStateData() {
     // FIXME: Перенос данных между локациями
     Gold = StateManager.gold;
@@ -133,35 +143,29 @@ public class Player : MonoBehaviour {
     MapUI.UpdateResources();
     MapUI.UpdateLocation(StateManager.currentScene);
 
-    MapZoneEvent events = move.CurrentZone.GetComponent<MapZoneEvent>();
+    MapZoneEvent events = Move.CurrentZone.GetComponent<MapZoneEvent>();
     events.CheckEvents(true);
 
-    if (move.CurrentZone is not MapZoneBattle battleZone) return;
+    if (Move.CurrentZone is not MapZoneBattle battleZone) return;
     BattleResult? result = StateManager.battleResult;
     if (result == null) return;
 
     MapZoneManager.UpdateAfterBattle(result);
-    BattleReward fixedReward = battleZone.fixedReward;
+    Reward fixedReward = battleZone.fixedReward;
 
     switch (result) {
       case BattleResult.Victory:
-        BattleReward reward = StateManager.battleReward;
+        Reward reward = StateManager.battleReward;
         if (reward == null) return;
         reward.Add(fixedReward);
-        battleZone.fixedReward = new BattleReward();
-
-        SetGold(reward.Gold);
-        SetResources(reward.resources);
-        AddExpirience(reward.experience);
-        SetFame(reward.fame);
-        Inventory.AddItems(reward.equipment);
-        Inventory.AddItems(reward.items);
+        battleZone.fixedReward = new Reward();
+        CollectReward(reward);
         break;
       case BattleResult.Defeat:
       case BattleResult.Retreat:
-        transform.position = move.startZone.playerPosition;
-        move.CurrentZone = move.startZone;
-        StateManager.currentPlayerZoneId = move.CurrentZone.id;
+        transform.position = Move.startZone.playerPosition;
+        Move.CurrentZone = Move.startZone;
+        StateManager.currentPlayerZoneId = Move.CurrentZone.id;
         events.CheckEvents(true);
         _ = CameraController.FocusOn(transform.position, true);
         SetFame(fixedReward.fame / 2 * -1);

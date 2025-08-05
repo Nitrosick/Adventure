@@ -14,7 +14,7 @@ public class Tile : MonoBehaviour {
 
   public TileType type;
   public TileSpawnType spawnType;
-  public BattleReward loot;
+  public Reward loot;
   public ParticleSystem lootPickEffect;
 
   public int height;

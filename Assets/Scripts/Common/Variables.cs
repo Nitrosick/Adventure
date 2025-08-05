@@ -45,7 +45,7 @@ Default: #5C523F
 Highlighted / Pressed / Selected: #938569
 Disabled: #5C523F o-128
 
-Total gold on map: 75 - 130
+Total gold on map: 110 - 165
 */
 
 using Newtonsoft.Json;
