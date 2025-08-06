@@ -196,7 +196,7 @@ public class BattleManager : MonoBehaviour
         break;
     }
 
-    BattleUI.DisableUI();
+    BattleUI.Instance.DisableUI();
     SceneController.ShowEventInfo(icon, text);
     SceneController.SwitchScene(StateManager.enterScene);
   }

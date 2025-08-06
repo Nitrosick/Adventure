@@ -24,9 +24,9 @@ public class QueueManager : MonoBehaviour
     Queue.Sort((a, b) => b.Initiative.CompareTo(a.Initiative));
     orderNumber = 0;
     CurrentUnit = Queue[0];
-    BattleUI.UpdateQueue(Queue);
+    BattleUI.Instance.UpdateQueue(Queue);
     List<Skill> skills = CurrentUnit.Equip.GetSkills();
-    if (CurrentUnit.Relation != UnitRelation.Emeny) BattleUI.ShowSkills(skills, PhaseManager.CurrentPhase, CurrentUnit);
+    if (CurrentUnit.Relation != UnitRelation.Emeny) BattleUI.Instance.ShowSkills(skills, PhaseManager.CurrentPhase, CurrentUnit);
     CurrentUnit.Ui.MarkAsActive();
     FocusOnUnit();
 
@@ -48,8 +48,8 @@ public class QueueManager : MonoBehaviour
       return;
     }
 
-    if (nextUnit.Relation == UnitRelation.Emeny) BattleUI.DisableUI();
-    else BattleUI.EnableUI();
+    if (nextUnit.Relation == UnitRelation.Emeny) BattleUI.Instance.DisableUI();
+    else BattleUI.Instance.EnableUI();
 
     BeforeSwitch();
     CurrentUnit = nextUnit;
@@ -73,7 +73,7 @@ public class QueueManager : MonoBehaviour
     CurrentUnit.Effects.ProcessTurnEffects();
     CurrentUnit.Animator.Reset();
     CurrentUnit.Ui.MarkAsActive();
-    BattleUI.UpdateQueue(Queue, orderNumber);
+    BattleUI.Instance.UpdateQueue(Queue, orderNumber);
     FocusOnUnit();
   }
 

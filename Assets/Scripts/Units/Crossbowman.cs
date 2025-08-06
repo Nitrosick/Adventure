@@ -42,7 +42,7 @@ public class Crossbowman : Unit
   }
 
   public async override void OnAttack(Unit target = null) {
-    BattleUI.DisableUI();
+    BattleUI.Instance.DisableUI();
     if (target != null) Target = target;
 
     Vector3 dirToTarget = (Target.transform.position - transform.position).normalized;

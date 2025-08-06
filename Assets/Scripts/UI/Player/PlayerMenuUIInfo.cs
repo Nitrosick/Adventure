@@ -231,7 +231,7 @@ public class PlayerMenuUIInfo : MonoBehaviour {
 
   public static void ShowInfo(Unit unit) {
     Clear();
-    unitActions.SetActive(true);
+    if (!unit.IsHero) unitActions.SetActive(true);
     equipment.gameObject.SetActive(true);
     coreStats.SetActive(true);
     unitParams.SetActive(true);

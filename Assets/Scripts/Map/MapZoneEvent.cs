@@ -20,10 +20,10 @@ public class MapZoneEvent : MonoBehaviour
         StartBattle();
         break;
       case MapZoneType.Home:
-        MapUI.ShowInteractableButton(Get<MapZoneHome>().OpenHomeMenu);
+        MapUI.Instance.ShowInteractableButton(Get<MapZoneHome>().OpenHomeMenu);
         break;
       case MapZoneType.Recruitment:
-        MapUI.ShowInteractableButton(Get<MapZoneRecruitment>().OpenRecruitmentPanel);
+        MapUI.Instance.ShowInteractableButton(Get<MapZoneRecruitment>().OpenRecruitmentPanel);
         break;
     }
   }
@@ -53,8 +53,8 @@ public class MapZoneEvent : MonoBehaviour
     StateManager.WriteUnitsData(playerUnits, "allies");
     StateManager.WriteUnitsData(battleZone.guard, "enemies");
 
-    MapUI.DisableUI();
-    MapUI.HideZoneInfo();
+    MapUI.Instance.DisableUI();
+    MapUI.Instance.HideZoneInfo();
     SceneController.ShowEventInfo("battle", "Battle is starting");
     SceneController.SwitchScene(battleZone.battlefieldName);
   }

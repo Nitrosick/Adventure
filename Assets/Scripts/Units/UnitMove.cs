@@ -28,7 +28,7 @@ public class UnitMove : MonoBehaviour {
 
     if (pathTiles == null) return;
 
-    BattleUI.DisableUI();
+    BattleUI.Instance.DisableUI();
     _ = CameraController.FocusOn(target.transform.position);
 
     unit.CurrentTile.OccupiedBy = null;
@@ -67,7 +67,7 @@ public class UnitMove : MonoBehaviour {
         CheckTileType();
         IsMoving = false;
         unit.Animator.SetMoving(false);
-        BattleUI.EnableUI();
+        BattleUI.Instance.EnableUI();
 
         if (unit.CurrentMovePoints < 1 || unit.Relation == UnitRelation.Emeny) {
           PhaseManager.NextPhase();

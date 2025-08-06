@@ -24,7 +24,7 @@ public class MapInput : MonoBehaviour {
             if (path == null) return;
 
             _ = CameraController.FocusOn(zone.playerPosition);
-            MapUI.HideInteractableButton();
+            MapUI.Instance.HideInteractableButton();
 
             await player.Move.Move(path);
             player.Move.CurrentZone = zone;

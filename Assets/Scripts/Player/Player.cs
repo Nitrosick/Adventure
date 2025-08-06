@@ -42,7 +42,7 @@ public class Player : MonoBehaviour {
     Gold += value;
     if (Gold < 0) Gold = 0;
     StateManager.gold = Gold;
-    MapUI.UpdateResources();
+    MapUI.Instance.UpdateResources();
   }
 
   public void SetResources(int[] array) {
@@ -51,21 +51,21 @@ public class Player : MonoBehaviour {
       if (Resources[i] < 0) Resources[i] = 0;
     }
     StateManager.resources = Resources;
-    MapUI.UpdateResources();
+    MapUI.Instance.UpdateResources();
   }
 
   public void SetVillagers(int value) {
     Villagers += value;
     if (Villagers < 0) Villagers = 0;
     StateManager.villagers = Villagers;
-    MapUI.UpdateResources();
+    MapUI.Instance.UpdateResources();
   }
 
   private void SetMaxVillagers() {
     int bonusUnits = Fame / fameStepSize * bonusVillagersPerStep;
     MaxVillagers = Mathf.Min(baseMaxVillagers + bonusUnits, villagersLimit);
     StateManager.maxVillagers = MaxVillagers;
-    MapUI.UpdateResources();
+    MapUI.Instance.UpdateResources();
   }
 
   public void AddExpirience(int value) {
@@ -75,7 +75,7 @@ public class Player : MonoBehaviour {
       LevelUp();
     }
     StateManager.experience = Experience;
-    MapUI.UpdateResources();
+    MapUI.Instance.UpdateResources();
   }
 
   public int XPForNextLevel => GetXPForLevel(Level);
@@ -118,11 +118,12 @@ public class Player : MonoBehaviour {
   public void CollectReward(Reward reward) {
     AddExpirience(reward.experience);
     SetFame(reward.fame);
-    SetGold(Utils.GetRandomInRange(reward.goldRange[0], reward.goldRange[1]));
+    int goldValue = Utils.GetRandomInRange(reward.goldRange[0], reward.goldRange[1]);
+    SetGold(goldValue);
     SetResources(reward.resources);
     Inventory.AddItems(reward.equipment);
     Inventory.AddItems(reward.items);
-    MapUI.UpdateResources();
+    MapUI.Instance.UpdateResources();
   }
 
   private void GetStateData() {
@@ -140,8 +141,8 @@ public class Player : MonoBehaviour {
     if (StateManager.inventoryEquipment.Length > 0) Inventory.UpdateInventory(StateManager.inventoryEquipment);
     if (StateManager.inventoryItems.Length > 0) Inventory.UpdateInventory(StateManager.inventoryItems);
 
-    MapUI.UpdateResources();
-    MapUI.UpdateLocation(StateManager.currentScene);
+    MapUI.Instance.UpdateResources();
+    MapUI.Instance.UpdateLocation(StateManager.currentScene);
 
     MapZoneEvent events = Move.CurrentZone.GetComponent<MapZoneEvent>();
     events.CheckEvents(true);

@@ -7,7 +7,7 @@ public class PhaseManager : MonoBehaviour
 
   private void Awake() {
     CurrentPhase = BattlePhase.Movement;
-    BattleUI.SwitchPhase(CurrentPhase);
+    BattleUI.Instance.SwitchPhase(CurrentPhase);
   }
 
   private void OnDestroy() {
@@ -42,14 +42,14 @@ public class PhaseManager : MonoBehaviour
         break;
     }
 
-    BattleUI.SwitchPhase(CurrentPhase);
+    BattleUI.Instance.SwitchPhase(CurrentPhase);
     PhaseActions();
   }
 
   private static void PhaseActions() {
     Unit unit = QueueManager.CurrentUnit;
     List<Skill> skills = unit.Equip.GetSkills();
-    if (unit.Relation != UnitRelation.Emeny) BattleUI.ShowSkills(skills, CurrentPhase, unit);
+    if (unit.Relation != UnitRelation.Emeny) BattleUI.Instance.ShowSkills(skills, CurrentPhase, unit);
 
     switch (CurrentPhase) {
       case BattlePhase.Movement:

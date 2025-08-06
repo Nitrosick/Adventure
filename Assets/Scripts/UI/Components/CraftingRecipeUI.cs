@@ -126,7 +126,7 @@ public class CraftingRecipeUI : MonoBehaviour {
     }
 
     _ = Toast.Show("success", "Item crafted");
-    MapUI.UpdateResources();
+    MapUI.Instance.UpdateResources();
     HomeMenuUI.RecalculateRecipes();
   }
 }

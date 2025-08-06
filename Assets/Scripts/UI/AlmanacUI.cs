@@ -6,32 +6,31 @@ using UnityEngine.UI;
 public class AlmanacUI : MonoBehaviour {
   // Components
   public static AlmanacUI Instance;
+  public GameObject articleButtonPrefab;
+
   private static Transform menu;
   private static Transform content;
-  public GameObject articleButtonPrefab;
+  private static TextMeshProUGUI title;
+  private static TextMeshProUGUI text;
 
   // Navigation
   private static Transform navigation;
   private static Button closeButton;
-
-  //Sections
-  // private static Transform welcomeSection;
-  // private static HealingMenuUI healingSection;
-  // private static TradingMenuUI tradingSection;
-  // private static CraftingMenuUI craftingSection;
+  private static readonly Dictionary<string, GameObject> buttons = new() { };
 
   private void Awake() {
     Instance = this;
     menu = transform.Find("Almanac/Panel");
-    content = menu.Find("Content/Viewport/Scroll");
+    content = menu.Find("Content/Viewport/Content");
 
     static Transform Find(string path) => menu.Find(path);
-    // static Transform FindInContent(string path) => content.Find(path);
     static T Get<T>(string path) where T : Component => Find(path).GetComponent<T>();
-    // T GetInContent<T>(string path) where T : Component => content.Find(path).GetComponent<T>();
+    static T GetInContent<T>(string path) where T : Component => content.Find(path).GetComponent<T>();
 
     navigation = Find("Navigation/Articles");
     closeButton = Get<Button>("Navigation/Control/Close");
+    title = GetInContent<TextMeshProUGUI>("Title");
+    text = GetInContent<TextMeshProUGUI>("Text");
 
     if (!ComponentsInitialized()) {
       Debug.LogError("Almanac components initialization error");
@@ -42,7 +41,8 @@ public class AlmanacUI : MonoBehaviour {
   }
 
   private static bool ComponentsInitialized() {
-    return menu != null && navigation != null && closeButton != null;
+    return menu != null && navigation != null && closeButton != null &&
+    title != null && text != null;
   }
 
   private void OnDestroy() {
@@ -64,6 +64,9 @@ public class AlmanacUI : MonoBehaviour {
 
   private static void Clear() {
     foreach (Transform child in navigation) Destroy(child.gameObject);
+    title.text = "";
+    text.text = "";
+    buttons.Clear();
   }
 
   private static void Init() {
@@ -75,13 +78,26 @@ public class AlmanacUI : MonoBehaviour {
       btn.transform.Find("Icon").GetComponent<Image>().sprite = a.icon;
       btn.transform.Find("Text").GetComponent<TextMeshProUGUI>().text = a.title;
 
+      GameObject newMark = btn.transform.Find("New").gameObject;
+      buttons[a.id] = newMark;
+      if (a.isNew) newMark.SetActive(true);
+
       Button btnScript = btn.transform.GetComponent<Button>();
       btnScript.onClick.RemoveAllListeners();
       btnScript.onClick.AddListener(() => ShowContent(a));
     }
+
+    ShowContent(articles[0]);
   }
 
   private static void ShowContent(KnowledgeArticle article) {
-    Debug.Log(article);
+    title.text = article.title;
+    text.text = article.content;
+
+    if (article.isNew) {
+      article.isNew = false;
+      buttons[article.id].SetActive(false);
+      MapUI.Instance.UpdateAlmanacIcon();
+    }
   }
 }

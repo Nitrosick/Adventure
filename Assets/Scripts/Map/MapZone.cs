@@ -55,7 +55,7 @@ public class MapZone : MonoBehaviour {
 
   protected void OnMouseEnter() {
     if (SceneController.Locked || EventSystem.current.IsPointerOverGameObject() || secret) return;
-    MapUI.ShowZoneInfo(zoneName, description, descriptionCleared, events, isEmpty);
+    MapUI.Instance.ShowZoneInfo(zoneName, description, descriptionCleared, events, isEmpty);
 
     MapZone playerZone = Player.Instance.GetComponent<PlayerMove>().CurrentZone;
     int[] wayIds = ways.Select(way => way.id).ToArray();
@@ -68,7 +68,7 @@ public class MapZone : MonoBehaviour {
   }
 
   protected void OnMouseExit() {
-    MapUI.HideZoneInfo();
+    MapUI.Instance.HideZoneInfo();
 
     auraRender.material = defaultMaterial;
     InitMarker();
@@ -104,7 +104,7 @@ public class MapZone : MonoBehaviour {
     events.RemoveAt(0);
     if (events.Count == 0) {
       SetCleared();
-      MapUI.HideInteractableButton();
+      MapUI.Instance.HideInteractableButton();
     }
     StateManager.zonesState[id] = events;
   }

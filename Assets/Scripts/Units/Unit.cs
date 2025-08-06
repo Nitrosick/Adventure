@@ -161,7 +161,7 @@ public class Unit : MonoBehaviour {
 
   // Attack
   public async virtual void OnAttack(Unit target = null) {
-    BattleUI.DisableUI();
+    BattleUI.Instance.DisableUI();
     if (target != null) Target = target;
 
     Vector3 dirToTarget = (Target.GetPosition() - GetPosition()).normalized;
@@ -182,7 +182,7 @@ public class Unit : MonoBehaviour {
   }
 
   public async void BreakObject(Breakable target) {
-    BattleUI.DisableUI();
+    BattleUI.Instance.DisableUI();
     TargetObject = target;
 
     Vector3 dirToTarget = (TargetObject.ParentTile.transform.position - GetPosition()).normalized;
@@ -193,7 +193,7 @@ public class Unit : MonoBehaviour {
   }
 
   public async void ChopTree(TreeObject target) {
-    BattleUI.DisableUI();
+    BattleUI.Instance.DisableUI();
     TargetTree = target;
     Vector3 dirToTarget = (TargetTree.ParentTile.transform.position - GetPosition()).normalized;
 

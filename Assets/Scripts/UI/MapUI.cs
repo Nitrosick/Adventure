@@ -4,41 +4,35 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-public class MapUI : MonoBehaviour {
+public class MapUI : GeneralUI {
+  public static MapUI Instance;
+
   // Zone info
-  private static GameObject zoneInfoPanel;
-  private static TextMeshProUGUI zoneInfoTitle;
-  private static TextMeshProUGUI zoneInfoDescription;
-  private static GameObject zoneInfoBattleMark;
-  private static GameObject zoneInfoGuardedMark;
-  private static GameObject zoneInfoClearedMark;
-  private static GameObject zoneInfoRecruitMark;
+  private GameObject zoneInfoPanel;
+  private TextMeshProUGUI zoneInfoTitle;
+  private TextMeshProUGUI zoneInfoDescription;
+  private GameObject zoneInfoBattleMark;
+  private GameObject zoneInfoGuardedMark;
+  private GameObject zoneInfoClearedMark;
+  private GameObject zoneInfoRecruitMark;
 
   // Buttons
-  private static Button mainMenuButton;
-  private static Button playerMenuButton;
-  private static Button almanacButton;
-  private static Button interactButton;
+  private Button playerMenuButton;
+  private Button interactButton;
 
   // Resources
-  private static TextMeshProUGUI goldValue;
-  private static TextMeshProUGUI woodValue;
-  private static TextMeshProUGUI stoneValue;
-  private static TextMeshProUGUI metalValue;
-  private static TextMeshProUGUI leatherValue;
-  private static TextMeshProUGUI villagersValue;
+  private TextMeshProUGUI goldValue;
+  private TextMeshProUGUI woodValue;
+  private TextMeshProUGUI stoneValue;
+  private TextMeshProUGUI metalValue;
+  private TextMeshProUGUI leatherValue;
+  private TextMeshProUGUI villagersValue;
+  private TextMeshProUGUI location;
 
-  private static TextMeshProUGUI location;
+  protected override void Awake() {
+    base.Awake();
+    Instance = this;
 
-  private T Get<T>(Transform parent, string path) where T : Component {
-    return parent.Find(path).GetComponent<T>();
-  }
-
-  private GameObject Find(Transform parent, string path) {
-    return parent.Find(path).gameObject;
-  }
-
-  private void Awake() {
     Transform infoPanel = transform.Find("Info/ZoneInfoPanel");
     Transform markers = infoPanel.Find("Markers");
     Transform top = transform.Find("Top");
@@ -55,9 +49,7 @@ public class MapUI : MonoBehaviour {
     zoneInfoClearedMark = Find(markers, "Clear");
     zoneInfoRecruitMark = Find(markers, "Recruitment");
 
-    mainMenuButton = Get<Button>(mainMenu, "Main");
     playerMenuButton = Get<Button>(mainMenu, "Player");
-    almanacButton = Get<Button>(mainMenu, "Almanac");
     interactButton = Get<Button>(actions, "Interact");
 
     goldValue = Get<TextMeshProUGUI>(resources, "Gold/Value");
@@ -72,40 +64,59 @@ public class MapUI : MonoBehaviour {
       Debug.LogError("Map UI components initialization error");
     }
 
-    mainMenuButton.onClick.AddListener(OpenPauseMenu);
     playerMenuButton.onClick.AddListener(SwitchPlayerMenu);
-    almanacButton.onClick.AddListener(OpenAlmanac);
     EnableUI();
   }
 
-  private static bool ComponentsInitialized() {
+  private bool ComponentsInitialized() {
     return zoneInfoPanel != null && zoneInfoTitle != null && zoneInfoDescription != null &&
-      zoneInfoGuardedMark != null && mainMenuButton != null && playerMenuButton != null &&
-      goldValue != null && woodValue != null && stoneValue != null &&
-      metalValue != null && villagersValue != null && leatherValue != null &&
-      zoneInfoBattleMark != null && zoneInfoClearedMark != null && zoneInfoRecruitMark != null &&
-      interactButton != null && location != null && almanacButton != null;
+      zoneInfoGuardedMark != null && playerMenuButton != null && goldValue != null &&
+      woodValue != null && stoneValue != null && metalValue != null &&
+      villagersValue != null && leatherValue != null && zoneInfoBattleMark != null &&
+      zoneInfoClearedMark != null && zoneInfoRecruitMark != null && interactButton != null &&
+      location != null;
   }
 
-  private void OnDestroy() {
-    mainMenuButton.onClick.RemoveListener(OpenPauseMenu);
+  protected override void OnDestroy() {
+    base.OnDestroy();
     playerMenuButton.onClick.RemoveListener(SwitchPlayerMenu);
-    almanacButton.onClick.RemoveListener(OpenAlmanac);
   }
 
-  public static void DisableUI() {
-    mainMenuButton.interactable = false;
+  public override void DisableUI() {
+    base.DisableUI();
     playerMenuButton.interactable = false;
-    almanacButton.interactable = false;
   }
 
-  public static void EnableUI() {
-    mainMenuButton.interactable = true;
+  public override void EnableUI() {
+    base.EnableUI();
     playerMenuButton.interactable = true;
-    almanacButton.interactable = true;
   }
 
-  public static void ShowZoneInfo(string title, string desc, string descCleared, List<MapZoneType> events, bool empty) {
+  protected override void OpenPauseMenu() {
+    CloseOtherWindows();
+    PlayerMenuUI.Close();
+    AlmanacUI.Close();
+    PauseMenu.Open();
+  }
+
+  private void SwitchPlayerMenu() {
+    CloseOtherWindows();
+    AlmanacUI.Close();
+    PlayerMenuUI.Switch();
+  }
+
+  protected override void OpenAlmanac() {
+    CloseOtherWindows();
+    PlayerMenuUI.Close();
+    AlmanacUI.Open();
+  }
+
+  private void CloseOtherWindows() {
+    RecruitingUI.Close();
+    HomeMenuUI.Close();
+  }
+
+  public void ShowZoneInfo(string title, string desc, string descCleared, List<MapZoneType> events, bool empty) {
     if (!ComponentsInitialized()) return;
     zoneInfoPanel.SetActive(true);
     zoneInfoTitle.text = title;
@@ -122,7 +133,7 @@ public class MapUI : MonoBehaviour {
     else if (events.Contains(MapZoneType.Recruitment)) zoneInfoRecruitMark.SetActive(true);
   }
 
-  public static void HideZoneInfo() {
+  public void HideZoneInfo() {
     if (!ComponentsInitialized()) return;
     zoneInfoPanel.SetActive(false);
     zoneInfoTitle.text = "";
@@ -133,18 +144,18 @@ public class MapUI : MonoBehaviour {
     zoneInfoRecruitMark.SetActive(false);
   }
 
-  public static void ShowInteractableButton(UnityAction callback) {
+  public void ShowInteractableButton(UnityAction callback) {
     // FIXME: Смена текста и иконки
     interactButton.onClick.AddListener(callback);
     interactButton.gameObject.SetActive(true);
   }
 
-  public static void HideInteractableButton() {
+  public void HideInteractableButton() {
     interactButton.gameObject.SetActive(false);
     interactButton.onClick.RemoveAllListeners();
   }
 
-  public static void UpdateResources() {
+  public void UpdateResources() {
     Player player = Player.Instance;
 
     goldValue.text = player.Gold.ToString();
@@ -165,31 +176,7 @@ public class MapUI : MonoBehaviour {
     }
   }
 
-  public static void UpdateLocation(string value) {
+  public void UpdateLocation(string value) {
     location.text = value;
-  }
-
-  private static void OpenPauseMenu() {
-    CloseOtherWindows();
-    PlayerMenuUI.Close();
-    AlmanacUI.Close();
-    PauseMenu.Open();
-  }
-
-  private static void SwitchPlayerMenu() {
-    CloseOtherWindows();
-    AlmanacUI.Close();
-    PlayerMenuUI.Switch();
-  }
-
-  private static void OpenAlmanac() {
-    CloseOtherWindows();
-    PlayerMenuUI.Close();
-    AlmanacUI.Open();
-  }
-
-  private static void CloseOtherWindows() {
-    RecruitingUI.Close();
-    HomeMenuUI.Close();
   }
 }
