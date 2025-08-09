@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb13a142f8c484a44b9b8c61360ca04b, type: 3}
+  m_Name: w6
+  m_EditorClassIdentifier: 
+  id: w6
+  itemName: Spiked club
+  description: A homemade weapon that almost anyone can make if they're not too lazy.
+    It has very poor damage stats, but can stun a target if used correctly.
+  requirementStats: 020000000000000000000000
+  requirementLevel: 1
+  type: 0
+  slot: 0
+  weight: 0
+  rarity: 0
+  effect: {fileID: 11400000, guid: 6e491c811d9de3a4a8f96b65b1ba63b6, type: 2}
+  skill: {fileID: 0}
+  icon: {fileID: 21300000, guid: ac4b30b468279e44b9589077f8c72a9d, type: 3}
+  price: 20
+  isNew: 0
+  damage: 3
+  critModifier: 1.2
+  armorPenetration: 30
+  effectChance: 10
+  range: 1
+  attackType: 1
+  prefab: {fileID: 1049791742440788130, guid: c9d17c7c13091a54a854df3c53037579, type: 3}
+  damageType: 4
+  scalingStats: 00000000

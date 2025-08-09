@@ -114,7 +114,7 @@ public class TileManager : MonoBehaviour
       if (tile == unit.CurrentTile) continue;
       float dist = Pathfinding.GetCost(unit.CurrentTile, tile);
       int minRange = unit.Type == UnitType.Range ? 2 : 0;
-      if (dist >= minRange && dist <= unit.Equip.primaryWeapon.range + 0.5f) highlightedTiles.Add(tile);
+      if (dist >= minRange && dist <= unit.Equip.primary.range + 0.5f) highlightedTiles.Add(tile);
     }
 
     int targetsCount = 0;

@@ -276,9 +276,9 @@ public class PlayerMenuUIInfo : MonoBehaviour {
     );
 
     unitMp.text = unit.DefaultMovePoints.ToString();
-    unitDamage.text = (unit.Equip.primaryWeapon.damage + unit.Strength).ToString();
+    unitDamage.text = (unit.Equip.primary.damage + unit.Strength).ToString();
     unitDefense.text = unit.Equip.GetTotalDefense().ToString();
-    unitRange.text = unit.Equip.primaryWeapon.range.ToString();
+    unitRange.text = unit.Equip.primary.range.ToString();
 
     if (unit.Projectiles == 0) unitProjectiles.text = "-";
     else if (unit.Projectiles == unit.CurrentProjectiles) unitProjectiles.text = unit.Projectiles.ToString();
@@ -390,18 +390,16 @@ public class PlayerMenuUIInfo : MonoBehaviour {
     Image primarySlot = equipment.Find("Primary/Image").GetComponent<Image>();
     Image armorSlot = equipment.Find("Armor/Image").GetComponent<Image>();
     Image secondarySlot = equipment.Find("Secondary/Image").GetComponent<Image>();
-    primarySlot.sprite = equip.primaryWeapon.icon;
+    primarySlot.sprite = equip.primary.icon;
     armorSlot.sprite = equip.armor.icon;
 
-    if (equip.secondaryWeapon != null) {
+    if (equip.secondary != null) {
       secondarySlot.enabled = true;
-      secondarySlot.sprite = equip.secondaryWeapon.icon;
-    }
-    else if (equip.shield != null) {
+      secondarySlot.sprite = equip.secondary.icon;
+    } else if (equip.secondary != null) {
       secondarySlot.enabled = true;
-      secondarySlot.sprite = equip.shield.icon;
-    }
-    else {
+      secondarySlot.sprite = equip.secondary.icon;
+    } else {
       secondarySlot.enabled = false;
     }
   }

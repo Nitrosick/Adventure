@@ -4,18 +4,23 @@ using UnityEngine;
 
 public class UnitEquipment : MonoBehaviour {
   private Unit unit;
-  public Weapon primaryWeapon;
-  public Weapon secondaryWeapon;
-  public Armor shield;
+  public Weapon primary;
+  public Equipment secondary;
   public Armor armor;
+  // FIXME: Доп. слот
+  // public Equipment additional;
 
   private ArmorSet[] armorSets;
   public Transform rightHand;
   public Transform leftHand;
+  private Transform beard;
+  private Transform hair;
 
   private void Awake() {
     unit = transform.GetComponent<Unit>();
     armorSets = GetComponentsInChildren<ArmorSet>(true);
+    beard = transform.Find("Model/Beard");
+    hair = transform.Find("Model/Hair");
 
     if (unit == null || armorSets.Length == 0) {
       Debug.LogError("Unit equipment components initialization error");
@@ -27,29 +32,41 @@ public class UnitEquipment : MonoBehaviour {
   }
 
   private void UpdateEquipment() {
+    if (beard != null) beard.gameObject.SetActive(false);
+    if (hair != null) hair.gameObject.SetActive(false);
+
     foreach (ArmorSet set in armorSets) {
-      if (set.id == armor.id) set.gameObject.SetActive(true);
+      if (set.id == armor.id) {
+        set.gameObject.SetActive(true);
+        if (set.showBeard && beard != null) beard.gameObject.SetActive(true);
+        if (set.showHair && hair != null) hair.gameObject.SetActive(true);
+      }
       else set.gameObject.SetActive(false);
     }
 
     foreach (Transform item in rightHand) { Destroy(item.gameObject); }
     foreach (Transform item in leftHand) { Destroy(item.gameObject); }
 
-    if (primaryWeapon != null) {
-      Weapon loadedWeapon = Resources.Load<Weapon>("Weapon/" + primaryWeapon.name);
+    if (primary != null) {
+      Weapon loadedWeapon = Resources.Load<Weapon>("Weapon/" + primary.name);
       if (loadedWeapon == null) return;
       GameObject weaponObj = Instantiate(loadedWeapon.prefab, rightHand);
       weaponObj.transform.SetParent(rightHand, false);
     }
 
-    if (shield != null) {
-      Armor loadedShield = Resources.Load<Armor>("Armor/" + shield.name);
-      if (loadedShield == null) return;
-      GameObject shieldObj = Instantiate(loadedShield.prefab, leftHand);
-      shieldObj.transform.SetParent(leftHand, false);
+    if (secondary != null) {
+      if (secondary is Weapon secWeapon) {
+        Weapon loaded = Resources.Load<Weapon>("Weapon/" + secondary.name);
+        if (loaded == null) return;
+        GameObject obj = Instantiate(loaded.prefab, leftHand);
+        obj.transform.SetParent(leftHand, false);
+      } else if (secondary is Armor secArmor) {
+        Armor loaded = Resources.Load<Armor>("Armor/" + secondary.name);
+        if (loaded == null) return;
+        GameObject obj = Instantiate(loaded.prefab, leftHand);
+        obj.transform.SetParent(leftHand, false);
+      }
     }
-
-    // FIXME: Обновление доп. предмета
   }
 
   public void EquipItem(Equipment item) {
@@ -61,12 +78,13 @@ public class UnitEquipment : MonoBehaviour {
       case Weapon newWeapon:
         switch (newWeapon.slot) {
           case UnitEquipSlot.Primary:
-            oldItem = primaryWeapon;
-            primaryWeapon = newWeapon;
+            oldItem = primary;
+            primary = newWeapon;
             break;
+          // FIXME: Может быть не только оружие
           case UnitEquipSlot.Secondary:
-            oldItem = secondaryWeapon;
-            secondaryWeapon = newWeapon;
+            oldItem = secondary;
+            secondary = newWeapon;
             break;
         }
         break;
@@ -78,8 +96,8 @@ public class UnitEquipment : MonoBehaviour {
             armor = newArmor;
             break;
           case UnitEquipSlot.Secondary:
-            oldItem = shield;
-            shield = newArmor;
+            oldItem = secondary;
+            secondary = newArmor;
             break;
         }
         break;
@@ -94,38 +112,37 @@ public class UnitEquipment : MonoBehaviour {
 
   public void UnequipAll() {
     List<Equipment> inventory = Player.Instance.Inventory.Equip;
-    inventory.Add(primaryWeapon);
+    inventory.Add(primary);
     inventory.Add(armor);
-    if (secondaryWeapon != null) inventory.Add(secondaryWeapon);
-    if (shield != null) inventory.Add(shield);
+    if (secondary != null) inventory.Add(secondary);
 
-    primaryWeapon = null;
-    secondaryWeapon = null;
+    primary = null;
+    secondary = null;
     armor = null;
-    shield = null;
 
     Player.Instance.Army.UpdateState();
     Player.Instance.Inventory.UpdateState();
   }
 
   public List<Equipment> GetEquipmentList() {
-    List<Equipment> result = new() { primaryWeapon, armor };
-    if (secondaryWeapon != null) result.Add(secondaryWeapon);
-    if (shield != null) result.Add(shield);
+    List<Equipment> result = new() { primary, armor };
+    if (secondary != null) result.Add(secondary);
     return result;
   }
 
   public float GetTotalDefense() {
     float result = 0;
     if (armor != null) result += armor.defense;
-    if (shield != null) result += shield.defense;
+    if (secondary != null) {
+      if (secondary is Armor secArmor) result += secArmor.defense;
+    }
     return result;
   }
 
   public float GetTotalDamage() {
     // FIXME: Учет предмета во второй руке
-    float result = primaryWeapon.damage;
-    foreach (CoreStat stat in primaryWeapon.scalingStats) {
+    float result = primary.damage;
+    foreach (CoreStat stat in primary.scalingStats) {
       switch (stat) {
         case CoreStat.Strength: result += unit.Strength; break;
         case CoreStat.Dexterity: result += unit.Dexterity; break;
@@ -137,9 +154,8 @@ public class UnitEquipment : MonoBehaviour {
 
   public List<Skill> GetSkills() {
     List<Skill> result = new() { };
-    if (primaryWeapon != null && primaryWeapon.skill != null) result.Add(primaryWeapon.skill);
-    if (secondaryWeapon != null && secondaryWeapon.skill != null) result.Add(secondaryWeapon.skill);
-    if (shield != null && shield.skill != null) result.Add(shield.skill);
+    if (primary != null && primary.skill != null) result.Add(primary.skill);
+    if (secondary != null && secondary.skill != null) result.Add(secondary.skill);
     if (armor != null && armor.skill != null) result.Add(armor.skill);
     return result;
   }
@@ -153,11 +169,11 @@ public class UnitEquipment : MonoBehaviour {
   }
 
   public bool CanBreakObjects() {
-    return primaryWeapon.damageType == DamageType.Chop || primaryWeapon.damageType == DamageType.Crash;
+    return primary.damageType == DamageType.Chop || primary.damageType == DamageType.Crash;
   }
 
   public bool CanChopTrees() {
-    return primaryWeapon.damageType == DamageType.Chop;
+    return primary.damageType == DamageType.Chop;
   }
 
   public int CanEquip(Equipment item, UnitEquipSlot slot) {
@@ -178,10 +194,8 @@ public class UnitEquipment : MonoBehaviour {
         }
         break;
       case UnitEquipSlot.Secondary:
-        if (item is Weapon weapon2) {
-          // FIXME: Проверка на оружие для левой руки
-        }
-        else if (item is Armor armor2) {
+        // FIXME: Проверка на оружие для левой руки
+        if (item is Armor armor2) {
           if (unit.ShieldIsAllow) result = 0;
         }
         break;
@@ -204,7 +218,7 @@ public class UnitEquipment : MonoBehaviour {
   }
 
   public bool HasItem(Equipment item) {
-    return new Equipment[] { primaryWeapon, secondaryWeapon, shield, armor }
+    return new Equipment[] { primary, secondary, armor }
       .Any(e => e != null && e.id == item.id);
   }
 }

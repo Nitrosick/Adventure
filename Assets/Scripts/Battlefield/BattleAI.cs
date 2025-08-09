@@ -89,7 +89,7 @@ public static class BattleAI {
     Vector2Int diff = from.Coords - to.Coords;
     int dx = Mathf.Abs(diff.x);
     int dy = Mathf.Abs(diff.y);
-    int range = enemy.Equip.primaryWeapon.range;
+    int range = enemy.Equip.primary.range;
 
     if (range <= 3) return Mathf.Max(dx, dy);
     return dx + dy == 0 ? 0 : (dx == 0 || dy == 0 ? dx + dy : dx + dy - 0.5f);
@@ -139,7 +139,7 @@ public static class BattleAI {
     if (target == null) return;
 
     float distance = GetAttackDistance(enemy.CurrentTile, target.CurrentTile);
-    int range = enemy.Equip.primaryWeapon.range;
+    int range = enemy.Equip.primary.range;
 
     if (distance <= range) enemy.Target = target;
     else enemy.Target = null;
@@ -197,7 +197,7 @@ public static class BattleAI {
 
       foreach (Unit target in playerUnits) {
         float dist = GetAttackDistance(tile, target.CurrentTile);
-        if (dist < 2 || dist > enemy.Equip.primaryWeapon.range) continue;
+        if (dist < 2 || dist > enemy.Equip.primary.range) continue;
         if (!LineOfSightClear(tile.transform.position, target.CurrentTile.transform.position, enemy.gameObject)) continue;
         float score = EvaluateTileScore(tile, target);
 

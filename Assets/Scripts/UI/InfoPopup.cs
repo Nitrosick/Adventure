@@ -112,9 +112,9 @@ public class InfoPopup : MonoBehaviour {
       unit.Strength, unit.Dexterity, unit.Intelligence
     );
     unitMP.text = unit.TotalMovePoints.ToString();
-    unitDamage.text = unit.Equip.primaryWeapon.damage.ToString();
+    unitDamage.text = unit.Equip.primary.damage.ToString();
     unitDefense.text = unit.Equip.GetTotalDefense().ToString();
-    unitRange.text = unit.Equip.primaryWeapon.range.ToString();
+    unitRange.text = unit.Equip.primary.range.ToString();
     unitSkillCharges.text = unit.SkillCharges.ToString();
 
     if (unit.Projectiles == 0) unitProjectiles.text = "-";

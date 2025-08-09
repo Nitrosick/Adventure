@@ -102,7 +102,7 @@ public class Unit : MonoBehaviour {
 
   private void SetMovePoints() {
     float result = DefaultMovePoints;
-    Equipment[] unitEquip = { Equip.primaryWeapon, Equip.secondaryWeapon, Equip.shield, Equip.armor };
+    Equipment[] unitEquip = { Equip.primary, Equip.secondary, Equip.armor };
 
     foreach (Equipment item in unitEquip) {
       if (item == null) continue;
@@ -177,7 +177,7 @@ public class Unit : MonoBehaviour {
 
     if (!successAttack) Target.Animator.Dodge();
 
-    Animator.SetAttackType(Equip.primaryWeapon.attackType);
+    Animator.SetAttackType(Equip.primary.attackType);
     Animator.Attack();
   }
 
@@ -188,7 +188,7 @@ public class Unit : MonoBehaviour {
     Vector3 dirToTarget = (TargetObject.ParentTile.transform.position - GetPosition()).normalized;
     await Animator.RotateTowards(dirToTarget);
 
-    Animator.SetAttackType(Equip.primaryWeapon.attackType);
+    Animator.SetAttackType(Equip.primary.attackType);
     Animator.Attack();
   }
 
@@ -198,7 +198,7 @@ public class Unit : MonoBehaviour {
     Vector3 dirToTarget = (TargetTree.ParentTile.transform.position - GetPosition()).normalized;
 
     await Animator.RotateTowards(dirToTarget);
-    Animator.SetAttackType(Equip.primaryWeapon.attackType);
+    Animator.SetAttackType(Equip.primary.attackType);
     Animator.Attack();
   }
 
@@ -295,7 +295,6 @@ public class Unit : MonoBehaviour {
     if (!IsDead && CurrentHealth <= 0) health = TotalHealth;
     UnitEquipment equipment = transform.GetComponent<UnitEquipment>();
 
-    // FIXME: Добавить все сериализуемые поля
     return new UnitData {
       prefabId = prefabId,
       currentHealth = health,
@@ -304,9 +303,8 @@ public class Unit : MonoBehaviour {
       dexterity = Dexterity,
       intelligence = Intelligence,
       level = Level,
-      primaryWeaponId = equipment.primaryWeapon != null ? equipment.primaryWeapon.id : null,
-      secondaryWeaponId = equipment.secondaryWeapon != null ? equipment.secondaryWeapon.id : null,
-      shieldId = equipment.shield != null ? equipment.shield.id : null,
+      primaryId = equipment.primary != null ? equipment.primary.id : null,
+      secondaryId = equipment.secondary != null ? equipment.secondary.id : null,
       armorId = equipment.armor != null ? equipment.armor.id : null,
     };
   }
@@ -314,9 +312,8 @@ public class Unit : MonoBehaviour {
   public void FromData(UnitData data) {
     UnitEquipment equipment = transform.GetComponent<UnitEquipment>();
 
-    Weapon primaryWeapon = Factory.CreateEquipById(data.primaryWeaponId) as Weapon;
-    Weapon secondaryWeapon = Factory.CreateEquipById(data.secondaryWeaponId) as Weapon;
-    Armor shield = Factory.CreateEquipById(data.shieldId) as Armor;
+    Weapon primary = Factory.CreateEquipById(data.primaryId) as Weapon;
+    Equipment secondary = Factory.CreateEquipById(data.secondaryId);
     Armor armor = Factory.CreateEquipById(data.armorId) as Armor;
 
     CurrentHealth = data.currentHealth;
@@ -325,9 +322,8 @@ public class Unit : MonoBehaviour {
     Dexterity = data.dexterity;
     Intelligence = data.intelligence;
     Level = data.level;
-    equipment.primaryWeapon = primaryWeapon;
-    equipment.secondaryWeapon = secondaryWeapon;
-    equipment.shield = shield;
+    equipment.primary = primary;
+    equipment.secondary = secondary;
     equipment.armor = armor;
   }
 

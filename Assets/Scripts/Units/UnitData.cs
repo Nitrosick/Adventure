@@ -1,6 +1,5 @@
 [System.Serializable]
 public class UnitData {
-  // FIXME: Добавить все сериализуемые поля
   public string prefabId;
   public float currentHealth;
   public bool inSquad;
@@ -9,8 +8,7 @@ public class UnitData {
   public float intelligence;
   public int level;
 
-  public string primaryWeaponId;
-  public string secondaryWeaponId;
-  public string shieldId;
+  public string primaryId;
+  public string secondaryId;
   public string armorId;
 }

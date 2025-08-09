@@ -6,7 +6,7 @@ public class Militia : Unit
     Intelligence = 1;
 
     Name = "Militia";
-    Description = "Yesterday's peasant is today's armed infantryman. An inexperienced and poorly equipped fighter, but always ready for battle.";
+    Description = "Infantry often recruits strong guys who previously guarded warehouses or docks, or worked as bouncers in taverns. They are always ready for a good fight.";
     prefabId = "u2";
     Type = UnitType.Melee;
     AllowedWeapon = EquipmentType.OneHandWeapon;

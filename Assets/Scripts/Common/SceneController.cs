@@ -44,14 +44,14 @@ public class SceneController : MonoBehaviour
   public static void Unlock() { Locked = false; }
 
   public async static void OpenWindow(string name) {
-    StateManager.openedWindows.Add(name);
     await Task.Yield();
+    StateManager.openedWindows.Add(name);
     background.SetActive(StateManager.openedWindows.Count > 0);
   }
 
   public async static void CloseWindow(string name) {
-    StateManager.openedWindows.Remove(name);
     await Task.Yield();
+    StateManager.openedWindows.Remove(name);
     background.SetActive(StateManager.openedWindows.Count > 0);
   }
 

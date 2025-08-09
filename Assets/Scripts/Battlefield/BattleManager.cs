@@ -118,12 +118,12 @@ public class BattleManager : MonoBehaviour
 
     bool success = Utils.RollChance(chance);
     // FIXME: Учет предмета во второй руке
-    if (success) multiplier = attacker.Equip.primaryWeapon.critModifier;
+    if (success) multiplier = attacker.Equip.primary.critModifier;
     return multiplier;
   }
 
   public static float CalculateDamage(Unit attacker, Unit target) {
-    Weapon attackerWeapon = attacker.Equip.primaryWeapon;
+    Weapon attackerWeapon = attacker.Equip.primary;
     Armor targetArmor = target.Equip.armor;
 
     float resist = targetArmor.resists[attackerWeapon.damageType];
@@ -141,7 +141,7 @@ public class BattleManager : MonoBehaviour
   }
 
   public static Effect GetWeaponEffect(Unit attacker, Unit target) {
-    Weapon weapon = attacker.Equip.primaryWeapon;
+    Weapon weapon = attacker.Equip.primary;
     Armor armor = target.Equip.armor;
 
     if (weapon.effect == null || weapon.effectChance == 0f) return null;

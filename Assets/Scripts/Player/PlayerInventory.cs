@@ -6,6 +6,8 @@ public class PlayerInventory : MonoBehaviour {
   private PlayerArmy army;
   public Transform weaponBracing;
   public Transform shieldBracing;
+  private Transform beard;
+  private Transform hair;
 
   public List<Equipment> Equip { get; private set; } = new() { };
   public List<Item> Items { get; private set; } = new() { };
@@ -14,6 +16,8 @@ public class PlayerInventory : MonoBehaviour {
   private void Awake() {
     army = transform.GetComponent<PlayerArmy>();
     armorSets = GetComponentsInChildren<ArmorSet>(true);
+    beard = transform.Find("Model/Beard");
+    hair = transform.Find("Model/Hair");
 
     if (army == null || armorSets.Length == 0) {
       Debug.LogError("Unit inventory components initialization error");
@@ -28,23 +32,33 @@ public class PlayerInventory : MonoBehaviour {
     Unit hero = army.Units.FirstOrDefault(u => u.IsHero);
     if (hero == null) return;
     UnitEquipment heroEquip = hero.Equip;
+    if (beard != null) beard.gameObject.SetActive(false);
+    if (hair != null) hair.gameObject.SetActive(false);
 
     foreach (ArmorSet set in armorSets) {
-      if (set.id == heroEquip.armor.id) set.gameObject.SetActive(true);
+      if (set.id == heroEquip.armor.id) {
+        set.gameObject.SetActive(true);
+        if (set.showBeard && beard != null) beard.gameObject.SetActive(true);
+        if (set.showHair && hair != null) hair.gameObject.SetActive(true);
+      }
       else set.gameObject.SetActive(false);
     }
 
     foreach (Transform item in weaponBracing) { Destroy(item.gameObject); }
     foreach (Transform item in shieldBracing) { Destroy(item.gameObject); }
 
-    Weapon loadedWeapon = Resources.Load<Weapon>("Weapon/" + heroEquip.primaryWeapon.name);
-    Armor loadedShield = Resources.Load<Armor>("Armor/" + heroEquip.shield.name);
-    if (loadedWeapon == null || loadedShield == null) return;
-
+    Weapon loadedWeapon = Resources.Load<Weapon>("Weapon/" + heroEquip.primary.name);
+    if (loadedWeapon == null) return;
     GameObject weaponObj = Instantiate(loadedWeapon.prefab, weaponBracing);
     weaponObj.transform.SetParent(weaponBracing, false);
-    GameObject shieldObj = Instantiate(loadedShield.prefab, shieldBracing);
-    shieldObj.transform.SetParent(shieldBracing, false);
+
+    if (heroEquip.secondary is Armor secArmor) {
+      Armor loadedShield = Resources.Load<Armor>("Armor/" + heroEquip.secondary.name);
+      if (loadedShield == null) return;
+      GameObject shieldObj = Instantiate(loadedShield.prefab, shieldBracing);
+      shieldObj.transform.SetParent(shieldBracing, false);
+    }
+    // FIXME: Обработать все типы доп. предмета
   }
 
   public void UpdateInventory(Equipment[] items) { Equip = items.ToList(); }
