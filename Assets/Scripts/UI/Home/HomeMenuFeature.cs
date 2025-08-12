@@ -11,7 +11,7 @@ public class HomeMenuFeature : MonoBehaviour {
   private TextMeshProUGUI level;
   private Image avatarBackground;
 
-  protected readonly Dictionary<MasteryLevel, Color> palette = new();
+  protected Dictionary<MasteryLevel, Color> palette = new();
   protected MasteryLevel masteryLevel;
 
   private readonly int slotColumns = 5;
@@ -27,23 +27,11 @@ public class HomeMenuFeature : MonoBehaviour {
       return;
     }
 
-    InitPalette();
+    palette = Utils.GetMasteryPalette();
   }
 
   private bool ComponentsInitialized() {
     return title != null && level != null && avatarBackground != null;
-  }
-
-  private void InitPalette() {
-    AddColor(MasteryLevel.Novice, "#A0A0A0");
-    AddColor(MasteryLevel.Apprentice, "#618C2D");
-    AddColor(MasteryLevel.Adept, "#306DAB");
-    AddColor(MasteryLevel.Expert, "#6948A4");
-    AddColor(MasteryLevel.Master, "#CF8F0B");
-  }
-
-  private void AddColor(MasteryLevel lvl, string hex) {
-    if (ColorUtility.TryParseHtmlString(hex, out var color)) palette[lvl] = color;
   }
 
   protected void InitHeader(string name, MasteryLevel lvl) {

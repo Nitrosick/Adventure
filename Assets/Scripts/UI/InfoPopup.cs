@@ -31,7 +31,6 @@ public class InfoPopup : MonoBehaviour {
   private static TextMeshProUGUI unitDamage;
   private static TextMeshProUGUI unitDefense;
   private static TextMeshProUGUI unitRange;
-  private static TextMeshProUGUI unitSkillCharges;
   private static TextMeshProUGUI unitProjectiles;
   private static TextMeshProUGUI unitEffects;
 
@@ -72,7 +71,6 @@ public class InfoPopup : MonoBehaviour {
     unitDamage = Get<TextMeshProUGUI>(unitParams, "Damage/Value");
     unitDefense = Get<TextMeshProUGUI>(unitParams, "Defense/Value");
     unitRange = Get<TextMeshProUGUI>(unitParams, "Range/Value");
-    unitSkillCharges = Get<TextMeshProUGUI>(unitParams, "SkillCharges/Value");
     unitProjectiles = Get<TextMeshProUGUI>(unitParams, "Projectiles/Value");
 
     unitEffects = Get<TextMeshProUGUI>(panel, "Effects");
@@ -85,8 +83,8 @@ public class InfoPopup : MonoBehaviour {
       armorParams == null || armorDefense == null || weight == null ||
       unitParams == null || unitHP == null || unitLevel == null ||
       unitStats == null || unitMP == null || unitDamage == null ||
-      unitDefense == null || unitRange == null || unitSkillCharges == null ||
-      unitEffects == null || pricePanel == null || unitProjectiles == null
+      unitDefense == null || unitRange == null || unitEffects == null ||
+      pricePanel == null || unitProjectiles == null
     ) {
       Debug.LogError("Item info components initialization error");
       return;
@@ -115,11 +113,16 @@ public class InfoPopup : MonoBehaviour {
     unitDamage.text = unit.Equip.primary.damage.ToString();
     unitDefense.text = unit.Equip.GetTotalDefense().ToString();
     unitRange.text = unit.Equip.primary.range.ToString();
-    unitSkillCharges.text = unit.SkillCharges.ToString();
 
     if (unit.Projectiles == 0) unitProjectiles.text = "-";
     else if (unit.Projectiles == unit.CurrentProjectiles) unitProjectiles.text = unit.Projectiles.ToString();
     else unitProjectiles.text = $"{unit.CurrentProjectiles} / {unit.Projectiles}";
+
+    UnitEffects effectsComponent = unit.Effects;
+    if (effectsComponent == null) {
+      unitEffects.gameObject.SetActive(false);
+      return;
+    }
 
     string effectsText = "Effects";
     foreach (EffectInstance e in unit.Effects.ActiveEffects) {
@@ -197,7 +200,6 @@ public class InfoPopup : MonoBehaviour {
     unitDamage.text = "";
     unitDefense.text = "";
     unitRange.text = "";
-    unitSkillCharges.text = "";
     unitProjectiles.text = "";
     unitEffects.text = "";
   }

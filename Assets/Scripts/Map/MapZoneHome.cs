@@ -8,6 +8,12 @@ public class MapZoneHome : MapZone {
   public string healerName;
   public MasteryLevel healerLevel;
 
+  [Header("Training")]
+  public string trainerName;
+  public MasteryLevel trainerLevel;
+  public TrainingChain[] soldierTrainingChains;
+  public TrainingChain[] supportTrainingChains;
+
   [Header("Trading")]
   public string merchantName;
   public MasteryLevel merchantLevel;

@@ -63,10 +63,12 @@ public class CraftingRecipeUI : MonoBehaviour {
     }
 
     int[] res = data.componentResources;
+    string[] resTooltips = { "Wood", "Stone", "Metal", "Leather" };
+
     for (int i = 0; i < res.Length; i++) {
       if (res[i] == 0) continue;
       GameObject obj = Instantiate(recipeSlotPrefab, componentsPanel);
-      obj.GetComponent<CraftingRecipeSlot>().Init(sprites[i], res[i]);
+      obj.GetComponent<CraftingRecipeSlot>().Init(sprites[i], res[i], resTooltips[i]);
     }
 
     CheckEnoughResources();

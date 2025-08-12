@@ -9,7 +9,7 @@ public class HeroWarrior : Unit {
     Name = "Hero";
     Description = "The fate of this warrior is entirely in your hands.";
     IsHero = true;
-    prefabId = "u1";
+    PrefabId = "u1";
     Type = UnitType.Melee;
     AllowedWeapon = EquipmentType.OneHandWeapon;
     ShieldIsAllow = true;

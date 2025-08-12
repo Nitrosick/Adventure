@@ -183,5 +183,6 @@ public enum MapZoneFeature {
   Healing,
   Trading,
   Weaponsmith,
-  Armorer
+  Armorer,
+  Training
 }

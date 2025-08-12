@@ -312,6 +312,7 @@ GameObject:
   - component: {fileID: 8260135569687470957}
   - component: {fileID: 1264400681170012463}
   - component: {fileID: 1375467979999771859}
+  - component: {fileID: 3261842948472481}
   m_Layer: 5
   m_Name: TradingMenuSlot
   m_TagString: MenuSlot
@@ -392,6 +393,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 194cb981eb3b3224699b5365c7875ac1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &3261842948472481
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4972313229319543418}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85ae1c4c3e52d3e4fb35cc8072e38c05, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  message: 
 --- !u!1 &6605456944149207944
 GameObject:
   m_ObjectHideFlags: 0

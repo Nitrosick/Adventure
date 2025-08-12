@@ -33,11 +33,12 @@ public class TradingMenuSlot : MonoBehaviour, IPointerEnterHandler, IPointerExit
     }
   }
 
-  public void Init(Sprite sprite, int price, int i) {
+  public void Init(Sprite sprite, int price, int i, string hint = "") {
     type = ItemType.Resource;
     image.sprite = sprite;
     itemPrice = price;
     resourceIndex = i;
+    if (hint != "") transform.GetComponent<TooltipTrigger>().message = hint;
 
     UpdatePrice();
   }

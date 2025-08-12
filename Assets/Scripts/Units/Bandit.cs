@@ -7,7 +7,7 @@ public class Bandit : Unit
 
     Name = "Bandit";
     Description = "This is a fast, agile, but poorly protected fighter who uses swords and daggers. Bandits set up camps in forests and hunt passing travelers.";
-    prefabId = "u3";
+    PrefabId = "u3";
     Type = UnitType.Melee;
     AllowedWeapon = EquipmentType.OneHandWeapon;
     TotalHealth = 20f;

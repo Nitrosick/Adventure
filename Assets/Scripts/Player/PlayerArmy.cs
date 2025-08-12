@@ -23,6 +23,13 @@ public class PlayerArmy : MonoBehaviour {
     UpdateState();
   }
 
+  public void AddUnit(Unit unit) {
+    if (unit == null) return;
+    Unit prefab = StateManager.PrefabDatabase.GetPrefab(unit.PrefabId, true);
+    Units.Add(prefab);
+    UpdateState();
+  }
+
   public void DeleteUnit(Unit unit) {
     for (int i = 0; i < Units.Count; i++) {
       if (Units[i] == unit) {
@@ -38,5 +45,9 @@ public class PlayerArmy : MonoBehaviour {
 
   public void UpdateState() {
     StateManager.WriteUnitsData(Units.ToArray(), "allies");
+  }
+
+  public bool HasUnit(Unit unit) {
+    return Units.Any(u => u.PrefabId == unit.PrefabId);
   }
 }

@@ -56,9 +56,11 @@ public class TradingMenuUI : HomeMenuFeature {
     ClearSlots(miscSlots);
 
     if (resourcesAvailable) {
+      string[] resTooltips = { "Wood", "Stone", "Metal", "Leather" };
+
       for (int i = 0; i < resourcePrices.Length; i++) {
         GameObject slot = Instantiate(slotPrefab, resourceSlots);
-        slot.GetComponent<TradingMenuSlot>().Init(resourceSprites[i], resourcePrices[i], i);
+        slot.GetComponent<TradingMenuSlot>().Init(resourceSprites[i], resourcePrices[i], i, resTooltips[i]);
       }
     }
 

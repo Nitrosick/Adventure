@@ -162,6 +162,7 @@ GameObject:
   - component: {fileID: 7959691179547903130}
   - component: {fileID: 1876001038782221453}
   - component: {fileID: 6049749530718872865}
+  - component: {fileID: 2752135118209848536}
   m_Layer: 5
   m_Name: RecipeSlot
   m_TagString: MenuSlot
@@ -242,6 +243,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a07cb95aef2c79149b65eee57f7fa11f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2752135118209848536
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 279035475939884220}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85ae1c4c3e52d3e4fb35cc8072e38c05, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  message: 
 --- !u!1 &2780971351566297482
 GameObject:
   m_ObjectHideFlags: 0

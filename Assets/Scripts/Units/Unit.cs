@@ -10,7 +10,7 @@ public class Unit : MonoBehaviour {
   public UnitEquipment Equip { get; private set; }
   public UnitEffects Effects { get; private set; }
   public Sprite avatar;
-  protected string prefabId;
+  public string PrefabId { get; protected set; }
 
   // Temporary
   public Tile CurrentTile { get; set; }
@@ -296,7 +296,7 @@ public class Unit : MonoBehaviour {
     UnitEquipment equipment = transform.GetComponent<UnitEquipment>();
 
     return new UnitData {
-      prefabId = prefabId,
+      prefabId = PrefabId,
       currentHealth = health,
       inSquad = InSquad,
       strength = Strength,

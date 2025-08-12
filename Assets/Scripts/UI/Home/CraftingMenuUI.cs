@@ -12,7 +12,7 @@ public class CraftingMenuUI : HomeMenuFeature {
   private GameObject armorerDesc;
   private Transform recipesPanel;
 
-  protected readonly Dictionary<Rarity, Color> rarityPalette = new();
+  protected Dictionary<Rarity, Color> rarityPalette = new();
 
   protected override void Awake() {
     base.Awake();
@@ -29,24 +29,12 @@ public class CraftingMenuUI : HomeMenuFeature {
       return;
     }
 
-    InitRarityPalette();
+    rarityPalette = Utils.GetRarityPalette();
   }
 
   private bool ComponentsInitialized() {
     return masterIcon != null && weaponsmithDesc != null && armorerDesc != null &&
     recipesPanel != null;
-  }
-
-  private void InitRarityPalette() {
-    AddColor(Rarity.Common, "#A0A0A0");
-    AddColor(Rarity.Rare, "#618C2D");
-    AddColor(Rarity.Epic, "#306DAB");
-    AddColor(Rarity.Legendary, "#6948A4");
-    AddColor(Rarity.Relic, "#CF8F0B");
-  }
-
-  private void AddColor(Rarity lvl, string hex) {
-    if (ColorUtility.TryParseHtmlString(hex, out var color)) rarityPalette[lvl] = color;
   }
 
   public void Init(string name, MasteryLevel lvl, MapZoneFeature type, CraftingRecipe[] recipes) {

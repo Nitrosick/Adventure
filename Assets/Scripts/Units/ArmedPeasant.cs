@@ -7,7 +7,7 @@ public class ArmedPeasant : Unit
 
     Name = "Armed peasant";
     Description = "Just yesterday, a peasant working on the farm, today already on the front line. He has no combat experience, but he can be useful in the squad.";
-    prefabId = "u5";
+    PrefabId = "u5";
     Type = UnitType.Melee;
     AllowedWeapon = EquipmentType.OneHandWeapon;
     TotalHealth = 20f;
