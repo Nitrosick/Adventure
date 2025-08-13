@@ -92,8 +92,9 @@ public class RecruitingUI : MonoBehaviour {
   public static void Open(MapZoneRecruitment zone) {
     if (zone == null || zone.requirements == null) return;
     mapZone = zone;
-    title.text = mapZone.zoneName;
-    description.text = mapZone.description;
+    MapZone parentZone = zone.GetComponent<MapZone>();
+    title.text = parentZone.zoneName;
+    description.text = parentZone.description;
 
     if (zone.recruitVillagers > 0) {
       villagersCount.text = "x" + zone.recruitVillagers;
@@ -173,13 +174,16 @@ public class RecruitingUI : MonoBehaviour {
   }
 
   private static void OnSubmit() {
+    MapZone parentZone = mapZone.GetComponent<MapZone>();
+
     if (mapZone.recruitVillagers > 0) {
       player.SetVillagers(mapZone.recruitVillagers);
-      mapZone.SetCleared();
+      parentZone.SetCleared();
     }
 
     // FIXME: Отнять ресурсы
-    mapZone.UnshiftEvent();
+    // FIXME: Учитывать засаду
+    parentZone.UnshiftEvent();
     Close();
     _ = Toast.Show("success", "People have joined you");
   }

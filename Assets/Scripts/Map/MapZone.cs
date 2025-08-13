@@ -5,20 +5,15 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class MapZone : MonoBehaviour {
-  [Header("Common")]
   public int id;
   public Vector3 playerPosition;
   public string zoneName;
-  public string description;
-  public string descriptionCleared;
+  [TextArea(5, 20)] public string description;
+  [TextArea(5, 20)] public string descriptionCleared;
   public List<MapZoneType> events;
   public bool isEmpty;
   public bool secret;
 
-  [Header("Materials and components")]
-  public Material defaultMaterial;
-  public Material highlightMaterial;
-  public Material stoneMaterial;
   public GameObject[] interactiveObjects;
   protected Renderer auraRender;
   protected SpriteRenderer markerRender;
@@ -31,7 +26,6 @@ public class MapZone : MonoBehaviour {
 
   protected void Awake() {
     auraRender = GetComponent<Renderer>();
-    auraRender.material = defaultMaterial;
     markerRender = transform.Find("Marker").GetComponent<SpriteRenderer>();
     Transform markIconObj = transform.Find("Mark/Icon");
     if (markIconObj != null) markIcon = markIconObj.GetComponent<MeshRenderer>();
@@ -53,6 +47,10 @@ public class MapZone : MonoBehaviour {
     }
   }
 
+  private void Start() {
+    auraRender.material = MapZoneManager.Instance.defaultMaterial;
+  }
+
   protected void OnMouseEnter() {
     if (SceneController.Locked || EventSystem.current.IsPointerOverGameObject() || secret) return;
     MapUI.Instance.ShowZoneInfo(zoneName, description, descriptionCleared, events, isEmpty);
@@ -61,7 +59,7 @@ public class MapZone : MonoBehaviour {
     int[] wayIds = ways.Select(way => way.id).ToArray();
     if (playerZone == this || !wayIds.Contains(playerZone.id)) return;
 
-    auraRender.material = highlightMaterial;
+    auraRender.material = MapZoneManager.Instance.highlightMaterial;
     Color color = markerRender.color;
     color.a = linesTransparency + 0.3f;
     markerRender.color = color;
@@ -70,12 +68,12 @@ public class MapZone : MonoBehaviour {
   protected void OnMouseExit() {
     MapUI.Instance.HideZoneInfo();
 
-    auraRender.material = defaultMaterial;
+    auraRender.material = MapZoneManager.Instance.defaultMaterial;
     InitMarker();
   }
 
   public virtual void SetCleared() {
-    if (markIcon != null) markIcon.material = stoneMaterial;
+    if (markIcon != null) markIcon.material = MapZoneManager.Instance.stoneMaterial;
 
     if (interactiveObjects != null && interactiveObjects.Length > 0) {
       foreach (GameObject obj in interactiveObjects) {
@@ -101,11 +99,14 @@ public class MapZone : MonoBehaviour {
   }
 
   public void UnshiftEvent() {
+    if (events[0] == MapZoneType.Ambush) return;
     events.RemoveAt(0);
+
     if (events.Count == 0) {
       SetCleared();
       MapUI.Instance.HideInteractableButton();
     }
+
     StateManager.zonesState[id] = events;
   }
 

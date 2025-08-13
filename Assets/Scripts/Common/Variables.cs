@@ -173,9 +173,9 @@ public enum MapZoneType {
   Home,
   InstantBattle,
   Guard,
-  Ambush,
   Constructing,
-  Recruitment
+  Recruitment,
+  Ambush
   // ...
 }
 

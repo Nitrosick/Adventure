@@ -147,7 +147,8 @@ public class Player : MonoBehaviour {
     MapZoneEvent events = Move.CurrentZone.GetComponent<MapZoneEvent>();
     events.CheckEvents(true);
 
-    if (Move.CurrentZone is not MapZoneBattle battleZone) return;
+    MapZoneBattle battleZone = Move.CurrentZone.GetComponent<MapZoneBattle>();
+    if (battleZone == null) return;
     BattleResult? result = StateManager.battleResult;
     if (result == null) return;
 

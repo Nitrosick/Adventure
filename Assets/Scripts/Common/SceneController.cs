@@ -13,7 +13,7 @@ public class SceneController : MonoBehaviour
   // Background
   private static GameObject background;
   private static Image overlay;
-  private static readonly float fadeDuration = 2f;
+  private static readonly float fadeDuration = 1.6f;
 
   // Event panel
   private static GameObject eventPanel;

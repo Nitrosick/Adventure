@@ -2,22 +2,30 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class MapZoneEvent : MonoBehaviour
-{
+public class MapZoneEvent : MonoBehaviour {
   private MapZone zone;
 
   private void Awake() {
     zone = transform.GetComponent<MapZone>();
   }
 
-  public void CheckEvents(bool ignoreBattle = false) {
+  public void CheckEvents(bool ignoreBattle = false, bool forceAmbush = false) {
     if (zone == null || zone.events.Count < 1) return;
     T Get<T>() where T : Component => transform.GetComponent<T>();
+    MapZoneBattle battleZone = Get<MapZoneBattle>();
+
+    if (zone.events[0] == MapZoneType.Ambush && !ignoreBattle) {
+      bool check = Utils.RollChance(battleZone.ambushChance);
+      if (check || forceAmbush) {
+        StartBattle(battleZone, true);
+        return;
+      }
+    }
 
     switch (zone.events[0]) {
       case MapZoneType.InstantBattle:
         if (ignoreBattle) return;
-        StartBattle();
+        StartBattle(battleZone);
         break;
       case MapZoneType.Home:
         MapUI.Instance.ShowInteractableButton(Get<MapZoneHome>().OpenHomeMenu);
@@ -25,11 +33,13 @@ public class MapZoneEvent : MonoBehaviour
       case MapZoneType.Recruitment:
         MapUI.Instance.ShowInteractableButton(Get<MapZoneRecruitment>().OpenRecruitmentPanel);
         break;
+      case MapZoneType.Constructing:
+        Debug.Log("Stroim");
+        break;
     }
   }
 
-  private void StartBattle() {
-    if (zone is not MapZoneBattle battleZone) return;
+  private void StartBattle(MapZoneBattle battleZone, bool isAmbush = false) {
     if (battleZone.guard == null || battleZone.guard.Length < 1) {
       Debug.LogError("Zone guard is not specified");
       return;
@@ -44,7 +54,9 @@ public class MapZoneEvent : MonoBehaviour
     }
 
     if (unitsInSquad.Length > battleZone.armySlots) {
-      SquadOverwhelmed.Open(battleZone.armySlots, this, battleZone.events[0] != MapZoneType.InstantBattle);
+      bool cancelable = false;
+      if (!isAmbush) cancelable = zone.events[0] != MapZoneType.InstantBattle;
+      SquadOverwhelmed.Open(battleZone.armySlots, this, cancelable, isAmbush);
       return;
     }
 
@@ -55,7 +67,7 @@ public class MapZoneEvent : MonoBehaviour
 
     MapUI.Instance.DisableUI();
     MapUI.Instance.HideZoneInfo();
-    SceneController.ShowEventInfo("battle", "Battle is starting");
+    SceneController.ShowEventInfo("battle", isAmbush ? "Ambush!" : "Battle is starting");
     SceneController.SwitchScene(battleZone.battlefieldName);
   }
 }

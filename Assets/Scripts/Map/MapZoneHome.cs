@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class MapZoneHome : MapZone {
+public class MapZoneHome : MonoBehaviour {
   [Header("Features")]
   public MapZoneFeature[] features;
 

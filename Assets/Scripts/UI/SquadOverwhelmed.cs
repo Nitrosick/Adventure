@@ -18,6 +18,7 @@ public class SquadOverwhelmed : MonoBehaviour {
   public GameObject emptySlotPrefab;
   private static int limit;
   private static MapZoneEvent mapZoneEvent;
+  private static bool isAmbush;
 
   private static readonly int slotsInRow = 5;
 
@@ -47,10 +48,11 @@ public class SquadOverwhelmed : MonoBehaviour {
     cancel.onClick.RemoveListener(OnCancel);
   }
 
-  public static void Open(int lim, MapZoneEvent evt, bool cancelable) {
+  public static void Open(int lim, MapZoneEvent evt, bool cancelable, bool ambush = false) {
     cancel.gameObject.SetActive(cancelable);
     limit = lim;
     mapZoneEvent = evt;
+    isAmbush = ambush;
 
     text.text =
       "Your squad is overwhelmed.\nA maximum of <color=#781010>" +
@@ -85,7 +87,7 @@ public class SquadOverwhelmed : MonoBehaviour {
 
   private static void OnSubmit() {
     Close();
-    if (mapZoneEvent != null) mapZoneEvent.CheckEvents();
+    if (mapZoneEvent != null) mapZoneEvent.CheckEvents(false, isAmbush);
     mapZoneEvent = null;
   }
 

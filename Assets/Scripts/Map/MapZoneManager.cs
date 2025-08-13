@@ -3,9 +3,16 @@ using System.Linq;
 using UnityEngine;
 
 public class MapZoneManager : MonoBehaviour {
+  public static MapZoneManager Instance;
+
+  public Material defaultMaterial;
+  public Material highlightMaterial;
+  public Material stoneMaterial;
   public static MapZone[] Zones { get; private set; }
 
   private void Awake() {
+    Instance = this;
+
     Zones = GameObject.FindGameObjectsWithTag("MapZone")
       .Select(zone => zone.GetComponent<MapZone>())
       .Where(zone => zone != null)
