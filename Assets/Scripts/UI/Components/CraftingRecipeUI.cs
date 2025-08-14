@@ -12,7 +12,7 @@ public class CraftingRecipeUI : MonoBehaviour {
 
   private TextMeshProUGUI price;
   private Transform componentsPanel;
-  private CraftingRecipeSlot resultSlot;
+  private SlotWithCount resultSlot;
   private Image arrowIcon;
   private Button craftButton;
   private Sprite[] sprites;
@@ -24,7 +24,7 @@ public class CraftingRecipeUI : MonoBehaviour {
     Transform panel = transform.Find("Viewport/Content").GetComponent<Transform>();
     price = panel.Find("Price/Value").GetComponent<TextMeshProUGUI>();
     componentsPanel = panel.Find("Components");
-    resultSlot = panel.Find("ResultSlot").GetComponent<CraftingRecipeSlot>();
+    resultSlot = panel.Find("ResultSlot").GetComponent<SlotWithCount>();
     arrowIcon = panel.Find("ArrowIcon").GetComponent<Image>();
     craftButton = panel.Find("Craft").GetComponent<Button>();
     sprites = new Sprite[] { woodSprite, stoneSprite, metalSprite, leatherSprite };
@@ -49,7 +49,7 @@ public class CraftingRecipeUI : MonoBehaviour {
   public void Init(CraftingRecipe data) {
     recipe = data;
     GameObject source = Instantiate(recipeSlotPrefab, componentsPanel);
-    CraftingRecipeSlot slotScript = source.GetComponent<CraftingRecipeSlot>();
+    SlotWithCount slotScript = source.GetComponent<SlotWithCount>();
 
     if (data.sourceEquip != null) slotScript.Init(data.sourceEquip);
     if (data.resultEquip != null) resultSlot.Init(data.resultEquip, data.resultCount);
@@ -58,17 +58,15 @@ public class CraftingRecipeUI : MonoBehaviour {
     if (data.componentItems.Length > 0) {
       foreach (Item item in data.componentItems) {
         GameObject obj = Instantiate(recipeSlotPrefab, componentsPanel);
-        obj.GetComponent<CraftingRecipeSlot>().Init(item);
+        obj.GetComponent<SlotWithCount>().Init(item);
       }
     }
 
     int[] res = data.componentResources;
-    string[] resTooltips = { "Wood", "Stone", "Metal", "Leather" };
-
     for (int i = 0; i < res.Length; i++) {
       if (res[i] == 0) continue;
       GameObject obj = Instantiate(recipeSlotPrefab, componentsPanel);
-      obj.GetComponent<CraftingRecipeSlot>().Init(sprites[i], res[i], resTooltips[i]);
+      obj.GetComponent<SlotWithCount>().Init(sprites[i], res[i], MapUI.Instance.resTooltips[i]);
     }
 
     CheckEnoughResources();
@@ -116,9 +114,7 @@ public class CraftingRecipeUI : MonoBehaviour {
     }
 
     player.Inventory.RemoveItem(recipe.sourceEquip);
-    foreach (Item item in recipe.componentItems) {
-      player.Inventory.RemoveItem(item);
-    }
+    foreach (Item item in recipe.componentItems) player.Inventory.RemoveItem(item);
     player.SetResources(recipe.componentResources.Select(n => -n).ToArray());
     player.SetGold(recipe.cost * -1);
 

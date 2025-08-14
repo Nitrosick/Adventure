@@ -1,9 +1,10 @@
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class CraftingRecipeSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler {
+public class SlotWithCount : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler {
   private Image image;
   private GameObject itemCount;
   private TextMeshProUGUI itemCountText;
@@ -22,28 +23,32 @@ public class CraftingRecipeSlot : MonoBehaviour, IPointerEnterHandler, IPointerE
     }
   }
 
-  public void Init(Sprite sprite, int count = 1, string hint = "") {
+  public async void Init(Sprite sprite, int count = 1, string hint = "") {
+    await Task.Yield();
     image.sprite = sprite;
     if (count > 1) itemCount.SetActive(true);
     itemCountText.text = count.ToString();
     if (hint != "") transform.GetComponent<TooltipTrigger>().message = hint;
   }
 
-  public void Init(Equipment item, int count = 1) {
+  public async void Init(Equipment item, int count = 1) {
+    await Task.Yield();
     image.sprite = item.icon;
     if (count > 1) itemCount.SetActive(true);
     itemCountText.text = count.ToString();
     currentEquip = item;
   }
 
-  public void Init(Item item, int count = 1) {
+  public async void Init(Item item, int count = 1) {
+    await Task.Yield();
     image.sprite = item.icon;
     if (count > 1) itemCount.SetActive(true);
     itemCountText.text = count.ToString();
     currentItem = item;
   }
 
-  public void Init(Unit unit) {
+  public async void Init(Unit unit) {
+    await Task.Yield();
     image.sprite = unit.avatar;
     currentUnit = unit;
   }

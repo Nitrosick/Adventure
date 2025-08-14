@@ -3,8 +3,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System.Threading.Tasks;
 
-public class TradingMenuSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler {
+public class SlotWithPrice : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler {
   private Player player;
   private ItemType type;
   private Image image;
@@ -33,7 +34,8 @@ public class TradingMenuSlot : MonoBehaviour, IPointerEnterHandler, IPointerExit
     }
   }
 
-  public void Init(Sprite sprite, int price, int i, string hint = "") {
+  public async void Init(Sprite sprite, int price, int i, string hint = "") {
+    await Task.Yield();
     type = ItemType.Resource;
     image.sprite = sprite;
     itemPrice = price;
@@ -43,7 +45,8 @@ public class TradingMenuSlot : MonoBehaviour, IPointerEnterHandler, IPointerExit
     UpdatePrice();
   }
 
-  public void Init(Equipment item) {
+  public async void Init(Equipment item) {
+    await Task.Yield();
     type = ItemType.Equipment;
     image.sprite = item.icon;
     itemPrice = item.price;
@@ -53,7 +56,8 @@ public class TradingMenuSlot : MonoBehaviour, IPointerEnterHandler, IPointerExit
     UpdatePrice();
   }
 
-  public void Init(Item item) {
+  public async void Init(Item item) {
+    await Task.Yield();
     type = ItemType.Misc;
     image.sprite = item.icon;
     itemPrice = item.price;

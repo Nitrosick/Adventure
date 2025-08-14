@@ -9,7 +9,7 @@ public class TrainingChainUI : MonoBehaviour {
 
   private TextMeshProUGUI price;
   private Transform componentsPanel;
-  private CraftingRecipeSlot resultSlot;
+  private SlotWithCount resultSlot;
   private Image arrowIcon;
   private Button trainButton;
   private Color accessColor;
@@ -21,7 +21,7 @@ public class TrainingChainUI : MonoBehaviour {
     Transform panel = transform.Find("Viewport/Content").GetComponent<Transform>();
     price = panel.Find("Price/Value").GetComponent<TextMeshProUGUI>();
     componentsPanel = panel.Find("Components");
-    resultSlot = panel.Find("ResultSlot").GetComponent<CraftingRecipeSlot>();
+    resultSlot = panel.Find("ResultSlot").GetComponent<SlotWithCount>();
     arrowIcon = panel.Find("ArrowIcon").GetComponent<Image>();
     trainButton = panel.Find("Train").GetComponent<Button>();
 
@@ -47,7 +47,7 @@ public class TrainingChainUI : MonoBehaviour {
   public void Init(TrainingChain data) {
     chain = data;
     GameObject source = Instantiate(chainSlotPrefab, componentsPanel);
-    CraftingRecipeSlot slotScript = source.GetComponent<CraftingRecipeSlot>();
+    SlotWithCount slotScript = source.GetComponent<SlotWithCount>();
 
     if (data.sourceUnit != null) {
       Unit prefab = StateManager.PrefabDatabase.GetPrefab(data.sourceUnit.PrefabId, true);
@@ -66,14 +66,14 @@ public class TrainingChainUI : MonoBehaviour {
     if (data.items.Length > 0) {
       foreach (Item item in data.items) {
         GameObject obj = Instantiate(chainSlotPrefab, componentsPanel);
-        obj.GetComponent<CraftingRecipeSlot>().Init(item);
+        obj.GetComponent<SlotWithCount>().Init(item);
       }
     }
 
     if (data.equipment.Length > 0) {
       foreach (Equipment item in data.equipment) {
         GameObject obj = Instantiate(chainSlotPrefab, componentsPanel);
-        obj.GetComponent<CraftingRecipeSlot>().Init(item);
+        obj.GetComponent<SlotWithCount>().Init(item);
       }
     }
 

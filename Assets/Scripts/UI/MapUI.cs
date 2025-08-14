@@ -28,6 +28,7 @@ public class MapUI : GeneralUI {
   private TextMeshProUGUI leatherValue;
   private TextMeshProUGUI villagersValue;
   private TextMeshProUGUI location;
+  public string[] resTooltips = { "Wood", "Stone", "Metal", "Leather" };
 
   protected override void Awake() {
     base.Awake();

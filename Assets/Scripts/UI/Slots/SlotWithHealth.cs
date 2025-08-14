@@ -1,8 +1,9 @@
 
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HealingMenuSlot : MonoBehaviour {
+public class SlotWithHealth : MonoBehaviour {
   private Image image;
   private GameObject deathMark;
   private RectTransform healthBar;
@@ -19,7 +20,8 @@ public class HealingMenuSlot : MonoBehaviour {
     }
   }
 
-  public void Init(Unit unit, bool withHp = false) {
+  public async void Init(Unit unit, bool withHp = false) {
+    await Task.Yield();
     image.sprite = unit.avatar;
 
     if (unit.CurrentHealth <= 0) deathMark.SetActive(true);

@@ -4,84 +4,62 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class RecruitingUI : MonoBehaviour {
-  private static Player player;
+  public static RecruitingUI Instance;
+  public Sprite villagersSprite;
+  public Sprite[] resourceSprites;
+  public GameObject slotPrefab;
+  public GameObject emptySlotPrefab;
+
   private static Transform window;
   private static Button submit;
   private static Button cancel;
-  private static TextMeshProUGUI title;
-  private static TextMeshProUGUI description;
-  private static Transform villagersPanel;
-  private static TextMeshProUGUI villagersCount;
   private static GameObject notEnoughRes;
   private static GameObject notEnoughSlots;
   private static MapZoneRecruitment mapZone;
 
+  // Reward
+  private static TextMeshProUGUI rewardTitle;
+  private static Transform rewardSlots;
+  private static Transform requirementSlots;
+
   // Requirements
-  private static Transform reqPlayerLevel;
-  private static TextMeshProUGUI reqPlayerLevelValue;
-  private static Transform reqPlayerFame;
-  private static TextMeshProUGUI reqPlayerFameValue;
-  private static Transform reqGold;
-  private static TextMeshProUGUI reqGoldValue;
-  private static Transform reqWood;
-  private static TextMeshProUGUI reqWoodValue;
-  private static Transform reqStone;
-  private static TextMeshProUGUI reqStoneValue;
-  private static Transform reqMetal;
-  private static TextMeshProUGUI reqMetalValue;
-  private static Transform reqLeather;
-  private static TextMeshProUGUI reqLeatherValue;
-  private static Transform reqEquipment;
+  private static TextMeshProUGUI reqPlayerLevel;
+  private static TextMeshProUGUI reqPlayerFame;
+  private static TextMeshProUGUI reqGold;
+
+  private static readonly int slotsInRow = 5;
 
   private void Awake() {
+    Instance = this;
+
     Transform Find(string path) => window.Find(path);
     T Get<T>(string path) where T : Component => Find(path).GetComponent<T>();
 
     window = transform.Find("Recruitment/Panel");
     submit = Get<Button>("Control/Recruit");
     cancel = Get<Button>("Control/Cancel");
-    title = Get<TextMeshProUGUI>("Head/Title");
-    description = Get<TextMeshProUGUI>("Description");
-    villagersPanel = Find("Reward/Villagers");
-    villagersCount = Get<TextMeshProUGUI>("Reward/Villagers/Value");
     notEnoughRes = Find("NotEnoughRes").gameObject;
     notEnoughSlots = Find("NotEnoughSlots").gameObject;
 
-    reqPlayerLevel = Find("Requirements/PlayerLevel");
-    reqPlayerLevelValue = Get<TextMeshProUGUI>("Requirements/PlayerLevel/Value");
-    reqPlayerFame = Find("Requirements/PlayerFame");
-    reqPlayerFameValue = Get<TextMeshProUGUI>("Requirements/PlayerFame/Value");
-    reqGold = Find("Requirements/Gold");
-    reqGoldValue = Get<TextMeshProUGUI>("Requirements/Gold/Value");
-    reqWood = Find("Requirements/Wood");
-    reqWoodValue = Get<TextMeshProUGUI>("Requirements/Wood/Value");
-    reqStone = Find("Requirements/Stone");
-    reqStoneValue = Get<TextMeshProUGUI>("Requirements/Stone/Value");
-    reqMetal = Find("Requirements/Metal");
-    reqMetalValue = Get<TextMeshProUGUI>("Requirements/Metal/Value");
-    reqLeather = Find("Requirements/Leather");
-    reqLeatherValue = Get<TextMeshProUGUI>("Requirements/Leather/Value");
-    reqEquipment = Find("Requirements/Equipment");
+    rewardTitle = Get<TextMeshProUGUI>("Reward/Title");
+    rewardSlots = Find("Reward/Slots");
+    requirementSlots = Find("Requirements/Slots");
+
+    reqPlayerLevel = Get<TextMeshProUGUI>("Requirements/PlayerLevel/Value");
+    reqPlayerFame = Get<TextMeshProUGUI>("Requirements/PlayerFame/Value");
+    reqGold = Get<TextMeshProUGUI>("Requirements/Gold/Value");
 
     if (
-      window == null || submit == null || cancel == null ||
-      title == null || description == null || villagersPanel == null ||
-      villagersCount == null || reqPlayerLevel == null || reqPlayerLevelValue == null ||
-      reqPlayerFame == null || reqPlayerFameValue == null || reqGold == null ||
-      reqGoldValue == null || reqWood == null || reqWoodValue == null ||
-      reqStone == null || reqStoneValue == null || reqMetal == null ||
-      reqMetalValue == null || reqLeather == null || reqLeatherValue == null ||
-      reqEquipment == null || notEnoughRes == null || notEnoughSlots == null
+      resourceSprites.Length != 4 || window == null || submit == null ||
+      cancel == null || notEnoughRes == null || notEnoughSlots == null ||
+      rewardTitle == null || rewardSlots == null || reqPlayerLevel == null ||
+      reqPlayerFame == null || reqGold == null || requirementSlots == null
     ) {
       Debug.LogError("Recruiting UI components initialization error");
     }
 
     submit.onClick.AddListener(OnSubmit);
     cancel.onClick.AddListener(Close);
-  }
-
-  private void Start() {
-    player = Player.Instance;
   }
 
   private void OnDestroy() {
@@ -92,14 +70,8 @@ public class RecruitingUI : MonoBehaviour {
   public static void Open(MapZoneRecruitment zone) {
     if (zone == null || zone.requirements == null) return;
     mapZone = zone;
-    MapZone parentZone = zone.GetComponent<MapZone>();
-    title.text = parentZone.zoneName;
-    description.text = parentZone.description;
-
-    if (zone.recruitVillagers > 0) {
-      villagersCount.text = "x" + zone.recruitVillagers;
-      villagersPanel.gameObject.SetActive(true);
-    }
+    ShowRequirements();
+    RenderSlots();
 
     if (!EnoughSlots(zone.recruitVillagers)) {
       notEnoughSlots.SetActive(true);
@@ -109,7 +81,6 @@ public class RecruitingUI : MonoBehaviour {
       submit.interactable = false;
     }
 
-    ShowRequirements(zone.requirements);
     window.gameObject.SetActive(true);
     SceneController.OpenWindow("recruiting");
   }
@@ -118,73 +89,160 @@ public class RecruitingUI : MonoBehaviour {
     window.gameObject.SetActive(false);
 
     mapZone = null;
-    title.text = "";
-    description.text = "";
-    villagersPanel.gameObject.SetActive(false);
     notEnoughRes.SetActive(false);
     notEnoughSlots.SetActive(false);
     submit.interactable = true;
 
-    reqPlayerLevel.gameObject.SetActive(false);
-    reqPlayerFame.gameObject.SetActive(false);
-    reqGold.gameObject.SetActive(false);
-    reqWood.gameObject.SetActive(false);
-    reqStone.gameObject.SetActive(false);
-    reqMetal.gameObject.SetActive(false);
-    reqLeather.gameObject.SetActive(false);
-    reqEquipment.gameObject.SetActive(false);
+    rewardTitle.text = "";
+    reqPlayerLevel.text = "-";
+    reqPlayerFame.text = "-";
+    reqGold.text = "-";
 
+    ClearSlots();
     SceneController.CloseWindow("recruiting");
   }
 
-  private static void ShowRequirements(Requirements req) {
-    static void Check(int value, GameObject obj, int current, TextMeshProUGUI field = null) {
-      if (value > 0) {
-        obj.SetActive(true);
-        field.text = current < value ? "<color=#F61010>" + value.ToString() + "</color>" : value.ToString();
+  private static void ClearSlots() {
+    foreach (Transform child in rewardSlots) Destroy(child.gameObject);
+    foreach (Transform child in requirementSlots) Destroy(child.gameObject);
+  }
+
+  private static void ShowRequirements() {
+    rewardTitle.text = mapZone.recruitVillagers > 0 ? "Villagers" : "Units";
+    Requirements req = mapZone.requirements;
+    if (req.playerLevel > 0) reqPlayerLevel.text = req.playerLevel.ToString();
+    if (req.playerFame > 0) reqPlayerFame.text = req.playerFame.ToString();
+    if (req.gold > 0) reqGold.text = req.gold.ToString();
+  }
+
+  private static void RenderSlots() {
+    if (mapZone.recruitVillagers > 0) {
+      GameObject slot = Instantiate(Instance.slotPrefab, rewardSlots);
+      slot.GetComponent<SlotWithCount>().Init(
+        Instance.villagersSprite,
+        mapZone.recruitVillagers,
+        "Villagers"
+      );
+    }
+
+    if (mapZone.recruits.Length > 0) {
+      foreach (Unit unit in mapZone.recruits) {
+        GameObject slot = Instantiate(Instance.slotPrefab, rewardSlots);
+        slot.GetComponent<SlotWithCount>().Init(unit);
       }
     }
 
-    Check(req.playerLevel, reqPlayerLevel.gameObject, player.Level, reqPlayerLevelValue);
-    Check(req.playerFame, reqPlayerFame.gameObject, player.Fame, reqPlayerFameValue);
-    Check(req.gold, reqGold.gameObject, player.Gold, reqGoldValue);
-    Check(req.resources[0], reqWood.gameObject, player.Resources[0], reqWoodValue);
-    Check(req.resources[1], reqStone.gameObject, player.Resources[1], reqStoneValue);
-    Check(req.resources[2], reqMetal.gameObject, player.Resources[2], reqMetalValue);
-    Check(req.resources[3], reqLeather.gameObject, player.Resources[3], reqLeatherValue);
+    Requirements req = mapZone.requirements;
+    int slotsCount = 0;
 
-    if (req.equipment.Length > 0) reqEquipment.gameObject.SetActive(true);
+    requirementSlots.gameObject.SetActive(
+      req.resources.Length > 0 &&
+      req.equipment.Length > 0
+    );
+
+    for (int i = 0; i < req.resources.Length; i++) {
+      if (req.resources[i] > 0) {
+        GameObject slot = Instantiate(Instance.slotPrefab, requirementSlots);
+        slot.GetComponent<SlotWithCount>().Init(
+          Instance.resourceSprites[i],
+          req.resources[i],
+          MapUI.Instance.resTooltips[i]
+        );
+        slotsCount++;
+      }
+    }
+
+    if (req.equipment.Length > 0) {
+      foreach (Equipment item in req.equipment) {
+        GameObject slot = Instantiate(Instance.slotPrefab, requirementSlots);
+        slot.GetComponent<SlotWithCount>().Init(item);
+        slotsCount++;
+      }
+    }
+
+    if (req.items.Length > 0) {
+      foreach (Item item in req.items) {
+        GameObject slot = Instantiate(Instance.slotPrefab, requirementSlots);
+        slot.GetComponent<SlotWithCount>().Init(item);
+        slotsCount++;
+      }
+    }
+
+    RenderEmptySlots(slotsCount);
+  }
+
+  private static void RenderEmptySlots(int filled) {
+    if (filled == slotsInRow) {
+      return;
+    } else if (filled < slotsInRow) {
+      for (int i = filled; i < slotsInRow; i++) {
+        Instantiate(Instance.emptySlotPrefab, requirementSlots);
+      }
+    } else {
+      int remainder = filled % slotsInRow;
+      int placeholders = remainder == 0 ? 0 : slotsInRow - remainder;
+
+      for (int i = 0; i < placeholders; i++) {
+        Instantiate(Instance.emptySlotPrefab, requirementSlots);
+      }
+    }
   }
 
   private static bool MeetsRequirements(Requirements req) {
-    if (req.playerLevel > player.Level) return false;
-    if (req.playerFame > player.Fame) return false;
-    if (req.gold > player.Gold) return false;
+    Player player = Player.Instance;
+    bool check = true;
+
+    if (
+      req.playerLevel > player.Level ||
+      req.playerFame > player.Fame ||
+      req.gold > player.Gold
+    ) check = false;
 
     for (int i = 0; i < req.resources.Length; i++) {
-      if (req.resources[i] > player.Resources[i]) return false;
+      if (req.resources[i] > player.Resources[i]) check = false;
     }
 
-    // FIXME: Проверка на экипировку и предметы
-    return true;
+    if (req.equipment.Length > 0) {
+      foreach (Equipment item in req.equipment) {
+        if (!player.Inventory.HasItem(item)) check = false;
+      }
+    }
+
+    if (req.items.Length > 0) {
+      foreach (Item item in req.items) {
+        if (!player.Inventory.HasItem(item)) check = false;
+      }
+    }
+
+    return check;
   }
 
   private static bool EnoughSlots(int count) {
+    Player player = Player.Instance;
     return player.GetTotalPeople().Sum() + count <= player.MaxVillagers;
   }
 
   private static void OnSubmit() {
-    MapZone parentZone = mapZone.GetComponent<MapZone>();
+    Player player = Player.Instance;
+    Requirements req = mapZone.requirements;
 
-    if (mapZone.recruitVillagers > 0) {
-      player.SetVillagers(mapZone.recruitVillagers);
-      parentZone.SetCleared();
+    if (req.equipment.Length > 0) {
+      foreach (Equipment item in req.equipment) {
+        if (!player.Inventory.HasItem(item, true)) {
+          _ = Toast.Show("warning", "The required item is equipped on the unit");
+          return;
+        }
+      }
     }
 
-    // FIXME: Отнять ресурсы
-    // FIXME: Учитывать засаду
-    parentZone.UnshiftEvent();
-    Close();
+    player.SetGold(req.gold * -1);
+    player.SetResources(req.resources.Select(n => -n).ToArray());
+    foreach (Item item in req.items) player.Inventory.RemoveItem(item);
+    player.SetVillagers(mapZone.recruitVillagers);
+    foreach (Unit unit in mapZone.recruits) player.Army.AddUnit(unit);
+
+    mapZone.GetComponent<MapZone>().UnshiftEvent();
     _ = Toast.Show("success", "People have joined you");
+    Close();
   }
 }

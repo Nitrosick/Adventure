@@ -128,7 +128,7 @@ public class HealingMenuUI : HomeMenuFeature {
 
       foreach (Unit unit in wounded) {
         GameObject slot = Instantiate(slotPrefab, woundedSlots);
-        slot.GetComponent<HealingMenuSlot>().Init(unit, true);
+        slot.GetComponent<SlotWithHealth>().Init(unit, true);
       }
 
       healButton.interactable = balance >= woundedTotal;
@@ -146,7 +146,7 @@ public class HealingMenuUI : HomeMenuFeature {
 
       foreach (Unit unit in dead) {
         GameObject slot = Instantiate(slotPrefab, deadSlots);
-        slot.GetComponent<HealingMenuSlot>().Init(unit);
+        slot.GetComponent<SlotWithHealth>().Init(unit);
       }
 
       reanimateButton.interactable = balance >= deadTotal;

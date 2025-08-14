@@ -56,22 +56,24 @@ public class TradingMenuUI : HomeMenuFeature {
     ClearSlots(miscSlots);
 
     if (resourcesAvailable) {
-      string[] resTooltips = { "Wood", "Stone", "Metal", "Leather" };
-
       for (int i = 0; i < resourcePrices.Length; i++) {
         GameObject slot = Instantiate(slotPrefab, resourceSlots);
-        slot.GetComponent<TradingMenuSlot>().Init(resourceSprites[i], resourcePrices[i], i, resTooltips[i]);
+        slot.GetComponent<SlotWithPrice>().Init(
+          resourceSprites[i],
+          resourcePrices[i], i,
+          MapUI.Instance.resTooltips[i]
+        );
       }
     }
 
     foreach (Equipment item in equipmentGoods) {
       GameObject slot = Instantiate(slotPrefab, equipmentSlots);
-      slot.GetComponent<TradingMenuSlot>().Init(item);
+      slot.GetComponent<SlotWithPrice>().Init(item);
     }
 
     foreach (Item item in itemGoods) {
       GameObject slot = Instantiate(slotPrefab, miscSlots);
-      slot.GetComponent<TradingMenuSlot>().Init(item);
+      slot.GetComponent<SlotWithPrice>().Init(item);
     }
 
     RenderEmptySlots(resourceSlots, resourcesAvailable ? resourcePrices.Length : 0);
@@ -89,7 +91,7 @@ public class TradingMenuUI : HomeMenuFeature {
   }
 
   public void CheckBalance() {
-    foreach (TradingMenuSlot slot in FindObjectsOfType<TradingMenuSlot>()) {
+    foreach (SlotWithPrice slot in FindObjectsOfType<SlotWithPrice>()) {
       slot.UpdatePrice();
     }
   }
