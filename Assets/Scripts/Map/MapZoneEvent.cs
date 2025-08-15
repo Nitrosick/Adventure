@@ -13,28 +13,38 @@ public class MapZoneEvent : MonoBehaviour {
     if (zone == null || zone.events.Count < 1) return;
     T Get<T>() where T : Component => transform.GetComponent<T>();
     MapZoneBattle battleZone = Get<MapZoneBattle>();
+    int eventIndex = 0;
 
-    if (zone.events[0] == MapZoneType.Ambush && !ignoreBattle) {
-      bool check = Utils.RollChance(battleZone.ambushChance);
-      if (check || forceAmbush) {
-        StartBattle(battleZone, true);
-        return;
+    if (zone.events[eventIndex] == MapZoneType.Ambush) {
+      eventIndex++;
+      if (!ignoreBattle) {
+        bool check = Utils.RollChance(battleZone.ambushChance);
+        if (check || forceAmbush) {
+          StartBattle(battleZone, true);
+          return;
+        }
       }
     }
 
-    switch (zone.events[0]) {
+    switch (zone.events[eventIndex]) {
       case MapZoneType.InstantBattle:
         if (ignoreBattle) return;
         StartBattle(battleZone);
         break;
       case MapZoneType.Home:
-        MapUI.Instance.ShowInteractableButton(Get<MapZoneHome>().OpenHomeMenu);
+        MapUI.Instance.ShowInteractableButton(
+          Get<MapZoneHome>().OpenHomeMenu
+        );
         break;
       case MapZoneType.Recruitment:
-        MapUI.Instance.ShowInteractableButton(Get<MapZoneRecruitment>().OpenRecruitmentPanel);
+        MapUI.Instance.ShowInteractableButton(
+          Get<MapZoneRecruitment>().OpenRecruitmentPanel
+        );
         break;
       case MapZoneType.Constructing:
-        Debug.Log("Stroim");
+        MapUI.Instance.ShowInteractableButton(
+          Get<MapZoneBuilding>().OpenBuildingPanel
+        );
         break;
     }
   }

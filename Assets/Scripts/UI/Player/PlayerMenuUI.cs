@@ -10,7 +10,6 @@ public class PlayerMenuUI : MonoBehaviour {
   public static PlayerMenuUI Instance;
 
   public GameObject menuSlotPrefab;
-  public GameObject menuEmptySlotPrefab;
   private static Transform menu;
 
   // Navigation
@@ -276,7 +275,7 @@ public class PlayerMenuUI : MonoBehaviour {
     }
     else if (filled < defaultSlotsCount) {
       for (int i = filled; i < defaultSlotsCount; i++) {
-        Instantiate(Instance.menuEmptySlotPrefab, panel);
+        Instantiate(MapUI.Instance.emptySlotPrefab, panel);
       }
     }
     else {
@@ -284,7 +283,7 @@ public class PlayerMenuUI : MonoBehaviour {
       int placeholders = remainder == 0 ? 0 : slotColumns - remainder;
 
       for (int i = 0; i < placeholders; i++) {
-        Instantiate(Instance.menuEmptySlotPrefab, panel);
+        Instantiate(MapUI.Instance.emptySlotPrefab, panel);
       }
     }
   }

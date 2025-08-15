@@ -6,7 +6,6 @@ public class TradingMenuUI : HomeMenuFeature {
   private RectTransform resourceSlots;
   private RectTransform equipmentSlots;
   private RectTransform miscSlots;
-  public Sprite[] resourceSprites;
   public int[] resourcePrices;
 
   private bool resourcesAvailable;
@@ -27,8 +26,7 @@ public class TradingMenuUI : HomeMenuFeature {
   }
 
   private bool ComponentsInitialized() {
-    return resourceSprites.Length == 4 && resourcePrices.Length == 4 && resourceSlots != null &&
-    equipmentSlots != null && miscSlots != null;
+    return resourcePrices.Length == 4 && resourceSlots != null && equipmentSlots != null && miscSlots != null;
   }
 
   public void Init(
@@ -59,7 +57,7 @@ public class TradingMenuUI : HomeMenuFeature {
       for (int i = 0; i < resourcePrices.Length; i++) {
         GameObject slot = Instantiate(slotPrefab, resourceSlots);
         slot.GetComponent<SlotWithPrice>().Init(
-          resourceSprites[i],
+          MapUI.Instance.resourceSprites[i],
           resourcePrices[i], i,
           MapUI.Instance.resTooltips[i]
         );

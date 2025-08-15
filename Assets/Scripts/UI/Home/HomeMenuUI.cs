@@ -104,8 +104,8 @@ public class HomeMenuUI : MonoBehaviour {
     if (features.Contains(MapZoneFeature.Healing)) healingFeature.interactable = true;
     if (features.Contains(MapZoneFeature.Training)) trainingFeature.interactable = true;
     if (features.Contains(MapZoneFeature.Trading)) tradingFeature.interactable = true;
-    if (features.Contains(MapZoneFeature.Weaponsmith) && mapZone.weaponsmithRecipes.Length > 0) weaponUpFeature.interactable = true;
-    if (features.Contains(MapZoneFeature.Armorer) && mapZone.armorerRecipes.Length > 0) armorUpFeature.interactable = true;
+    if (features.Contains(MapZoneFeature.Weaponsmith)) weaponUpFeature.interactable = true;
+    if (features.Contains(MapZoneFeature.Armorer)) armorUpFeature.interactable = true;
   }
 
   private static void DisableButtons() {

@@ -33,7 +33,7 @@ public class PlayerMove : MonoBehaviour
 
     if (StateManager.visitedZones.Count == 0) {
       StateManager.visitedZones.Add(CurrentZone.id);
-      _ = CurrentZone.ShowPathLines();
+      CurrentZone.ShowPathLines();
     }
   }
 

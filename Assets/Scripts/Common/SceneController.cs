@@ -70,7 +70,7 @@ public class SceneController : MonoBehaviour
     await Fade(1f, 0f, false);
   }
 
-  private static async Task Fade(float from, float to, bool easeIn) {
+  public static async Task Fade(float from, float to, bool easeIn) {
     float time = 0f;
     Color color = overlay.color;
 
@@ -96,6 +96,8 @@ public class SceneController : MonoBehaviour
   }
 
   public static void HideEventInfo() {
+    eventPanel.SetActive(false);
+    eventIcon.sprite = null;
     eventText.text = "";
   }
 }

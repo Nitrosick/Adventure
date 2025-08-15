@@ -1,5 +1,11 @@
 using UnityEngine;
 
 public class MapZoneBuilding : MonoBehaviour {
-  // FIXME: При постройке дозорной башни удалять ambush
+  public Building building;
+  public Requirements requirements;
+  public Sprite sprite;
+
+  public void OpenBuildingPanel() {
+    BuildingUI.Open(this);
+  }
 }

@@ -39,15 +39,15 @@ public class MapZone : MonoBehaviour {
 
     InitPathLines();
     InitMarker();
+  }
 
+  private void Start() {
     Dictionary<int, List<MapZoneType>> state = StateManager.zonesState;
     if (state.Count > 0 && state[id] != null) {
       if (state[id].Count > 0) events = state[id];
       else SetCleared();
     }
-  }
 
-  private void Start() {
     auraRender.material = MapZoneManager.Instance.defaultMaterial;
   }
 
@@ -90,7 +90,7 @@ public class MapZone : MonoBehaviour {
     }
 
     if (!StateManager.visitedZones.Contains(id)) {
-      _ = ShowPathLines();
+      ShowPathLines();
       StateManager.visitedZones.Add(id);
     }
 
@@ -110,6 +110,13 @@ public class MapZone : MonoBehaviour {
     StateManager.zonesState[id] = events;
   }
 
+  public void RemoveAmbush() {
+    events = events
+      .Where(e => e != MapZoneType.Ambush)
+      .ToList();
+    StateManager.zonesState[id] = events;
+  }
+
   public void InitMarker() {
     Color color = markerRender.color;
     color.a = secret ? 0f : linesTransparency;
@@ -126,22 +133,26 @@ public class MapZone : MonoBehaviour {
     }
   }
 
-  public async Task ShowPathLines() {
+  public void ShowPathLines() {
     foreach (Transform path in pathLines) {
-      LineRenderer renderer = path.GetComponent<LineRenderer>();
-      Material mat = renderer.material;
-      Color color = mat.color;
-      float elapsed = 0f;
-
-      while (elapsed < fadeDuration) {
-        elapsed += Time.deltaTime;
-        color.a = Mathf.Lerp(0f, 1f, elapsed / fadeDuration);
-        mat.color = color;
-        await Task.Yield();
-      }
-
-      color.a = linesTransparency;
-      mat.color = color;
+      _ = PathLineFade(path);
     }
+  }
+
+  private async Task PathLineFade(Transform path) {
+    LineRenderer renderer = path.GetComponent<LineRenderer>();
+    Material mat = renderer.material;
+    Color color = mat.color;
+    float elapsed = 0f;
+
+    while (elapsed < fadeDuration) {
+      elapsed += Time.deltaTime;
+      color.a = Mathf.Lerp(0f, 1f, elapsed / fadeDuration);
+      mat.color = color;
+      await Task.Yield();
+    }
+
+    color.a = linesTransparency;
+    mat.color = color;
   }
 }

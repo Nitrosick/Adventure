@@ -67,7 +67,7 @@ public class MapZoneManager : MonoBehaviour {
     if (visited.Count > 0) {
       foreach (MapZone zone in Zones) {
         if (visited.Contains(zone.id)) {
-          _ = zone.ShowPathLines();
+          zone.ShowPathLines();
           zone.secret = false;
           zone.InitMarker();
         }

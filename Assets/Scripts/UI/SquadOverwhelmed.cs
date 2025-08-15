@@ -15,7 +15,6 @@ public class SquadOverwhelmed : MonoBehaviour {
   private static Button cancel;
 
   public GameObject slotPrefab;
-  public GameObject emptySlotPrefab;
   private static int limit;
   private static MapZoneEvent mapZoneEvent;
   private static bool isAmbush;
@@ -103,14 +102,14 @@ public class SquadOverwhelmed : MonoBehaviour {
       return;
     } else if (filled < defaultSlotsCount) {
       for (int i = filled; i < defaultSlotsCount; i++) {
-        Instantiate(Instance.emptySlotPrefab, slots);
+        Instantiate(MapUI.Instance.emptySlotPrefab, slots);
       }
     } else {
       int remainder = filled % slotsInRow;
       int placeholders = remainder == 0 ? 0 : slotsInRow - remainder;
 
       for (int i = 0; i < placeholders; i++) {
-        Instantiate(Instance.emptySlotPrefab, slots);
+        Instantiate(MapUI.Instance.emptySlotPrefab, slots);
       }
     }
   }

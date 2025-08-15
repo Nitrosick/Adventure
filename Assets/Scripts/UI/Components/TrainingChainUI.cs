@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class TrainingChainUI : MonoBehaviour {
   public GameObject chainSlotPrefab;
-  public Sprite villagersSprite;
 
   private TextMeshProUGUI price;
   private Transform componentsPanel;
@@ -54,7 +53,7 @@ public class TrainingChainUI : MonoBehaviour {
       unitObjects.Add(prefab);
       slotScript.Init(prefab);
     } else if (data.sourceVillagersCount > 0) {
-      slotScript.Init(villagersSprite, data.sourceVillagersCount, "Villagers");
+      slotScript.Init(MapUI.Instance.villagersSprite, data.sourceVillagersCount, "Villagers");
     }
 
     if (data.resultUnit != null) {

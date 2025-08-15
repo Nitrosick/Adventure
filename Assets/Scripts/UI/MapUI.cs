@@ -6,6 +6,9 @@ using UnityEngine.UI;
 
 public class MapUI : GeneralUI {
   public static MapUI Instance;
+  public GameObject emptySlotPrefab;
+  public Sprite villagersSprite;
+  public Sprite[] resourceSprites;
 
   // Zone info
   private GameObject zoneInfoPanel;

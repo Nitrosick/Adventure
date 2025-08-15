@@ -3,20 +3,19 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class RecruitingUI : MonoBehaviour {
-  public static RecruitingUI Instance;
+public class BuildingUI : MonoBehaviour {
+  public static BuildingUI Instance;
   public GameObject slotPrefab;
 
   private static Transform window;
   private static Button submit;
   private static Button cancel;
   private static GameObject notEnoughRes;
-  private static GameObject notEnoughSlots;
-  private static MapZoneRecruitment mapZone;
+  private static MapZoneBuilding mapZone;
 
   // Reward
   private static TextMeshProUGUI rewardTitle;
-  private static Transform rewardSlots;
+  private static Image rewardImage;
 
   // Requirements
   private static TextMeshProUGUI reqPlayerLevel;
@@ -32,14 +31,13 @@ public class RecruitingUI : MonoBehaviour {
     Transform Find(string path) => window.Find(path);
     T Get<T>(string path) where T : Component => Find(path).GetComponent<T>();
 
-    window = transform.Find("Recruitment/Panel");
-    submit = Get<Button>("Control/Recruit");
+    window = transform.Find("Building/Panel");
+    submit = Get<Button>("Control/Build");
     cancel = Get<Button>("Control/Cancel");
     notEnoughRes = Find("NotEnoughRes").gameObject;
-    notEnoughSlots = Find("NotEnoughSlots").gameObject;
 
     rewardTitle = Get<TextMeshProUGUI>("Reward/Title");
-    rewardSlots = Find("Reward/Slots");
+    rewardImage = Get<Image>("Reward/Image/Image");
 
     reqPlayerLevel = Get<TextMeshProUGUI>("Requirements/PlayerLevel/Value");
     reqPlayerFame = Get<TextMeshProUGUI>("Requirements/PlayerFame/Value");
@@ -48,11 +46,11 @@ public class RecruitingUI : MonoBehaviour {
 
     if (
       window == null || submit == null || cancel == null ||
-      notEnoughRes == null || notEnoughSlots == null || rewardTitle == null ||
-      rewardSlots == null || reqPlayerLevel == null || reqPlayerFame == null ||
-      reqGold == null || requirementSlots == null
+      notEnoughRes == null || rewardTitle == null || rewardImage == null ||
+      reqPlayerLevel == null || reqPlayerFame == null || reqGold == null ||
+      requirementSlots == null
     ) {
-      Debug.LogError("Recruiting UI components initialization error");
+      Debug.LogError("Building UI components initialization error");
     }
 
     submit.onClick.AddListener(OnSubmit);
@@ -64,22 +62,21 @@ public class RecruitingUI : MonoBehaviour {
     cancel.onClick.RemoveListener(Close);
   }
 
-  public static void Open(MapZoneRecruitment zone) {
-    if (zone == null || zone.requirements == null) return;
+  public static void Open(MapZoneBuilding zone) {
+    ClearSlots();
+    if (zone == null || zone.requirements == null || zone.sprite == null) return;
     mapZone = zone;
+    rewardImage.sprite = zone.sprite;
     ShowRequirements();
     RenderSlots();
 
-    if (!EnoughSlots(zone.recruitVillagers)) {
-      notEnoughSlots.SetActive(true);
-      submit.interactable = false;
-    } else if (!MeetsRequirements(zone.requirements)) {
+    if (!MeetsRequirements(zone.requirements)) {
       notEnoughRes.SetActive(true);
       submit.interactable = false;
     }
 
     window.gameObject.SetActive(true);
-    SceneController.OpenWindow("recruiting");
+    SceneController.OpenWindow("building");
   }
 
   public static void Close() {
@@ -87,7 +84,6 @@ public class RecruitingUI : MonoBehaviour {
 
     mapZone = null;
     notEnoughRes.SetActive(false);
-    notEnoughSlots.SetActive(false);
     submit.interactable = true;
 
     rewardTitle.text = "";
@@ -96,16 +92,15 @@ public class RecruitingUI : MonoBehaviour {
     reqGold.text = "-";
 
     ClearSlots();
-    SceneController.CloseWindow("recruiting");
+    SceneController.CloseWindow("building");
   }
 
   private static void ClearSlots() {
-    foreach (Transform child in rewardSlots) Destroy(child.gameObject);
     foreach (Transform child in requirementSlots) Destroy(child.gameObject);
   }
 
   private static void ShowRequirements() {
-    rewardTitle.text = mapZone.recruitVillagers > 0 ? "Villagers" : "Units";
+    rewardTitle.text = mapZone.building.ToString();
     Requirements req = mapZone.requirements;
     if (req.playerLevel > 0) reqPlayerLevel.text = req.playerLevel.ToString();
     if (req.playerFame > 0) reqPlayerFame.text = req.playerFame.ToString();
@@ -113,29 +108,14 @@ public class RecruitingUI : MonoBehaviour {
   }
 
   private static void RenderSlots() {
-    if (mapZone.recruitVillagers > 0) {
-      GameObject slot = Instantiate(Instance.slotPrefab, rewardSlots);
-      slot.GetComponent<SlotWithCount>().Init(
-        MapUI.Instance.villagersSprite,
-        mapZone.recruitVillagers,
-        "Villagers"
-      );
-    }
-
-    if (mapZone.recruits.Length > 0) {
-      foreach (Unit unit in mapZone.recruits) {
-        GameObject slot = Instantiate(Instance.slotPrefab, rewardSlots);
-        slot.GetComponent<SlotWithCount>().Init(unit);
-      }
-    }
-
     Requirements req = mapZone.requirements;
     int slotsCount = 0;
 
     requirementSlots.gameObject.SetActive(
       req.resources.Any(x => x > 0) ||
       req.equipment.Length > 0 ||
-      req.items.Length > 0
+      req.items.Length > 0 ||
+      req.villagers > 0
     );
 
     for (int i = 0; i < req.resources.Length; i++) {
@@ -148,6 +128,16 @@ public class RecruitingUI : MonoBehaviour {
         );
         slotsCount++;
       }
+    }
+
+    if (req.villagers > 0) {
+      GameObject slot = Instantiate(Instance.slotPrefab, requirementSlots);
+      slot.GetComponent<SlotWithCount>().Init(
+        MapUI.Instance.villagersSprite,
+        req.villagers,
+        "Villagers"
+      );
+      slotsCount++;
     }
 
     if (req.equipment.Length > 0) {
@@ -193,7 +183,8 @@ public class RecruitingUI : MonoBehaviour {
     if (
       req.playerLevel > player.Level ||
       req.playerFame > player.Fame ||
-      req.gold > player.Gold
+      req.gold > player.Gold ||
+      req.villagers > player.Villagers
     ) check = false;
 
     for (int i = 0; i < req.resources.Length; i++) {
@@ -215,12 +206,7 @@ public class RecruitingUI : MonoBehaviour {
     return check;
   }
 
-  private static bool EnoughSlots(int count) {
-    Player player = Player.Instance;
-    return player.GetTotalPeople().Sum() + count <= player.MaxVillagers;
-  }
-
-  private static void OnSubmit() {
+  private async static void OnSubmit() {
     Player player = Player.Instance;
     Requirements req = mapZone.requirements;
 
@@ -235,13 +221,20 @@ public class RecruitingUI : MonoBehaviour {
 
     player.SetGold(req.gold * -1);
     player.SetResources(req.resources.Select(n => -n).ToArray());
+    player.SetVillagers(req.villagers * -1);
     foreach (Equipment item in req.equipment) player.Inventory.RemoveItem(item);
     foreach (Item item in req.items) player.Inventory.RemoveItem(item);
-    player.SetVillagers(mapZone.recruitVillagers);
-    foreach (Unit unit in mapZone.recruits) player.Army.AddUnit(unit);
 
-    mapZone.GetComponent<MapZone>().UnshiftEvent();
-    _ = Toast.Show("success", "People have joined you");
     Close();
+    SceneController.ShowEventInfo("build", "Building");
+    await SceneController.Fade(0f, 1f, true);
+
+    MapZone parentZone = mapZone.GetComponent<MapZone>();
+    if (mapZone.building == Building.Watchtower) parentZone.RemoveAmbush();
+    parentZone.UnshiftEvent();
+
+    await SceneController.Fade(1f, 0f, false);
+    SceneController.HideEventInfo();
+    StateManager.SaveGame();
   }
 }

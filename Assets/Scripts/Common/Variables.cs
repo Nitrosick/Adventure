@@ -186,3 +186,8 @@ public enum MapZoneFeature {
   Armorer,
   Training
 }
+
+public enum Building {
+  Watchtower,
+  Lumbercamp
+}
