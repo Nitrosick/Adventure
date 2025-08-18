@@ -29,14 +29,13 @@ public class UnitMove : MonoBehaviour {
     if (pathTiles == null) return;
 
     BattleUI.Instance.DisableUI();
-    _ = CameraController.FocusOn(target.transform.position);
+    _ = CameraController.FocusOn(target.GetPos());
 
     unit.CurrentTile.OccupiedBy = null;
     path.Clear();
 
     foreach (Tile tile in pathTiles) {
-      Vector3 center = new(tile.Coords.x + 0.5f, tile.height, tile.Coords.y + 0.5f);
-      path.Enqueue(center);
+      path.Enqueue(tile.GetPos());
     }
 
     IsMoving = true;

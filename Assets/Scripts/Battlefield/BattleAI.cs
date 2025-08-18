@@ -6,12 +6,14 @@ public static class BattleAI {
   private static Unit enemy;
   private static UnitMove enemyMove;
   private static List<Unit> playerUnits;
-  private static readonly float distanceWeight = 1.5f;
+  // FIXME: Сделать метод для получения дальности атаки
+  private static int AttackRange => enemy.Equip.primary.range;
+  private static readonly float unitPointOffset = 0.75f;
 
   // Evaluation coefficients
+  private static readonly float distanceWeight = 1.5f;
   private static readonly float coverWeight = 1.0f;
   private static readonly float threatPenalty = 2.0f;
-  private static readonly float unitPointOffset = 1.8f;
 
   public static void EnemyMove(Unit unit) {
     enemy = unit;
@@ -86,20 +88,20 @@ public static class BattleAI {
   }
 
   private static float GetAttackDistance(Tile from, Tile to) {
-    Vector2Int diff = from.Coords - to.Coords;
-    int dx = Mathf.Abs(diff.x);
-    int dy = Mathf.Abs(diff.y);
-    int range = enemy.Equip.primary.range;
+    int dx = Mathf.Abs(from.Coords.x - to.Coords.x);
+    int dy = Mathf.Abs(from.Coords.y - to.Coords.y);
 
-    if (range <= 3) return Mathf.Max(dx, dy);
-    return dx + dy == 0 ? 0 : (dx == 0 || dy == 0 ? dx + dy : dx + dy - 0.5f);
+    int diag = Mathf.Min(dx, dy);
+    int straight = Mathf.Abs(dx - dy);
+
+    return diag * 1.5f + straight;
   }
 
   private static bool LineOfSightClear(Vector3 from, Vector3 to, GameObject source) {
     Vector3 fixedFrom = from + new Vector3(0, unitPointOffset, 0);
     Vector3 fixedTo = to + new Vector3(0, unitPointOffset, 0);
     Vector3 direction = (fixedTo - fixedFrom).normalized;
-    float distance = Vector3.Distance(from, fixedTo);
+    float distance = Vector3.Distance(fixedFrom, fixedTo);
 
     Ray ray = new(fixedFrom, direction);
     RaycastHit[] hits = Physics.RaycastAll(ray, distance, ~0, QueryTriggerInteraction.Collide);
@@ -115,7 +117,8 @@ public static class BattleAI {
         continue;
       }
 
-      if (hitObj.layer == LayerMask.NameToLayer("Obstacle")) return false;
+      if (hitObj.layer == LayerMask.NameToLayer("Obstacle") ||
+          hitObj.layer == LayerMask.NameToLayer("BattlefieldTile")) return false;
     }
 
     return true;
@@ -125,7 +128,7 @@ public static class BattleAI {
     float distanceFromTarget = Vector2Int.Distance(tile.Coords, target.CurrentTile.Coords);
     int nearbyEnemies = playerUnits.Count(u => Vector2Int.Distance(tile.Coords, u.CurrentTile.Coords) <= 2);
     int coverBonus = tile.type == TileType.Cover ? 1 : 0;
-    bool hasLOS = LineOfSightClear(tile.transform.position, target.CurrentTile.transform.position, enemy.gameObject);
+    bool hasLOS = LineOfSightClear(tile.GetPos(), target.CurrentTile.GetPos(), enemy.gameObject);
 
     float score = 0;
     score += distanceFromTarget * distanceWeight;
@@ -137,12 +140,19 @@ public static class BattleAI {
 
   private static void SetAttackTarget(Unit target) {
     if (target == null) return;
-
     float distance = GetAttackDistance(enemy.CurrentTile, target.CurrentTile);
-    int range = enemy.Equip.primary.range;
-
-    if (distance <= range) enemy.Target = target;
+    if (distance <= AttackRange + 1f) enemy.Target = target;
     else enemy.Target = null;
+  }
+
+  private static void SetAttackTarget(Unit target, Tile from) {
+    if (target == null || from == null) return;
+    float distance = GetAttackDistance(from, target.CurrentTile);
+    if (distance <= AttackRange + 1f && LineOfSightClear(from.GetPos(), target.CurrentTile.GetPos(), enemy.gameObject)) {
+      enemy.Target = target;
+    } else {
+      enemy.Target = null;
+    }
   }
 
   private static bool TryMoveToNeighborOf(Unit target) {
@@ -156,7 +166,6 @@ public static class BattleAI {
         return true;
       }
     }
-
     return false;
   }
 
@@ -170,7 +179,6 @@ public static class BattleAI {
       SetAttackTarget(closest);
       return;
     }
-
     ComeCloser();
   }
 
@@ -181,7 +189,6 @@ public static class BattleAI {
         return;
       }
     }
-
     ComeCloser();
   }
 
@@ -197,8 +204,8 @@ public static class BattleAI {
 
       foreach (Unit target in playerUnits) {
         float dist = GetAttackDistance(tile, target.CurrentTile);
-        if (dist < 2 || dist > enemy.Equip.primary.range) continue;
-        if (!LineOfSightClear(tile.transform.position, target.CurrentTile.transform.position, enemy.gameObject)) continue;
+        if (dist < 2 || dist > AttackRange) continue;
+        if (!LineOfSightClear(tile.GetPos(), target.CurrentTile.GetPos(), enemy.gameObject)) continue;
         float score = EvaluateTileScore(tile, target);
 
         if (score > bestScore) {
@@ -210,7 +217,7 @@ public static class BattleAI {
     }
 
     if (bestTile != null) {
-      SetAttackTarget(bestTarget);
+      SetAttackTarget(bestTarget, bestTile);
       enemyMove.OnMove(bestTile);
       return;
     }

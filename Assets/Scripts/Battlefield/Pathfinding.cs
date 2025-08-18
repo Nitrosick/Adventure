@@ -34,7 +34,6 @@ public static class Pathfinding
         float tentativeGScore = gScore[current] + Vector2Int.Distance(current.Coords, neighbor.Coords);
 
         if (tentativeGScore > mp) continue;
-
         if (!openSet.Contains(neighbor)) openSet.Add(neighbor);
         else if (tentativeGScore >= gScore.GetValueOrDefault(neighbor, Mathf.Infinity)) continue;
 

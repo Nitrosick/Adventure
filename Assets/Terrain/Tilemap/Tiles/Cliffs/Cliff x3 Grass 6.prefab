@@ -61,10 +61,41 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 43165c3a18539da499ae62bac8ec5a63,
         type: 3}
       propertyPath: m_Name
-      value: Cliff x3 6
+      value: Cliff x3 Grass 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 43165c3a18539da499ae62bac8ec5a63,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4268239641431045757}
   m_SourcePrefab: {fileID: 100100000, guid: 43165c3a18539da499ae62bac8ec5a63, type: 3}
+--- !u!1 &1322972062686539510 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 43165c3a18539da499ae62bac8ec5a63,
+    type: 3}
+  m_PrefabInstance: {fileID: 2206004900989457319}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &4268239641431045757
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1322972062686539510}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.5999734, y: 6, z: 1.5515549}
+  m_Center: {x: -0.20001349, y: 3, z: -0.22422266}

@@ -13,8 +13,13 @@ public static class SceneSwitcher
     EditorSceneManager.OpenScene("Assets/Scenes/Map/Dunpine village.unity");
   }
 
-  [MenuItem("Scenes/Open Battle Scene %#&3")] // Ctrl+Shift+Alt+3
-  public static void OpenBattleScene() {
-    EditorSceneManager.OpenScene("Assets/Scenes/Battlefield/1.unity");
+  [MenuItem("Scenes/Open Battle Scene 1 %#&3")] // Ctrl+Shift+Alt+3
+  public static void OpenSceneBF1() {
+    EditorSceneManager.OpenScene("Assets/Scenes/Battlefield/bf1.unity");
+  }
+
+  [MenuItem("Scenes/Open Battle Scene 2 %#&4")] // Ctrl+Shift+Alt+4
+  public static void OpenSceneBF2() {
+    EditorSceneManager.OpenScene("Assets/Scenes/Battlefield/bf2.unity");
   }
 }

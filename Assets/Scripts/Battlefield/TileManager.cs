@@ -2,8 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class TileManager : MonoBehaviour
-{
+public class TileManager : MonoBehaviour {
   public static Dictionary<Vector2Int, Tile> tiles = new();
   public static Tile allyFocusTile;
   public static Tile enemyFocusTile;

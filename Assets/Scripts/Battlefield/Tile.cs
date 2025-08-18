@@ -78,6 +78,10 @@ public class Tile : MonoBehaviour {
     }
   }
 
+  public Vector3 GetPos() {
+    return transform.position + new Vector3(0, height - transform.position.y, 0);
+  }
+
   public void DropLoot() {
     bool success = Utils.RollChance(lootDropChance);
     if (success) {

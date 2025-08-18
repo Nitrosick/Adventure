@@ -77,12 +77,11 @@ public class BattleManager : MonoBehaviour
 
       Unit unit = StateManager.PrefabDatabase.GetPrefab(data.prefabId);
       if (unit == null) return;
-
-      Vector3 center = new(tile.Coords.x + 0.5f, tile.height, tile.Coords.y + 0.5f);
+      Vector3 center = tile.GetPos();
       Vector3 direction = Vector3.zero;
 
       if (focusTile != null) {
-        direction = (new Vector3(focusTile.Coords.x, 0, focusTile.Coords.y) - center).normalized;
+        direction = (new Vector3(focusTile.GetPos().x, 0, focusTile.GetPos().y) - center).normalized;
         direction.y = 0;
       }
 
@@ -126,7 +125,7 @@ public class BattleManager : MonoBehaviour
     Weapon attackerWeapon = attacker.Equip.primary;
     Armor targetArmor = target.Equip.armor;
 
-    float resist = targetArmor.resists[attackerWeapon.damageType];
+    float resist = target.Equip.GetTotalResists()[attackerWeapon.damageType];
     float damage = attacker.Equip.GetTotalDamage();
     if (resist != 0) damage *= 1f - (resist / 100f);
     float defense = target.Equip.GetTotalDefense();

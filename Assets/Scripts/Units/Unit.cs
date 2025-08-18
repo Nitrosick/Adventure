@@ -111,6 +111,8 @@ public class Unit : MonoBehaviour {
     }
 
     if (result < 1f) result = 1f;
+    if (result < 4f) MoveSpeed *= 0.9f;
+    else if (result > 7f) MoveSpeed *= 1.1f;
     TotalMovePoints = result;
     CurrentMovePoints = result;
   }
@@ -142,10 +144,6 @@ public class Unit : MonoBehaviour {
     return result;
   }
 
-  private Vector3 GetPosition() {
-    return transform.position + new Vector3(-0.5f, 0, -0.5f);
-  }
-
   public void IncreaseStats(int[] stats) {
     if (stats == null || stats.Length != 3) return;
     Strength += stats[0];
@@ -164,8 +162,8 @@ public class Unit : MonoBehaviour {
     BattleUI.Instance.DisableUI();
     if (target != null) Target = target;
 
-    Vector3 dirToTarget = (Target.GetPosition() - GetPosition()).normalized;
-    Vector3 dirFromTarget = (GetPosition() - Target.GetPosition()).normalized;
+    Vector3 dirToTarget = (Target.transform.position - transform.position).normalized;
+    Vector3 dirFromTarget = (transform.position - Target.transform.position).normalized;
 
     await Task.WhenAll(
       Animator.RotateTowards(dirToTarget),
@@ -185,7 +183,7 @@ public class Unit : MonoBehaviour {
     BattleUI.Instance.DisableUI();
     TargetObject = target;
 
-    Vector3 dirToTarget = (TargetObject.ParentTile.transform.position - GetPosition()).normalized;
+    Vector3 dirToTarget = TargetObject.ParentTile.transform.position.normalized;
     await Animator.RotateTowards(dirToTarget);
 
     Animator.SetAttackType(Equip.primary.attackType);
@@ -195,7 +193,7 @@ public class Unit : MonoBehaviour {
   public async void ChopTree(TreeObject target) {
     BattleUI.Instance.DisableUI();
     TargetTree = target;
-    Vector3 dirToTarget = (TargetTree.ParentTile.transform.position - GetPosition()).normalized;
+    Vector3 dirToTarget = TargetTree.ParentTile.transform.position.normalized;
 
     await Animator.RotateTowards(dirToTarget);
     Animator.SetAttackType(Equip.primary.attackType);
@@ -261,6 +259,7 @@ public class Unit : MonoBehaviour {
     UnitCollider.enabled = false;
     Ui.ClearMarkers();
     Ui.HideHealthBar();
+    Ui.HideChargesBar();
     Effects.ClearEffects();
     Animator.Die();
     _ = MakeCorpse();
@@ -280,7 +279,7 @@ public class Unit : MonoBehaviour {
 
     Instantiate(
       BattleManager.Instance.corpsePrefab,
-      GetPosition(),
+      transform.position,
       Quaternion.Euler(0, 65, 0)
     );
   }

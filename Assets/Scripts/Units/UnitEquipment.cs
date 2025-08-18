@@ -139,6 +139,20 @@ public class UnitEquipment : MonoBehaviour {
     return result;
   }
 
+  public Dictionary<DamageType, float> GetTotalResists() {
+    Dictionary<DamageType, float> result = new (armor.resists);
+
+    if (secondary != null) {
+      if (secondary is Armor secArmor) {
+        foreach (var dmg in secArmor.resists) {
+          if (result.ContainsKey(dmg.Key)) result[dmg.Key] += dmg.Value;
+          else result[dmg.Key] = dmg.Value;
+        }
+      }
+    }
+    return result;
+  }
+
   public float GetTotalDamage() {
     // FIXME: Учет предмета во второй руке
     float result = primary.damage;

@@ -11,7 +11,7 @@ public class Bandit : Unit
     Type = UnitType.Melee;
     AllowedWeapon = EquipmentType.OneHandWeapon;
     TotalHealth = 20f;
-    MoveSpeed = 3f;
+    MoveSpeed = 3.3f;
     DefaultMovePoints = 6;
     Initiative = 6;
     Priority = 12;
