@@ -7,16 +7,38 @@ using System.Collections.Generic;
 public class TileBrush : GridBrushBase {
   public enum TileRotation { Random, Left, Top, Right, Bottom }
 
-  [SerializeField, HideInInspector] private int selectedSetIndex = 0;
+  [HideInInspector] public int selectedSetIndex = 0;
   [HideInInspector] public TileRotation tileRotation;
   [HideInInspector, Range(-2, 2)] public int tileOffset = 0;
 
-  private readonly List<TileBrushSet> availableSets = new();
+  public readonly List<TileBrushSet> availableSets = new();
   private List<GameObject> currentPrefabs = new();
 
 #if UNITY_EDITOR
   [CustomEditor(typeof(TileBrush))]
   public class TileBrushInspector : Editor {
+    private void OnEnable() {
+      SceneView.duringSceneGui += DuringSceneGUI;
+    }
+
+    private void OnDisable() {
+      SceneView.duringSceneGui -= DuringSceneGUI;
+    }
+
+    private void DuringSceneGUI(SceneView sceneView) {
+      Event e = Event.current;
+      TileBrush brush = (TileBrush)target;
+
+      if (e.type == EventType.KeyDown && e.keyCode == KeyCode.R) {
+        brush.tileRotation =
+          (TileRotation)(((int)brush.tileRotation + 1) %
+          System.Enum.GetValues(typeof(TileRotation)).Length);
+
+        e.Use();
+        EditorUtility.SetDirty(brush);
+      }
+    }
+
     public override void OnInspectorGUI() {
       TileBrush brush = (TileBrush)target;
 
@@ -24,7 +46,7 @@ public class TileBrush : GridBrushBase {
 
       string[] names = new string[brush.availableSets.Count];
       for (int i = 0; i < names.Length; i++) {
-        names[i] = brush.availableSets[i]?.brushSetName ?? $"Set {i}";
+        names[i] = brush.availableSets[i] == null ? $"Set {i}" : brush.availableSets[i].brushSetName;
       }
 
       brush.selectedSetIndex = EditorGUILayout.Popup("Brush Set", brush.selectedSetIndex, names);

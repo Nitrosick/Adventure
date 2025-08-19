@@ -13,9 +13,9 @@ public class Tile : MonoBehaviour {
   public GameObject Highlight { get; private set; }
 
   public TileType type;
+  public Tile climbTo;
   public TileSpawnType spawnType;
   public Reward loot;
-  public ParticleSystem lootPickEffect;
 
   public int height;
   public bool allyFocusPoint;
@@ -86,7 +86,7 @@ public class Tile : MonoBehaviour {
     bool success = Utils.RollChance(lootDropChance);
     if (success) {
       GameObject obj = transform.Find("Loot").gameObject;
-      if (obj == null || loot == null || lootPickEffect == null) {
+      if (obj == null || loot == null || TileManager.Instance.lootPickEffect == null) {
         type = TileType.Open;
         return;
       }
@@ -99,8 +99,8 @@ public class Tile : MonoBehaviour {
 
   public void TakeLoot() {
     Transform obj = transform.Find("Loot");
-    if (obj == null || loot == null || lootPickEffect == null) return;
-    Instantiate(lootPickEffect, obj.position, Quaternion.identity);
+    if (obj == null || loot == null || TileManager.Instance.lootPickEffect == null) return;
+    Instantiate(TileManager.Instance.lootPickEffect, obj.position, Quaternion.identity);
     Destroy(obj.gameObject);
     BattleManager.Reward.Add(loot);
 

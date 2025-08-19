@@ -45,6 +45,9 @@ public class BattleManager : MonoBehaviour
     InitSpawnZones();
     SpawnUnits(allies, allySpawns, UnitRelation.Ally);
     SpawnUnits(enemies, enemySpawns, UnitRelation.Emeny);
+  }
+
+  private void Start() {
     QueueManager.Init();
   }
 

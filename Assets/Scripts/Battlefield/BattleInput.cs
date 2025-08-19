@@ -46,7 +46,7 @@ public class BattleInput : MonoBehaviour {
           if (hit.collider.TryGetComponent<Tile>(out var clickedTile)) {
             if (
               clickedTile == null ||
-              !TileManager.TileIsWalkable(clickedTile) ||
+              !TileManager.TileIsWalkable(currentUnit.CurrentTile, clickedTile) ||
               !clickedTile.Grid.activeSelf
             ) return;
 

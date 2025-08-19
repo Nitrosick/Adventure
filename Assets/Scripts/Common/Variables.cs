@@ -58,7 +58,8 @@ public enum TileType {
   Cover,
   Tree,
   Breakable,
-  Loot
+  Loot,
+  Climb
 }
 
 public enum TileSpawnType {

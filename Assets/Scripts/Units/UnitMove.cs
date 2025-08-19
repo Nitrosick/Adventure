@@ -3,9 +3,9 @@ using UnityEngine;
 
 public class UnitMove : MonoBehaviour {
   private Unit unit;
-  private readonly Queue<Vector3> path = new();
-
+  private readonly Queue<Tile> path = new();
   public bool IsMoving { get; private set; } = false;
+  private readonly int mpToClimb = 2;
 
   private void Awake() {
     unit = transform.GetComponent<Unit>();
@@ -35,7 +35,7 @@ public class UnitMove : MonoBehaviour {
     path.Clear();
 
     foreach (Tile tile in pathTiles) {
-      path.Enqueue(tile.GetPos());
+      path.Enqueue(tile);
     }
 
     IsMoving = true;
@@ -52,45 +52,82 @@ public class UnitMove : MonoBehaviour {
   private void MoveAlongPath() {
     if (path.Count == 0) return;
 
-    Vector3 target = path.Peek();
-    Vector3 direction = (target - transform.position).normalized;
+    Tile targetTile = path.Peek();
+    Vector3 targetPos = targetTile.GetPos();
+    Vector3 direction = (targetPos - transform.position).normalized;
 
     _ = unit.Animator.RotateTowards(direction, true);
     unit.Animator.SetMoving(true);
-    transform.position = Vector3.MoveTowards(transform.position, target, unit.MoveSpeed * Time.deltaTime);
+    transform.position = Vector3.MoveTowards(transform.position, targetPos, unit.MoveSpeed * Time.deltaTime);
 
-    if (Vector3.Distance(transform.position, target) < 0.01f) {
+    if (Vector3.Distance(transform.position, targetPos) < 0.01f) {
+      CheckTileTypeOnMove(targetTile);
       path.Dequeue();
 
       if (path.Count == 0) {
-        CheckTileType();
+        CheckTileTypeOnStop();
         IsMoving = false;
         unit.Animator.SetMoving(false);
         BattleUI.Instance.EnableUI();
-
-        if (unit.CurrentMovePoints < 1 || unit.Relation == UnitRelation.Emeny) {
-          PhaseManager.NextPhase();
-        }
-        else {
-          TileManager.ShowReachableTiles(
-            unit.CurrentTile,
-            unit.CurrentMovePoints
-          );
-        }
+        AfterMove();
       }
     }
   }
 
-  private void CheckTileType() {
-    if (unit.CurrentTile.type == TileType.Cover) {
-      Effect coverEffect = Resources.Load<Effect>("Effects/Cover");
-      unit.Effects.ApplyEffect(coverEffect);
+  private void AfterMove() {
+    if (unit.CurrentMovePoints < 1 || unit.Relation == UnitRelation.Emeny) {
+      PhaseManager.NextPhase();
     } else {
-      unit.Effects.ClearEffect("Cover");
+      TileManager.ShowReachableTiles(
+        unit.CurrentTile,
+        unit.CurrentMovePoints
+      );
+    }
+  }
+
+  public void Climb() {
+    if (unit.CurrentMovePoints < mpToClimb) {
+      _ = Toast.Show("warning", "Not enough movement points");
+      return;
     }
 
-    if (unit.CurrentTile.type == TileType.Loot && unit.Relation == UnitRelation.Ally) {
-      unit.CurrentTile.TakeLoot();
+    Tile tileFrom = unit.CurrentTile;
+    if (tileFrom.type != TileType.Climb || tileFrom.climbTo == null) return;
+    Tile tileTo = tileFrom.climbTo;
+
+    _ = CameraController.FocusOn(tileTo.GetPos());
+    tileFrom.OccupiedBy = null;
+    transform.position = tileTo.GetPos();
+    unit.CurrentTile = tileTo;
+    unit.CurrentTile.OccupiedBy = unit;
+    unit.CurrentMovePoints -= mpToClimb;
+    AfterMove();
+  }
+
+  private void CheckTileTypeOnMove(Tile tile) {
+    switch (tile.type) {
+      case TileType.Loot:
+        if (unit.Relation == UnitRelation.Ally) tile.TakeLoot();
+        break;
+        // case TileType.Trap:
+        //   break;
     }
+  }
+
+  private void CheckTileTypeOnStop() {
+    TileType type = unit.CurrentTile.type;
+
+    switch (type) {
+      case TileType.Cover:
+        Effect coverEffect = Resources.Load<Effect>("Effects/Cover");
+        unit.Effects.ApplyEffect(coverEffect);
+        break;
+      case TileType.Climb:
+        BattleUI.Instance.ShowClimbButton();
+        break;
+    }
+
+    if (type != TileType.Cover) unit.Effects.ClearEffect("Cover");
+    if (type != TileType.Climb) BattleUI.Instance.HideClimbButton();
   }
 }

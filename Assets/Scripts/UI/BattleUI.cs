@@ -21,6 +21,7 @@ public class BattleUI : GeneralUI {
 
   // Buttons and labels
   private Button phaseSkipButton;
+  private Button climbButton;
   private Image phaseAttackLabel;
   private Image phaseMoveLabel;
   private TextMeshProUGUI currentRound;
@@ -40,13 +41,14 @@ public class BattleUI : GeneralUI {
     mainMenuButton = Get<Button>(top, "MainMenu/Main");
     currentRound = Get<TextMeshProUGUI>(top, "Round/Value");
     phaseSkipButton = Get<Button>(actionsPanel, "SkipPhase");
+    climbButton = Get<Button>(actionsPanel, "Climb");
     phaseAttackLabel = Get<Image>(actionsPanel, "PhaseAttack");
     phaseMoveLabel = Get<Image>(actionsPanel, "PhaseMovement");
 
     if (
       queuePanel == null || actionsPanel == null || skillsPanel == null ||
       phaseSkipButton == null || phaseAttackLabel == null || phaseMoveLabel == null ||
-      currentRound == null
+      currentRound == null || climbButton == null
     ) {
       Debug.LogError("Battle UI components initialization error");
       return;
@@ -56,11 +58,13 @@ public class BattleUI : GeneralUI {
     ColorUtility.TryParseHtmlString("#989898", out inactiveColor);
 
     phaseSkipButton.onClick.AddListener(SkipPhase);
+    climbButton.onClick.AddListener(Climb);
   }
 
   protected override void OnDestroy() {
     base.OnDestroy();
     phaseSkipButton.onClick.RemoveListener(SkipPhase);
+    climbButton.onClick.RemoveListener(Climb);
   }
 
   private void SkipPhase() {
@@ -70,12 +74,14 @@ public class BattleUI : GeneralUI {
   public override void DisableUI() {
     base.DisableUI();
     phaseSkipButton.interactable = false;
+    climbButton.interactable = false;
     skillsPanel.gameObject.SetActive(false);
   }
 
   public override void EnableUI() {
     base.EnableUI();
     phaseSkipButton.interactable = true;
+    climbButton.interactable = true;
     skillsPanel.gameObject.SetActive(true);
   }
 
@@ -119,6 +125,18 @@ public class BattleUI : GeneralUI {
         phaseAttackLabel.color = activeColor;
         break;
     }
+  }
+
+  public void ShowClimbButton() {
+    climbButton.gameObject.SetActive(true);
+  }
+
+  public void HideClimbButton() {
+    climbButton.gameObject.SetActive(false);
+  }
+
+  public void Climb() {
+    QueueManager.CurrentUnit.Move.Climb();
   }
 
   public void ShowSkills(List<Skill> skills, BattlePhase phase, Unit unit) {

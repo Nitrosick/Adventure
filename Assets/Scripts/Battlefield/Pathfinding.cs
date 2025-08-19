@@ -29,7 +29,7 @@ public static class Pathfinding
       closedSet.Add(current);
 
       foreach (Tile neighbor in current.Neighbors) {
-        if (!TileManager.TileIsWalkable(neighbor) || closedSet.Contains(neighbor)) continue;
+        if (!TileManager.TileIsWalkable(current, neighbor) || closedSet.Contains(neighbor)) continue;
 
         float tentativeGScore = gScore[current] + Vector2Int.Distance(current.Coords, neighbor.Coords);
 

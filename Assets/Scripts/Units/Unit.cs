@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 public class Unit : MonoBehaviour {
   // Components
   public CapsuleCollider UnitCollider { get; private set; }
+  public UnitMove Move { get; private set; }
   public UnitUI Ui { get; private set; }
   public UnitAnimator Animator { get; private set; }
   public UnitEquipment Equip { get; private set; }
@@ -73,12 +74,13 @@ public class Unit : MonoBehaviour {
 
   public virtual void Init(Tile tile, UnitRelation relation, Vector3 direction) {
     UnitCollider = transform.GetComponent<CapsuleCollider>();
+    Move = transform.GetComponent<UnitMove>();
     Ui = transform.GetComponent<UnitUI>();
     Animator = transform.GetComponent<UnitAnimator>();
     Effects = transform.GetComponent<UnitEffects>();
     SetMovePoints();
 
-    if (UnitCollider == null || Ui == null || Animator == null || Equip == null || Effects == null) {
+    if (UnitCollider == null || Move == null || Ui == null || Animator == null || Equip == null || Effects == null) {
       Debug.LogError("Unit components initialization error");
       return;
     }

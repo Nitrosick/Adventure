@@ -3,6 +3,9 @@ using System.Linq;
 using UnityEngine;
 
 public class TileManager : MonoBehaviour {
+  public static TileManager Instance;
+  public ParticleSystem lootPickEffect;
+
   public static Dictionary<Vector2Int, Tile> tiles = new();
   public static Tile allyFocusTile;
   public static Tile enemyFocusTile;
@@ -19,6 +22,7 @@ public class TileManager : MonoBehaviour {
   };
 
   private void Awake() {
+    Instance = this;
     tiles.Clear();
 
     foreach (Tile tile in FindObjectsOfType<Tile>()) {
@@ -41,18 +45,19 @@ public class TileManager : MonoBehaviour {
     tiles.Clear();
   }
 
-  public static bool TileIsWalkable(Tile tile) {
+  public static bool TileIsWalkable(Tile from, Tile to) {
+    if (from.height != to.height) return false;
     return (
-      tile.type != TileType.Obstacle &&
-      tile.type != TileType.Tree &&
-      tile.type != TileType.Breakable &&
-      tile.OccupiedBy == null
+      to.type != TileType.Obstacle &&
+      to.type != TileType.Tree &&
+      to.type != TileType.Breakable &&
+      to.OccupiedBy == null
     );
   }
 
-  public static List<Tile> GetAllWalkable() {
+  public static List<Tile> GetAllWalkable(Tile from) {
     return tiles.Values
-      .Where(tile => TileIsWalkable(tile))
+      .Where(tile => TileIsWalkable(from, tile))
       .ToList();
   }
 
@@ -96,7 +101,7 @@ public class TileManager : MonoBehaviour {
         if (
           newCost <= mp &&
           (!costSoFar.ContainsKey(neighbor) || newCost < costSoFar[neighbor]) &&
-          TileIsWalkable(neighbor)
+          TileIsWalkable(current, neighbor)
         ) {
           costSoFar[neighbor] = newCost;
           frontier.Enqueue(neighbor);
@@ -111,6 +116,7 @@ public class TileManager : MonoBehaviour {
 
     foreach (Tile tile in tiles.Values) {
       if (tile == unit.CurrentTile) continue;
+      if (unit.Type == UnitType.Melee && unit.CurrentTile.height != tile.height) continue;
       float dist = Pathfinding.GetCost(unit.CurrentTile, tile);
       int minRange = unit.Type == UnitType.Range ? 2 : 0;
       if (dist >= minRange && dist <= unit.Equip.primary.range + 0.5f) highlightedTiles.Add(tile);
