@@ -166,6 +166,10 @@ public class UnitEquipment : MonoBehaviour {
     return result;
   }
 
+  public int GetRange() {
+    return primary.range;
+  }
+
   public List<Skill> GetSkills() {
     List<Skill> result = new() { };
     if (primary != null && primary.skill != null) result.Add(primary.skill);

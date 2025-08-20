@@ -185,7 +185,7 @@ public class Unit : MonoBehaviour {
     BattleUI.Instance.DisableUI();
     TargetObject = target;
 
-    Vector3 dirToTarget = TargetObject.ParentTile.transform.position.normalized;
+    Vector3 dirToTarget = TargetObject.ParentTile.GetPos().normalized;
     await Animator.RotateTowards(dirToTarget);
 
     Animator.SetAttackType(Equip.primary.attackType);
@@ -195,7 +195,7 @@ public class Unit : MonoBehaviour {
   public async void ChopTree(TreeObject target) {
     BattleUI.Instance.DisableUI();
     TargetTree = target;
-    Vector3 dirToTarget = TargetTree.ParentTile.transform.position.normalized;
+    Vector3 dirToTarget = TargetTree.ParentTile.GetPos().normalized;
 
     await Animator.RotateTowards(dirToTarget);
     Animator.SetAttackType(Equip.primary.attackType);
@@ -304,6 +304,7 @@ public class Unit : MonoBehaviour {
       dexterity = Dexterity,
       intelligence = Intelligence,
       level = Level,
+      type = Type,
       primaryId = equipment.primary != null ? equipment.primary.id : null,
       secondaryId = equipment.secondary != null ? equipment.secondary.id : null,
       armorId = equipment.armor != null ? equipment.armor.id : null,

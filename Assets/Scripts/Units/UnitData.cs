@@ -7,6 +7,7 @@ public class UnitData {
   public float dexterity;
   public float intelligence;
   public int level;
+  public UnitType type;
 
   public string primaryId;
   public string secondaryId;

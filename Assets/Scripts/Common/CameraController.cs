@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class CameraController : MonoBehaviour {
-  private static CameraController instance;
+  private static CameraController Instance;
   private static CinemachineVirtualCamera cinemachine;
   private static CinemachineBasicMultiChannelPerlin perlin;
   private static Task currentShakeTask;
@@ -22,7 +22,7 @@ public class CameraController : MonoBehaviour {
   [SerializeField] private float[] zLimits = { -100, 100 };
 
   private void Awake() {
-    instance = this;
+    Instance = this;
     cinemachine = transform.GetComponent<CinemachineVirtualCamera>();
     perlin = cinemachine.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
 
@@ -41,10 +41,10 @@ public class CameraController : MonoBehaviour {
     float offsetZ = height / Mathf.Tan(angleX * Mathf.Deg2Rad);
     float offsetX = offsetZ * Mathf.Tan(angleY * Mathf.Deg2Rad);
 
-    instance.xLimits[0] += offsetX / 2;
-    instance.xLimits[1] += offsetX / 2;
-    instance.zLimits[0] += offsetZ / 2;
-    instance.zLimits[1] += offsetZ / 2;
+    Instance.xLimits[0] += offsetX / 2;
+    Instance.xLimits[1] += offsetX / 2;
+    Instance.zLimits[0] += offsetZ / 2;
+    Instance.zLimits[1] += offsetZ / 2;
   }
 
   private void Update() {
@@ -53,7 +53,7 @@ public class CameraController : MonoBehaviour {
   }
 
   private bool ShouldMove() {
-    Vector2 move = instance.moveInput.action.ReadValue<Vector2>();
+    Vector2 move = Instance.moveInput.action.ReadValue<Vector2>();
     Vector2 mousePos = Mouse.current.position.ReadValue();
 
     bool keyboardInput = move.sqrMagnitude > 0.01f;
@@ -68,15 +68,15 @@ public class CameraController : MonoBehaviour {
   }
 
   private static void Move() {
-    Vector3 forward = instance.transform.forward;
-    Vector3 right = instance.transform.right;
+    Vector3 forward = Instance.transform.forward;
+    Vector3 right = Instance.transform.right;
 
     forward.y = 0;
     right.y = 0;
     forward.Normalize();
     right.Normalize();
 
-    Vector2 move = instance.moveInput.action.ReadValue<Vector2>();
+    Vector2 move = Instance.moveInput.action.ReadValue<Vector2>();
     Vector3 moveDirection = (right * move.x + forward * move.y).normalized;
 
     Vector2 mousePos = Mouse.current.position.ReadValue();
@@ -94,26 +94,26 @@ public class CameraController : MonoBehaviour {
       speed = edgeScrollSpeed * Time.deltaTime;
     }
 
-    Vector3 position = instance.transform.position;
+    Vector3 position = Instance.transform.position;
     Vector3 desiredMove = moveDirection * speed;
     Vector3 targetPosition = position + desiredMove;
 
-    if ((targetPosition.x < instance.xLimits[0] && desiredMove.x < 0) ||
-        (targetPosition.x > instance.xLimits[1] && desiredMove.x > 0)) {
+    if ((targetPosition.x < Instance.xLimits[0] && desiredMove.x < 0) ||
+        (targetPosition.x > Instance.xLimits[1] && desiredMove.x > 0)) {
       desiredMove.x = 0;
     }
 
-    if ((targetPosition.z < instance.zLimits[0] && desiredMove.z < 0) ||
-        (targetPosition.z > instance.zLimits[1] && desiredMove.z > 0)) {
+    if ((targetPosition.z < Instance.zLimits[0] && desiredMove.z < 0) ||
+        (targetPosition.z > Instance.zLimits[1] && desiredMove.z > 0)) {
       desiredMove.z = 0;
     }
 
-    instance.transform.position += desiredMove;
+    Instance.transform.position += desiredMove;
   }
 
   private static void CalculateFocusDistance() {
-    float height = instance.transform.position.y;
-    float angleDegrees = instance.transform.eulerAngles.x;
+    float height = Instance.transform.position.y;
+    float angleDegrees = Instance.transform.eulerAngles.x;
     float angleRadians = Mathf.Deg2Rad * angleDegrees;
     float result = height / Mathf.Sin(angleRadians);
     focusDistance = result;
@@ -122,12 +122,12 @@ public class CameraController : MonoBehaviour {
   public static async Task FocusOn(Vector3 target, bool immediate = false) {
     isFocusing = true;
 
-    Vector3 direction = instance.transform.forward;
+    Vector3 direction = Instance.transform.forward;
     Vector3 targetPosition = target - direction * focusDistance;
-    Vector3 startPos = instance.transform.position;
+    Vector3 startPos = Instance.transform.position;
 
     if (immediate) {
-      instance.transform.position = targetPosition;
+      Instance.transform.position = targetPosition;
       isFocusing = false;
       return;
     }
@@ -139,11 +139,11 @@ public class CameraController : MonoBehaviour {
       float t = elapsed / focusDuration;
       t = Mathf.SmoothStep(0, 1, t);
 
-      instance.transform.position = Vector3.Lerp(startPos, targetPosition, t);
+      Instance.transform.position = Vector3.Lerp(startPos, targetPosition, t);
       await Task.Yield();
     }
 
-    instance.transform.position = targetPosition;
+    Instance.transform.position = targetPosition;
     isFocusing = false;
   }
 

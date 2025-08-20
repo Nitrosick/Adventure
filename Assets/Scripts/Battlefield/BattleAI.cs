@@ -7,8 +7,7 @@ public static class BattleAI {
   private static UnitMove enemyMove;
   private static Tile enemyTile;
   private static List<Unit> playerUnits;
-  // FIXME: Сделать метод для получения дальности атаки
-  private static int AttackRange => enemy.Equip.primary.range;
+  private static int AttackRange => enemy.Equip.GetRange();
   private static readonly float unitPointOffset = 0.75f;
 
   // Evaluation coefficients
@@ -89,16 +88,6 @@ public static class BattleAI {
     if (safestTile != null) enemyMove.OnMove(safestTile);
   }
 
-  private static float GetAttackDistance(Tile from, Tile to) {
-    int dx = Mathf.Abs(from.Coords.x - to.Coords.x);
-    int dy = Mathf.Abs(from.Coords.y - to.Coords.y);
-
-    int diag = Mathf.Min(dx, dy);
-    int straight = Mathf.Abs(dx - dy);
-
-    return diag * 1.5f + straight;
-  }
-
   private static bool LineOfSightClear(Vector3 from, Vector3 to) {
     Vector3 fixedFrom = from + new Vector3(0, unitPointOffset, 0);
     Vector3 fixedTo = to + new Vector3(0, unitPointOffset, 0);
@@ -137,16 +126,9 @@ public static class BattleAI {
     return score;
   }
 
-  private static void SetAttackTarget(Unit target) {
-    if (target == null) return;
-    float distance = GetAttackDistance(enemyTile, target.CurrentTile);
-    if (distance <= AttackRange) enemy.Target = target;
-    else enemy.Target = null;
-  }
-
   private static void SetAttackTarget(Unit target, Tile from) {
     if (target == null || from == null) return;
-    float distance = GetAttackDistance(from, target.CurrentTile);
+    float distance = Pathfinding.GetCost(from, target.CurrentTile, AttackRange);
     if (distance <= AttackRange && LineOfSightClear(from.GetPos(), target.CurrentTile.GetPos())) {
       enemy.Target = target;
     } else {
@@ -154,7 +136,7 @@ public static class BattleAI {
     }
   }
 
-  private static bool TryMoveToNeighborOf(Unit target) {
+  private static Tile TryMoveToNeighborOf(Unit target) {
     foreach (Tile neighbor in target.CurrentTile.Neighbors) {
       if (!TileManager.TileIsWalkable(target.CurrentTile, neighbor)) continue;
 
@@ -162,10 +144,10 @@ public static class BattleAI {
 
       if (path != null) {
         enemyMove.OnMove(neighbor);
-        return true;
+        return neighbor;
       }
     }
-    return false;
+    return null;
   }
 
   // Unit behavior
@@ -174,19 +156,16 @@ public static class BattleAI {
       .OrderBy(u => Vector2Int.Distance(enemyTile.Coords, u.CurrentTile.Coords))
       .First();
 
-    if (TryMoveToNeighborOf(closest)) {
-      SetAttackTarget(closest);
-      return;
-    }
-    ComeCloser();
+    Tile tile = TryMoveToNeighborOf(closest);
+    if (tile != null) SetAttackTarget(closest, tile);
+    else ComeCloser();
   }
 
   private static void MoveToPriorityEnemy() {
     foreach (Unit target in playerUnits) {
-      if (TryMoveToNeighborOf(target)) {
-        SetAttackTarget(target);
-        return;
-      }
+      Tile tile = TryMoveToNeighborOf(target);
+      if (tile != null) SetAttackTarget(target, tile);
+      else ComeCloser();
     }
     ComeCloser();
   }
@@ -202,7 +181,7 @@ public static class BattleAI {
       if (path == null) continue;
 
       foreach (Unit target in playerUnits) {
-        float dist = GetAttackDistance(tile, target.CurrentTile);
+        float dist = Pathfinding.GetCost(tile, target.CurrentTile, AttackRange);
         if (dist < 2 || dist > AttackRange) continue;
         if (!LineOfSightClear(tile.GetPos(), target.CurrentTile.GetPos())) continue;
         float score = EvaluateTileScore(tile, target);

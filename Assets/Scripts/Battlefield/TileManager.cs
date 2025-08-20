@@ -7,6 +7,7 @@ public class TileManager : MonoBehaviour {
   public ParticleSystem lootPickEffect;
 
   public static Dictionary<Vector2Int, Tile> tiles = new();
+  public static List<TileFiller> fillers = new();
   public static Tile allyFocusTile;
   public static Tile enemyFocusTile;
 
@@ -24,9 +25,14 @@ public class TileManager : MonoBehaviour {
   private void Awake() {
     Instance = this;
     tiles.Clear();
+    fillers.Clear();
 
-    foreach (Tile tile in FindObjectsOfType<Tile>()) {
+    foreach (Tile tile in FindObjectsOfType<Tile>(true)) {
       tiles[tile.Coords] = tile;
+    }
+
+    foreach (TileFiller tile in FindObjectsOfType<TileFiller>(true)) {
+      fillers.Add(tile);
     }
 
     if (tiles.Count < 1) {
@@ -43,6 +49,7 @@ public class TileManager : MonoBehaviour {
 
   private void OnDestroy() {
     tiles.Clear();
+    fillers.Clear();
   }
 
   public static bool TileIsWalkable(Tile from, Tile to) {
@@ -61,8 +68,21 @@ public class TileManager : MonoBehaviour {
       .ToList();
   }
 
+  public static List<Tile> GetHighTiles() {
+    return tiles.Values
+      .Where(tile => tile.height > 1)
+      .OrderByDescending(tile => tile.height)
+      .ToList();
+  }
+
+  public static List<TileFiller> GetFillers() {
+    return fillers
+      .Where(filler => filler.height > 1)
+      .ToList();
+  }
+
   public static Tile GetRandomFreeTile(List<Tile> list) {
-    List<Tile> freeTiles = new ();
+    List<Tile> freeTiles = new();
 
     foreach (Tile tile in list) {
       if (tile.OccupiedBy == null) freeTiles.Add(tile);
@@ -74,7 +94,7 @@ public class TileManager : MonoBehaviour {
   }
 
   public static List<Tile> GetSpawns(TileSpawnType type) {
-    List<Tile> result = new ();
+    List<Tile> result = new();
     foreach (Tile tile in tiles.Values) {
       if (tile.spawnType == type && tile.type == TileType.Open) result.Add(tile);
     }
@@ -117,9 +137,9 @@ public class TileManager : MonoBehaviour {
     foreach (Tile tile in tiles.Values) {
       if (tile == unit.CurrentTile) continue;
       if (unit.Type == UnitType.Melee && unit.CurrentTile.height != tile.height) continue;
-      float dist = Pathfinding.GetCost(unit.CurrentTile, tile);
+      float dist = Pathfinding.GetCost(unit.CurrentTile, tile, unit.Equip.GetRange());
       int minRange = unit.Type == UnitType.Range ? 2 : 0;
-      if (dist >= minRange && dist <= unit.Equip.primary.range + 0.5f) highlightedTiles.Add(tile);
+      if (dist >= minRange && dist <= unit.Equip.GetRange()) highlightedTiles.Add(tile);
     }
 
     int targetsCount = 0;

@@ -66,15 +66,38 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: ff74657c826178844bb9d779c11ce7f1,
         type: 3}
       propertyPath: m_Layer
-      value: 6
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: ff74657c826178844bb9d779c11ce7f1,
         type: 3}
       propertyPath: m_TagString
-      value: BattlefieldTile
+      value: BattlefieldTileFiller
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ff74657c826178844bb9d779c11ce7f1,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4274692448816335792}
   m_SourcePrefab: {fileID: 100100000, guid: ff74657c826178844bb9d779c11ce7f1, type: 3}
+--- !u!1 &1669797002371573392 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: ff74657c826178844bb9d779c11ce7f1,
+    type: 3}
+  m_PrefabInstance: {fileID: 2012306764436052929}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4274692448816335792
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1669797002371573392}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b42d2a540e04a3a40a7cde29ca65f0d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  height: 3

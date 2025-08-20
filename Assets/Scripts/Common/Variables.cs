@@ -45,29 +45,13 @@ Default: #5C523F
 Highlighted / Pressed / Selected: #938569
 Disabled: #5C523F o-128
 
-Total gold on map: 110 - 165
+Total gold on map: 125 - 190
 */
 
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
 // Battle
-public enum TileType {
-  Open,
-  Obstacle,
-  Cover,
-  Tree,
-  Breakable,
-  Loot,
-  Climb
-}
-
-public enum TileSpawnType {
-  No,
-  Ally,
-  Enemy
-}
-
 public enum BattlePhase {
   Movement,
   Attack,
@@ -99,6 +83,25 @@ public enum AIBehaviorType {
   KeepDistance,
   Retreat,
   Passive
+}
+
+// Battlefield tiles
+public enum TileType {
+  Open,
+  Obstacle,
+  Cover,
+  Tree,
+  Breakable,
+  Loot,
+  Climb
+}
+
+public enum TileSpawnType {
+  No,
+  AnyAlly,
+  AnyEnemy,
+  AllyShooter,
+  EnemyShooter
 }
 
 // UI

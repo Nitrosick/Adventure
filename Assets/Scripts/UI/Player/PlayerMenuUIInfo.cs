@@ -278,7 +278,7 @@ public class PlayerMenuUIInfo : MonoBehaviour {
     unitMp.text = unit.DefaultMovePoints.ToString();
     unitDamage.text = (unit.Equip.primary.damage + unit.Strength).ToString();
     unitDefense.text = unit.Equip.GetTotalDefense().ToString();
-    unitRange.text = unit.Equip.primary.range.ToString();
+    unitRange.text = unit.Equip.GetRange().ToString();
 
     if (unit.Projectiles == 0) unitProjectiles.text = "-";
     else if (unit.Projectiles == unit.CurrentProjectiles) unitProjectiles.text = unit.Projectiles.ToString();

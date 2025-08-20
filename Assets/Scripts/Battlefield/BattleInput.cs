@@ -1,8 +1,40 @@
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 public class BattleInput : MonoBehaviour {
+  [SerializeField] private InputActionReference flattenInput;
+  private List<Tile> tiles;
+  private List<TileFiller> fillers;
+  private Transform terrain;
+  private Vector3 terrainInitPos;
+  private readonly float lerpDuration = 0.25f;
+
+  private void Awake() {
+    terrain = GameObject.FindGameObjectWithTag("Terrain").GetComponent<Transform>();
+  }
+
+  private void Start() {
+    tiles = TileManager.GetHighTiles();
+    fillers = TileManager.GetFillers();
+    if (terrain == null) return;
+    terrainInitPos = terrain.transform.position;
+  }
+
+  private void OnEnable() {
+    flattenInput.action.performed += OnFlattenPressed;
+    flattenInput.action.canceled += OnFlattenReleased;
+    flattenInput.action.Enable();
+  }
+
+  private void OnDisable() {
+    flattenInput.action.performed -= OnFlattenPressed;
+    flattenInput.action.canceled -= OnFlattenReleased;
+    flattenInput.action.Disable();
+  }
+
   private void Update() {
     if (
       BattleManager.battleResult != null ||
@@ -76,5 +108,48 @@ public class BattleInput : MonoBehaviour {
           break;
       }
     }
+  }
+
+  private void OnFlattenPressed(InputAction.CallbackContext ctx) {
+    foreach (Tile tile in tiles) {
+      float offset = tile.height - (0.1f * tile.height) - 1;
+      Vector3 targetPos = tile.InitPosition - new Vector3(0, offset, 0);
+      AnimateMove(tile.transform, targetPos);
+    }
+
+    foreach (TileFiller filler in fillers) {
+      float offset = filler.height - (0.1f * filler.height) - 1;
+      Vector3 targetPos = filler.InitPosition - new Vector3(0, offset, 0);
+      AnimateMove(filler.transform, targetPos);
+    }
+
+    Vector3 terrainTargetPos = terrain.transform.position - new Vector3(0, tiles[0].height - 1, 0);
+    AnimateMove(terrain, terrainTargetPos);
+  }
+
+  private void OnFlattenReleased(InputAction.CallbackContext ctx) {
+    foreach (Tile tile in tiles) {
+      AnimateMove(tile.transform, tile.InitPosition);
+    }
+
+    foreach (TileFiller filler in fillers) {
+      AnimateMove(filler.transform, filler.InitPosition);
+    }
+
+    AnimateMove(terrain, terrainInitPos);
+  }
+
+  private async void AnimateMove(Transform t, Vector3 target) {
+    Vector3 start = t.position;
+    float elapsed = 0f;
+
+    while (elapsed < lerpDuration) {
+      elapsed += Time.deltaTime;
+      float tNorm = Mathf.Clamp01(elapsed / lerpDuration);
+      t.position = Vector3.Lerp(start, target, tNorm);
+      await Task.Yield();
+    }
+
+    t.position = target;
   }
 }

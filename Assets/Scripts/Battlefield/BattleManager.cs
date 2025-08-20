@@ -3,14 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class BattleManager : MonoBehaviour
-{
+public class BattleManager : MonoBehaviour {
   public static BattleManager Instance;
 
   private UnitData[] allies;
   private UnitData[] enemies;
+
   private static List<Tile> allySpawns;
+  private static List<Tile> allyShooterSpawns;
   private static List<Tile> enemySpawns;
+  private static List<Tile> enemyShooterSpawns;
+
   public static BattleResult? battleResult;
   public static Reward Reward { get; private set; }
   public GameObject corpsePrefab;
@@ -26,8 +29,15 @@ public class BattleManager : MonoBehaviour
     Instance = this;
     battleResult = null;
     Reward = new Reward();
-    allies = StateManager.playerUnits.Where(u => u.inSquad).ToArray();
-    enemies = StateManager.enemies;
+
+    allies = StateManager.playerUnits
+      .Where(u => u.inSquad)
+      .OrderByDescending(u => u.type == UnitType.Range)
+      .ToArray();
+
+    enemies = StateManager.enemies
+      .OrderByDescending(u => u.type == UnitType.Range)
+      .ToArray();
 
     if (allies == null || allies.Length == 0) {
       Debug.LogError("Ally units not found");
@@ -61,8 +71,10 @@ public class BattleManager : MonoBehaviour
   }
 
   private void InitSpawnZones() {
-    allySpawns = TileManager.GetSpawns(TileSpawnType.Ally);
-    enemySpawns = TileManager.GetSpawns(TileSpawnType.Enemy);
+    allySpawns = TileManager.GetSpawns(TileSpawnType.AnyAlly);
+    enemySpawns = TileManager.GetSpawns(TileSpawnType.AnyEnemy);
+    allyShooterSpawns = TileManager.GetSpawns(TileSpawnType.AllyShooter);
+    enemyShooterSpawns = TileManager.GetSpawns(TileSpawnType.EnemyShooter);
   }
 
   private void SpawnUnits(UnitData[] unitsData, List<Tile> spawns, UnitRelation relation) {
@@ -70,8 +82,28 @@ public class BattleManager : MonoBehaviour
       ? TileManager.allyFocusTile
       : TileManager.enemyFocusTile;
 
+    List<Tile> shooterSpawns = spawns == allySpawns
+      ? allyShooterSpawns
+      : enemyShooterSpawns;
+
     foreach (UnitData data in unitsData) {
-      Tile tile = TileManager.GetRandomFreeTile(spawns);
+      Tile tile = null;
+
+      if (data.type == UnitType.Range) {
+        if (shooterSpawns.Count > 0) {
+          tile = TileManager.GetRandomFreeTile(shooterSpawns);
+          shooterSpawns.Remove(tile);
+        }
+        if (tile == null && spawns.Count > 0) {
+          tile = TileManager.GetRandomFreeTile(spawns);
+          spawns.Remove(tile);
+        }
+      } else {
+        if (spawns.Count > 0) {
+          tile = TileManager.GetRandomFreeTile(spawns);
+          spawns.Remove(tile);
+        }
+      }
 
       if (tile == null) {
         Debug.LogError("Not enough free tiles to place units");

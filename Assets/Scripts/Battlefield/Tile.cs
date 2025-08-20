@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 
 public class Tile : MonoBehaviour {
   public Vector2Int Coords { get; private set; }
+  public Vector3 InitPosition { get; private set; }
   public List<Tile> Neighbors { get; set; }
   public Unit OccupiedBy { get; set; }
 
@@ -25,13 +26,14 @@ public class Tile : MonoBehaviour {
   private void Awake() {
     Coords = new(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.z));
     Neighbors = new();
-    Grid = transform.Find("Grid").gameObject;
-    AttackGrid = transform.Find("AttackGrid").gameObject;
-    Highlight = transform.Find("Highlight").gameObject;
+    InitPosition = transform.position;
 
-    if (Grid == null || AttackGrid == null || Highlight == null) {
-      Debug.LogError("Tile components initialization error");
-    }
+    Transform grid = transform.Find("Grid");
+    if (grid != null) Grid = grid.gameObject;
+    Transform attackGrid = transform.Find("AttackGrid");
+    if (attackGrid != null) AttackGrid = attackGrid.gameObject;
+    Transform highlight = transform.Find("Highlight");
+    if (highlight != null) Highlight = highlight.gameObject;
   }
 
   private void OnDestroy() {
@@ -43,24 +45,31 @@ public class Tile : MonoBehaviour {
   private void OnMouseExit() { Unhover(); }
 
   public void Hover() {
-    if (EventSystem.current.IsPointerOverGameObject()) return;
-    if (!Grid.activeSelf && !AttackGrid.activeSelf) return;
+    if (
+      EventSystem.current.IsPointerOverGameObject() ||
+      Grid == null || AttackGrid == null ||
+      (!Grid.activeSelf && !AttackGrid.activeSelf)
+    ) return;
     Highlight.SetActive(true);
   }
 
   public void Unhover() {
+    if (Highlight == null) return;
     Highlight.SetActive(false);
   }
 
   public void ShowGrid() {
+    if (Grid == null) return;
     Grid.SetActive(true);
   }
 
   public void ShowAttackGrid() {
+    if (AttackGrid == null) return;
     AttackGrid.SetActive(true);
   }
 
   public void HideGrid() {
+    if (Grid == null || Highlight == null || AttackGrid == null) return;
     Grid.SetActive(false);
     Highlight.SetActive(false);
     AttackGrid.SetActive(false);
@@ -92,7 +101,8 @@ public class Tile : MonoBehaviour {
       }
       obj.SetActive(true);
       type = TileType.Loot;
-    } else {
+    }
+    else {
       type = TileType.Open;
     }
   }
