@@ -25,20 +25,21 @@ public class Crossbowman : Unit
 
   public GameObject boltPrefab;
   private Transform weapon;
+  private Animator weaponAnimation;
   private Transform missleSpawner;
-  private readonly int boltSpeed = 17;
+  private readonly float boltSpeed = 17;
 
   public async override void Init(Tile tile, UnitRelation relation, Vector3 direction) {
     base.Init(tile, relation, direction);
 
     await Task.Yield();
     weapon = GetComponentsInChildren<Transform>(true).FirstOrDefault(c => c.CompareTag("Weapon"));
+    weaponAnimation = weapon.GetComponent<Animator>();
     missleSpawner = weapon.transform.Find("MissleSpawner").GetComponent<Transform>();
 
     if (weapon == null || missleSpawner == null) {
       Debug.LogError("Crossbowman components initialization error");
     }
-    return;
   }
 
   public async override void OnAttack(Unit target = null) {
@@ -54,6 +55,7 @@ public class Crossbowman : Unit
     );
 
     Animator.Attack();
+    if (weaponAnimation != null) weaponAnimation.SetTrigger("Shoot");
   }
 
   public override void Shoot() {
@@ -72,6 +74,7 @@ public class Crossbowman : Unit
     successAttack = Utils.RollChance(hitChance);
 
     Missle missle = bolt.GetComponent<Missle>();
-    missle.Launch(this, shootDirection, boltSpeed, damage, critModifier, successAttack);
+    Vector3 velocity = shootDirection * boltSpeed;
+    missle.Launch(this, velocity, damage, critModifier, successAttack);
   }
 }

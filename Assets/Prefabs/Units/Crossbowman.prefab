@@ -12,10 +12,11 @@ GameObject:
   - component: {fileID: 4253104328844257840}
   - component: {fileID: 7444924848504783732}
   - component: {fileID: 1109366306537701282}
+  - component: {fileID: -7334883661526423381}
+  - component: {fileID: -9028565459167643303}
   - component: {fileID: 2521036456178082933}
   - component: {fileID: 6686146405576298908}
   - component: {fileID: 8725112281255501486}
-  - component: {fileID: -9028565459167643303}
   m_Layer: 7
   m_Name: Crossbowman
   m_TagString: Unit
@@ -100,6 +101,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3fe0fd99bec91b438c2eb95aaf645f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-7334883661526423381
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2548740166397950227}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de0639f1c5ccc96438527c8ff2944518, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &-9028565459167643303
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2548740166397950227}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18bd26ee4ce5ce149a1112e65c7e902e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  primary: {fileID: 11400000, guid: 20433f70455daaf4f898352a64463b8c, type: 2}
+  secondary: {fileID: 0}
+  armor: {fileID: 11400000, guid: cad705e9b6a85c441b4fb0a1f30a51f3, type: 2}
+  rightHand: {fileID: 8365742737056621226}
+  leftHand: {fileID: 583191698633526075}
 --- !u!114 &2521036456178082933
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -136,23 +166,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd8d4958156e16c4f80f458aa665da20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &-9028565459167643303
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2548740166397950227}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 18bd26ee4ce5ce149a1112e65c7e902e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  primary: {fileID: 11400000, guid: 20433f70455daaf4f898352a64463b8c, type: 2}
-  secondary: {fileID: 0}
-  armor: {fileID: 11400000, guid: cad705e9b6a85c441b4fb0a1f30a51f3, type: 2}
-  rightHand: {fileID: 8365742737056621226}
-  leftHand: {fileID: 583191698633526075}
 --- !u!1 &3829476033744859008
 GameObject:
   m_ObjectHideFlags: 0

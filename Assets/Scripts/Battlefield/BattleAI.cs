@@ -34,6 +34,9 @@ public static class BattleAI {
       case AIBehaviorType.Retreat:
         MoveAway();
         break;
+      case AIBehaviorType.HoldPosition:
+        HoldPosition();
+        break;
       case AIBehaviorType.Passive:
         PhaseManager.NextPhase();
         break;
@@ -57,7 +60,7 @@ public static class BattleAI {
       List<Tile> path = Pathfinding.FindPath(enemyTile, tile, enemy.CurrentMovePoints);
 
       if (path != null) {
-        float dist = Vector2Int.Distance(tile.Coords, playerUnits.First().CurrentTile.Coords);
+        float dist = GetDistance(tile, playerUnits.First().CurrentTile);
 
         if (dist < closestDistance) {
           closest = tile;
@@ -77,7 +80,7 @@ public static class BattleAI {
     foreach (Tile tile in allWalkableTiles) {
       List<Tile> path = Pathfinding.FindPath(enemyTile, tile, enemy.CurrentMovePoints);
       if (path == null) continue;
-      float dist = playerUnits.Min(t => Vector2Int.Distance(tile.Coords, t.CurrentTile.Coords));
+      float dist = playerUnits.Min(t => GetDistance(tile, t.CurrentTile));
 
       if (dist > furthest) {
         safestTile = tile;
@@ -89,14 +92,18 @@ public static class BattleAI {
   }
 
   private static bool LineOfSightClear(Vector3 from, Vector3 to) {
-    Vector3 fixedFrom = from + new Vector3(0, unitPointOffset, 0);
-    Vector3 fixedTo = to + new Vector3(0, unitPointOffset, 0);
+    float offset = enemy.Equip.primary.trajectory == ShotTrajectory.Arc
+      ? unitPointOffset * 2
+      : unitPointOffset;
+
+    Vector3 fixedFrom = from + new Vector3(0, offset, 0);
+    Vector3 fixedTo = to + new Vector3(0, offset, 0);
     Vector3 direction = (fixedTo - fixedFrom).normalized;
     GameObject source = enemy.gameObject;
-    float distance = Vector3.Distance(fixedFrom, fixedTo);
+    float dist = Vector3.Distance(fixedFrom, fixedTo);
 
     Ray ray = new(fixedFrom, direction);
-    RaycastHit[] hits = Physics.RaycastAll(ray, distance, ~0, QueryTriggerInteraction.Collide);
+    RaycastHit[] hits = Physics.RaycastAll(ray, dist, ~0, QueryTriggerInteraction.Collide);
 
     foreach (var hit in hits) {
       GameObject hitObj = hit.collider.gameObject;
@@ -114,22 +121,23 @@ public static class BattleAI {
   }
 
   private static float EvaluateTileScore(Tile tile, Unit target) {
-    float distanceFromTarget = Vector2Int.Distance(tile.Coords, target.CurrentTile.Coords);
+    float dist = GetDistance(tile, target.CurrentTile);
     int nearbyEnemies = playerUnits.Count(u => Vector2Int.Distance(tile.Coords, u.CurrentTile.Coords) <= 2);
     int coverBonus = tile.type == TileType.Cover ? 1 : 0;
 
     float score = 0;
-    score += distanceFromTarget * distanceWeight;
+    score += dist * distanceWeight;
     score += coverBonus * coverWeight;
     score -= nearbyEnemies * threatPenalty;
+    score += target.GetPriority();
 
     return score;
   }
 
   private static void SetAttackTarget(Unit target, Tile from) {
     if (target == null || from == null) return;
-    float distance = Pathfinding.GetCost(from, target.CurrentTile, AttackRange);
-    if (distance <= AttackRange && LineOfSightClear(from.GetPos(), target.CurrentTile.GetPos())) {
+    float dist = Pathfinding.GetCost(from, target.CurrentTile, AttackRange);
+    if (dist <= AttackRange && LineOfSightClear(from.GetPos(), target.CurrentTile.GetPos())) {
       enemy.Target = target;
     } else {
       enemy.Target = null;
@@ -150,10 +158,14 @@ public static class BattleAI {
     return null;
   }
 
+  private static float GetDistance(Tile from, Tile to) {
+    return Vector2Int.Distance(from.Coords, to.Coords);
+  }
+
   // Unit behavior
   private static void MoveToClosestEnemy() {
     Unit closest = playerUnits
-      .OrderBy(u => Vector2Int.Distance(enemyTile.Coords, u.CurrentTile.Coords))
+      .OrderBy(u => GetDistance(enemyTile, u.CurrentTile))
       .First();
 
     Tile tile = TryMoveToNeighborOf(closest);
@@ -208,7 +220,7 @@ public static class BattleAI {
       List<Tile> path = Pathfinding.FindPath(enemyTile, tile, enemy.CurrentMovePoints);
       if (path == null) continue;
 
-      float dist = Vector2Int.Distance(tile.Coords, priorityTarget.CurrentTile.Coords);
+      float dist = GetDistance(tile, priorityTarget.CurrentTile);
       if (dist < closestDistance) {
         closest = tile;
         closestDistance = dist;
@@ -218,5 +230,21 @@ public static class BattleAI {
 
     if (closest != null) enemyMove.OnMove(closest);
     else MoveAway();
+  }
+
+  private static void HoldPosition() {
+    foreach (Unit target in playerUnits) {
+      float dist = Pathfinding.GetCost(enemyTile, target.CurrentTile, AttackRange);
+      if (dist < 2 || dist > AttackRange) continue;
+      if (!LineOfSightClear(enemyTile.GetPos(), target.CurrentTile.GetPos())) continue;
+      SetAttackTarget(target, enemyTile);
+
+      if (enemy.Target != null) {
+        PhaseManager.NextPhase();
+        return;
+      }
+    }
+
+    PhaseManager.NextPhase();
   }
 }

@@ -26,11 +26,11 @@ public class QueueManager : MonoBehaviour
     CurrentUnit = Queue[0];
     BattleUI.Instance.UpdateQueue(Queue);
     List<Skill> skills = CurrentUnit.Equip.GetSkills();
-    if (CurrentUnit.Relation != UnitRelation.Emeny) BattleUI.Instance.ShowSkills(skills, PhaseManager.CurrentPhase, CurrentUnit);
+    if (CurrentUnit.Relation != UnitRelation.Enemy) BattleUI.Instance.ShowSkills(skills, PhaseManager.CurrentPhase, CurrentUnit);
     CurrentUnit.Ui.MarkAsActive();
     FocusOnUnit();
 
-    if (CurrentUnit.Relation == UnitRelation.Emeny) BattleAI.EnemyMove(CurrentUnit);
+    if (CurrentUnit.Relation == UnitRelation.Enemy) BattleAI.EnemyMove(CurrentUnit);
   }
 
   public static void NextUnit() {
@@ -48,7 +48,7 @@ public class QueueManager : MonoBehaviour
       return;
     }
 
-    if (nextUnit.Relation == UnitRelation.Emeny) BattleUI.Instance.DisableUI();
+    if (nextUnit.Relation == UnitRelation.Enemy) BattleUI.Instance.DisableUI();
     else BattleUI.Instance.EnableUI();
 
     BeforeSwitch();
@@ -93,7 +93,7 @@ public class QueueManager : MonoBehaviour
     foreach (Unit unit in Queue) {
       if (unit.IsDead) continue;
       if (unit.Relation == UnitRelation.Ally) alliesCount++;
-      else if (unit.Relation == UnitRelation.Emeny) enemiesCount++;
+      else if (unit.Relation == UnitRelation.Enemy) enemiesCount++;
     }
 
     if (alliesCount == 0) BattleManager.battleResult = BattleResult.Defeat;

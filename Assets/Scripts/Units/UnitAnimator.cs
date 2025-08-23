@@ -4,6 +4,7 @@ using UnityEngine;
 public class UnitAnimator : MonoBehaviour {
   private Transform model;
   private Animator animator;
+  public GameObject fakeMissle;
 
   private void Awake() {
     model = transform.Find("Model").transform;
@@ -49,6 +50,16 @@ public class UnitAnimator : MonoBehaviour {
 
   public void Dodge() {
     animator.SetTrigger("Dodge");
+  }
+
+  public void ShowFakeMissle() {
+    if (fakeMissle == null) return;
+    fakeMissle.SetActive(true);
+  }
+
+  public void HideFakeMissle() {
+    if (fakeMissle == null) return;
+    fakeMissle.SetActive(false);
   }
 
   public void Reset() {

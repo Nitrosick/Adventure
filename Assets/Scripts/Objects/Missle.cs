@@ -1,29 +1,31 @@
 using UnityEngine;
 
-public class Missle : MonoBehaviour
-{
+public class Missle : MonoBehaviour {
   private Rigidbody rb;
   private Unit source;
-  private Vector3 direction;
-  private int speed;
   private float damage;
   private float critModifier;
   private bool success;
+  private readonly int defaultDestroyTime = 5;
 
   private void Awake() {
     rb = transform.GetComponent<Rigidbody>();
     if (rb == null) Debug.LogError("Missle initialization error");
   }
 
-  public void Launch(Unit src, Vector3 dir, int spd, float dmg, float crit, bool suc) {
+  void LateUpdate() {
+    Vector3 v = rb.velocity;
+    if (v.sqrMagnitude > 1e-6f) transform.rotation = Quaternion.LookRotation(v);
+  }
+
+  public void Launch(Unit src, Vector3 velocity, float dmg, float crit, bool suc) {
     source = src;
-    direction = dir;
-    speed = spd;
     damage = dmg;
     critModifier = crit;
     success = suc;
     rb.isKinematic = false;
-    rb.velocity = direction * speed;
+    rb.velocity = velocity;
+    Destroy(gameObject, defaultDestroyTime);
   }
 
   private void OnTriggerEnter(Collider other) {
@@ -34,9 +36,9 @@ public class Missle : MonoBehaviour
 
       if (target.Effects.HasEffect("Block")) {
         target.Ui.ShowPopup("Block!");
-        target.TakeDamage(0f, 1f);
+        target.Health.TakeDamage(0f, 1f);
       } else if (success) {
-        target.TakeDamage(damage, critModifier);
+        target.Health.TakeDamage(damage, critModifier);
       } else {
         target.Ui.ShowPopup("Miss!");
         target.Animator.Dodge();

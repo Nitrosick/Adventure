@@ -22,8 +22,10 @@ public class BattleManager : MonoBehaviour {
   private static readonly float defaultHitChance = 95f;
   private static readonly float minHitChance = 5f;
   private static readonly float defaultCritChance = 5f;
-  private static readonly float minDamage = 0.5f;
+  private static readonly float minDamage = 0.3f;
   private static readonly float defenseFactor = 10f;
+  private static readonly float noFineDistance = 6f;
+  private static readonly float distanceFinePerUnit = 4f;
 
   private void Awake() {
     Instance = this;
@@ -54,7 +56,7 @@ public class BattleManager : MonoBehaviour {
 
     InitSpawnZones();
     SpawnUnits(allies, allySpawns, UnitRelation.Ally);
-    SpawnUnits(enemies, enemySpawns, UnitRelation.Emeny);
+    SpawnUnits(enemies, enemySpawns, UnitRelation.Enemy);
   }
 
   private void Start() {
@@ -129,30 +131,43 @@ public class BattleManager : MonoBehaviour {
 
   public static float GetHitChance(Unit attacker, Unit target) {
     // FIXME: Расчет шанса попадания
-    if (target.Effects.HasEffect("Block")) return 100f;
-
     float result = defaultHitChance;
-    if (attacker.Type == UnitType.Range) {
-      if (attacker.Effects.HasEffect("Cover")) result /= 2;
-      if (target.Effects.HasEffect("Cover")) result /= 2;
-    }
 
+    // Terrain
+    int atkH = attacker.CurrentTile.height;
+    int tarH = target.CurrentTile.height;
+    result += (atkH - tarH) * 10;
+
+    // Parameters
     float dexDelta = attacker.Dexterity - target.Dexterity;
     if (dexDelta < 0) result -= Math.Abs(dexDelta) * dexterityScaleUnit;
-    if (result < minHitChance) result = minHitChance;
-    return result;
+
+    // Effects
+    if (target.Effects.HasEffect("Block")) return 100f;
+    if (attacker.Type == UnitType.Range) {
+      if (attacker.Effects.HasEffect("Cover") || target.Effects.HasEffect("Cover")) result /= 2;
+    }
+
+    // Distance
+    float distance = Vector3.Distance(attacker.transform.position, target.transform.position);
+    float delta = distance - noFineDistance;
+    if (delta > 0) result -= delta * distanceFinePerUnit;
+
+    return result < minHitChance ? minHitChance : result;
   }
 
   public static float GetCritModifier(Unit attacker, Unit target) {
     float multiplier = 1f;
     float chance = defaultCritChance;
 
+    // Parameters
     float dexDelta = attacker.Dexterity - target.Dexterity;
     if (dexDelta > 0) chance += dexDelta * dexterityScaleUnit;
 
     bool success = Utils.RollChance(chance);
     // FIXME: Учет предмета во второй руке
     if (success) multiplier = attacker.Equip.primary.critModifier;
+
     return multiplier;
   }
 
@@ -160,17 +175,24 @@ public class BattleManager : MonoBehaviour {
     Weapon attackerWeapon = attacker.Equip.primary;
     Armor targetArmor = target.Equip.armor;
 
+    // Armor and weapon
     float resist = target.Equip.GetTotalResists()[attackerWeapon.damageType];
     float damage = attacker.Equip.GetTotalDamage();
     if (resist != 0) damage *= 1f - (resist / 100f);
     float defense = target.Equip.GetTotalDefense();
-
     if (attackerWeapon.armorPenetration > 0 && (targetArmor.weight != EquipmentWeight.Light)) {
       defense *= 1f - (attackerWeapon.armorPenetration / 100f);
     }
-
     float total = damage * Mathf.Exp(-defense / defenseFactor);
+
+    // Terrain
+    int atkH = attacker.CurrentTile.height;
+    int tarH = target.CurrentTile.height;
+    total *= 1f + (atkH - tarH) * 0.1f;
+
+    // Effects
     if (target.Effects.HasEffect("Block")) total /= 2;
+
     return total < minDamage ? minDamage : total;
   }
 
@@ -206,7 +228,7 @@ public class BattleManager : MonoBehaviour {
 
     if (battleResult == BattleResult.Victory) {
       foreach (Unit unit in QueueManager.Queue) {
-        if (unit.Relation == UnitRelation.Emeny) Reward.Add(unit.killReward);
+        if (unit.Relation == UnitRelation.Enemy) Reward.Add(unit.killReward);
       }
     }
 

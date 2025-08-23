@@ -102,7 +102,7 @@ public class TileManager : MonoBehaviour {
   }
 
   public static void ShowReachableTiles(Tile startTile, float mp) {
-    if (QueueManager.CurrentUnit.Relation == UnitRelation.Emeny) return;
+    if (QueueManager.CurrentUnit.Relation == UnitRelation.Enemy) return;
 
     HideGrid();
 

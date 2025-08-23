@@ -140,10 +140,11 @@ GameObject:
   - component: {fileID: 6746414188388866943}
   - component: {fileID: 5974656426504665683}
   - component: {fileID: 4915135084850685205}
+  - component: {fileID: 3000104066334576926}
+  - component: {fileID: 2307198960820107834}
   - component: {fileID: 2933146384353619192}
   - component: {fileID: 2252012317205545322}
   - component: {fileID: -6192711026490760115}
-  - component: {fileID: 2307198960820107834}
   m_Layer: 7
   m_Name: Bandit
   m_TagString: Unit
@@ -226,6 +227,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3fe0fd99bec91b438c2eb95aaf645f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &3000104066334576926
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2548740166397950227}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de0639f1c5ccc96438527c8ff2944518, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2307198960820107834
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2548740166397950227}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18bd26ee4ce5ce149a1112e65c7e902e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  primary: {fileID: 11400000, guid: 365a35aeda64b7e449cbcc504f7aa476, type: 2}
+  secondary: {fileID: 0}
+  armor: {fileID: 11400000, guid: 50dc9a5d42fe8fc4bbe68c5651250013, type: 2}
+  rightHand: {fileID: 1081873019822634086}
+  leftHand: {fileID: 8290399823321439735}
 --- !u!114 &2933146384353619192
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -262,23 +292,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd8d4958156e16c4f80f458aa665da20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &2307198960820107834
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2548740166397950227}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 18bd26ee4ce5ce149a1112e65c7e902e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  primary: {fileID: 11400000, guid: 365a35aeda64b7e449cbcc504f7aa476, type: 2}
-  secondary: {fileID: 0}
-  armor: {fileID: 11400000, guid: 50dc9a5d42fe8fc4bbe68c5651250013, type: 2}
-  rightHand: {fileID: 1081873019822634086}
-  leftHand: {fileID: 8290399823321439735}
 --- !u!1 &6230598250965387884
 GameObject:
   m_ObjectHideFlags: 0

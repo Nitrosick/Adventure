@@ -82,7 +82,15 @@ public enum AIBehaviorType {
   PriorityTarget,
   KeepDistance,
   Retreat,
-  Passive
+  Passive,
+  HoldPosition
+}
+
+public enum ShotTrajectory {
+  No,
+  Direct,
+  Arc,
+  FromAbove
 }
 
 // Battlefield tiles
@@ -129,7 +137,7 @@ public enum UnitType {
 
 public enum UnitRelation {
   Ally,
-  Emeny,
+  Enemy,
   Neutral
 }
 

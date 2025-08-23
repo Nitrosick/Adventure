@@ -44,14 +44,22 @@ public class UnitEquipment : MonoBehaviour {
       else set.gameObject.SetActive(false);
     }
 
-    foreach (Transform item in rightHand) { Destroy(item.gameObject); }
-    foreach (Transform item in leftHand) { Destroy(item.gameObject); }
+    foreach (Transform item in rightHand) {
+      if (item.gameObject.CompareTag("FakeObject")) continue;
+      Destroy(item.gameObject);
+    }
+
+    foreach (Transform item in leftHand) {
+      if (item.gameObject.CompareTag("FakeObject")) continue;
+      Destroy(item.gameObject);
+    }
 
     if (primary != null) {
       Weapon loadedWeapon = Resources.Load<Weapon>("Weapon/" + primary.name);
       if (loadedWeapon == null) return;
-      GameObject weaponObj = Instantiate(loadedWeapon.prefab, rightHand);
-      weaponObj.transform.SetParent(rightHand, false);
+      Transform hand = loadedWeapon.type == EquipmentType.Bow ? leftHand : rightHand;
+      GameObject weaponObj = Instantiate(loadedWeapon.prefab, hand);
+      weaponObj.transform.SetParent(hand, false);
     }
 
     if (secondary != null) {

@@ -53,13 +53,13 @@ public class UnitUI : MonoBehaviour {
   }
 
   public void MarkAsActive() {
-    if (unit.Relation == UnitRelation.Emeny) return;
+    if (unit.Relation == UnitRelation.Enemy) return;
     markerActive.SetActive(true);
     marker.SetActive(false);
   }
 
   public void MarkAsInactive() {
-    if (unit.Relation == UnitRelation.Emeny) return;
+    if (unit.Relation == UnitRelation.Enemy) return;
     markerActive.SetActive(false);
     marker.SetActive(true);
   }

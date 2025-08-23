@@ -22,4 +22,12 @@ public class UnitTrigger : MonoBehaviour {
   private void FinishAction() {
     unit.FinishAction();
   }
+
+  private void TriggerShowFakeMissle() {
+    unit.Animator.ShowFakeMissle();
+  }
+
+  private void TriggerHideFakeMissle() {
+    unit.Animator.HideFakeMissle();
+  }
 }

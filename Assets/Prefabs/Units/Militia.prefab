@@ -118,10 +118,11 @@ GameObject:
   - component: {fileID: 4526321106403368028}
   - component: {fileID: -6286018091571816709}
   - component: {fileID: 1109366306537701282}
+  - component: {fileID: -3114350864303674503}
+  - component: {fileID: 1186324214536582588}
   - component: {fileID: 6508725779702045150}
   - component: {fileID: 1941463840525008381}
   - component: {fileID: -4995011487116678424}
-  - component: {fileID: 1186324214536582588}
   m_Layer: 7
   m_Name: Militia
   m_TagString: Unit
@@ -204,6 +205,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3fe0fd99bec91b438c2eb95aaf645f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-3114350864303674503
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2548740166397950227}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de0639f1c5ccc96438527c8ff2944518, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1186324214536582588
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2548740166397950227}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18bd26ee4ce5ce149a1112e65c7e902e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  primary: {fileID: 11400000, guid: 11b46819f7122294dbddc5a655236abe, type: 2}
+  secondary: {fileID: 0}
+  armor: {fileID: 11400000, guid: 04ab682ec7d001e4b87d9b9f8c3b8c1d, type: 2}
+  rightHand: {fileID: 1853877059316188843}
+  leftHand: {fileID: 7328680596662382394}
 --- !u!114 &6508725779702045150
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -240,23 +270,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd8d4958156e16c4f80f458aa665da20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1186324214536582588
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2548740166397950227}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 18bd26ee4ce5ce149a1112e65c7e902e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  primary: {fileID: 11400000, guid: 11b46819f7122294dbddc5a655236abe, type: 2}
-  secondary: {fileID: 0}
-  armor: {fileID: 11400000, guid: 04ab682ec7d001e4b87d9b9f8c3b8c1d, type: 2}
-  rightHand: {fileID: 1853877059316188843}
-  leftHand: {fileID: 7328680596662382394}
 --- !u!1 &4634726609123951955
 GameObject:
   m_ObjectHideFlags: 0

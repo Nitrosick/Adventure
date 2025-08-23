@@ -49,11 +49,11 @@ public class PhaseManager : MonoBehaviour
   private static void PhaseActions() {
     Unit unit = QueueManager.CurrentUnit;
     List<Skill> skills = unit.Equip.GetSkills();
-    if (unit.Relation != UnitRelation.Emeny) BattleUI.Instance.ShowSkills(skills, CurrentPhase, unit);
+    if (unit.Relation != UnitRelation.Enemy) BattleUI.Instance.ShowSkills(skills, CurrentPhase, unit);
 
     switch (CurrentPhase) {
       case BattlePhase.Movement:
-        if (unit.Relation == UnitRelation.Emeny) BattleAI.EnemyMove(unit);
+        if (unit.Relation == UnitRelation.Enemy) BattleAI.EnemyMove(unit);
         break;
 
       case BattlePhase.Attack:
@@ -69,7 +69,7 @@ public class PhaseManager : MonoBehaviour
           return;
         }
 
-        if (unit.Relation == UnitRelation.Emeny) {
+        if (unit.Relation == UnitRelation.Enemy) {
           if (unit.Target != null) unit.OnAttack();
           else NextPhase();
         } else {

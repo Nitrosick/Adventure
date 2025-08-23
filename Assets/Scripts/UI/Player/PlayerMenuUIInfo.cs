@@ -489,7 +489,7 @@ public class PlayerMenuUIInfo : MonoBehaviour {
     }
 
     if (item is MedicineItem medItem) {
-      foreach (Unit unit in woundedUnits) unit.Heal(medItem.intensity);
+      foreach (Unit unit in woundedUnits) unit.Health.Heal(medItem.intensity);
       _ = Toast.Show("success", "Units are cured");
     }
 

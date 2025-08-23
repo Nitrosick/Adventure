@@ -6,6 +6,7 @@ public class Unit : MonoBehaviour {
   // Components
   public CapsuleCollider UnitCollider { get; private set; }
   public UnitMove Move { get; private set; }
+  public UnitHealth Health { get; private set; }
   public UnitUI Ui { get; private set; }
   public UnitAnimator Animator { get; private set; }
   public UnitEquipment Equip { get; private set; }
@@ -22,7 +23,7 @@ public class Unit : MonoBehaviour {
 
   // AI
   protected int Priority;
-  public AIBehaviorType BehaviorType { get; protected set; }
+  public AIBehaviorType BehaviorType { get; set; }
 
   // Core stats
   public float Strength { get; protected set; } // Heavy items / Damage / Stun chance and protect
@@ -53,10 +54,8 @@ public class Unit : MonoBehaviour {
   public int Projectiles { get; protected set; }
   public int CurrentProjectiles { get; protected set; }
 
-  protected readonly int objectDestroyTime = 10;
-
   // State
-  public bool IsDead { get; protected set; }
+  public bool IsDead { get; set; }
   public bool InSquad { get; set; } = true;
   public bool IsNew { get; set; }
 
@@ -75,12 +74,17 @@ public class Unit : MonoBehaviour {
   public virtual void Init(Tile tile, UnitRelation relation, Vector3 direction) {
     UnitCollider = transform.GetComponent<CapsuleCollider>();
     Move = transform.GetComponent<UnitMove>();
+    Health = transform.GetComponent<UnitHealth>();
     Ui = transform.GetComponent<UnitUI>();
     Animator = transform.GetComponent<UnitAnimator>();
     Effects = transform.GetComponent<UnitEffects>();
     SetMovePoints();
 
-    if (UnitCollider == null || Move == null || Ui == null || Animator == null || Equip == null || Effects == null) {
+    if (
+      UnitCollider == null || Move == null || Health == null ||
+      Ui == null || Animator == null || Equip == null ||
+      Effects == null
+    ) {
       Debug.LogError("Unit components initialization error");
       return;
     }
@@ -184,10 +188,8 @@ public class Unit : MonoBehaviour {
   public async void BreakObject(Breakable target) {
     BattleUI.Instance.DisableUI();
     TargetObject = target;
-
-    Vector3 dirToTarget = TargetObject.ParentTile.GetPos().normalized;
+    Vector3 dirToTarget = (TargetObject.ParentTile.GetPos() - transform.position).normalized;
     await Animator.RotateTowards(dirToTarget);
-
     Animator.SetAttackType(Equip.primary.attackType);
     Animator.Attack();
   }
@@ -195,8 +197,7 @@ public class Unit : MonoBehaviour {
   public async void ChopTree(TreeObject target) {
     BattleUI.Instance.DisableUI();
     TargetTree = target;
-    Vector3 dirToTarget = TargetTree.ParentTile.GetPos().normalized;
-
+    Vector3 dirToTarget = (TargetTree.ParentTile.GetPos() - transform.position).normalized;
     await Animator.RotateTowards(dirToTarget);
     Animator.SetAttackType(Equip.primary.attackType);
     Animator.Attack();
@@ -209,7 +210,7 @@ public class Unit : MonoBehaviour {
         float damage = BattleManager.CalculateDamage(this, Target);
         Effect effect = BattleManager.GetWeaponEffect(this, Target);
         if (effect != null) Target.Effects.ApplyEffect(effect);
-        Target.TakeDamage(damage, critModifier);
+        Target.Health.TakeDamage(damage, critModifier);
       } else {
         Target.Ui.ShowPopup("Miss!");
       }
@@ -229,61 +230,6 @@ public class Unit : MonoBehaviour {
       TargetTree = null;
       FinishAction();
     }
-  }
-
-  // Getting damage and Health
-  public void TakeDamage(float damage, float modifier, bool isTickDamage = false) {
-    float totalDamage = damage * modifier;
-
-    if (modifier > 1f) {
-      Ui.ShowPopup(totalDamage.ToString(), PopupType.Crit);
-      if (!isTickDamage) CameraController.Shake(1.2f);
-    }
-    else {
-      Ui.ShowPopup(totalDamage.ToString(), PopupType.Negative);
-      if (!isTickDamage) CameraController.Shake(0.8f);
-    }
-
-    if (totalDamage >= CurrentHealth) {
-      CurrentHealth = 0;
-      Die();
-    }
-    else {
-      CurrentHealth -= totalDamage;
-      Ui.UpdateHealth(TotalHealth, CurrentHealth);
-      if (!isTickDamage) Animator.TakeDamage();
-    }
-  }
-
-  private void Die() {
-    IsDead = true;
-    CurrentTile.OccupiedBy = null;
-    UnitCollider.enabled = false;
-    Ui.ClearMarkers();
-    Ui.HideHealthBar();
-    Ui.HideChargesBar();
-    Effects.ClearEffects();
-    Animator.Die();
-    _ = MakeCorpse();
-  }
-
-  public void Heal(float value, bool inBattle = true) {
-    CurrentHealth += value;
-    if (CurrentHealth > TotalHealth) CurrentHealth = TotalHealth;
-    if (!inBattle) Player.Instance.Army.UpdateState();
-  }
-
-  private async Task MakeCorpse() {
-    await Task.Delay(objectDestroyTime * 1000);
-
-    GameObject model = transform.Find("Model").gameObject;
-    Destroy(model);
-
-    Instantiate(
-      BattleManager.Instance.corpsePrefab,
-      transform.position,
-      Quaternion.Euler(0, 65, 0)
-    );
   }
 
   public void FinishAction() {

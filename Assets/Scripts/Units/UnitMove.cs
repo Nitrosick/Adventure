@@ -75,7 +75,7 @@ public class UnitMove : MonoBehaviour {
   }
 
   private void AfterMove() {
-    if (unit.CurrentMovePoints < 1 || unit.Relation == UnitRelation.Emeny) {
+    if (unit.CurrentMovePoints < 1 || unit.Relation == UnitRelation.Enemy) {
       PhaseManager.NextPhase();
     } else {
       TileManager.ShowReachableTiles(
@@ -123,7 +123,7 @@ public class UnitMove : MonoBehaviour {
         unit.Effects.ApplyEffect(coverEffect);
         break;
       case TileType.Climb:
-        BattleUI.Instance.ShowClimbButton();
+        if (unit.Relation != UnitRelation.Enemy) BattleUI.Instance.ShowClimbButton();
         break;
     }
 

@@ -17,7 +17,7 @@ public class EffectInstance {
 
   public void Tick(Unit target) {
     if (effectData.damage > 0) {
-      target.TakeDamage(effectData.damage, 1f, true);
+      target.Health.TakeDamage(effectData.damage, 1f, true);
     }
     remainingTurns--;
   }

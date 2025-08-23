@@ -11,5 +11,6 @@ public class Weapon : Equipment {
 
   public GameObject prefab;
   public DamageType damageType;
+  public ShotTrajectory trajectory;
   public CoreStat[] scalingStats;
 }
