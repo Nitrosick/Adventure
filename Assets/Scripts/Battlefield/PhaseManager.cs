@@ -57,7 +57,10 @@ public class PhaseManager : MonoBehaviour
         break;
 
       case BattlePhase.Attack:
-        if (unit.Effects.HasEffect("Block")) {
+        if (
+          unit.Effects.HasEffect("Block") ||
+          unit.Effects.HasEffect("Wall")
+        ) {
           NextPhase();
           return;
         }

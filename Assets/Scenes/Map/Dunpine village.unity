@@ -14478,7 +14478,7 @@ GameObject:
   m_Component:
   - component: {fileID: 349207136}
   m_Layer: 0
-  m_Name: ShieldBracing
+  m_Name: SmallShieldBracing
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14493,7 +14493,7 @@ Transform:
   m_GameObject: {fileID: 349207135}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: -0.13052624, w: 0.9914449}
-  m_LocalPosition: {x: -0.3, y: 3.4, z: -13.3}
+  m_LocalPosition: {x: -0.3, y: 3.4, z: -14.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -16207,6 +16207,37 @@ MonoBehaviour:
     items: []
     projectiles: 0
   ambushChance: 100
+--- !u!1 &379565853
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 379565854}
+  m_Layer: 0
+  m_Name: TwoHandWeaponBracing
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &379565854
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 379565853}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0.5, w: 0.8660254}
+  m_LocalPosition: {x: 31.4, y: 32.3, z: -17.8}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1280223021}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 60}
 --- !u!1 &383194565
 GameObject:
   m_ObjectHideFlags: 0
@@ -50218,7 +50249,15 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -6881390770214846263, guid: 0f59218f906856441a8c74ebba306787,
         type: 3}
       insertIndex: -1
+      addedObject: {fileID: 379565854}
+    - targetCorrespondingSourceObject: {fileID: -6881390770214846263, guid: 0f59218f906856441a8c74ebba306787,
+        type: 3}
+      insertIndex: -1
       addedObject: {fileID: 349207136}
+    - targetCorrespondingSourceObject: {fileID: -6881390770214846263, guid: 0f59218f906856441a8c74ebba306787,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1659565415}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 0f59218f906856441a8c74ebba306787,
         type: 3}
@@ -61058,8 +61097,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcb7fdfb9ad7cef41a7144d0a1fa50de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weaponBracing: {fileID: 1991529142}
-  shieldBracing: {fileID: 349207136}
+  oneHandWeaponBracing: {fileID: 1991529142}
+  twoHandWeaponBracing: {fileID: 379565854}
+  smallShieldBracing: {fileID: 349207136}
+  towerShieldBracing: {fileID: 1659565415}
 --- !u!1001 &1552586642
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -66636,6 +66677,37 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 5
   m_TargetDisplay: 0
+--- !u!1 &1659565414
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1659565415}
+  m_Layer: 0
+  m_Name: TowerShieldBracing
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1659565415
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1659565414}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.000000087544315, y: 0.000000016763805, z: 0.7071094, w: 0.7071043}
+  m_LocalPosition: {x: -0.3, y: 3.4000003, z: -17}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1280223021}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
 --- !u!1 &1661742454
 GameObject:
   m_ObjectHideFlags: 0
@@ -80092,7 +80164,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1991529142}
   m_Layer: 0
-  m_Name: WeaponBracing
+  m_Name: OneHandWeaponBracing
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

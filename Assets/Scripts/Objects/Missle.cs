@@ -34,7 +34,10 @@ public class Missle : MonoBehaviour {
     if (other.gameObject.CompareTag("Unit")) {
       Unit target = other.GetComponent<Unit>();
 
-      if (target.Effects.HasEffect("Block")) {
+      if (
+        target.Effects.HasEffect("Block") ||
+        target.Effects.HasEffect("Wall")
+      ) {
         target.Ui.ShowPopup("Block!");
         target.Health.TakeDamage(0f, 1f);
       } else if (success) {

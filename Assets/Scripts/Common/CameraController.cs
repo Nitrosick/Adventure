@@ -147,7 +147,7 @@ public class CameraController : MonoBehaviour {
     isFocusing = false;
   }
 
-  public static async void Shake(float intensity, float customDuration = 0f) {
+  public static async Task Shake(float intensity, float customDuration = 0f) {
     if (isShaking && currentShakeTask != null) return;
 
     float duration = customDuration == 0f ? intensity / 3 : customDuration;

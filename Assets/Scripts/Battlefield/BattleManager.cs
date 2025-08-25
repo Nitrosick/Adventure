@@ -147,7 +147,11 @@ public class BattleManager : MonoBehaviour {
     if (dexDelta < 0) result -= Math.Abs(dexDelta) * dexterityScaleUnit;
 
     // Effects
-    if (target.Effects.HasEffect("Block")) return 100f;
+    if (
+      target.Effects.HasEffect("Block") ||
+      target.Effects.HasEffect("Wall")
+    ) return 100f;
+
     if (attacker.Type == UnitType.Range) {
       if (attacker.Effects.HasEffect("Cover") || target.Effects.HasEffect("Cover")) result /= 2;
     }

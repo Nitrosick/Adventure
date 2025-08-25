@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class PlayerInventory : MonoBehaviour {
   private PlayerArmy army;
-  public Transform weaponBracing;
-  public Transform shieldBracing;
+  public Transform oneHandWeaponBracing;
+  public Transform twoHandWeaponBracing;
+  public Transform smallShieldBracing;
+  public Transform towerShieldBracing;
   private Transform beard;
   private Transform hair;
 
@@ -44,19 +46,29 @@ public class PlayerInventory : MonoBehaviour {
       else set.gameObject.SetActive(false);
     }
 
-    foreach (Transform item in weaponBracing) { Destroy(item.gameObject); }
-    foreach (Transform item in shieldBracing) { Destroy(item.gameObject); }
+    foreach (Transform item in oneHandWeaponBracing) { Destroy(item.gameObject); }
+    foreach (Transform item in twoHandWeaponBracing) { Destroy(item.gameObject); }
+    foreach (Transform item in smallShieldBracing) { Destroy(item.gameObject); }
+    foreach (Transform item in towerShieldBracing) { Destroy(item.gameObject); }
+
+    Transform bracing;
 
     Weapon loadedWeapon = Resources.Load<Weapon>("Weapon/" + heroEquip.primary.name);
     if (loadedWeapon == null) return;
-    GameObject weaponObj = Instantiate(loadedWeapon.prefab, weaponBracing);
-    weaponObj.transform.SetParent(weaponBracing, false);
+    bracing = loadedWeapon.type == EquipmentType.TwoHandWeapon
+      ? twoHandWeaponBracing
+      : oneHandWeaponBracing;
+    GameObject weaponObj = Instantiate(loadedWeapon.prefab, bracing);
+    weaponObj.transform.SetParent(bracing, false);
 
     if (heroEquip.secondary is Armor secArmor) {
       Armor loadedShield = Resources.Load<Armor>("Armor/" + heroEquip.secondary.name);
       if (loadedShield == null) return;
-      GameObject shieldObj = Instantiate(loadedShield.prefab, shieldBracing);
-      shieldObj.transform.SetParent(shieldBracing, false);
+      bracing = loadedShield.type == EquipmentType.TowerShield
+        ? towerShieldBracing
+        : smallShieldBracing;
+      GameObject shieldObj = Instantiate(loadedShield.prefab, bracing);
+      shieldObj.transform.SetParent(bracing, false);
     }
     // FIXME: Обработать все типы доп. предмета
   }

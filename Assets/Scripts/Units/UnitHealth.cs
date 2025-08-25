@@ -18,11 +18,11 @@ public class UnitHealth : MonoBehaviour {
 
     if (modifier > 1f) {
       unit.Ui.ShowPopup(totalDamage.ToString(), PopupType.Crit);
-      if (!isTickDamage) CameraController.Shake(1.2f);
+      if (!isTickDamage) _ = CameraController.Shake(1.2f);
     }
     else {
       unit.Ui.ShowPopup(totalDamage.ToString(), PopupType.Negative);
-      if (!isTickDamage) CameraController.Shake(0.8f);
+      if (!isTickDamage) _ = CameraController.Shake(0.8f);
     }
 
     if (totalDamage >= unit.CurrentHealth) {

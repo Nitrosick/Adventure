@@ -140,9 +140,7 @@ public class BattleUI : GeneralUI {
   }
 
   public void ShowSkills(List<Skill> skills, BattlePhase phase, Unit unit) {
-    foreach (Transform child in skillsPanel) {
-      Destroy(child.gameObject);
-    }
+    foreach (Transform child in skillsPanel) Destroy(child.gameObject);
 
     if (unit == null) {
       Debug.LogError("Unit not found");

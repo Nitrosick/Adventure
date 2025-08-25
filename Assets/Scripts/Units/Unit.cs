@@ -208,24 +208,13 @@ public class Unit : MonoBehaviour {
   public void DealDamage() {
     if (Target != null) {
       if (successAttack) {
-        List<Skill> skills = BattleManager.GetItemPassiveSkills(Target);
-        foreach (Skill skill in skills) {
-          // FIXME: Сделать отдельный метод для проверки пассивных скиллов
-          switch (skill.skillName) {
-            case SkillName.Parry:
-              Target.Animator.Parry();
-              CameraController.Shake(0.8f);
-              Target.Ui.ShowPopup("Parry!");
-              FinishAction();
-              return;
-          }
+        if (!DamageBlocked()) {
+          float critModifier = BattleManager.GetCritModifier(this, Target);
+          float damage = BattleManager.CalculateDamage(this, Target);
+          List<Effect> effects = BattleManager.GetItemEffects(this, Target);
+          foreach (Effect effect in effects) Target.Effects.ApplyEffect(effect);
+          Target.Health.TakeDamage(damage, critModifier);
         }
-
-        float critModifier = BattleManager.GetCritModifier(this, Target);
-        float damage = BattleManager.CalculateDamage(this, Target);
-        List<Effect> effects = BattleManager.GetItemEffects(this, Target);
-        foreach (Effect effect in effects) Target.Effects.ApplyEffect(effect);
-        Target.Health.TakeDamage(damage, critModifier);
       } else {
         Target.Ui.ShowPopup("Miss!");
       }
@@ -234,17 +223,50 @@ public class Unit : MonoBehaviour {
 
     if (TargetObject != null) {
       TargetObject.Break();
-      CameraController.Shake(0.8f);
+      _ = CameraController.Shake(0.8f);
       TargetObject = null;
       FinishAction();
     }
 
     if (TargetTree != null) {
       TargetTree.Chop();
-      CameraController.Shake(0.8f);
+      _ = CameraController.Shake(0.8f);
       TargetTree = null;
       FinishAction();
     }
+  }
+
+  private bool DamageBlocked() {
+    List<Skill> skills = BattleManager.GetItemPassiveSkills(Target);
+
+    foreach (Skill skill in skills) {
+      switch (skill.skillName) {
+        case SkillName.Parry:
+          Target.Animator.Parry();
+          Target.Ui.ShowPopup("Parry!");
+          Target.Health.TakeDamage(0f, 1f);
+          return true;
+      }
+    }
+
+    if (Target.Effects.HasEffect("Wall")) {
+      if (
+        Equip.primary.damageType == DamageType.Chop ||
+        Equip.primary.damageType == DamageType.Crash
+      ) {
+        bool isBreak = Utils.RollChance(Equip.primary.armorPenetration);
+        if (isBreak) {
+          Target.Effects.ClearEffect("Wall");
+          return false;
+        }
+      }
+
+      Target.Ui.ShowPopup("Block!");
+      Target.Health.TakeDamage(0f, 1f);
+      return true;
+    }
+
+    return false;
   }
 
   public void FinishAction() {
@@ -296,5 +318,5 @@ public class Unit : MonoBehaviour {
     if (CurrentProjectiles == 0) BehaviorType = AIBehaviorType.Retreat;
   }
 
-  public virtual void Block() { }
+  public virtual void BlockStance(SkillName type) { }
 }

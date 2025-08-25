@@ -21,8 +21,8 @@ public class HeroWarrior : Unit {
     BehaviorType = AIBehaviorType.Passive;
   }
 
-  public override void Block() {
-    Effect effect = Resources.Load<Effect>("Effects/Block");
+  public override void BlockStance(SkillName type) {
+    Effect effect = Resources.Load<Effect>("Effects/" + type.ToString());
     if (effect == null) return;
     Effects.ApplyEffect(effect);
     Animator.SetBlocking(true);

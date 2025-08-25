@@ -75,7 +75,8 @@ public enum DamageType {
 
 public enum SkillName {
   Block,
-  Parry
+  Parry,
+  Wall
 }
 
 public enum AIBehaviorType {
@@ -163,7 +164,8 @@ public enum EquipmentType {
   Crossbow,
   Bow,
   Shield,
-  Armor
+  Armor,
+  TowerShield,
 }
 
 public enum EquipmentWeight {

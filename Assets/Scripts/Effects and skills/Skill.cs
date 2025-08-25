@@ -17,7 +17,8 @@ public class Skill : ScriptableObject {
   public void Apply(Unit unit) {
     switch (skillName) {
       case SkillName.Block:
-        unit.Block();
+      case SkillName.Wall:
+        unit.BlockStance(skillName);
         break;
     }
   }

@@ -32,7 +32,7 @@ public class UnitEffects : MonoBehaviour {
     for (int i = ActiveEffects.Count - 1; i >= 0; i--) {
       EffectInstance instance = ActiveEffects[i];
       instance.Tick(unit);
-      if (instance.IsExpired) ActiveEffects.RemoveAt(i);
+      if (instance != null && instance.IsExpired) ActiveEffects.RemoveAt(i);
       unit.Ui.UpdateEffects();
     }
   }
@@ -48,6 +48,7 @@ public class UnitEffects : MonoBehaviour {
   public void ClearEffect(string effectName) {
     ActiveEffects.RemoveAll(e => e.effectData != null && e.effectData.name == effectName);
     if (effectName == "Stun") unit.Animator.SetStunned(false);
+    else if (effectName == "Wall") unit.Animator.SetBlocking(false);
     unit.Ui.UpdateEffects();
   }
 
