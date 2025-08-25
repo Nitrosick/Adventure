@@ -94,6 +94,11 @@ public class MapZone : MonoBehaviour {
       StateManager.visitedZones.Add(id);
     }
 
+    if (events.Count > 0 && events[0] == MapZoneType.Home) {
+      StateManager.startPlayerZoneId = id;
+      Player.Instance.Move.startZone = this;
+    }
+
     StateManager.currentPlayerZoneId = id;
     transform.GetComponent<MapZoneEvent>().CheckEvents();
   }

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class SaveData {
   public string saveTime;
   public string currentScene;
+  public int startPlayerZoneId;
   public int currentPlayerZoneId;
   public HashSet<int> visitedZones;
   public HashSet<string> collectedZoneLoot;

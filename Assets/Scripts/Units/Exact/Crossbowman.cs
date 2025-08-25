@@ -44,6 +44,7 @@ public class Crossbowman : Unit
 
   public async override void OnAttack(Unit target = null) {
     BattleUI.Instance.DisableUI();
+    _ = CameraController.FocusOn(transform.position);
     if (target != null) Target = target;
 
     Vector3 dirToTarget = (Target.transform.position - transform.position).normalized;
@@ -60,6 +61,8 @@ public class Crossbowman : Unit
 
   public override void Shoot() {
     base.Shoot();
+
+    _ = CameraController.FocusOn(Target.transform.position);
     Vector3 shootDirection = (Target.UnitCollider.bounds.center - missleSpawner.position).normalized;
 
     GameObject bolt = Instantiate(

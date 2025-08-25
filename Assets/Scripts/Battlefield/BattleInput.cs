@@ -111,6 +111,8 @@ public class BattleInput : MonoBehaviour {
   }
 
   private void OnFlattenPressed(InputAction.CallbackContext ctx) {
+    if (tiles.Count == 0) return;
+
     foreach (Tile tile in tiles) {
       float offset = tile.height - (0.1f * tile.height) - 1;
       Vector3 targetPos = tile.InitPosition - new Vector3(0, offset, 0);

@@ -13,6 +13,7 @@ public abstract class Equipment : ScriptableObject {
   public Rarity rarity;
   // FIXME: Переделать на массив эффектов
   public Effect effect;
+  public float effectChance;
   public Skill skill;
   public Sprite icon;
   public int price;

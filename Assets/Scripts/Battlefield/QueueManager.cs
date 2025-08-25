@@ -25,7 +25,7 @@ public class QueueManager : MonoBehaviour
     orderNumber = 0;
     CurrentUnit = Queue[0];
     BattleUI.Instance.UpdateQueue(Queue);
-    List<Skill> skills = CurrentUnit.Equip.GetSkills();
+    List<Skill> skills = CurrentUnit.Equip.GetActiveSkills();
     if (CurrentUnit.Relation != UnitRelation.Enemy) BattleUI.Instance.ShowSkills(skills, PhaseManager.CurrentPhase, CurrentUnit);
     CurrentUnit.Ui.MarkAsActive();
     FocusOnUnit();

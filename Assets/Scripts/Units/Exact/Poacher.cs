@@ -43,6 +43,7 @@ public class Poacher : Unit {
 
   public async override void OnAttack(Unit target = null) {
     BattleUI.Instance.DisableUI();
+    _ = CameraController.FocusOn(transform.position);
     if (target != null) Target = target;
 
     Vector3 dirToTarget = (Target.transform.position - transform.position).normalized;
@@ -60,6 +61,7 @@ public class Poacher : Unit {
   public override void Shoot() {
     base.Shoot();
 
+    _ = CameraController.FocusOn(Target.transform.position);
     Missle arrow = Instantiate(arrowPrefab, missleSpawner.position, Quaternion.identity)
       .GetComponent<Missle>();
 

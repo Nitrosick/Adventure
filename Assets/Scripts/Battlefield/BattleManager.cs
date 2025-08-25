@@ -130,8 +130,12 @@ public class BattleManager : MonoBehaviour {
   }
 
   public static float GetHitChance(Unit attacker, Unit target) {
-    // FIXME: Расчет шанса попадания
     float result = defaultHitChance;
+
+    // Equipment weight
+    int attackerWeightCoef = attacker.Equip.GetWeightCoefficient();
+    int targetWeightCoef = target.Equip.GetWeightCoefficient();
+    result -= (attackerWeightCoef - targetWeightCoef) * 5;
 
     // Terrain
     int atkH = attacker.CurrentTile.height;
@@ -150,8 +154,8 @@ public class BattleManager : MonoBehaviour {
 
     // Distance
     float distance = Vector3.Distance(attacker.transform.position, target.transform.position);
-    float delta = distance - noFineDistance;
-    if (delta > 0) result -= delta * distanceFinePerUnit;
+    float disDelta = distance - noFineDistance;
+    if (disDelta > 0) result -= disDelta * distanceFinePerUnit;
 
     return result < minHitChance ? minHitChance : result;
   }
@@ -196,25 +200,41 @@ public class BattleManager : MonoBehaviour {
     return total < minDamage ? minDamage : total;
   }
 
-  public static Effect GetWeaponEffect(Unit attacker, Unit target) {
-    Weapon weapon = attacker.Equip.primary;
-    Armor armor = target.Equip.armor;
+  public static List<Effect> GetItemEffects(Unit attacker, Unit target) {
+    List<Effect> result = new();
+    Equipment primary = attacker.Equip.primary;
+    Equipment secondary = attacker.Equip.secondary;
+    Equipment attackerArmor = attacker.Equip.armor;
+    Equipment targetArmor = target.Equip.armor;
+    // FIXME: Доп. слот
+    Equipment[] items = { primary, secondary, attackerArmor };
 
-    if (weapon.effect == null || weapon.effectChance == 0f) return null;
-    float chance = weapon.effectChance;
-
-    if (weapon.effect.effectName == "Bleeding" && armor.weight == EquipmentWeight.Heavy) {
-      chance /= 2;
+    foreach (Equipment item in items) {
+      if (item == null || item.effect == null) continue;
+      float chance = item.effectChance;
+      if (item.effect.effectName == "Bleeding" && targetArmor.weight == EquipmentWeight.Heavy) chance /= 2;
+      else if (item.effect.effectName == "Stun") chance += attacker.Strength - target.Strength;
+      if (Utils.RollChance(chance)) result.Add(item.effect);
     }
 
-    if (weapon.effect.effectName == "Stun") {
-      chance += attacker.Strength - target.Strength;
+    return result;
+  }
+
+  public static List<Skill> GetItemPassiveSkills(Unit unit) {
+    List<Skill> result = new();
+    Equipment primary = unit.Equip.primary;
+    Equipment secondary = unit.Equip.secondary;
+    Equipment attackerArmor = unit.Equip.armor;
+    // FIXME: Доп. слот
+    Equipment[] items = { primary, secondary, attackerArmor };
+
+    foreach (Equipment item in items) {
+      if (item == null || item.skill == null || item.skill.isActive) continue;
+      float chance = item.skill.activateChance;
+      if (Utils.RollChance(chance)) result.Add(item.skill);
     }
 
-    if (chance <= 0) return null;
-    bool success = Utils.RollChance(chance);
-    if (!success) return null;
-    return weapon.effect;
+    return result;
   }
 
   public static void Finish() {

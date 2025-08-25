@@ -68,7 +68,8 @@ public class UnitEquipment : MonoBehaviour {
         if (loaded == null) return;
         GameObject obj = Instantiate(loaded.prefab, leftHand);
         obj.transform.SetParent(leftHand, false);
-      } else if (secondary is Armor secArmor) {
+      }
+      else if (secondary is Armor secArmor) {
         Armor loaded = Resources.Load<Armor>("Armor/" + secondary.name);
         if (loaded == null) return;
         GameObject obj = Instantiate(loaded.prefab, leftHand);
@@ -148,7 +149,7 @@ public class UnitEquipment : MonoBehaviour {
   }
 
   public Dictionary<DamageType, float> GetTotalResists() {
-    Dictionary<DamageType, float> result = new (armor.resists);
+    Dictionary<DamageType, float> result = new(armor.resists);
 
     if (secondary != null) {
       if (secondary is Armor secArmor) {
@@ -178,17 +179,44 @@ public class UnitEquipment : MonoBehaviour {
     return primary.range;
   }
 
-  public List<Skill> GetSkills() {
+  public int GetWeightCoefficient() {
+    int result = 0;
+    if (primary != null) result += GetWeightValue(primary.weight);
+    if (secondary != null) result += GetWeightValue(secondary.weight);
+    if (armor != null) result += GetWeightValue(armor.weight);
+    return result;
+  }
+
+  private int GetWeightValue(EquipmentWeight weight) {
+    return weight switch {
+      EquipmentWeight.Medium => 1,
+      EquipmentWeight.Heavy => 2,
+      _ => 0
+    };
+  }
+
+  public List<Skill> GetActiveSkills() {
+    return GetSkills(true);
+  }
+
+  public List<Skill> GetPassiveSkills() {
+    return GetSkills(false);
+  }
+
+  private List<Skill> GetSkills(bool active) {
     List<Skill> result = new() { };
-    if (primary != null && primary.skill != null) result.Add(primary.skill);
-    if (secondary != null && secondary.skill != null) result.Add(secondary.skill);
-    if (armor != null && armor.skill != null) result.Add(armor.skill);
+    if (primary != null && primary.skill != null && primary.skill.isActive == active)
+      result.Add(primary.skill);
+    if (secondary != null && secondary.skill != null && secondary.skill.isActive == active)
+      result.Add(secondary.skill);
+    if (armor != null && armor.skill != null && armor.skill.isActive == active)
+      result.Add(armor.skill);
     return result;
   }
 
   public bool HasAttackPhaseSkills() {
     if (unit.SkillCharges <= 0) return false;
-    foreach (Skill skill in GetSkills()) {
+    foreach (Skill skill in GetActiveSkills()) {
       if (skill.skillPhases.Contains(BattlePhase.Attack)) return true;
     }
     return false;

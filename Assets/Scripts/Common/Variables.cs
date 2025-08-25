@@ -74,7 +74,8 @@ public enum DamageType {
 }
 
 public enum SkillName {
-  Block
+  Block,
+  Parry
 }
 
 public enum AIBehaviorType {

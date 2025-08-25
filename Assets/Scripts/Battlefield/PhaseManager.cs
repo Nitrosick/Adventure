@@ -48,7 +48,7 @@ public class PhaseManager : MonoBehaviour
 
   private static void PhaseActions() {
     Unit unit = QueueManager.CurrentUnit;
-    List<Skill> skills = unit.Equip.GetSkills();
+    List<Skill> skills = unit.Equip.GetActiveSkills();
     if (unit.Relation != UnitRelation.Enemy) BattleUI.Instance.ShowSkills(skills, CurrentPhase, unit);
 
     switch (CurrentPhase) {

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -102,7 +103,7 @@ public class Unit : MonoBehaviour {
     SkillCharges = TotalSkillCharges;
     CurrentProjectiles = Projectiles;
 
-    if (Equip.GetSkills().Count > 0) Ui.UpdateCharges(TotalSkillCharges, SkillCharges);
+    if (Equip.GetActiveSkills().Count > 0) Ui.UpdateCharges(TotalSkillCharges, SkillCharges);
     return;
   }
 
@@ -165,6 +166,7 @@ public class Unit : MonoBehaviour {
 
   // Attack
   public async virtual void OnAttack(Unit target = null) {
+    // FIXME: Проверка пассивных скиллов атакующего
     BattleUI.Instance.DisableUI();
     if (target != null) Target = target;
 
@@ -206,10 +208,23 @@ public class Unit : MonoBehaviour {
   public void DealDamage() {
     if (Target != null) {
       if (successAttack) {
+        List<Skill> skills = BattleManager.GetItemPassiveSkills(Target);
+        foreach (Skill skill in skills) {
+          // FIXME: Сделать отдельный метод для проверки пассивных скиллов
+          switch (skill.skillName) {
+            case SkillName.Parry:
+              Target.Animator.Parry();
+              CameraController.Shake(0.8f);
+              Target.Ui.ShowPopup("Parry!");
+              FinishAction();
+              return;
+          }
+        }
+
         float critModifier = BattleManager.GetCritModifier(this, Target);
         float damage = BattleManager.CalculateDamage(this, Target);
-        Effect effect = BattleManager.GetWeaponEffect(this, Target);
-        if (effect != null) Target.Effects.ApplyEffect(effect);
+        List<Effect> effects = BattleManager.GetItemEffects(this, Target);
+        foreach (Effect effect in effects) Target.Effects.ApplyEffect(effect);
         Target.Health.TakeDamage(damage, critModifier);
       } else {
         Target.Ui.ShowPopup("Miss!");

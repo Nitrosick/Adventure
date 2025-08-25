@@ -52,6 +52,10 @@ public class UnitAnimator : MonoBehaviour {
     animator.SetTrigger("Dodge");
   }
 
+  public void Parry() {
+    animator.SetTrigger("Parry");
+  }
+
   public void ShowFakeMissle() {
     if (fakeMissle == null) return;
     fakeMissle.SetActive(true);
