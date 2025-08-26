@@ -46,6 +46,7 @@ Highlighted / Pressed / Selected: #938569
 Disabled: #5C523F o-128
 
 Total gold on map: 125 - 190
+Total villagers: 2
 */
 
 using Newtonsoft.Json;

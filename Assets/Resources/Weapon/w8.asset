@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb13a142f8c484a44b9b8c61360ca04b, type: 3}
+  m_Name: w8
+  m_EditorClassIdentifier: 
+  id: w8
+  itemName: Battle axe
+  description: A convenient and ergonomic axe. Good for both combat and everyday
+    use. Can easily clear barricades, break down doors, or pierce heavy armor.
+  requirementStats: 030000000100000000000000
+  requirementLevel: 1
+  type: 0
+  slot: 0
+  weight: 1
+  rarity: 0
+  effect: {fileID: 0}
+  effectChance: 0
+  skill: {fileID: 0}
+  icon: {fileID: 21300000, guid: 488a28c6b43e7d644931d03215d8359a, type: 3}
+  price: 90
+  isNew: 0
+  damage: 7
+  critModifier: 1.3
+  armorPenetration: 25
+  range: 1
+  attackType: 1
+  prefab: {fileID: 8109463894766015606, guid: a24ec10aa631c104a888c0dc95485906, type: 3}
+  damageType: 3
+  trajectory: 0
+  scalingStats: 00000000
