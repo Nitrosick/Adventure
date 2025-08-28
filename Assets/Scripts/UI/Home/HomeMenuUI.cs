@@ -1,4 +1,4 @@
-using System.Linq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,8 +16,10 @@ public class HomeMenuUI : MonoBehaviour {
   private static Button tradingFeature;
   private static Button weaponUpFeature;
   private static Button armorUpFeature;
+  private static Button questsFeature;
   private static Button saveButton;
   private static Button closeButton;
+  private static Dictionary<MapZoneFeature, Button> featureButtons = new() { };
 
   //Sections
   private static Transform welcomeSection;
@@ -25,6 +27,7 @@ public class HomeMenuUI : MonoBehaviour {
   private static TrainingMenuUI trainingSection;
   private static TradingMenuUI tradingSection;
   private static CraftingMenuUI craftingSection;
+  private static QuestsMenuUI questsSection;
 
   private static readonly int saveDelay = 3;
 
@@ -43,6 +46,7 @@ public class HomeMenuUI : MonoBehaviour {
     tradingFeature = Get<Button>("Navigation/Features/Trading");
     weaponUpFeature = Get<Button>("Navigation/Features/WeaponUp");
     armorUpFeature = Get<Button>("Navigation/Features/ArmorUp");
+    questsFeature = Get<Button>("Navigation/Features/Quests");
     saveButton = Get<Button>("Navigation/Control/Save");
     closeButton = Get<Button>("Navigation/Control/Close");
 
@@ -51,17 +55,28 @@ public class HomeMenuUI : MonoBehaviour {
     trainingSection = GetInContent<TrainingMenuUI>("Training");
     tradingSection = GetInContent<TradingMenuUI>("Trading");
     craftingSection = GetInContent<CraftingMenuUI>("Crafting");
+    questsSection = GetInContent<QuestsMenuUI>("Quests");
 
     if (!ComponentsInitialized()) {
       Debug.LogError("Home menu UI components initialization error");
       return;
     }
 
+    featureButtons = new Dictionary<MapZoneFeature, Button>() {
+      { MapZoneFeature.Healing, healingFeature },
+      { MapZoneFeature.Training, trainingFeature },
+      { MapZoneFeature.Trading, tradingFeature },
+      { MapZoneFeature.Weaponsmith, weaponUpFeature },
+      { MapZoneFeature.Armorer, armorUpFeature },
+      { MapZoneFeature.Quests, questsFeature }
+    };
+
     healingFeature.onClick.AddListener(() => OpenSection(MapZoneFeature.Healing));
     trainingFeature.onClick.AddListener(() => OpenSection(MapZoneFeature.Training));
     tradingFeature.onClick.AddListener(() => OpenSection(MapZoneFeature.Trading));
     weaponUpFeature.onClick.AddListener(() => OpenSection(MapZoneFeature.Weaponsmith));
     armorUpFeature.onClick.AddListener(() => OpenSection(MapZoneFeature.Armorer));
+    questsFeature.onClick.AddListener(() => OpenSection(MapZoneFeature.Quests));
     saveButton.onClick.AddListener(SaveGame);
     closeButton.onClick.AddListener(Close);
   }
@@ -71,7 +86,8 @@ public class HomeMenuUI : MonoBehaviour {
     saveButton != null && healingFeature != null && healingSection != null &&
     welcomeSection != null && tradingFeature != null && tradingSection != null &&
     weaponUpFeature != null && armorUpFeature != null && craftingSection != null &&
-    trainingFeature != null && trainingSection != null;
+    trainingFeature != null && trainingSection != null && questsFeature != null &&
+    questsSection != null;
   }
 
   private void OnDestroy() {
@@ -80,6 +96,7 @@ public class HomeMenuUI : MonoBehaviour {
     tradingFeature.onClick.RemoveListener(() => OpenSection(MapZoneFeature.Trading));
     weaponUpFeature.onClick.RemoveListener(() => OpenSection(MapZoneFeature.Weaponsmith));
     armorUpFeature.onClick.RemoveListener(() => OpenSection(MapZoneFeature.Armorer));
+    questsFeature.onClick.RemoveListener(() => OpenSection(MapZoneFeature.Quests));
     saveButton.onClick.RemoveListener(SaveGame);
     closeButton.onClick.RemoveListener(Close);
   }
@@ -101,19 +118,17 @@ public class HomeMenuUI : MonoBehaviour {
   }
 
   private static void EnableButtons(MapZoneFeature[] features) {
-    if (features.Contains(MapZoneFeature.Healing)) healingFeature.interactable = true;
-    if (features.Contains(MapZoneFeature.Training)) trainingFeature.interactable = true;
-    if (features.Contains(MapZoneFeature.Trading)) tradingFeature.interactable = true;
-    if (features.Contains(MapZoneFeature.Weaponsmith)) weaponUpFeature.interactable = true;
-    if (features.Contains(MapZoneFeature.Armorer)) armorUpFeature.interactable = true;
+    foreach (var feature in features) {
+      if (featureButtons.TryGetValue(feature, out var button)) {
+        button.interactable = true;
+      }
+    }
   }
 
   private static void DisableButtons() {
-    healingFeature.interactable = false;
-    trainingFeature.interactable = false;
-    tradingFeature.interactable = false;
-    weaponUpFeature.interactable = false;
-    armorUpFeature.interactable = false;
+    foreach (var button in featureButtons.Values) {
+      button.interactable = false;
+    }
   }
 
   private static async void SaveGame() {
@@ -169,6 +184,14 @@ public class HomeMenuUI : MonoBehaviour {
           mapZone.armorerRecipes
         );
         break;
+      case MapZoneFeature.Quests:
+        questsSection.gameObject.SetActive(true);
+        questsSection.Init(
+          mapZone.elderName,
+          mapZone.elderLevel,
+          mapZone.quests
+        );
+        break;
     }
   }
 
@@ -178,6 +201,7 @@ public class HomeMenuUI : MonoBehaviour {
     trainingSection.Clear();
     tradingSection.Clear();
     craftingSection.Clear();
+    questsSection.Clear();
   }
 
   public static void RecalculateRecipes() {

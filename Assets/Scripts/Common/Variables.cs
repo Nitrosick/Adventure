@@ -45,8 +45,9 @@ Default: #5C523F
 Highlighted / Pressed / Selected: #938569
 Disabled: #5C523F o-128
 
-Total gold on map: 125 - 190
+Total gold on map: 205 - 270
 Total villagers: 2
+Total fame: 200
 */
 
 using Newtonsoft.Json;
@@ -200,10 +201,25 @@ public enum MapZoneFeature {
   Trading,
   Weaponsmith,
   Armorer,
-  Training
+  Training,
+  Quests
 }
 
 public enum Building {
   Watchtower,
   Lumbercamp
+}
+
+// Quests
+public enum QuestState {
+  Inactive,
+  Accepted,
+  Completed
+}
+
+public enum QuestObjective {
+  Fight,
+  VisitZone,
+  GetItem,
+  BringItem
 }

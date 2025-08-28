@@ -32,6 +32,8 @@ public static class StateManager {
   public static HashSet<int> visitedZones;
   public static HashSet<string> collectedZoneLoot;
   public static HashSet<string> unlockedKnowledge;
+  public static HashSet<string> activeQuests;
+  public static HashSet<string> completedQuests;
   public static int gold;
   public static int[] resources;
   public static int villagers;
@@ -61,6 +63,8 @@ public static class StateManager {
     visitedZones = new HashSet<int> { };
     collectedZoneLoot = new HashSet<string> { };
     unlockedKnowledge = new HashSet<string> { };
+    activeQuests = new HashSet<string> { };
+    completedQuests = new HashSet<string> { };
     gold = 0;
     resources = new int[] { 0, 0, 0, 0 };
     villagers = 0;
@@ -149,6 +153,8 @@ public static class StateManager {
       visitedZones = visitedZones,
       collectedZoneLoot = collectedZoneLoot,
       unlockedKnowledge = unlockedKnowledge,
+      activeQuests = activeQuests,
+      completedQuests = completedQuests,
       gold = gold,
       resources = resources,
       villagers = villagers,
@@ -172,6 +178,8 @@ public static class StateManager {
     visitedZones = data.visitedZones;
     collectedZoneLoot = data.collectedZoneLoot;
     unlockedKnowledge = data.unlockedKnowledge;
+    activeQuests = data.activeQuests;
+    completedQuests = data.completedQuests;
     gold = data.gold;
     resources = data.resources;
     villagers = data.villagers;

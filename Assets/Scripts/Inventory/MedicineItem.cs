@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Items/Medicine")]
+[CreateAssetMenu(menuName = "GameObjects/Items/Medicine")]
   public class MedicineItem : Item {
   public float intensity;
 }

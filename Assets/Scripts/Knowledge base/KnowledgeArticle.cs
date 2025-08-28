@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Article", menuName = "KnowledgeBase/Article")]
+[CreateAssetMenu(fileName = "Article", menuName = "GameObjects/KnowledgeBase/Article")]
 public class KnowledgeArticle : ScriptableObject {
   public string id;
   public string title;

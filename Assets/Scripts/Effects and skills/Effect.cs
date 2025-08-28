@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Effect")]
+[CreateAssetMenu(menuName = "GameObjects/Effect")]
 public class Effect : ScriptableObject {
   public string effectName;
   public int duration;

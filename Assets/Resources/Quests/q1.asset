@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe00ffcbb90a67b48a662f89560245b4, type: 3}
+  m_Name: q1
+  m_EditorClassIdentifier: 
+  id: q1
+  title: Brawler
+  description: The brawler, who returned from a long voyage with his henchmen, has
+    not left the tavern for three days. He constantly fights, breaks dishes, and
+    harasses the girls. The locals are looking for someone who can drive him away
+    and are willing to pay for it with coin.
+  objective: 0
+  objectiveZoneId: 9
+  requiredLevel: 1
+  reward:
+    experience: 100
+    fame: 100
+    goldRange: 5000000050000000
+    resources: 00000000000000000000000000000000
+    equipment: []
+    items: []
+    projectiles: 0
+  state: 0

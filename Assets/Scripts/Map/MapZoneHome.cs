@@ -31,6 +31,11 @@ public class MapZoneHome : MonoBehaviour {
   public MasteryLevel armorerLevel;
   public CraftingRecipe[] armorerRecipes;
 
+  [Header("Quests")]
+  public string elderName;
+  public MasteryLevel elderLevel;
+  public Quest[] quests;
+
   public void OpenHomeMenu() {
     if (features.Length < 1) return;
     HomeMenuUI.Open(this);

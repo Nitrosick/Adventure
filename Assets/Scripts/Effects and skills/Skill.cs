@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-[CreateAssetMenu(menuName = "Skill")]
+[CreateAssetMenu(menuName = "GameObjects/Skill")]
 public class Skill : ScriptableObject {
   public string displayName;
   [TextArea(5, 20)] public string description;

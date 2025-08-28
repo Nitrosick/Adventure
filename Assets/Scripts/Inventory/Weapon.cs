@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Equipment/Weapon")]
+[CreateAssetMenu(menuName = "GameObjects/Equipment/Weapon")]
 public class Weapon : Equipment {
   public float damage;
   public float critModifier;

@@ -10,6 +10,8 @@ public class SaveData {
   public HashSet<int> visitedZones;
   public HashSet<string> collectedZoneLoot;
   public HashSet<string> unlockedKnowledge;
+  public HashSet<string> activeQuests;
+  public HashSet<string> completedQuests;
   public int gold;
   public int[] resources;
   public int villagers;
