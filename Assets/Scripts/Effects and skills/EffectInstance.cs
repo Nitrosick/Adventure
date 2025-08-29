@@ -3,16 +3,10 @@ public class EffectInstance {
   public int remainingTurns;
   public float damagePerTurn;
 
-  public EffectInstance(Effect data) {
+  public EffectInstance(Effect data, int duration = 0, float damage = 0) {
     effectData = data;
-    remainingTurns = data.duration;
-    damagePerTurn = data.damage;
-  }
-
-  public EffectInstance(Effect data, int duration, float damage) {
-    effectData = data;
-    remainingTurns = duration;
-    damagePerTurn = damage;
+    remainingTurns = duration == 0 ? data.duration : duration;
+    damagePerTurn = damage == 0 ? data.damage : damage;
   }
 
   public void Tick(Unit target) {

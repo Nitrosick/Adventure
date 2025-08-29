@@ -15,16 +15,17 @@ public class UnitEffects : MonoBehaviour {
   }
 
   public void ApplyEffect(Effect effect, int duration = 0, float damage = 0) {
-    var existing = ActiveEffects.Find(e => e.effectData == effect);
+    EffectInstance existing = ActiveEffects.Find(e => e.effectData == effect);
 
-    if (existing != null && !effect.isStackable) {
-      existing.remainingTurns = effect.duration;
+    if (existing != null) {
+      if (effect.isStackable) existing.remainingTurns += effect.duration;
+      else existing.remainingTurns = effect.duration;
     } else {
-      if (duration == 0 && damage == 0) ActiveEffects.Add(new EffectInstance(effect));
-      else ActiveEffects.Add(new EffectInstance(effect, duration, damage));
+      ActiveEffects.Add(new EffectInstance(effect, duration, damage));
     }
 
     if (effect.effectName == "Stun") unit.Animator.SetStunned(true);
+
     unit.Ui.UpdateEffects();
   }
 

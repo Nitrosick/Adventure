@@ -26,6 +26,8 @@ public class PlayerArmy : MonoBehaviour {
   public void AddUnit(Unit unit) {
     if (unit == null) return;
     Unit prefab = StateManager.PrefabDatabase.GetPrefab(unit.PrefabId, true);
+    prefab.InSquad = false;
+    prefab.IsNew = true;
     Units.Add(prefab);
     UpdateState();
   }

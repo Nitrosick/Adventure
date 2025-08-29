@@ -15,11 +15,12 @@ MonoBehaviour:
   id: q1
   title: Brawler
   description: The brawler, who returned from a long voyage with his henchmen, has
-    not left the tavern for three days. He constantly fights, breaks dishes, and
-    harasses the girls. The locals are looking for someone who can drive him away
-    and are willing to pay for it with coin.
-  objective: 0
+    not left the <b>Tavern</b> for three days. He constantly fights, breaks dishes,
+    and harasses the girls. The locals are looking for someone who can drive him
+    away and are willing to pay for it with coin.
+  objectiveType: 0
   objectiveZoneId: 9
+  objectiveItem: {fileID: 0}
   requiredLevel: 1
   reward:
     experience: 100

@@ -1,3 +1,4 @@
+using System.Threading;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
@@ -10,6 +11,8 @@ public class Toast : MonoBehaviour {
   private static Image image;
   private static TextMeshProUGUI message;
   private static readonly int delay = 5;
+
+  private static CancellationTokenSource cts;
 
   private void Awake() {
     IconDatabase = Resources.Load<IconDatabase>("Databases/IconDatabase");
@@ -24,12 +27,18 @@ public class Toast : MonoBehaviour {
   }
 
   public static async Task Show(string icon, string text) {
+    cts?.Cancel();
+    cts = new CancellationTokenSource();
+
     image.sprite = IconDatabase.GetIcon(icon);
     message.text = text;
     panel.gameObject.SetActive(true);
     UpdateSize();
-    await Task.Delay(delay * 1000);
-    Hide();
+
+    try {
+      await Task.Delay(delay * 1000, cts.Token);
+      Hide();
+    } catch (TaskCanceledException) { }
   }
 
   private static void Hide() {
