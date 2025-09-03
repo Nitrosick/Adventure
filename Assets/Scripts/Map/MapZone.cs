@@ -74,7 +74,6 @@ public class MapZone : MonoBehaviour {
   }
 
   public virtual void SetCleared() {
-    if (markIconObj != null) markIconObj.gameObject.SetActive(true);
     if (markIcon != null) markIcon.material = MapZoneManager.Instance.stoneMaterial;
     isEmpty = true;
 
@@ -86,6 +85,7 @@ public class MapZone : MonoBehaviour {
   }
 
   public void SetActive() {
+    if (markIconObj != null) markIconObj.gameObject.SetActive(true);
     if (markIcon != null) markIcon.material = MapZoneManager.Instance.goldMaterial;
     isEmpty = false;
 

@@ -176,8 +176,10 @@ public static class BattleAI {
   private static void MoveToPriorityEnemy() {
     foreach (Unit target in playerUnits) {
       Tile tile = TryMoveToNeighborOf(target);
-      if (tile != null) SetAttackTarget(target, tile);
-      else ComeCloser();
+      if (tile != null) {
+        SetAttackTarget(target, tile);
+        return;
+      }
     }
     ComeCloser();
   }
