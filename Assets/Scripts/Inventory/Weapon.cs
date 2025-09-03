@@ -5,6 +5,7 @@ public class Weapon : Equipment {
   public float damage;
   public float critModifier;
   public float armorPenetration;
+  public float precision = 95f;
   public int range;
   public int attackType = 1;
 

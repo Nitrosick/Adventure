@@ -17,6 +17,10 @@ public class QuestManager : MonoBehaviour {
   public static void AcceptQuest(Quest quest) {
     if (IsQuestActive(quest.id)) return;
     quest.state = QuestState.Accepted;
+    MapZone zone = MapZoneManager.FindById(quest.objectiveZoneId);
+    if (zone != null) zone.ActivateQuest();
+    // FIXME: Активировать конкретный квест
+    // FIXME: Квест может быть за пределами зоны
     StateManager.activeQuests.Add(quest.id);
   }
 

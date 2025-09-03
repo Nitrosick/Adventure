@@ -23,6 +23,7 @@ MonoBehaviour:
   weight: 0
   rarity: 0
   effect: {fileID: 11400000, guid: 6e491c811d9de3a4a8f96b65b1ba63b6, type: 2}
+  effectChance: 10
   skill: {fileID: 0}
   icon: {fileID: 21300000, guid: ac4b30b468279e44b9589077f8c72a9d, type: 3}
   price: 20
@@ -30,9 +31,10 @@ MonoBehaviour:
   damage: 4
   critModifier: 1.2
   armorPenetration: 30
-  effectChance: 10
+  precision: 87
   range: 1
   attackType: 1
   prefab: {fileID: 1049791742440788130, guid: c9d17c7c13091a54a854df3c53037579, type: 3}
   damageType: 4
+  trajectory: 0
   scalingStats: 00000000

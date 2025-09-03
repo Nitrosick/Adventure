@@ -8,6 +8,7 @@ public class MapZoneManager : MonoBehaviour {
   public Material defaultMaterial;
   public Material highlightMaterial;
   public Material stoneMaterial;
+  public Material goldMaterial;
   public static MapZone[] Zones { get; private set; }
 
   private void Awake() {
@@ -50,36 +51,36 @@ public class MapZoneManager : MonoBehaviour {
   }
 
   public static void GetStateData() {
-    Dictionary<int, List<MapZoneType>> state = StateManager.zonesState;
-    HashSet<int> visited = StateManager.visitedZones;
-    HashSet<string> looted = StateManager.collectedZoneLoot;
+    var state = StateManager.zonesState;
+    var visited = StateManager.visitedZones;
+    var looted = StateManager.collectedZoneLoot;
 
-    if (state.Count > 0) {
-      foreach (int id in state.Keys) {
-        if (state[id] != null) {
-          MapZone zone = FindById(id);
-          if (zone == null) continue;
-          zone.events = state[id];
-        }
-      }
+    var activeQuests = QuestManager.Instance.database.quests
+      .Where(q => q.state == QuestState.Accepted)
+      .Select(q => q.objectiveZoneId)
+      .ToHashSet();
+
+    foreach (var kvp in state) {
+      if (kvp.Value == null) continue;
+      var zone = FindById(kvp.Key);
+      if (zone == null) continue;
+      zone.events = kvp.Value;
     }
 
-    if (visited.Count > 0) {
-      foreach (MapZone zone in Zones) {
-        if (visited.Contains(zone.id)) {
-          zone.ShowPathLines();
-          zone.secret = false;
-          zone.InitMarker();
-        }
-      }
+    foreach (var zone in Zones.Where(z => visited.Contains(z.id))) {
+      zone.ShowPathLines();
+      zone.secret = false;
+      zone.InitMarker();
     }
 
-    if (looted.Count > 0) {
-      foreach (MapLoot loot in FindObjectsOfType<MapLoot>()) {
-        if (looted.Contains(loot.id)) {
-          Destroy(loot.gameObject);
-        }
-      }
+    foreach (var loot in FindObjectsOfType<MapLoot>().Where(l => looted.Contains(l.id))) {
+      Destroy(loot.gameObject);
+    }
+
+    foreach (var zone in Zones.Where(z => activeQuests.Contains(z.id))) {
+      if (zone.events.Count == 0) zone.SetActive();
+      zone.events.Insert(0, MapZoneType.Quest);
     }
   }
+
 }

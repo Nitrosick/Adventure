@@ -40,8 +40,8 @@ public class PlayerInventory : MonoBehaviour {
     foreach (ArmorSet set in armorSets) {
       if (set.id == heroEquip.armor.id) {
         set.gameObject.SetActive(true);
-        if (set.showBeard && beard != null) beard.gameObject.SetActive(true);
-        if (set.showHair && hair != null) hair.gameObject.SetActive(true);
+        if (beard != null) beard.gameObject.SetActive(!heroEquip.armor.hideBeard);
+        if (hair != null) hair.gameObject.SetActive(!heroEquip.armor.hideHair);
       }
       else set.gameObject.SetActive(false);
     }

@@ -12,6 +12,7 @@ public class QuestAcceptDialog : MonoBehaviour {
   private static GameObject background;
   private static Button accept;
   private static Button cancel;
+  private static TextMeshProUGUI cancelText;
   private static Action<bool> callback;
   private static TextMeshProUGUI title;
   private static TextMeshProUGUI description;
@@ -35,6 +36,7 @@ public class QuestAcceptDialog : MonoBehaviour {
     background = transform.Find("QuestAcceptDialog/Background").gameObject;
     accept = Get<Button>("Control/Accept");
     cancel = Get<Button>("Control/Cancel");
+    cancelText = Get<TextMeshProUGUI>("Control/Cancel/Text");
     title = Get<TextMeshProUGUI>("Head/Title");
     description = Get<TextMeshProUGUI>("Text");
     rewardXP = Get<TextMeshProUGUI>("Reward/Experience/Value");
@@ -46,7 +48,7 @@ public class QuestAcceptDialog : MonoBehaviour {
       window == null || background == null || accept == null ||
       cancel == null || title == null || description == null ||
       rewardSlots == null || rewardXP == null || rewardFame == null ||
-      rewardGold == null
+      rewardGold == null || cancelText == null
     ) {
       Debug.LogError("Quest dialog components initialization error");
       return;
@@ -95,6 +97,11 @@ public class QuestAcceptDialog : MonoBehaviour {
     description.text = quest.description;
     ShowReward();
     RenderSlots();
+
+    bool acceptable = quest.state == QuestState.Inactive;
+    accept.gameObject.SetActive(acceptable);
+    cancelText.text = acceptable ? "Cancel" : "Close";
+
     Open();
   }
 

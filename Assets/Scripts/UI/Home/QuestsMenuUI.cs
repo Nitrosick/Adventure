@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 
 public class QuestsMenuUI : HomeMenuFeature {
@@ -23,7 +24,7 @@ public class QuestsMenuUI : HomeMenuFeature {
 
   public void Init(string name, MasteryLevel lvl, Quest[] _quests) {
     InitHeader(name, lvl);
-    quests = _quests;
+    quests = _quests.Where(q => q.state == QuestState.Inactive).ToArray();
     UpdateQuestsData();
   }
 

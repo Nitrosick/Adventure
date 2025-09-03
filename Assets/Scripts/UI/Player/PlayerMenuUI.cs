@@ -10,12 +10,14 @@ public class PlayerMenuUI : MonoBehaviour {
   public static PlayerMenuUI Instance;
 
   public GameObject menuSlotPrefab;
+  public GameObject questSlotPrefab;
   private static Transform menu;
 
   // Navigation
   private static Button navHero;
   private static Button navUnits;
   private static Button navInventory;
+  private static Button navQuests;
 
   // Slots
   private static RectTransform leftSlots;
@@ -31,6 +33,14 @@ public class PlayerMenuUI : MonoBehaviour {
   private static TextMeshProUGUI playerFameValue;
   private static RectTransform playerFameBar;
   private static RectTransform playerFameBarFill;
+
+  // Quests
+  private static Transform activeQuests;
+  private static Transform completedQuests;
+  private static GameObject activeQuestsEmpty;
+  private static GameObject completedQuestsEmpty;
+  private static Transform activeQuestsList;
+  private static Transform completedQuestsList;
 
   private static readonly int slotColumns = 5;
   private static readonly float slotsGap = 4f;
@@ -52,6 +62,7 @@ public class PlayerMenuUI : MonoBehaviour {
     navHero = Get<Button>("Left/Navigation/Hero");
     navUnits = Get<Button>("Left/Navigation/Units");
     navInventory = Get<Button>("Left/Navigation/Inventory");
+    navQuests = Get<Button>("Left/Navigation/Quests");
 
     leftSlots = Get<RectTransform>("Left/Blocks/Left/Slots/Viewport/Content");
     rightSlots = Get<RectTransform>("Left/Blocks/Right/Slots/Viewport/Content");
@@ -68,6 +79,13 @@ public class PlayerMenuUI : MonoBehaviour {
     playerFameBar = Get<RectTransform>("Left/Blocks/Left/PlayerProgress/Viewport/Content/FameBar");
     playerFameBarFill = Get<RectTransform>("Left/Blocks/Left/PlayerProgress/Viewport/Content/FameBar/Fill");
 
+    activeQuests = Find("Left/Blocks/Left/ActiveQuests");
+    completedQuests = Find("Left/Blocks/Right/CompletedQuests");
+    activeQuestsEmpty = Find("Left/Blocks/Left/ActiveQuests/Viewport/Content/Empty").gameObject;
+    completedQuestsEmpty = Find("Left/Blocks/Right/CompletedQuests/Viewport/Content/Empty").gameObject;
+    activeQuestsList = Find("Left/Blocks/Left/ActiveQuests/Viewport/Content/List");
+    completedQuestsList = Find("Left/Blocks/Right/CompletedQuests/Viewport/Content/List");
+
     if (!ComponentsInitialized()) {
       Debug.LogError("Player menu UI components initialization error");
       return;
@@ -76,6 +94,7 @@ public class PlayerMenuUI : MonoBehaviour {
     navHero.onClick.AddListener(SelectHeroTab);
     navUnits.onClick.AddListener(SelectUnitsTab);
     navInventory.onClick.AddListener(SelectInventoryTab);
+    navQuests.onClick.AddListener(SelectQuestsTab);
   }
 
   private async void Start() {
@@ -91,13 +110,17 @@ public class PlayerMenuUI : MonoBehaviour {
     leftSlotsTitle != null && rightSlotsTitle != null && navHero != null &&
     navUnits != null && navInventory != null && playerProgress != null &&
     playerXpValue != null && playerXpBar != null && playerXpBarFill != null &&
-    playerFameValue != null && playerFameBar != null && playerFameBarFill != null;
+    playerFameValue != null && playerFameBar != null && playerFameBarFill != null &&
+    navQuests != null && activeQuests != null && completedQuests != null &&
+    activeQuestsEmpty != null && completedQuestsEmpty != null && activeQuestsList != null &&
+    completedQuestsList != null;
   }
 
   private void OnDestroy() {
     navHero.onClick.RemoveListener(SelectHeroTab);
     navUnits.onClick.RemoveListener(SelectUnitsTab);
     navInventory.onClick.RemoveListener(SelectInventoryTab);
+    navQuests.onClick.RemoveListener(SelectQuestsTab);
   }
 
   public static void Open() {
@@ -121,10 +144,17 @@ public class PlayerMenuUI : MonoBehaviour {
     navHero.interactable = true;
     navUnits.interactable = true;
     navInventory.interactable = true;
+    navQuests.interactable = true;
+
     foreach (Transform child in leftSlots) Destroy(child.gameObject);
     foreach (Transform child in rightSlots) Destroy(child.gameObject);
+    foreach (Transform child in activeQuestsList) Destroy(child.gameObject);
+    foreach (Transform child in completedQuestsList) Destroy(child.gameObject);
+
     ShowSlots(false);
     playerProgress.gameObject.SetActive(false);
+    activeQuests.gameObject.SetActive(false);
+    completedQuests.gameObject.SetActive(false);
 
     leftSlotsTitle.text = "";
     rightSlotsTitle.text = "";
@@ -267,6 +297,39 @@ public class PlayerMenuUI : MonoBehaviour {
     await Task.Yield();
     selectedSlot = leftSlots.GetChild(0).GetComponent<MenuSlot>();
     if (selectedSlot != null) PlayerMenuUIInfo.ShowInfo(selectedSlot.EquipmentItem);
+  }
+
+  private async static void SelectQuestsTab() {
+    Clear();
+    navQuests.interactable = false;
+    activeQuests.gameObject.SetActive(true);
+    completedQuests.gameObject.SetActive(true);
+    leftSlotsTitle.text = "Active";
+    rightSlotsTitle.text = "Completed";
+
+    List<Quest> quests = QuestManager.Instance.database.quests;
+    Quest[] active = quests.Where(q => q.state == QuestState.Accepted).ToArray();
+    Quest[] completed = quests.Where(q => q.state == QuestState.Completed).ToArray();
+
+    foreach (var q in active) {
+      GameObject slot = Instantiate(Instance.questSlotPrefab, activeQuestsList);
+      slot.GetComponent<QuestSlot>().Init(q);
+    }
+
+    foreach (var q in completed) {
+      GameObject slot = Instantiate(Instance.questSlotPrefab, completedQuestsList);
+      slot.GetComponent<QuestSlot>().Init(q);
+    }
+
+    activeQuestsEmpty.SetActive(active.Length == 0);
+    completedQuestsEmpty.SetActive(completed.Length == 0);
+
+    Player player = Player.Instance;
+    Unit hero = player.Army.Units.FirstOrDefault(u => u.IsHero);
+    if (hero == null) return;
+
+    await Task.Yield();
+    PlayerMenuUIInfo.ShowInfo(hero);
   }
 
   private static void RenderEmptySlots(RectTransform panel, int filled) {

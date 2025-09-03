@@ -17,6 +17,7 @@ public class MapZone : MonoBehaviour {
   public GameObject[] interactiveObjects;
   protected Renderer auraRender;
   protected SpriteRenderer markerRender;
+  protected Transform markIconObj;
   protected MeshRenderer markIcon;
   protected Way[] ways;
   protected Transform pathLines;
@@ -25,10 +26,10 @@ public class MapZone : MonoBehaviour {
   private readonly float linesTransparency = 0.6f;
 
   protected void Awake() {
-    auraRender = GetComponent<Renderer>();
+    auraRender = transform.GetComponent<Renderer>();
     markerRender = transform.Find("Marker").GetComponent<SpriteRenderer>();
-    Transform markIconObj = transform.Find("Mark/Icon");
-    if (markIconObj != null) markIcon = markIconObj.GetComponent<MeshRenderer>();
+    markIconObj = transform.Find("Mark");
+    if (markIconObj != null) markIcon = markIconObj.Find("Icon").GetComponent<MeshRenderer>();
     ways = transform.GetComponentsInChildren<Way>();
     pathLines = transform.Find("Pathes");
 
@@ -73,7 +74,20 @@ public class MapZone : MonoBehaviour {
   }
 
   public virtual void SetCleared() {
+    if (markIconObj != null) markIconObj.gameObject.SetActive(true);
     if (markIcon != null) markIcon.material = MapZoneManager.Instance.stoneMaterial;
+    isEmpty = true;
+
+    if (interactiveObjects != null && interactiveObjects.Length > 0) {
+      foreach (GameObject obj in interactiveObjects) {
+        obj.SetActive(!obj.activeSelf);
+      }
+    }
+  }
+
+  public void SetActive() {
+    if (markIcon != null) markIcon.material = MapZoneManager.Instance.goldMaterial;
+    isEmpty = false;
 
     if (interactiveObjects != null && interactiveObjects.Length > 0) {
       foreach (GameObject obj in interactiveObjects) {
@@ -159,5 +173,13 @@ public class MapZone : MonoBehaviour {
 
     color.a = linesTransparency;
     mat.color = color;
+  }
+
+  public void ActivateQuest() {
+    if (!transform.TryGetComponent<MapZoneQuest>(out var questScript)) return;
+    if (questScript.questsList.Length == 0) return;
+    SetActive();
+    markIconObj.gameObject.SetActive(true);
+    events.Insert(0, MapZoneType.Quest);
   }
 }

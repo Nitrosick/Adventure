@@ -27,9 +27,16 @@ public class MapZoneEvent : MonoBehaviour {
     }
 
     switch (zone.events[eventIndex]) {
-      case MapZoneType.InstantBattle:
+      case MapZoneType.Battle:
         if (ignoreBattle) return;
-        StartBattle(battleZone);
+        if (battleZone.instant) StartBattle(battleZone);
+        else MapUI.Instance.ShowInteractableButton(battleZone.StartBattle);
+        break;
+      case MapZoneType.Quest:
+        MapZoneQuest questZone = Get<MapZoneQuest>();
+        if (questZone == null || questZone.questsList.Length == 0) break;
+        // FIXME: Учесть несколько квестов
+        CheckQuestType(questZone.questsList[0], battleZone);
         break;
       case MapZoneType.Home:
         MapUI.Instance.ShowInteractableButton(
@@ -49,7 +56,16 @@ public class MapZoneEvent : MonoBehaviour {
     }
   }
 
-  private void StartBattle(MapZoneBattle battleZone, bool isAmbush = false) {
+  private void CheckQuestType(Quest quest, MapZoneBattle battle) {
+    switch (quest.objectiveType) {
+      case QuestObjective.Fight:
+        if (battle.instant) StartBattle(battle);
+        else MapUI.Instance.ShowInteractableButton(battle.StartBattle, "battle", "Attack");
+        break;
+    }
+  }
+
+  public void StartBattle(MapZoneBattle battleZone, bool isAmbush = false) {
     if (battleZone.guard == null || battleZone.guard.Length < 1) {
       Debug.LogError("Zone guard is not specified");
       return;
@@ -65,7 +81,7 @@ public class MapZoneEvent : MonoBehaviour {
 
     if (unitsInSquad.Length > battleZone.armySlots) {
       bool cancelable = false;
-      if (!isAmbush) cancelable = zone.events[0] != MapZoneType.InstantBattle;
+      if (!isAmbush) cancelable = zone.events[0] != MapZoneType.Battle;
       SquadOverwhelmed.Open(battleZone.armySlots, this, cancelable, isAmbush);
       return;
     }

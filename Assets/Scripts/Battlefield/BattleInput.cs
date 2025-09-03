@@ -10,13 +10,25 @@ public class BattleInput : MonoBehaviour {
   private List<TileFiller> fillers;
   private Transform terrain;
   private Vector3 terrainInitPos;
+  private readonly List<Renderer> obstacles = new();
+  private readonly Dictionary<Renderer, Color> originalColors = new();
+  private bool isTransparent = false;
   private readonly float lerpDuration = 0.25f;
+  private readonly float objectsTransparency = 0.3f;
 
   private void Awake() {
     terrain = GameObject.FindGameObjectWithTag("Terrain").GetComponent<Transform>();
   }
 
   private void Start() {
+    GameObject[] objs = GameObject.FindGameObjectsWithTag("BattlefieldLargeObject");
+    foreach (GameObject obj in objs) {
+      if (obj.TryGetComponent<Renderer>(out var rend)) {
+        obstacles.Add(rend);
+        originalColors[rend] = rend.material.color;
+      }
+    }
+
     tiles = TileManager.GetHighTiles();
     fillers = TileManager.GetFillers();
     if (terrain == null) return;
@@ -111,6 +123,7 @@ public class BattleInput : MonoBehaviour {
   }
 
   private void OnFlattenPressed(InputAction.CallbackContext ctx) {
+    if (obstacles.Count > 0) SetTransparency(true);
     if (tiles.Count == 0) return;
 
     foreach (Tile tile in tiles) {
@@ -130,6 +143,8 @@ public class BattleInput : MonoBehaviour {
   }
 
   private void OnFlattenReleased(InputAction.CallbackContext ctx) {
+    if (obstacles.Count > 0) SetTransparency(false);
+
     foreach (Tile tile in tiles) {
       AnimateMove(tile.transform, tile.InitPosition);
     }
@@ -153,5 +168,41 @@ public class BattleInput : MonoBehaviour {
     }
 
     t.position = target;
+  }
+
+  private void SetTransparency(bool on) {
+    if (isTransparent == on) return;
+    isTransparent = on;
+
+    foreach (Renderer rend in obstacles) {
+      if (!originalColors.ContainsKey(rend)) continue;
+      Color col = originalColors[rend];
+
+      if (on) {
+        col.a = objectsTransparency;
+        rend.material.SetFloat("_Surface", 1);
+        rend.material.SetOverrideTag("RenderType", "Transparent");
+        rend.material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+        rend.material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+        rend.material.SetInt("_ZWrite", 0);
+        rend.material.DisableKeyword("_ALPHATEST_ON");
+        rend.material.EnableKeyword("_ALPHABLEND_ON");
+        rend.material.DisableKeyword("_ALPHAPREMULTIPLY_ON");
+        rend.material.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
+      }
+
+      rend.material.color = col;
+
+      if (!on) {
+        rend.material.color = originalColors[rend];
+        rend.material.SetFloat("_Surface", 0);
+        rend.material.SetOverrideTag("RenderType", "Opaque");
+        rend.material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
+        rend.material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.Zero);
+        rend.material.SetInt("_ZWrite", 1);
+        rend.material.DisableKeyword("_ALPHABLEND_ON");
+        rend.material.renderQueue = -1;
+      }
+    }
   }
 }

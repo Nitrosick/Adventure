@@ -35,6 +35,7 @@ public class Unit : MonoBehaviour {
   public string Name { get; protected set; }
   public string Description { get; protected set; }
   public bool IsHero { get; protected set; } = false;
+  public bool IsBoss { get; protected set; } = false;
   public UnitType Type { get; protected set; }
   public UnitRelation Relation { get; private set; }
   public Reward killReward;
@@ -283,6 +284,7 @@ public class Unit : MonoBehaviour {
       prefabId = PrefabId,
       currentHealth = health,
       inSquad = InSquad,
+      isBoss = IsBoss,
       strength = Strength,
       dexterity = Dexterity,
       intelligence = Intelligence,

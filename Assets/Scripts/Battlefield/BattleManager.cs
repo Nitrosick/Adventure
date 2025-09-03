@@ -13,13 +13,13 @@ public class BattleManager : MonoBehaviour {
   private static List<Tile> allyShooterSpawns;
   private static List<Tile> enemySpawns;
   private static List<Tile> enemyShooterSpawns;
+  private static List<Tile> bossSpawns;
 
   public static BattleResult? battleResult;
   public static Reward Reward { get; private set; }
   public GameObject corpsePrefab;
 
-  private static readonly float dexterityScaleUnit = 3.5f;
-  private static readonly float defaultHitChance = 95f;
+  private static readonly float dexterityScaleUnit = 3f;
   private static readonly float minHitChance = 5f;
   private static readonly float defaultCritChance = 5f;
   private static readonly float minDamage = 0.3f;
@@ -77,6 +77,7 @@ public class BattleManager : MonoBehaviour {
     enemySpawns = TileManager.GetSpawns(TileSpawnType.AnyEnemy);
     allyShooterSpawns = TileManager.GetSpawns(TileSpawnType.AllyShooter);
     enemyShooterSpawns = TileManager.GetSpawns(TileSpawnType.EnemyShooter);
+    bossSpawns = TileManager.GetSpawns(TileSpawnType.Boss);
   }
 
   private void SpawnUnits(UnitData[] unitsData, List<Tile> spawns, UnitRelation relation) {
@@ -91,7 +92,16 @@ public class BattleManager : MonoBehaviour {
     foreach (UnitData data in unitsData) {
       Tile tile = null;
 
-      if (data.type == UnitType.Range) {
+      if (data.isBoss) {
+        if (bossSpawns.Count > 0) {
+          tile = TileManager.GetRandomFreeTile(bossSpawns);
+          bossSpawns.Remove(tile);
+        }
+        if (tile == null && spawns.Count > 0) {
+          tile = TileManager.GetRandomFreeTile(spawns);
+          spawns.Remove(tile);
+        }
+      } else if (data.type == UnitType.Range) {
         if (shooterSpawns.Count > 0) {
           tile = TileManager.GetRandomFreeTile(shooterSpawns);
           shooterSpawns.Remove(tile);
@@ -105,11 +115,6 @@ public class BattleManager : MonoBehaviour {
           tile = TileManager.GetRandomFreeTile(spawns);
           spawns.Remove(tile);
         }
-      }
-
-      if (tile == null) {
-        Debug.LogError("Not enough free tiles to place units");
-        return;
       }
 
       Unit unit = StateManager.PrefabDatabase.GetPrefab(data.prefabId);
@@ -130,7 +135,7 @@ public class BattleManager : MonoBehaviour {
   }
 
   public static float GetHitChance(Unit attacker, Unit target) {
-    float result = defaultHitChance;
+    float result = attacker.Equip.primary.precision;
 
     // Equipment weight
     int attackerWeightCoef = attacker.Equip.GetWeightCoefficient();

@@ -4,27 +4,30 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
 public class QueueSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler {
-  private GameObject frameActive;
+  private Image frame;
   private Image relationIndicator;
-  private GameObject crown;
+  private Image crown;
+  private Image skull;
   private Image portrait;
-
   private Unit currentUnit;
 
+  private static Color activeColor;
   private static Color allyColor;
   private static Color enemyColor;
 
   private void Awake() {
-    frameActive = transform.Find("FrameActive").gameObject;
+    frame = transform.Find("Frame").GetComponent<Image>();
     relationIndicator = transform.Find("RelationIndicator").GetComponent<Image>();
-    crown = transform.Find("Crown").gameObject;
+    crown = transform.Find("Crown").GetComponent<Image>();
+    skull = transform.Find("Skull").GetComponent<Image>();
     portrait = transform.Find("Portrait").GetComponent<Image>();
 
-    if (frameActive == null || relationIndicator == null || crown == null || portrait == null) {
+    if (frame == null || relationIndicator == null || crown == null || skull == null || portrait == null) {
       Debug.LogError("Queue slot components initialization error");
       return;
     }
 
+    ColorUtility.TryParseHtmlString("#EFBF0D", out activeColor);
     ColorUtility.TryParseHtmlString("#174E87", out allyColor);
     ColorUtility.TryParseHtmlString("#781010", out enemyColor);
   }
@@ -33,12 +36,15 @@ public class QueueSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     currentUnit = unit;
     Color color = unit.Relation == UnitRelation.Ally ? allyColor : enemyColor;
     relationIndicator.color = color;
-    if (unit.IsHero) crown.SetActive(true);
+    crown.gameObject.SetActive(unit.IsHero);
+    skull.gameObject.SetActive(unit.IsBoss);
     portrait.sprite = unit.avatar;
   }
 
   public void SetActive() {
-    frameActive.SetActive(true);
+    frame.color = activeColor;
+    crown.color = activeColor;
+    skull.color = activeColor;
   }
 
   public void OnPointerEnter(PointerEventData eventData) {

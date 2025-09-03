@@ -6,4 +6,9 @@ public class MapZoneBattle : MonoBehaviour {
   public int armySlots;
   public Reward fixedReward;
   public float ambushChance;
+  public bool instant = true;
+
+  public void StartBattle() {
+    transform.GetComponent<MapZoneEvent>().StartBattle(this);
+  }
 }

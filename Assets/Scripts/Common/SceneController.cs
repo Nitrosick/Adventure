@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
@@ -43,14 +44,14 @@ public class SceneController : MonoBehaviour
   public static void Lock() { Locked = true; }
   public static void Unlock() { Locked = false; }
 
-  public async static void OpenWindow(string name) {
-    await Task.Yield();
-    StateManager.openedWindows.Add(name);
-    background.SetActive(StateManager.openedWindows.Count > 0);
+  public static void OpenWindow(string name) {
+    HashSet<string> windows = StateManager.openedWindows;
+    if (windows.Count > 0) windows.Clear();
+    windows.Add(name);
+    background.SetActive(windows.Count > 0);
   }
 
-  public async static void CloseWindow(string name) {
-    await Task.Yield();
+  public static void CloseWindow(string name) {
     StateManager.openedWindows.Remove(name);
     background.SetActive(StateManager.openedWindows.Count > 0);
   }

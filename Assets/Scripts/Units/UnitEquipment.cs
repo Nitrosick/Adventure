@@ -38,8 +38,8 @@ public class UnitEquipment : MonoBehaviour {
     foreach (ArmorSet set in armorSets) {
       if (set.id == armor.id) {
         set.gameObject.SetActive(true);
-        if (set.showBeard && beard != null) beard.gameObject.SetActive(true);
-        if (set.showHair && hair != null) hair.gameObject.SetActive(true);
+        if (beard != null) beard.gameObject.SetActive(!armor.hideBeard);
+        if (hair != null) hair.gameObject.SetActive(!armor.hideHair);
       }
       else set.gameObject.SetActive(false);
     }

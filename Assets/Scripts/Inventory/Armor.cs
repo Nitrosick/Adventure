@@ -8,6 +8,8 @@ public class Armor : Equipment {
   public List<DamageResistance> resistsMap;
   public Dictionary<DamageType, float> resists;
   // FIXME: Добавить все типы резистов
+  public bool hideBeard;
+  public bool hideHair;
 
   private void OnEnable() {
     resists = new Dictionary<DamageType, float>();

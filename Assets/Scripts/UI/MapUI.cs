@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class MapUI : GeneralUI {
   public static MapUI Instance;
+  private static IconDatabase IconDatabase;
   public GameObject emptySlotPrefab;
   public Sprite villagersSprite;
   public Sprite[] resourceSprites;
@@ -15,13 +16,15 @@ public class MapUI : GeneralUI {
   private TextMeshProUGUI zoneInfoTitle;
   private TextMeshProUGUI zoneInfoDescription;
   private GameObject zoneInfoBattleMark;
-  private GameObject zoneInfoGuardedMark;
   private GameObject zoneInfoClearedMark;
   private GameObject zoneInfoRecruitMark;
+  private GameObject zoneInfoQuestMark;
 
   // Buttons
   private Button playerMenuButton;
   private Button interactButton;
+  private Image interactButtonIcon;
+  private TextMeshProUGUI interactButtonText;
 
   // Resources
   private TextMeshProUGUI goldValue;
@@ -36,6 +39,7 @@ public class MapUI : GeneralUI {
   protected override void Awake() {
     base.Awake();
     Instance = this;
+    IconDatabase = Resources.Load<IconDatabase>("Databases/IconDatabase");
 
     Transform infoPanel = transform.Find("Info/ZoneInfoPanel");
     Transform markers = infoPanel.Find("Markers");
@@ -49,12 +53,14 @@ public class MapUI : GeneralUI {
     zoneInfoDescription = Get<TextMeshProUGUI>(infoPanel, "Description");
 
     zoneInfoBattleMark = Find(markers, "Battle");
-    zoneInfoGuardedMark = Find(markers, "Guard");
     zoneInfoClearedMark = Find(markers, "Clear");
     zoneInfoRecruitMark = Find(markers, "Recruitment");
+    zoneInfoQuestMark = Find(markers, "Quest");
 
     playerMenuButton = Get<Button>(mainMenu, "Player");
     interactButton = Get<Button>(actions, "Interact");
+    interactButtonIcon = Get<Image>(actions, "Interact/Icon");
+    interactButtonText = Get<TextMeshProUGUI>(actions, "Interact/Text");
 
     goldValue = Get<TextMeshProUGUI>(resources, "Gold/Value");
     woodValue = Get<TextMeshProUGUI>(resources, "Wood/Value");
@@ -74,11 +80,11 @@ public class MapUI : GeneralUI {
 
   private bool ComponentsInitialized() {
     return zoneInfoPanel != null && zoneInfoTitle != null && zoneInfoDescription != null &&
-      zoneInfoGuardedMark != null && playerMenuButton != null && goldValue != null &&
+      zoneInfoQuestMark != null && playerMenuButton != null && goldValue != null &&
       woodValue != null && stoneValue != null && metalValue != null &&
       villagersValue != null && leatherValue != null && zoneInfoBattleMark != null &&
       zoneInfoClearedMark != null && zoneInfoRecruitMark != null && interactButton != null &&
-      location != null;
+      location != null && interactButtonIcon != null && interactButtonText != null;
   }
 
   protected override void OnDestroy() {
@@ -132,9 +138,9 @@ public class MapUI : GeneralUI {
 
     zoneInfoDescription.text = events.Count == 0 ? descCleared : desc;
     if (events.Count == 0) zoneInfoClearedMark.SetActive(true);
-    else if (events.Contains(MapZoneType.InstantBattle)) zoneInfoBattleMark.SetActive(true);
-    else if (events.Contains(MapZoneType.Guard)) zoneInfoGuardedMark.SetActive(true);
+    else if (events.Contains(MapZoneType.Battle)) zoneInfoBattleMark.SetActive(true);
     else if (events.Contains(MapZoneType.Recruitment)) zoneInfoRecruitMark.SetActive(true);
+    else if (events.Contains(MapZoneType.Quest)) zoneInfoQuestMark.SetActive(true);
   }
 
   public void HideZoneInfo() {
@@ -143,13 +149,15 @@ public class MapUI : GeneralUI {
     zoneInfoTitle.text = "";
     zoneInfoDescription.text = "";
     zoneInfoBattleMark.SetActive(false);
-    zoneInfoGuardedMark.SetActive(false);
     zoneInfoClearedMark.SetActive(false);
     zoneInfoRecruitMark.SetActive(false);
+    zoneInfoQuestMark.SetActive(false);
   }
 
-  public void ShowInteractableButton(UnityAction callback) {
-    // FIXME: Смена текста и иконки
+  public void ShowInteractableButton(UnityAction callback, string icon = "settings", string text = "Interact") {
+    Sprite sprite = IconDatabase.GetIcon(icon);
+    interactButtonIcon.sprite = sprite;
+    interactButtonText.text = text;
     interactButton.onClick.AddListener(callback);
     interactButton.gameObject.SetActive(true);
   }

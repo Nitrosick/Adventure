@@ -5,14 +5,16 @@ using TMPro;
 
 public class QuestSlot : MonoBehaviour {
   private Button button;
+  private TextMeshProUGUI title;
   private TextMeshProUGUI level;
   private Quest currentQuest;
 
   private void Awake() {
     button = transform.GetComponent<Button>();
+    title = transform.Find("Title").GetComponent<TextMeshProUGUI>();
     level = transform.Find("Level").GetComponent<TextMeshProUGUI>();
 
-    if (button == null || level == null) {
+    if (button == null || title == null || level == null) {
       Debug.LogError("Quest slot components initialization error");
       return;
     }
@@ -26,6 +28,7 @@ public class QuestSlot : MonoBehaviour {
 
   public void Init(Quest quest) {
     currentQuest = quest;
+    title.text = quest.title;
 
     bool available = Player.Instance.Level >= currentQuest.requiredLevel;
     level.text = !available
@@ -44,7 +47,8 @@ public class QuestSlot : MonoBehaviour {
 
   private void AcceptQuest(bool accepted) {
     if (!accepted) return;
-    // Принять квест
+    button.interactable = false;
+    QuestManager.AcceptQuest(currentQuest);
     _ = Toast.Show("success", "Quest accepted");
   }
 }
