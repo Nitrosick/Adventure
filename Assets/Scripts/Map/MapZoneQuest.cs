@@ -1,5 +1,6 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class MapZoneQuest : MonoBehaviour {
-  public Quest[] questsList;
+  public List<Quest> questsList;
 }

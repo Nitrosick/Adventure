@@ -17,7 +17,6 @@ public class MapZone : MonoBehaviour {
   public GameObject[] interactiveObjects;
   protected Renderer auraRender;
   protected SpriteRenderer markerRender;
-  protected Transform markIconObj;
   protected MeshRenderer markIcon;
   protected Way[] ways;
   protected Transform pathLines;
@@ -28,7 +27,7 @@ public class MapZone : MonoBehaviour {
   protected void Awake() {
     auraRender = transform.GetComponent<Renderer>();
     markerRender = transform.Find("Marker").GetComponent<SpriteRenderer>();
-    markIconObj = transform.Find("Mark");
+    Transform markIconObj = transform.Find("Mark");
     if (markIconObj != null) markIcon = markIconObj.Find("Icon").GetComponent<MeshRenderer>();
     ways = transform.GetComponentsInChildren<Way>();
     pathLines = transform.Find("Pathes");
@@ -76,19 +75,16 @@ public class MapZone : MonoBehaviour {
   public virtual void SetCleared() {
     if (markIcon != null) markIcon.material = MapZoneManager.Instance.stoneMaterial;
     isEmpty = true;
-
-    if (interactiveObjects != null && interactiveObjects.Length > 0) {
-      foreach (GameObject obj in interactiveObjects) {
-        obj.SetActive(!obj.activeSelf);
-      }
-    }
+    SwitchInteractiveObjects();
   }
 
   public void SetActive() {
-    if (markIconObj != null) markIconObj.gameObject.SetActive(true);
     if (markIcon != null) markIcon.material = MapZoneManager.Instance.goldMaterial;
     isEmpty = false;
+    SwitchInteractiveObjects();
+  }
 
+  private void SwitchInteractiveObjects() {
     if (interactiveObjects != null && interactiveObjects.Length > 0) {
       foreach (GameObject obj in interactiveObjects) {
         obj.SetActive(!obj.activeSelf);
@@ -177,9 +173,8 @@ public class MapZone : MonoBehaviour {
 
   public void ActivateQuest() {
     if (!transform.TryGetComponent<MapZoneQuest>(out var questScript)) return;
-    if (questScript.questsList.Length == 0) return;
+    if (questScript.questsList.Count == 0) return;
     SetActive();
-    markIconObj.gameObject.SetActive(true);
-    events.Insert(0, MapZoneType.Quest);
+    if (events[0] != MapZoneType.Quest) events.Insert(0, MapZoneType.Quest);
   }
 }

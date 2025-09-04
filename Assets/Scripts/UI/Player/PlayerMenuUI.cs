@@ -190,8 +190,6 @@ public class PlayerMenuUI : MonoBehaviour {
     Unit hero = player.Army.Units.FirstOrDefault(u => u.IsHero);
     if (hero == null) return;
 
-    PlayerMenuUIInfo.Level.text = "Level: " + player.Level.ToString();
-    PlayerMenuUIInfo.SelectHeroTab();
     playerProgress.gameObject.SetActive(true);
 
     playerXpValue.text = string.Format(

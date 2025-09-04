@@ -215,23 +215,20 @@ public class PlayerMenuUIInfo : MonoBehaviour {
     }
   }
 
-  public static void SelectHeroTab() {
-    equipment.gameObject.SetActive(true);
-    coreStats.SetActive(true);
+  public static void ShowInfo(Unit unit) {
+    Clear();
+    Player player = Player.Instance;
 
-    if (Player.Instance.StatPoints > 0) {
+    if (!unit.IsHero) {
+      unitActions.SetActive(true);
+    }
+    else if (player.StatPoints > 0) {
+      statPointsRow.SetActive(true);
       strengthUp.gameObject.SetActive(true);
       dexterityUp.gameObject.SetActive(true);
       intelligenceUp.gameObject.SetActive(true);
     }
 
-    statPointsRow.SetActive(true);
-    unitParams.SetActive(true);
-  }
-
-  public static void ShowInfo(Unit unit) {
-    Clear();
-    if (!unit.IsHero) unitActions.SetActive(true);
     equipment.gameObject.SetActive(true);
     coreStats.SetActive(true);
     unitParams.SetActive(true);
@@ -245,9 +242,8 @@ public class PlayerMenuUIInfo : MonoBehaviour {
     }
 
     displayName.text = unit.Name;
-    if (!unit.IsHero) Level.text = "Level: " + unit.Level.ToString();
+    Level.text = "Level: " + unit.Level.ToString();
     type.text = "Type: " + unit.Type.ToString();
-
     deathMark.SetActive(unit.CurrentHealth <= 0);
     inSquadMark.SetActive(unit.InSquad);
 
@@ -261,7 +257,7 @@ public class PlayerMenuUIInfo : MonoBehaviour {
 
     UpdateUnitEquipment(unit);
 
-    statPoints.text = Player.Instance.StatPoints.ToString();
+    statPoints.text = player.StatPoints.ToString();
     strength.text = "<color=#F61010>" + unit.Strength.ToString() + "</color>";
     dexterity.text = "<color=#81D11F>" + unit.Dexterity.ToString() + "</color>";
     intelligence.text = "<color=#2B8EF3>" + unit.Intelligence.ToString() + "</color>";

@@ -152,6 +152,11 @@ public class Unit : MonoBehaviour {
     return result;
   }
 
+  public void LevelUp() {
+    Level++;
+    // FIXME: Добавление статов если юнит не герой
+  }
+
   public void IncreaseStats(int[] stats) {
     if (stats == null || stats.Length != 3) return;
     Strength += stats[0];

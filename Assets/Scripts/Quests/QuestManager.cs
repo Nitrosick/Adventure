@@ -28,6 +28,8 @@ public class QuestManager : MonoBehaviour {
     if (IsQuestCompleted(quest.id)) return;
     quest.state = QuestState.Completed;
     GiveRewards(quest);
+    _ = Toast.Show("success", "Quest completed!");
+    // FIXME: Выводить сообщение с наградой за квест
     StateManager.activeQuests.Remove(quest.id);
     StateManager.completedQuests.Add(quest.id);
   }
@@ -50,6 +52,10 @@ public class QuestManager : MonoBehaviour {
 
     if (quest == null) return false;
     return quest.state == QuestState.Completed;
+  }
+
+  public static void CheckCurrentQuests(QuestObjective type) {
+    // FIXME: Вызывать проверку при получении предметов и посещении зон
   }
 
   private static void GetStateData() {

@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -47,7 +46,22 @@ public class MapZoneManager : MonoBehaviour {
     MapZone currentZone = FindById(StateManager.currentPlayerZoneId);
 
     if (currentZone == null) return;
-    if (result == BattleResult.Victory) currentZone.UnshiftEvent();
+    if (result == BattleResult.Victory) {
+      // FIXME: Учесть несколько квестов
+      if (
+        currentZone.events[0] == MapZoneType.Quest &&
+        currentZone.TryGetComponent<MapZoneQuest>(out var questZone)
+      ) {
+        if (
+          questZone.questsList.Count > 0 &&
+          questZone.questsList[0].objectiveType == QuestObjective.Fight
+        ) {
+          QuestManager.CompleteQuest(questZone.questsList[0]);
+          questZone.questsList.RemoveAt(0);
+        }
+      }
+      currentZone.UnshiftEvent();
+    }
   }
 
   public static void GetStateData() {
@@ -78,8 +92,8 @@ public class MapZoneManager : MonoBehaviour {
     }
 
     foreach (var zone in Zones.Where(z => activeQuests.Contains(z.id))) {
-      if (zone.events.Count == 0) zone.SetActive();
-      zone.events.Insert(0, MapZoneType.Quest);
+      if (zone.events.Count == 0 || zone.events[0] != MapZoneType.Quest) zone.events.Insert(0, MapZoneType.Quest);
+      zone.SetActive();
     }
   }
 

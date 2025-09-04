@@ -34,7 +34,7 @@ public class MapZoneEvent : MonoBehaviour {
         break;
       case MapZoneType.Quest:
         MapZoneQuest questZone = Get<MapZoneQuest>();
-        if (questZone == null || questZone.questsList.Length == 0) break;
+        if (questZone == null || questZone.questsList.Count == 0) break;
         // FIXME: Учесть несколько квестов
         CheckQuestType(questZone.questsList[0], battleZone);
         break;

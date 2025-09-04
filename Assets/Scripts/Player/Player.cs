@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 
 public class Player : MonoBehaviour {
@@ -91,10 +92,10 @@ public class Player : MonoBehaviour {
   private void LevelUp() {
     Level++;
     if (Level > 1) SetStatPoints(1);
+    Unit hero = Army.Units.FirstOrDefault(u => u.IsHero);
+    if (hero != null) hero.LevelUp();
     StateManager.level = Level;
-
-    // if (Level % 5 == 0) BoostUnitsLevel();
-    // FIXME: Повышение уровня юнитов
+    Army.UpdateState();
   }
 
   public void SetFame(int value) {
