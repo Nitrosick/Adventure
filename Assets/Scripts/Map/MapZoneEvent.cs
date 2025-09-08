@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -34,9 +35,8 @@ public class MapZoneEvent : MonoBehaviour {
         break;
       case MapZoneType.Quest:
         MapZoneQuest questZone = Get<MapZoneQuest>();
-        if (questZone == null || questZone.questsList.Count == 0) break;
-        // FIXME: Учесть несколько квестов
-        CheckQuestType(questZone.questsList[0], battleZone);
+        if (questZone == null) break;
+        CheckZoneQuests(questZone.questsList, battleZone);
         break;
       case MapZoneType.Home:
         MapUI.Instance.ShowInteractableButton(
@@ -56,12 +56,24 @@ public class MapZoneEvent : MonoBehaviour {
     }
   }
 
-  private void CheckQuestType(Quest quest, MapZoneBattle battle) {
-    switch (quest.objectiveType) {
-      case QuestObjective.Fight:
-        if (battle.instant) StartBattle(battle);
-        else MapUI.Instance.ShowInteractableButton(battle.StartBattle, "battle", "Attack");
-        break;
+  private void CheckZoneQuests(List<Quest> quests, MapZoneBattle battle) {
+    if (quests.Count == 0) return;
+
+    foreach (Quest q in quests) {
+      switch (q.objectiveType) {
+        case QuestObjective.Fight:
+          if (battle.instant) StartBattle(battle);
+          else MapUI.Instance.ShowInteractableButton(battle.StartBattle, "battle", "Attack");
+          return;
+        case QuestObjective.VisitZone:
+          QuestManager.CompleteQuest(q);
+          quests.Remove(q);
+          if (quests.Count == 0) zone.UnshiftEvent();
+          return;
+        case QuestObjective.BringItem:
+          // FIXME: Добавить проверку (возможно открывать диалог о сдаче предмета)
+          return;
+      }
     }
   }
 
@@ -90,6 +102,7 @@ public class MapZoneEvent : MonoBehaviour {
     StateManager.enterScene = SceneManager.GetActiveScene().name;
     StateManager.WriteUnitsData(playerUnits, "allies");
     StateManager.WriteUnitsData(battleZone.guard, "enemies");
+    StateManager.trapsCount = battleZone.trapsCount;
 
     MapUI.Instance.DisableUI();
     MapUI.Instance.HideZoneInfo();

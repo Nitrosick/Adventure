@@ -25,6 +25,7 @@ public class UnitEffects : MonoBehaviour {
     }
 
     if (effect.effectName == "Stun") unit.Animator.SetStunned(true);
+    if (effect.effectName == "Root") unit.Animator.SetRooted(true);
 
     unit.Ui.UpdateEffects();
   }
@@ -49,6 +50,7 @@ public class UnitEffects : MonoBehaviour {
   public void ClearEffect(string effectName) {
     ActiveEffects.RemoveAll(e => e.effectData != null && e.effectData.name == effectName);
     if (effectName == "Stun") unit.Animator.SetStunned(false);
+    if (effectName == "Root") unit.Animator.SetRooted(false);
     else if (effectName == "Wall") unit.Animator.SetBlocking(false);
     unit.Ui.UpdateEffects();
   }
@@ -56,6 +58,7 @@ public class UnitEffects : MonoBehaviour {
   public void ClearEffects() {
     ActiveEffects.Clear();
     unit.Animator.SetStunned(false);
+    unit.Animator.SetRooted(false);
     unit.Ui.UpdateEffects();
   }
 }

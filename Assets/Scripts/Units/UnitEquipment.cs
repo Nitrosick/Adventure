@@ -215,8 +215,9 @@ public class UnitEquipment : MonoBehaviour {
   }
 
   public bool HasAttackPhaseSkills() {
-    if (unit.SkillCharges <= 0) return false;
+    if (unit.SkillCharges == 0) return false;
     foreach (Skill skill in GetActiveSkills()) {
+      if ((unit.Effects.HasEffect("Stun") || unit.Effects.HasEffect("Root")) && !skill.canUseInRoot) continue;
       if (skill.skillPhases.Contains(BattlePhase.Attack)) return true;
     }
     return false;

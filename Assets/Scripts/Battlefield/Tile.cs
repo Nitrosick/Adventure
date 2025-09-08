@@ -124,4 +124,15 @@ public class Tile : MonoBehaviour {
     _ = Toast.Show("success", "Loot picked up");
     if (!transform.TryGetComponent<TooltipTrigger>(out var tooltip)) tooltip.message = "";
   }
+
+  public void TriggerTrap() {
+    Trap hiddenTrap = transform.GetComponentInChildren<Trap>();
+    if (hiddenTrap == null) return;
+    Destroy(hiddenTrap.gameObject);
+
+    GameObject trap = Instantiate(BattleManager.Instance.trapPrefab, transform);
+    trap.transform.position = GetPos();
+    trap.GetComponent<Trap>().Trigger(QueueManager.CurrentUnit);
+    type = TileType.Open;
+  }
 }

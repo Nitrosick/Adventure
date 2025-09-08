@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class UnitMove : MonoBehaviour {
@@ -15,11 +16,11 @@ public class UnitMove : MonoBehaviour {
     }
   }
 
-  private void Update() {
+  private void LateUpdate() {
     if (IsMoving && path.Count > 0) MoveAlongPath();
   }
 
-  public void OnMove(Tile target) {
+  public async void OnMove(Tile target) {
     List<Tile> pathTiles = Pathfinding.FindPath(
       unit.CurrentTile,
       target,
@@ -33,16 +34,12 @@ public class UnitMove : MonoBehaviour {
 
     unit.CurrentTile.OccupiedBy = null;
     path.Clear();
-
-    foreach (Tile tile in pathTiles) {
-      path.Enqueue(tile);
-    }
-
+    foreach (Tile tile in pathTiles) path.Enqueue(tile);
+    await Task.Yield();
     IsMoving = true;
-    unit.CurrentTile = target;
-    unit.CurrentTile.OccupiedBy = unit;
 
     float moveCost = 0f;
+    if (unit.CurrentMovePoints == 0) return;
     for (int i = 1; i < pathTiles.Count; i++) {
       moveCost += Pathfinding.GetCost(pathTiles[i - 1], pathTiles[i]);
     }
@@ -61,15 +58,19 @@ public class UnitMove : MonoBehaviour {
     transform.position = Vector3.MoveTowards(transform.position, targetPos, unit.MoveSpeed * Time.deltaTime);
 
     if (Vector3.Distance(transform.position, targetPos) < 0.01f) {
-      CheckTileTypeOnMove(targetTile);
-      path.Dequeue();
+      bool canMove = CheckTileTypeOnMove(targetTile);
+
+      if (canMove) path.Dequeue();
+      else path.Clear();
 
       if (path.Count == 0) {
+        unit.CurrentTile = targetTile;
+        unit.CurrentTile.OccupiedBy = unit;
         CheckTileTypeOnStop();
         IsMoving = false;
         unit.Animator.SetMoving(false);
         BattleUI.Instance.EnableUI();
-        AfterMove();
+        if (canMove) AfterMove();
       }
     }
   }
@@ -104,14 +105,17 @@ public class UnitMove : MonoBehaviour {
     AfterMove();
   }
 
-  private void CheckTileTypeOnMove(Tile tile) {
+  private bool CheckTileTypeOnMove(Tile tile) {
     switch (tile.type) {
       case TileType.Loot:
         if (unit.Relation == UnitRelation.Ally) tile.TakeLoot();
-        break;
-        // case TileType.Trap:
-        //   break;
+        return true;
+      case TileType.Trap:
+        tile.TriggerTrap();
+        // FIXME: Проверка на тип ловушки
+        return false;
     }
+    return true;
   }
 
   private void CheckTileTypeOnStop() {

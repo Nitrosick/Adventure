@@ -57,6 +57,7 @@ public static class BattleAI {
     float closestDistance = Mathf.Infinity;
 
     foreach (Tile tile in allWalkableTiles) {
+      if (IsTrap(tile)) continue;
       List<Tile> path = Pathfinding.FindPath(enemyTile, tile, enemy.CurrentMovePoints);
 
       if (path != null) {
@@ -78,6 +79,7 @@ public static class BattleAI {
     float furthest = float.NegativeInfinity;
 
     foreach (Tile tile in allWalkableTiles) {
+      if (IsTrap(tile)) continue;
       List<Tile> path = Pathfinding.FindPath(enemyTile, tile, enemy.CurrentMovePoints);
       if (path == null) continue;
       float dist = playerUnits.Min(t => GetDistance(tile, t.CurrentTile));
@@ -146,6 +148,7 @@ public static class BattleAI {
 
   private static Tile TryMoveToNeighborOf(Unit target) {
     foreach (Tile neighbor in target.CurrentTile.Neighbors) {
+      if (IsTrap(neighbor)) continue;
       if (!TileManager.TileIsWalkable(target.CurrentTile, neighbor)) continue;
 
       List<Tile> path = Pathfinding.FindPath(enemyTile, neighbor, enemy.CurrentMovePoints);
@@ -160,6 +163,15 @@ public static class BattleAI {
 
   private static float GetDistance(Tile from, Tile to) {
     return Vector2Int.Distance(from.Coords, to.Coords);
+  }
+
+  public static bool IsTrap(Tile tile) {
+    if (tile.type == TileType.Trap) {
+      Trap trap = tile.GetComponentInChildren<Trap>();
+      if (trap == null) return false;
+      if (trap.Relation == UnitRelation.Enemy) return true;
+    }
+    return false;
   }
 
   // Unit behavior
@@ -191,6 +203,7 @@ public static class BattleAI {
     float bestScore = float.NegativeInfinity;
 
     foreach (Tile tile in allWalkable) {
+      if (IsTrap(tile)) continue;
       List<Tile> path = Pathfinding.FindPath(enemyTile, tile, enemy.CurrentMovePoints);
       if (path == null) continue;
 
@@ -219,6 +232,7 @@ public static class BattleAI {
     Unit priorityTarget = playerUnits.First();
 
     foreach (Tile tile in allWalkable) {
+      if (IsTrap(tile)) continue;
       List<Tile> path = Pathfinding.FindPath(enemyTile, tile, enemy.CurrentMovePoints);
       if (path == null) continue;
 

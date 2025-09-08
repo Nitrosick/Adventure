@@ -65,9 +65,9 @@ public class Poacher : Unit {
     Missle arrow = Instantiate(arrowPrefab, missleSpawner.position, Quaternion.identity)
       .GetComponent<Missle>();
 
-    float hitChance = BattleManager.GetHitChance(this, Target);
-    float critModifier = BattleManager.GetCritModifier(this, Target);
-    float damage = BattleManager.CalculateDamage(this, Target);
+    float hitChance = Calculate.HitChance(this, Target);
+    float critModifier = Calculate.CritModifier(this, Target);
+    float damage = Calculate.Damage(this, Target);
     bool successAttack = Utils.RollChance(hitChance);
 
     Vector3 start = missleSpawner.position;

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class PhaseManager : MonoBehaviour
@@ -26,7 +27,7 @@ public class PhaseManager : MonoBehaviour
     QueueManager.CurrentUnit.ResetMovePoints();
   }
 
-  public static void NextPhase() {
+  public async static void NextPhase() {
     PhasePreSwitch();
 
     if (BattleManager.battleResult != null) return;
@@ -43,6 +44,7 @@ public class PhaseManager : MonoBehaviour
     }
 
     BattleUI.Instance.SwitchPhase(CurrentPhase);
+    await Task.Yield();
     PhaseActions();
   }
 
@@ -66,7 +68,7 @@ public class PhaseManager : MonoBehaviour
         }
 
         if (unit.Type == UnitType.Range && unit.CurrentProjectiles == 0) {
-          // FIXME: Проверка на доп. скиллы
+          // FIXME: Проверка на возможность использовать скиллы
           if (unit.Relation == UnitRelation.Ally) _ = Toast.Show("warning", "No projectiles");
           NextPhase();
           return;

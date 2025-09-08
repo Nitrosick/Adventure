@@ -82,11 +82,19 @@ public class TileManager : MonoBehaviour {
   }
 
   public static Tile GetRandomFreeTile(List<Tile> list) {
-    List<Tile> freeTiles = new();
+    List<Tile> freeTiles = list
+      .Where(t => t.OccupiedBy == null)
+      .ToList();
 
-    foreach (Tile tile in list) {
-      if (tile.OccupiedBy == null) freeTiles.Add(tile);
-    }
+    if (freeTiles.Count == 0) return null;
+    int i = Random.Range(0, freeTiles.Count);
+    return freeTiles[i];
+  }
+
+  public static Tile GetRandomFreeTile() {
+    List<Tile> freeTiles = tiles.Values
+      .Where(t => t.OccupiedBy == null && t.type == TileType.Open)
+      .ToList();
 
     if (freeTiles.Count == 0) return null;
     int i = Random.Range(0, freeTiles.Count);

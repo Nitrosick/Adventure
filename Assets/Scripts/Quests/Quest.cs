@@ -5,6 +5,7 @@ public class Quest : ScriptableObject {
   public string id;
   public string title;
   [TextArea(5, 20)] public string description;
+  [TextArea(5, 20)] public string descriptionCompleted;
   public QuestObjective objectiveType;
   public int objectiveZoneId;
   public Item objectiveItem;

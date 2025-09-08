@@ -1,16 +1,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class Pathfinding
-{
+public static class Pathfinding {
   public static List<Tile> FindPath(Tile start, Tile goal, float mp) {
     if (start == null || goal == null) {
       Debug.LogError("Start or target tile doesn't specified");
       return null;
     }
 
-    List<Tile> openSet = new () { start };
-    HashSet<Tile> closedSet = new ();
+    Unit unit = QueueManager.CurrentUnit;
+    List<Tile> openSet = new() { start };
+    HashSet<Tile> closedSet = new();
 
     Dictionary<Tile, Tile> cameFrom = new();
     Dictionary<Tile, float> gScore = new() { [start] = 0 };
@@ -29,6 +29,10 @@ public static class Pathfinding
       closedSet.Add(current);
 
       foreach (Tile neighbor in current.Neighbors) {
+        if (unit.Relation == UnitRelation.Enemy && neighbor.type == TileType.Trap) {
+          if (BattleAI.IsTrap(neighbor)) continue;
+        }
+
         if (!TileManager.TileIsWalkable(current, neighbor) || closedSet.Contains(neighbor)) continue;
 
         float tentativeGScore = gScore[current] + Vector2Int.Distance(current.Coords, neighbor.Coords);

@@ -19,24 +19,26 @@ public class UnitHealth : MonoBehaviour {
     if (modifier > 1f) {
       unit.Ui.ShowPopup(totalDamage.ToString(), PopupType.Crit);
       if (!isTickDamage) _ = CameraController.Shake(1.2f);
-    }
-    else {
+    } else {
       unit.Ui.ShowPopup(totalDamage.ToString(), PopupType.Negative);
       if (!isTickDamage) _ = CameraController.Shake(0.8f);
+    }
+
+    if (unit.BehaviorType == AIBehaviorType.HoldPosition) {
+      unit.BehaviorType = AIBehaviorType.KeepDistance;
     }
 
     if (totalDamage >= unit.CurrentHealth) {
       unit.CurrentHealth = 0;
       Die();
-    }
-    else {
+    } else {
       unit.CurrentHealth -= totalDamage;
       unit.Ui.UpdateHealth(unit.TotalHealth, unit.CurrentHealth);
-      if (!isTickDamage) unit.Animator.TakeDamage();
-    }
 
-    if (unit.BehaviorType == AIBehaviorType.HoldPosition) {
-      unit.BehaviorType = AIBehaviorType.KeepDistance;
+      if (!isTickDamage) {
+        if (unit.Effects.HasEffect("Stun") || unit.Effects.HasEffect("Root")) unit.FinishAction();
+        else unit.Animator.TakeDamage();
+      }
     }
   }
 

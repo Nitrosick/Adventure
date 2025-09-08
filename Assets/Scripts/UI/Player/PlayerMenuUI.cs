@@ -11,6 +11,7 @@ public class PlayerMenuUI : MonoBehaviour {
 
   public GameObject menuSlotPrefab;
   public GameObject questSlotPrefab;
+  public GameObject questEmptySlot;
   private static Transform menu;
 
   // Navigation
@@ -46,6 +47,7 @@ public class PlayerMenuUI : MonoBehaviour {
   private static readonly float slotsGap = 4f;
   private static readonly float scrollWidth = 15f;
   private static readonly int defaultSlotsCount = 25;
+  private static readonly int defaultQuestsInColumn = 7;
   private static float slotSize = 0;
 
   public static MenuSlot selectedSlot;
@@ -322,6 +324,9 @@ public class PlayerMenuUI : MonoBehaviour {
     activeQuestsEmpty.SetActive(active.Length == 0);
     completedQuestsEmpty.SetActive(completed.Length == 0);
 
+    RenderQuestEmptySlots(activeQuestsList, active.Length);
+    RenderQuestEmptySlots(completedQuestsList, completed.Length);
+
     Player player = Player.Instance;
     Unit hero = player.Army.Units.FirstOrDefault(u => u.IsHero);
     if (hero == null) return;
@@ -333,19 +338,25 @@ public class PlayerMenuUI : MonoBehaviour {
   private static void RenderEmptySlots(RectTransform panel, int filled) {
     if (filled == defaultSlotsCount) {
       return;
-    }
-    else if (filled < defaultSlotsCount) {
+    } else if (filled < defaultSlotsCount) {
       for (int i = filled; i < defaultSlotsCount; i++) {
         Instantiate(MapUI.Instance.emptySlotPrefab, panel);
       }
-    }
-    else {
+    } else {
       int remainder = filled % slotColumns;
       int placeholders = remainder == 0 ? 0 : slotColumns - remainder;
 
       for (int i = 0; i < placeholders; i++) {
         Instantiate(MapUI.Instance.emptySlotPrefab, panel);
       }
+    }
+  }
+
+  private static void RenderQuestEmptySlots(Transform panel, int filled) {
+    if (filled >= defaultQuestsInColumn) return;
+
+    for (int i = 0; i < defaultQuestsInColumn - filled; i++) {
+      Instantiate(Instance.questEmptySlot, panel);
     }
   }
 

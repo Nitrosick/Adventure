@@ -32,6 +32,7 @@ public class InfoPopup : MonoBehaviour {
   private static TextMeshProUGUI unitDefense;
   private static TextMeshProUGUI unitRange;
   private static TextMeshProUGUI unitProjectiles;
+  private static GameObject unitEffectsTitle;
   private static TextMeshProUGUI unitEffects;
 
   Transform Get(string path) => transform.Find(path);
@@ -73,6 +74,7 @@ public class InfoPopup : MonoBehaviour {
     unitRange = Get<TextMeshProUGUI>(unitParams, "Range/Value");
     unitProjectiles = Get<TextMeshProUGUI>(unitParams, "Projectiles/Value");
 
+    unitEffectsTitle = Find(panel, "EffectsTitle").gameObject;
     unitEffects = Get<TextMeshProUGUI>(panel, "Effects");
 
     if (
@@ -84,7 +86,7 @@ public class InfoPopup : MonoBehaviour {
       unitParams == null || unitHP == null || unitLevel == null ||
       unitStats == null || unitMP == null || unitDamage == null ||
       unitDefense == null || unitRange == null || unitEffects == null ||
-      pricePanel == null || unitProjectiles == null
+      pricePanel == null || unitProjectiles == null || unitEffectsTitle == null
     ) {
       Debug.LogError("Item info components initialization error");
       return;
@@ -94,6 +96,7 @@ public class InfoPopup : MonoBehaviour {
   public static void Show(Unit unit, bool showPrice = false) {
     panel.gameObject.SetActive(true);
     unitParams.gameObject.SetActive(true);
+    unitEffectsTitle.SetActive(true);
     unitEffects.gameObject.SetActive(true);
     if (showPrice) pricePanel.gameObject.SetActive(true);
 
@@ -120,16 +123,19 @@ public class InfoPopup : MonoBehaviour {
 
     UnitEffects effectsComponent = unit.Effects;
     if (effectsComponent == null) {
+      unitEffectsTitle.SetActive(false);
       unitEffects.gameObject.SetActive(false);
       return;
     }
 
-    string effectsText = "Effects";
+    string effectsText = "";
     foreach (EffectInstance e in unit.Effects.ActiveEffects) {
       if (e.effectData.isNegative) effectsText += $"\n<color=#F61010>{e.effectData.effectName}</color>";
       else effectsText += $"\n<color=#81D11F>{e.effectData.effectName}</color>";
     }
-    unitEffects.text = effectsText;
+    unitEffects.text = effectsText == ""
+      ? effectsText
+      : effectsText[2..];
   }
 
   public static void Show(Equipment item, bool showPrice = false) {
@@ -182,6 +188,8 @@ public class InfoPopup : MonoBehaviour {
     armorParams.gameObject.SetActive(false);
     medicineParams.gameObject.SetActive(false);
     pricePanel.gameObject.SetActive(false);
+    unitEffectsTitle.SetActive(false);
+
     title.text = "";
     description.text = "";
     price.text = "";

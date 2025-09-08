@@ -6,6 +6,7 @@ public class Skill : ScriptableObject {
   public string displayName;
   [TextArea(5, 20)] public string description;
   public bool isActive = true;
+  public bool canUseInRoot;
   public float activateChance = 100f;
 
   public SkillName skillName;

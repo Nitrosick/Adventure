@@ -34,7 +34,7 @@ public class GeneralUI : MonoBehaviour {
     mainMenuButton.onClick.AddListener(OpenPauseMenu);
     almanacButton.onClick.AddListener(OpenAlmanac);
 
-    ColorUtility.TryParseHtmlString("#5C523F", out defaultColor);
+    ColorUtility.TryParseHtmlString("#4B4A47", out defaultColor);
     ColorUtility.TryParseHtmlString("#EFBF0D", out highlightedColor);
   }
 

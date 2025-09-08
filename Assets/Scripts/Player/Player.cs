@@ -94,6 +94,8 @@ public class Player : MonoBehaviour {
     if (Level > 1) SetStatPoints(1);
     Unit hero = Army.Units.FirstOrDefault(u => u.IsHero);
     if (hero != null) hero.LevelUp();
+    _ = Toast.Show("star", "Level up!");
+    // FIXME: Инфо в альманахе о повышении уровня
     StateManager.level = Level;
     Army.UpdateState();
   }

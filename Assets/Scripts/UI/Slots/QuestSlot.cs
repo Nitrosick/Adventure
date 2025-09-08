@@ -6,15 +6,19 @@ using TMPro;
 public class QuestSlot : MonoBehaviour {
   private Button button;
   private TextMeshProUGUI title;
+  private TextMeshProUGUI levelLabel;
   private TextMeshProUGUI level;
+  private GameObject completedMark;
   private Quest currentQuest;
 
   private void Awake() {
     button = transform.GetComponent<Button>();
     title = transform.Find("Title").GetComponent<TextMeshProUGUI>();
+    levelLabel = transform.Find("Text").GetComponent<TextMeshProUGUI>();
     level = transform.Find("Level").GetComponent<TextMeshProUGUI>();
+    completedMark = transform.Find("Completed").gameObject;
 
-    if (button == null || title == null || level == null) {
+    if (button == null || title == null || levelLabel == null || level == null || completedMark == null) {
       Debug.LogError("Quest slot components initialization error");
       return;
     }
@@ -35,11 +39,14 @@ public class QuestSlot : MonoBehaviour {
       ? $"<color=#F61010>{currentQuest.requiredLevel}</color>"
       : currentQuest.requiredLevel.ToString();
 
+    levelLabel.gameObject.SetActive(quest.state != QuestState.Completed);
+    level.gameObject.SetActive(quest.state != QuestState.Completed);
+    completedMark.SetActive(quest.state == QuestState.Completed);
     button.interactable = available;
   }
 
   private void OpenDialog() {
-    QuestAcceptDialog.Acception(
+    QuestModalUI.Acception(
       AcceptQuest,
       currentQuest
     );

@@ -184,7 +184,7 @@ public class Unit : MonoBehaviour {
       Target.Animator.RotateTowards(dirFromTarget)
     );
 
-    float hitChance = BattleManager.GetHitChance(this, Target);
+    float hitChance = Calculate.HitChance(this, Target);
     successAttack = Utils.RollChance(hitChance);
 
     if (!successAttack) Target.Animator.Dodge();
@@ -215,9 +215,9 @@ public class Unit : MonoBehaviour {
     if (Target != null) {
       if (successAttack) {
         if (!DamageBlocked()) {
-          float critModifier = BattleManager.GetCritModifier(this, Target);
-          float damage = BattleManager.CalculateDamage(this, Target);
-          List<Effect> effects = BattleManager.GetItemEffects(this, Target);
+          float critModifier = Calculate.CritModifier(this, Target);
+          float damage = Calculate.Damage(this, Target);
+          List<Effect> effects = Calculate.ItemEffects(this, Target);
           foreach (Effect effect in effects) Target.Effects.ApplyEffect(effect);
           Target.Health.TakeDamage(damage, critModifier);
         }
@@ -243,7 +243,7 @@ public class Unit : MonoBehaviour {
   }
 
   private bool DamageBlocked() {
-    List<Skill> skills = BattleManager.GetItemPassiveSkills(Target);
+    List<Skill> skills = Calculate.ItemPassiveSkills(Target);
 
     foreach (Skill skill in skills) {
       switch (skill.skillName) {

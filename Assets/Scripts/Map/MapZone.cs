@@ -171,10 +171,10 @@ public class MapZone : MonoBehaviour {
     mat.color = color;
   }
 
-  public void ActivateQuest() {
+  public void ActivateQuest(Quest quest) {
     if (!transform.TryGetComponent<MapZoneQuest>(out var questScript)) return;
-    if (questScript.questsList.Count == 0) return;
-    SetActive();
+    questScript.questsList.Insert(0, quest);
     if (events[0] != MapZoneType.Quest) events.Insert(0, MapZoneType.Quest);
+    SetActive();
   }
 }

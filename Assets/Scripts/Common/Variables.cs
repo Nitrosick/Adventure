@@ -97,6 +97,11 @@ public enum ShotTrajectory {
   FromAbove
 }
 
+public enum TrapType {
+  BearTrap,
+  Spikes
+}
+
 // Battlefield tiles
 public enum TileType {
   Open,
@@ -105,7 +110,8 @@ public enum TileType {
   Tree,
   Breakable,
   Loot,
-  Climb
+  Climb,
+  Trap
 }
 
 public enum TileSpawnType {

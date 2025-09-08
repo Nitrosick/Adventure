@@ -22,6 +22,7 @@ public static class StateManager {
   // Moving between scenes
   public static string enterScene;
   public static UnitData[] enemies;
+  public static int trapsCount;
   public static BattleResult? battleResult;
   public static Reward battleReward;
 
@@ -53,6 +54,7 @@ public static class StateManager {
     enemies = null;
     battleResult = null;
     battleReward = null;
+    trapsCount = 0;
   }
 
   public static void ResetPlayerData() {

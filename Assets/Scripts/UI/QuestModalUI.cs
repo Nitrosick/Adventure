@@ -4,8 +4,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class QuestAcceptDialog : MonoBehaviour {
-  public static QuestAcceptDialog Instance;
+public class QuestModalUI : MonoBehaviour {
+  public static QuestModalUI Instance;
   public GameObject slotPrefab;
 
   private static Transform window;
@@ -32,8 +32,8 @@ public class QuestAcceptDialog : MonoBehaviour {
     Transform Find(string path) => window.Find(path);
     T Get<T>(string path) where T : Component => Find(path).GetComponent<T>();
 
-    window = transform.Find("QuestAcceptDialog/Panel");
-    background = transform.Find("QuestAcceptDialog/Background").gameObject;
+    window = transform.Find("QuestModal/Panel");
+    background = transform.Find("QuestModal/Background").gameObject;
     accept = Get<Button>("Control/Accept");
     cancel = Get<Button>("Control/Cancel");
     cancelText = Get<TextMeshProUGUI>("Control/Cancel/Text");
@@ -94,14 +94,30 @@ public class QuestAcceptDialog : MonoBehaviour {
     callback = action;
     quest = _quest;
     title.text = quest.title;
-    description.text = quest.description;
+    if (quest.state == QuestState.Completed) title.text += " (Completed)";
+
+    description.text = quest.state == QuestState.Completed
+     ? quest.descriptionCompleted
+     : quest.description;
+
     ShowReward();
     RenderSlots();
 
     bool acceptable = quest.state == QuestState.Inactive;
     accept.gameObject.SetActive(acceptable);
     cancelText.text = acceptable ? "Cancel" : "Close";
+    Open();
+  }
 
+  public static void ShowReward(Quest _quest) {
+    quest = _quest;
+    title.text = quest.title;
+    description.text = "Quest completed!";
+    ShowReward();
+    RenderSlots();
+
+    accept.gameObject.SetActive(false);
+    cancelText.text = "Get reward";
     Open();
   }
 

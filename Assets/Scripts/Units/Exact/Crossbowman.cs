@@ -71,9 +71,9 @@ public class Crossbowman : Unit
       Quaternion.LookRotation(shootDirection)
     );
 
-    float hitChance = BattleManager.GetHitChance(this, Target);
-    float critModifier = BattleManager.GetCritModifier(this, Target);
-    float damage = BattleManager.CalculateDamage(this, Target);
+    float hitChance = Calculate.HitChance(this, Target);
+    float critModifier = Calculate.CritModifier(this, Target);
+    float damage = Calculate.Damage(this, Target);
     successAttack = Utils.RollChance(hitChance);
 
     Missle missle = bolt.GetComponent<Missle>();

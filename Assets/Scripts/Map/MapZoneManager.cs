@@ -41,27 +41,23 @@ public class MapZoneManager : MonoBehaviour {
   }
 
   public static void UpdateAfterBattle(BattleResult? result) {
-    if (result == null) return;
-
     MapZone currentZone = FindById(StateManager.currentPlayerZoneId);
+    if (result == null || currentZone == null || result != BattleResult.Victory) return;
 
-    if (currentZone == null) return;
-    if (result == BattleResult.Victory) {
-      // FIXME: Учесть несколько квестов
-      if (
-        currentZone.events[0] == MapZoneType.Quest &&
-        currentZone.TryGetComponent<MapZoneQuest>(out var questZone)
-      ) {
-        if (
-          questZone.questsList.Count > 0 &&
-          questZone.questsList[0].objectiveType == QuestObjective.Fight
-        ) {
-          QuestManager.CompleteQuest(questZone.questsList[0]);
-          questZone.questsList.RemoveAt(0);
-        }
+    if (
+      currentZone.events[0] == MapZoneType.Quest &&
+      currentZone.TryGetComponent<MapZoneQuest>(out var questZone) &&
+      questZone.questsList.Count > 0
+    ) {
+      Quest quest = questZone.questsList.FirstOrDefault(q => q.objectiveType == QuestObjective.Fight);
+      if (quest != null) {
+        QuestManager.CompleteQuest(quest);
+        questZone.questsList.Remove(quest);
+        if (questZone.questsList.Count == 0) currentZone.UnshiftEvent();
+        return;
       }
-      currentZone.UnshiftEvent();
     }
+    currentZone.UnshiftEvent();
   }
 
   public static void GetStateData() {
