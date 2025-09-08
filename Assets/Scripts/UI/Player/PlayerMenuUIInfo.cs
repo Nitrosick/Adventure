@@ -24,6 +24,7 @@ public class PlayerMenuUIInfo : MonoBehaviour {
   private static Button equipmentPrimary;
   private static Button equipmentArmor;
   private static Button equipmentSecondary;
+  private static Button equipmentAdditional;
   private static GameObject coreStats;
   private static GameObject statPointsRow;
   private static TextMeshProUGUI statPoints;
@@ -87,6 +88,7 @@ public class PlayerMenuUIInfo : MonoBehaviour {
     equipmentPrimary = Find<Button>("Equipment/Primary");
     equipmentArmor = Find<Button>("Equipment/Armor");
     equipmentSecondary = Find<Button>("Equipment/Secondary");
+    equipmentAdditional = Find<Button>("Equipment/Additional");
 
     coreStats = FindGO("CoreStats");
     statPointsRow = FindGO("CoreStats/Points");
@@ -144,6 +146,7 @@ public class PlayerMenuUIInfo : MonoBehaviour {
     equipmentPrimary.onClick.AddListener(() => OpenSelector(UnitEquipSlot.Primary));
     equipmentArmor.onClick.AddListener(() => OpenSelector(UnitEquipSlot.Armor));
     equipmentSecondary.onClick.AddListener(() => OpenSelector(UnitEquipSlot.Secondary));
+    equipmentAdditional.onClick.AddListener(() => OpenSelector(UnitEquipSlot.Additional));
     strengthUp.onClick.AddListener(() => IncreaseStat(CoreStat.Strength));
     dexterityUp.onClick.AddListener(() => IncreaseStat(CoreStat.Dexterity));
     intelligenceUp.onClick.AddListener(() => IncreaseStat(CoreStat.Intelligence));
@@ -167,7 +170,8 @@ public class PlayerMenuUIInfo : MonoBehaviour {
     equipRequiredLevel != null && statPoints != null && strengthUp != null &&
     dexterityUp != null && intelligenceUp != null && statPointsRow != null &&
     deathMark != null && itemActions != null && useItem != null &&
-    itemParams != null && itemIntensity != null && unitProjectiles != null;
+    itemParams != null && itemIntensity != null && unitProjectiles != null &&
+    equipmentAdditional != null;
   }
 
   private void OnDestroy() {
@@ -177,6 +181,7 @@ public class PlayerMenuUIInfo : MonoBehaviour {
     equipmentPrimary.onClick.RemoveListener(() => { });
     equipmentArmor.onClick.RemoveListener(() => { });
     equipmentSecondary.onClick.RemoveListener(() => { });
+    equipmentAdditional.onClick.RemoveListener(() => { });
     strengthUp.onClick.RemoveListener(() => { });
     dexterityUp.onClick.RemoveListener(() => { });
     intelligenceUp.onClick.RemoveListener(() => { });
@@ -386,17 +391,22 @@ public class PlayerMenuUIInfo : MonoBehaviour {
     Image primarySlot = equipment.Find("Primary/Image").GetComponent<Image>();
     Image armorSlot = equipment.Find("Armor/Image").GetComponent<Image>();
     Image secondarySlot = equipment.Find("Secondary/Image").GetComponent<Image>();
+    Image additionalSlot = equipment.Find("Additional/Image").GetComponent<Image>();
     primarySlot.sprite = equip.primary.icon;
     armorSlot.sprite = equip.armor.icon;
 
     if (equip.secondary != null) {
       secondarySlot.enabled = true;
       secondarySlot.sprite = equip.secondary.icon;
-    } else if (equip.secondary != null) {
-      secondarySlot.enabled = true;
-      secondarySlot.sprite = equip.secondary.icon;
     } else {
       secondarySlot.enabled = false;
+    }
+
+    if (equip.additional != null) {
+      additionalSlot.enabled = true;
+      additionalSlot.sprite = equip.additional.icon;
+    } else {
+      additionalSlot.enabled = false;
     }
   }
 
@@ -445,6 +455,7 @@ public class PlayerMenuUIInfo : MonoBehaviour {
       case UnitEquipSlot.Primary: title = "Change weapon"; break;
       case UnitEquipSlot.Armor: title = "Change armor"; break;
       case UnitEquipSlot.Secondary: title = "Change left-hand item"; break;
+      case UnitEquipSlot.Additional: title = "Change additional item"; break;
     }
 
     Selector.List(ChangeEquipment, canEquip, notEnoughStats, title);
@@ -452,7 +463,7 @@ public class PlayerMenuUIInfo : MonoBehaviour {
 
   private static void ChangeEquipment(object item) {
     if (item is Equipment equipment) PlayerMenuUI.selectedUnit.Equip.EquipItem(equipment);
-    UpdateUnitEquipment(PlayerMenuUI.selectedUnit);
+    if (item is not AdditionalItem) UpdateUnitEquipment(PlayerMenuUI.selectedUnit);
     ShowInfo(PlayerMenuUI.selectedUnit);
   }
 

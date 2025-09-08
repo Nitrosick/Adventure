@@ -18,7 +18,7 @@ public class Poacher : Unit {
     DefaultMovePoints = 5;
     Initiative = 8;
     Priority = 16;
-    Projectiles = 40;
+    Projectiles = 25;
     BehaviorType = AIBehaviorType.HoldPosition;
   }
 

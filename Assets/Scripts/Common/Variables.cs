@@ -155,7 +155,8 @@ public enum UnitRelation {
 public enum UnitEquipSlot {
   Primary,
   Secondary,
-  Armor
+  Armor,
+  Additional
 }
 
 public enum MasteryLevel {
@@ -175,6 +176,7 @@ public enum EquipmentType {
   Shield,
   Armor,
   TowerShield,
+  Additional
 }
 
 public enum EquipmentWeight {
@@ -189,6 +191,10 @@ public enum Rarity {
   Epic,
   Legendary,
   Relic
+}
+
+public enum ItemBonus {
+  Projectiles
 }
 
 // Map

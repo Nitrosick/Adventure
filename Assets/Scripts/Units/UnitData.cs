@@ -13,4 +13,5 @@ public class UnitData {
   public string primaryId;
   public string secondaryId;
   public string armorId;
+  public string additionalId;
 }

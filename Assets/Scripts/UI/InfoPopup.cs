@@ -180,6 +180,23 @@ public class InfoPopup : MonoBehaviour {
     }
   }
 
+  public static void Show(AdditionalItem item, bool showPrice = false) {
+    panel.gameObject.SetActive(true);
+    equipRequirements.gameObject.SetActive(true);
+    if (showPrice) pricePanel.gameObject.SetActive(true);
+
+    title.text = item.itemName;
+    description.text = item.description;
+    price.text = item.price.ToString();
+    int[] stats = item.requirementStats;
+    reqStats.text = string.Format(
+      "<color=#F61010>{0}</color> / <color=#81D11F>{1}</color> / <color=#2B8EF3>{2}</color>",
+      stats[0], stats[1], stats[2]
+    );
+    reqLevel.text = item.requirementLevel.ToString();
+    weight.text = item.weight.ToString();
+  }
+
   public static void Hide() {
     panel.gameObject.SetActive(false);
     unitParams.gameObject.SetActive(false);

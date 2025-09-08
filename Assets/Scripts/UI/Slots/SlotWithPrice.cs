@@ -97,13 +97,15 @@ public class SlotWithPrice : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         break;
       case ItemType.Equipment:
         Equipment equip = Factory.CreateEquipById(itemId);
+        if (equip == null) break;
         equip.isNew = true;
-        if (equip != null) player.Inventory.AddItems(equip);
+        player.Inventory.AddItems(equip);
         break;
       case ItemType.Misc:
         Item item = Factory.CreateItemById(itemId);
+        if (item == null) break;
         item.isNew = true;
-        if (item != null) player.Inventory.AddItems(item);
+        player.Inventory.AddItems(item);
         break;
     }
 

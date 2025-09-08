@@ -31,9 +31,10 @@ public static class Factory {
 
   private static string GetPath(string id) {
     if (string.IsNullOrEmpty(id)) return null;
+    if (id.StartsWith("ai")) return "Additional/" + id;
+    if (id.StartsWith("mi")) return "Medicine/" + id;
     if (id.StartsWith("a") || id.StartsWith("s")) return "Armor/" + id;
     if (id.StartsWith("w")) return "Weapon/" + id;
-    if (id.StartsWith("mi")) return "Medicine/" + id;
     // FIXME: Добавить все каталоги предметов
     Debug.LogError($"Unknown equipment id: {id}");
     return null;

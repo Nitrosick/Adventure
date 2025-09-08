@@ -7,8 +7,7 @@ public class UnitEquipment : MonoBehaviour {
   public Weapon primary;
   public Equipment secondary;
   public Armor armor;
-  // FIXME: Доп. слот
-  // public Equipment additional;
+  public AdditionalItem additional;
 
   private ArmorSet[] armorSets;
   public Transform rightHand;
@@ -110,6 +109,11 @@ public class UnitEquipment : MonoBehaviour {
             break;
         }
         break;
+
+      case AdditionalItem newAdditional:
+        oldItem = additional;
+        additional = newAdditional;
+        break;
     }
 
     inventory.Remove(item);
@@ -124,10 +128,12 @@ public class UnitEquipment : MonoBehaviour {
     inventory.Add(primary);
     inventory.Add(armor);
     if (secondary != null) inventory.Add(secondary);
+    if (additional != null) inventory.Add(additional);
 
     primary = null;
     secondary = null;
     armor = null;
+    additional = null;
 
     Player.Instance.Army.UpdateState();
     Player.Instance.Inventory.UpdateState();
@@ -136,6 +142,7 @@ public class UnitEquipment : MonoBehaviour {
   public List<Equipment> GetEquipmentList() {
     List<Equipment> result = new() { primary, armor };
     if (secondary != null) result.Add(secondary);
+    if (additional != null) result.Add(additional);
     return result;
   }
 
@@ -184,6 +191,7 @@ public class UnitEquipment : MonoBehaviour {
     if (primary != null) result += GetWeightValue(primary.weight);
     if (secondary != null) result += GetWeightValue(secondary.weight);
     if (armor != null) result += GetWeightValue(armor.weight);
+    if (additional != null) result += GetWeightValue(additional.weight);
     return result;
   }
 
@@ -204,14 +212,10 @@ public class UnitEquipment : MonoBehaviour {
   }
 
   private List<Skill> GetSkills(bool active) {
-    List<Skill> result = new() { };
-    if (primary != null && primary.skill != null && primary.skill.isActive == active)
-      result.Add(primary.skill);
-    if (secondary != null && secondary.skill != null && secondary.skill.isActive == active)
-      result.Add(secondary.skill);
-    if (armor != null && armor.skill != null && armor.skill.isActive == active)
-      result.Add(armor.skill);
-    return result;
+    return new[] { primary, secondary, armor, additional }
+      .Where(e => e != null && e.skill != null && e.skill.isActive == active)
+      .Select(e => e.skill)
+      .ToList();
   }
 
   public bool HasAttackPhaseSkills() {
@@ -249,9 +253,16 @@ public class UnitEquipment : MonoBehaviour {
         }
         break;
       case UnitEquipSlot.Secondary:
-        // FIXME: Проверка на оружие для левой руки
         if (item is Armor armor2) {
-          if (unit.ShieldIsAllow) result = 0;
+          if (armor2.type == EquipmentType.Shield && unit.ShieldIsAllow) result = 0;
+        }
+        break;
+      case UnitEquipSlot.Additional:
+        if (item is AdditionalItem additional) {
+          if (
+            additional.unitTypes.Contains(unit.Type) &&
+            additional.allowedWeapons.Contains(unit.AllowedWeapon)
+          ) result = 0;
         }
         break;
     }
@@ -273,7 +284,7 @@ public class UnitEquipment : MonoBehaviour {
   }
 
   public bool HasItem(Equipment item) {
-    return new Equipment[] { primary, secondary, armor }
+    return new Equipment[] { primary, secondary, armor, additional }
       .Any(e => e != null && e.id == item.id);
   }
 }

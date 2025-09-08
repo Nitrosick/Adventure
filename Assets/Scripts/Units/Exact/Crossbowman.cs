@@ -19,7 +19,7 @@ public class Crossbowman : Unit
     DefaultMovePoints = 5;
     Initiative = 4;
     Priority = 15;
-    Projectiles = 40;
+    Projectiles = 25;
     BehaviorType = AIBehaviorType.KeepDistance;
   }
 

@@ -81,6 +81,7 @@ public class Unit : MonoBehaviour {
     Animator = transform.GetComponent<UnitAnimator>();
     Effects = transform.GetComponent<UnitEffects>();
     SetMovePoints();
+    SetProjectiles();
 
     if (
       UnitCollider == null || Move == null || Health == null ||
@@ -102,7 +103,6 @@ public class Unit : MonoBehaviour {
 
     Ui.UpdateHealth(TotalHealth, CurrentHealth);
     SkillCharges = TotalSkillCharges;
-    CurrentProjectiles = Projectiles;
 
     if (Equip.GetActiveSkills().Count > 0) Ui.UpdateCharges(TotalSkillCharges, SkillCharges);
     return;
@@ -123,6 +123,14 @@ public class Unit : MonoBehaviour {
     else if (result > 7f) MoveSpeed *= 1.1f;
     TotalMovePoints = result;
     CurrentMovePoints = result;
+  }
+
+  private void SetProjectiles() {
+    AdditionalItem item = Equip.additional;
+    if (item != null && item.bonusType == ItemBonus.Projectiles) {
+      Projectiles += (int)item.bonusValue;
+    }
+    CurrentProjectiles = Projectiles;
   }
 
   public void ResetMovePoints() {
@@ -298,6 +306,7 @@ public class Unit : MonoBehaviour {
       primaryId = equipment.primary != null ? equipment.primary.id : null,
       secondaryId = equipment.secondary != null ? equipment.secondary.id : null,
       armorId = equipment.armor != null ? equipment.armor.id : null,
+      additionalId = equipment.additional != null ? equipment.additional.id : null,
     };
   }
 
@@ -307,6 +316,7 @@ public class Unit : MonoBehaviour {
     Weapon primary = Factory.CreateEquipById(data.primaryId) as Weapon;
     Equipment secondary = Factory.CreateEquipById(data.secondaryId);
     Armor armor = Factory.CreateEquipById(data.armorId) as Armor;
+    AdditionalItem additional = Factory.CreateEquipById(data.additionalId) as AdditionalItem;
 
     CurrentHealth = data.currentHealth;
     InSquad = data.inSquad;
@@ -317,6 +327,7 @@ public class Unit : MonoBehaviour {
     equipment.primary = primary;
     equipment.secondary = secondary;
     equipment.armor = armor;
+    equipment.additional = additional;
   }
 
   // Overloaded
