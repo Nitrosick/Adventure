@@ -17,6 +17,14 @@ MonoBehaviour:
   description: At the start of each new round in combat, restores allied unit health
     based on its level.
   icon: {fileID: 21300000, guid: afa451af72da8784291f6d69bc23d35f, type: 3}
+  bonusType: 0
+  phase: 1
+  effectValues:
+  - 3
+  - 6
+  - 2
+  - 5
+  - 10
   effectDescriptions:
   - level: 0
     description: Restores <b>3 HP</b> to one random unit

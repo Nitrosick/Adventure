@@ -171,6 +171,11 @@ public enum SupportBonusType {
   Healing
 }
 
+public enum SupportPhase {
+  BeforeBattle,
+  EveryTurn
+}
+
 // Items
 public enum EquipmentType {
   OneHandWeapon,

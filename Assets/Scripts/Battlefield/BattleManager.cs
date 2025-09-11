@@ -155,6 +155,7 @@ public class BattleManager : MonoBehaviour {
     }
 
     // FIXME: Саппорты противника
+    SupportController.Init(allySupports);
     BattleUI.Instance.UpdateSupports(allySupports);
   }
 

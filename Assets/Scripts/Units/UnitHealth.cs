@@ -55,9 +55,17 @@ public class UnitHealth : MonoBehaviour {
   }
 
   public void Heal(float value, bool inBattle = true) {
+    if (unit.CurrentHealth == unit.TotalHealth) return;
     unit.CurrentHealth += value;
     if (unit.CurrentHealth > unit.TotalHealth) unit.CurrentHealth = unit.TotalHealth;
-    if (!inBattle) Player.Instance.Army.UpdateState();
+
+    if (!inBattle) {
+      Player.Instance.Army.UpdateState();
+    } else {
+      unit.Ui.ShowPopup(value.ToString(), PopupType.Positive);
+      unit.Ui.UpdateHealth(unit.TotalHealth, unit.CurrentHealth);
+      // FIXME: Эффект лечения если в бою
+    }
   }
 
   private async Task MakeCorpse() {

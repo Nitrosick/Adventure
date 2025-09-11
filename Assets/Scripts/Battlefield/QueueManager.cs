@@ -37,6 +37,7 @@ public class QueueManager : MonoBehaviour
     if (orderNumber >= Queue.Count - 1) {
       orderNumber = 0;
       Round++;
+      SupportController.EveryTurn();
     } else {
       orderNumber++;
     }

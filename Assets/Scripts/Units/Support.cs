@@ -8,6 +8,8 @@ public class Support : ScriptableObject {
   [TextArea(5, 20)] public string description;
   public Sprite icon;
   public SupportBonusType bonusType;
+  public SupportPhase phase;
+  public float[] effectValues = { 0, 0, 0, 0, 0 };
 
   [System.Serializable]
   public class LevelDescription {

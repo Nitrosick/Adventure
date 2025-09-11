@@ -62,6 +62,7 @@ public class Unit : MonoBehaviour {
   public bool IsNew { get; set; }
 
   protected void Awake() {
+    Health = transform.GetComponent<UnitHealth>();
     Equip = transform.GetComponent<UnitEquipment>();
     if (!IsDead && CurrentHealth <= 0) CurrentHealth = TotalHealth;
   }
@@ -76,7 +77,6 @@ public class Unit : MonoBehaviour {
   public virtual void Init(Tile tile, UnitRelation relation, Vector3 direction) {
     UnitCollider = transform.GetComponent<CapsuleCollider>();
     Move = transform.GetComponent<UnitMove>();
-    Health = transform.GetComponent<UnitHealth>();
     Ui = transform.GetComponent<UnitUI>();
     Animator = transform.GetComponent<UnitAnimator>();
     Effects = transform.GetComponent<UnitEffects>();
