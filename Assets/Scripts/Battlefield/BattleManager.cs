@@ -7,6 +7,7 @@ public class BattleManager : MonoBehaviour {
   // FIXME: Будут разные префабы ловушек
   public GameObject trapPrefab;
   public GameObject hiddenTrapPrefab;
+  public ParticleSystem healEffect;
 
   private UnitData[] allies;
   private UnitData[] enemies;

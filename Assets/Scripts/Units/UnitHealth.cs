@@ -64,7 +64,14 @@ public class UnitHealth : MonoBehaviour {
     } else {
       unit.Ui.ShowPopup(value.ToString(), PopupType.Positive);
       unit.Ui.UpdateHealth(unit.TotalHealth, unit.CurrentHealth);
-      // FIXME: Эффект лечения если в бою
+      if (BattleManager.Instance.healEffect != null) {
+        ParticleSystem effect = Instantiate(
+          BattleManager.Instance.healEffect,
+          unit.transform.position + new Vector3(0, 0.3f, 0),
+          Quaternion.identity
+        );
+        Destroy(effect.gameObject, 2);
+      }
     }
   }
 
