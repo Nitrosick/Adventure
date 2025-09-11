@@ -18,6 +18,7 @@ public class BattleUI : GeneralUI {
   private Transform queuePanel;
   private Transform actionsPanel;
   private Transform skillsPanel;
+  private Transform supportsPanel;
 
   // Buttons and labels
   private Button phaseSkipButton;
@@ -37,6 +38,7 @@ public class BattleUI : GeneralUI {
     queuePanel = transform.Find("TurnQueue/Panel");
     actionsPanel = transform.Find("Actions/Panel");
     skillsPanel = transform.Find("Actions/Panel/Skills");
+    supportsPanel = transform.Find("Supports/Panel");
 
     mainMenuButton = Get<Button>(top, "MainMenu/Main");
     currentRound = Get<TextMeshProUGUI>(top, "Round/Value");
@@ -48,7 +50,7 @@ public class BattleUI : GeneralUI {
     if (
       queuePanel == null || actionsPanel == null || skillsPanel == null ||
       phaseSkipButton == null || phaseAttackLabel == null || phaseMoveLabel == null ||
-      currentRound == null || climbButton == null
+      currentRound == null || climbButton == null || supportsPanel == null
     ) {
       Debug.LogError("Battle UI components initialization error");
       return;
@@ -95,9 +97,7 @@ public class BattleUI : GeneralUI {
   }
 
   public void UpdateQueue(List<Unit> queue, int current = 0) {
-    foreach (Transform child in queuePanel) {
-      Destroy(child.gameObject);
-    }
+    foreach (Transform child in queuePanel) Destroy(child.gameObject);
 
     currentRound.text = $"Round {QueueManager.Round}";
     int count = queue.Count;
@@ -111,6 +111,20 @@ public class BattleUI : GeneralUI {
 
       slotScript.Init(unit);
       if (i == 0) slotScript.SetActive();
+    }
+  }
+
+  public void UpdateSupports(List<SupportInstance> supports) {
+    if (supports.Count == 0) return;
+
+    supportsPanel.gameObject.SetActive(true);
+    foreach (Transform child in supportsPanel) Destroy(child.gameObject);
+
+    foreach (SupportInstance unit in supports) {
+      unit.relation = UnitRelation.Ally;
+      GameObject slot = Instantiate(Instance.queueSlotPrefab, supportsPanel);
+      slot.GetComponent<QueueSlot>().Init(unit);
+      // FIXME: Саппорты противника
     }
   }
 

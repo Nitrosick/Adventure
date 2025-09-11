@@ -20,8 +20,10 @@ public class SaveData {
   public int fame;
   public int level;
   public int statPoints;
+  public int supportSlots;
   public Dictionary<int, List<MapZoneType>> zonesState;
   public UnitData[] playerUnits;
+  public SupportData[] playerSupports;
   public string[] inventoryEquipmentIds;
   public string[] inventoryItemIds;
 }

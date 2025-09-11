@@ -9,7 +9,9 @@ public class QueueSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
   private Image crown;
   private Image skull;
   private Image portrait;
+
   private Unit currentUnit;
+  private SupportInstance currentSupport;
 
   private static Color activeColor;
   private static Color allyColor;
@@ -41,6 +43,13 @@ public class QueueSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     portrait.sprite = unit.avatar;
   }
 
+  public void Init(SupportInstance unit) {
+    currentSupport = unit;
+    Color color = unit.relation == UnitRelation.Ally ? allyColor : enemyColor;
+    relationIndicator.color = color;
+    portrait.sprite = unit.data.icon;
+  }
+
   public void SetActive() {
     frame.color = activeColor;
     crown.color = activeColor;
@@ -48,7 +57,8 @@ public class QueueSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
   }
 
   public void OnPointerEnter(PointerEventData eventData) {
-    InfoPopup.Show(currentUnit);
+    if (currentUnit != null) InfoPopup.Show(currentUnit);
+    else if (currentSupport != null) InfoPopup.Show(currentSupport);
   }
 
   public void OnPointerExit(PointerEventData eventData) {

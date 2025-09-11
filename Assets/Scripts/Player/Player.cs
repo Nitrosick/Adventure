@@ -141,6 +141,7 @@ public class Player : MonoBehaviour {
     StatPoints = StateManager.statPoints;
 
     if (StateManager.playerUnits.Length > 0) Army.UpdateUnits(StateManager.playerUnits);
+    if (StateManager.playerSupports.Length > 0) Army.UpdateSupports(StateManager.playerSupports);
     if (StateManager.inventoryEquipment.Length > 0) Inventory.UpdateInventory(StateManager.inventoryEquipment);
     if (StateManager.inventoryItems.Length > 0) Inventory.UpdateInventory(StateManager.inventoryItems);
 

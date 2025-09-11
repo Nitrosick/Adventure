@@ -4,6 +4,13 @@ using UnityEngine;
 
 public class PlayerArmy : MonoBehaviour {
   public List<Unit> Units { get; private set; } = new();
+  public List<SupportInstance> Supports { get; private set; } = new();
+  public int SupportSlots { get; private set; } = 1;
+
+  private void OnDestroy() {
+    Units.Clear();
+    Supports.Clear();
+  }
 
   public void UpdateUnits(UnitData[] array) {
     Units = array.Select(data => {
@@ -19,8 +26,16 @@ public class PlayerArmy : MonoBehaviour {
         else unit.InSquad = false;
       }
     }
+  }
 
-    UpdateState();
+  public void UpdateSupports(SupportData[] array) {
+    Supports = array.Select(data => {
+      Support unit = Factory.CreateSupportById(data.id);
+      if (unit == null) return null;
+      SupportInstance support = new(unit, data.level);
+      support.FromData(data);
+      return support;
+    }).ToList();
   }
 
   public void AddUnit(Unit unit) {
@@ -45,11 +60,37 @@ public class PlayerArmy : MonoBehaviour {
     UpdateState();
   }
 
+  public void AddSupport(Support data, MasteryLevel level) {
+    SupportInstance instance = new(data, level) { isNew = true };
+    Supports.Add(instance);
+    UpdateState();
+  }
+
+  public void DeleteSupport(string id, MasteryLevel level) {
+    for (int i = 0; i < Supports.Count; i++) {
+      if (Supports[i].data.id == id && Supports[i].level == level) {
+        Supports.RemoveAt(i);
+        return;
+      }
+    }
+    UpdateState();
+  }
+
   public void UpdateState() {
     StateManager.WriteUnitsData(Units.ToArray(), "allies");
+    StateManager.WriteSupportsData(Supports.ToArray());
   }
 
   public bool HasUnit(Unit unit) {
     return Units.Any(u => u.PrefabId == unit.PrefabId);
+  }
+
+  public bool HasSupport(string id) {
+    return Supports.Exists(s => s.data.id == id);
+  }
+
+  public void SetSupportSlots(int value) {
+    SupportSlots += value;
+    StateManager.supportSlots = SupportSlots;
   }
 }

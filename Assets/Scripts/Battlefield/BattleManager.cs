@@ -52,6 +52,7 @@ public class BattleManager : MonoBehaviour {
     SpawnUnits(allies, allySpawns, UnitRelation.Ally);
     SpawnUnits(enemies, enemySpawns, UnitRelation.Enemy);
     SpawnTraps(StateManager.trapsCount);
+    InitSupports();
   }
 
   private void Start() {
@@ -140,6 +141,21 @@ public class BattleManager : MonoBehaviour {
       tile.type = TileType.Trap;
     }
     // FIXME: Союзные ловушки
+  }
+
+  private static void InitSupports() {
+    List<SupportInstance> allySupports = new ();
+
+    foreach (SupportData data in StateManager.playerSupports) {
+      Support unit = Factory.CreateSupportById(data.id);
+      if (unit == null) continue;
+      SupportInstance support = new(unit, data.level);
+      support.FromData(data);
+      allySupports.Add(support);
+    }
+
+    // FIXME: Саппорты противника
+    BattleUI.Instance.UpdateSupports(allySupports);
   }
 
   public static void Finish() {

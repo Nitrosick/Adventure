@@ -3,13 +3,16 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using TMPro;
+using System.Collections.Generic;
 
 public class MenuSlot : MonoBehaviour, IPointerClickHandler {
   public Unit UnitItem { get; private set; }
+  public SupportInstance SupportItem { get; private set; }
   public Equipment EquipmentItem { get; private set; }
   public Item InventoryItem { get; private set; }
 
   private Image image;
+  private Image background;
   private GameObject activeFrame;
   public GameObject NewMark { get; private set; }
   public GameObject ActiveMark { get; private set; }
@@ -19,8 +22,11 @@ public class MenuSlot : MonoBehaviour, IPointerClickHandler {
   private TextMeshProUGUI count;
   private bool preventPointerEvents;
 
+  protected Dictionary<MasteryLevel, Color> palette = new();
+
   private void Awake() {
     image = transform.Find("Image").GetComponent<Image>();
+    background = transform.Find("Background").GetComponent<Image>();
     activeFrame = transform.Find("FrameActive").gameObject;
     NewMark = transform.Find("NewMark").gameObject;
     ActiveMark = transform.Find("ActiveMark").gameObject;
@@ -32,10 +38,12 @@ public class MenuSlot : MonoBehaviour, IPointerClickHandler {
     if (
       activeFrame == null || ActiveMark == null || DeathMark == null ||
       healthBar == null || healthBarFill == null || count == null ||
-      image == null || NewMark == null
-    )  {
+      image == null || NewMark == null || background == null
+    ) {
       Debug.LogError("Menu slot components initialization error");
     }
+
+    palette = Utils.GetMasteryPalette();
   }
 
   private void OnDestroy() {
@@ -47,7 +55,7 @@ public class MenuSlot : MonoBehaviour, IPointerClickHandler {
   public void Init(Unit unit, bool noPointer = false) {
     preventPointerEvents = noPointer;
     UnitItem = unit;
-    image.sprite = UnitItem.avatar;
+    image.sprite = unit.avatar;
     if (unit.IsNew) NewMark.SetActive(true);
 
     if (!preventPointerEvents) {
@@ -85,6 +93,15 @@ public class MenuSlot : MonoBehaviour, IPointerClickHandler {
     }
   }
 
+  public void Init(SupportInstance unit, bool noPointer = false) {
+    preventPointerEvents = noPointer;
+    SupportItem = unit;
+    image.sprite = unit.data.icon;
+    background.color = palette[unit.level];
+    if (unit.isNew) NewMark.SetActive(true);
+    if (!preventPointerEvents && unit.inSquad) ActiveMark.SetActive(true);
+  }
+
   public void SwitchActiveFrame(bool on) {
     activeFrame.SetActive(on);
   }
@@ -104,5 +121,6 @@ public class MenuSlot : MonoBehaviour, IPointerClickHandler {
     if (UnitItem != null) PlayerMenuUIInfo.ShowInfo(UnitItem);
     else if (EquipmentItem != null) PlayerMenuUIInfo.ShowInfo(EquipmentItem);
     else if (InventoryItem != null) PlayerMenuUIInfo.ShowInfo(InventoryItem);
+    else if (SupportItem != null) PlayerMenuUIInfo.ShowInfo(SupportItem);
   }
 }

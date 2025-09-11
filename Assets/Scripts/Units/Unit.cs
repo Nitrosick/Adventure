@@ -58,7 +58,7 @@ public class Unit : MonoBehaviour {
 
   // State
   public bool IsDead { get; set; }
-  public bool InSquad { get; set; } = true;
+  public bool InSquad { get; set; }
   public bool IsNew { get; set; }
 
   protected void Awake() {

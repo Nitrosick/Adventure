@@ -52,6 +52,9 @@ public class TrainingChainUI : MonoBehaviour {
       Unit prefab = StateManager.PrefabDatabase.GetPrefab(data.sourceUnit.PrefabId, true);
       unitObjects.Add(prefab);
       slotScript.Init(prefab);
+    } else if (data.sourceSupport != null) {
+      SupportInstance support = new (data.sourceSupport, data.sourceSupportLevel);
+      slotScript.Init(support);
     } else if (data.sourceVillagersCount > 0) {
       slotScript.Init(MapUI.Instance.villagersSprite, data.sourceVillagersCount, "Villagers");
     }
@@ -60,6 +63,9 @@ public class TrainingChainUI : MonoBehaviour {
       Unit prefab = StateManager.PrefabDatabase.GetPrefab(data.resultUnit.PrefabId, true);
       unitObjects.Add(prefab);
       resultSlot.Init(prefab);
+    } else if (data.resultSupport != null) {
+      SupportInstance support = new (data.resultSupport, data.resultSupportLevel);
+      resultSlot.Init(support);
     }
 
     if (data.items.Length > 0) {
@@ -95,6 +101,10 @@ public class TrainingChainUI : MonoBehaviour {
       if (!player.Army.HasUnit(chain.sourceUnit)) check = false;
     }
 
+    if (chain.sourceSupport != null) {
+      if (!player.Army.HasSupport(chain.sourceSupport.id)) check = false;
+    }
+
     if (chain.sourceVillagersCount > 0) {
       if (player.Villagers < chain.sourceVillagersCount) check = false;
     }
@@ -124,11 +134,15 @@ public class TrainingChainUI : MonoBehaviour {
     }
 
     if (chain.sourceUnit != null) player.Army.DeleteUnit(chain.sourceUnit);
+    else if (chain.sourceSupport != null) player.Army.DeleteSupport(chain.sourceSupport.id, chain.sourceSupportLevel);
     else if (chain.sourceVillagersCount > 0) player.SetVillagers(chain.sourceVillagersCount * -1);
+
     foreach (Equipment item in chain.equipment) player.Inventory.RemoveItem(item);
     foreach (Item item in chain.items) player.Inventory.RemoveItem(item);
+
     player.SetGold(chain.cost * -1);
-    player.Army.AddUnit(chain.resultUnit);
+    if (chain.resultUnit != null) player.Army.AddUnit(chain.resultUnit);
+    else if (chain.resultSupport != null) player.Army.AddSupport(chain.resultSupport, chain.resultSupportLevel);
 
     _ = Toast.Show("success", "Unit is ready");
     MapUI.Instance.UpdateResources();

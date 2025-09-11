@@ -214,12 +214,6 @@ public class PlayerMenuUIInfo : MonoBehaviour {
     foreach (Transform child in avatar) Destroy(child.gameObject);
   }
 
-  public static void UpdateSlotsSize(float size) {
-    foreach (RectTransform slot in equipment) {
-      slot.sizeDelta = new Vector2(size, size);
-    }
-  }
-
   public static void ShowInfo(Unit unit) {
     Clear();
     Player player = Player.Instance;
@@ -239,6 +233,7 @@ public class PlayerMenuUIInfo : MonoBehaviour {
     unitParams.SetActive(true);
 
     PlayerMenuUI.FrameSlot();
+    PlayerMenuUI.selectedSupport = null;
     PlayerMenuUI.selectedUnit = unit;
 
     if (unit.IsNew) {
@@ -254,12 +249,7 @@ public class PlayerMenuUIInfo : MonoBehaviour {
 
     GameObject unitAvatar = Instantiate(PlayerMenuUI.Instance.menuSlotPrefab, avatar);
     unitAvatar.GetComponent<MenuSlot>().Init(unit, true);
-
-    unitInSquad.interactable = unit.CurrentHealth > 0;
-    unitInSquad.transform.Find("Text").GetComponent<TextMeshProUGUI>().text = unit.InSquad
-      ? "Remove from squad"
-      : "Add to squad";
-
+    InSquadButtonLabel(unit);
     UpdateUnitEquipment(unit);
 
     statPoints.text = player.StatPoints.ToString();
@@ -284,6 +274,34 @@ public class PlayerMenuUIInfo : MonoBehaviour {
     if (unit.Projectiles == 0) unitProjectiles.text = "-";
     else if (unit.Projectiles == unit.CurrentProjectiles) unitProjectiles.text = unit.Projectiles.ToString();
     else unitProjectiles.text = $"{unit.CurrentProjectiles} / {unit.Projectiles}";
+  }
+
+  public static void ShowInfo(SupportInstance unit) {
+    Clear();
+    unitActions.SetActive(true);
+
+    PlayerMenuUI.FrameSlot();
+    PlayerMenuUI.selectedUnit = null;
+    PlayerMenuUI.selectedSupport = unit;
+
+    if (unit.isNew) {
+      unit.isNew = false;
+      PlayerMenuUI.selectedSlot.HideNewMark();
+    }
+
+    displayName.text = unit.data.unitName;
+    Level.text = "Level: " + unit.level.ToString();
+    type.text = "Type: " + unit.data.bonusType.ToString();
+    inSquadMark.SetActive(unit.inSquad);
+
+    GameObject unitAvatar = Instantiate(PlayerMenuUI.Instance.menuSlotPrefab, avatar);
+    unitAvatar.GetComponent<MenuSlot>().Init(unit, true);
+    InSquadButtonLabel(unit);
+
+    description.text = unit.data.description;
+    if (unit.effectDescription != "") {
+      description.text += $"\n({unit.effectDescription})";
+    }
   }
 
   public static void ShowInfo(Equipment equip) {
@@ -385,124 +403,23 @@ public class PlayerMenuUIInfo : MonoBehaviour {
     description.text = item.description;
   }
 
+  public static void InSquadButtonLabel(Unit unit) {
+    unitInSquad.transform.Find("Text").GetComponent<TextMeshProUGUI>().text = unit.InSquad
+      ? "Remove from squad"
+      : "Add to squad";
+  }
+
+  public static void InSquadButtonLabel(SupportInstance unit) {
+    unitInSquad.transform.Find("Text").GetComponent<TextMeshProUGUI>().text = unit.inSquad
+      ? "Remove from squad"
+      : "Add to squad";
+  }
+
   // Outer actions
-  private static void UpdateUnitEquipment(Unit unit) {
-    UnitEquipment equip = unit.Equip;
-    Image primarySlot = equipment.Find("Primary/Image").GetComponent<Image>();
-    Image armorSlot = equipment.Find("Armor/Image").GetComponent<Image>();
-    Image secondarySlot = equipment.Find("Secondary/Image").GetComponent<Image>();
-    Image additionalSlot = equipment.Find("Additional/Image").GetComponent<Image>();
-    primarySlot.sprite = equip.primary.icon;
-    armorSlot.sprite = equip.armor.icon;
-
-    if (equip.secondary != null) {
-      secondarySlot.enabled = true;
-      secondarySlot.sprite = equip.secondary.icon;
-    } else {
-      secondarySlot.enabled = false;
-    }
-
-    if (equip.additional != null) {
-      additionalSlot.enabled = true;
-      additionalSlot.sprite = equip.additional.icon;
-    } else {
-      additionalSlot.enabled = false;
-    }
-  }
-
-  private static void SwitchUnitInSquad() {
-    Unit unit = PlayerMenuUI.selectedUnit;
-    MenuSlot slot = PlayerMenuUI.selectedSlot;
-
-    unit.InSquad = !unit.InSquad;
-    inSquadMark.SetActive(unit.InSquad);
-    if (slot != null) slot.SwitchActiveMark();
-    Player.Instance.Army.UpdateState();
-  }
-
-  private static void DismissConfirmation() {
-    Dialog.Confirmation(
-      DismissUnit,
-      "Unit dismissing",
-      "Are you sure you want to dismiss this unit?\nIt will become a regular villager and lose all accumulated levels.\nIts equipment will be moved to the player's inventory."
-    );
-  }
-
-  private static void DismissUnit(bool accepted) {
-    if (!accepted) return;
-    Player.Instance.Army.DeleteUnit(PlayerMenuUI.selectedUnit);
-    _ = Toast.Show("info", "Unit dismissed");
-    PlayerMenuUI.SelectUnitsTab();
-  }
-
-  private static void OpenSelector(UnitEquipSlot slot) {
-    Unit unit = PlayerMenuUI.selectedUnit;
-    if (unit == null) return;
-
-    List<Equipment> inventory = Player.Instance.Inventory.Equip;
-    List<Equipment> canEquip = new() { };
-    List<Equipment> notEnoughStats = new() { };
-
-    foreach (Equipment item in inventory) {
-      int allowed = unit.Equip.CanEquip(item, slot);
-      if (allowed < 0) continue;
-      else if (allowed == 0) notEnoughStats.Add(item);
-      else canEquip.Add(item);
-    }
-
-    string title = "";
-    switch (slot) {
-      case UnitEquipSlot.Primary: title = "Change weapon"; break;
-      case UnitEquipSlot.Armor: title = "Change armor"; break;
-      case UnitEquipSlot.Secondary: title = "Change left-hand item"; break;
-      case UnitEquipSlot.Additional: title = "Change additional item"; break;
-    }
-
-    Selector.List(ChangeEquipment, canEquip, notEnoughStats, title);
-  }
-
-  private static void ChangeEquipment(object item) {
-    if (item is Equipment equipment) PlayerMenuUI.selectedUnit.Equip.EquipItem(equipment);
-    if (item is not AdditionalItem) UpdateUnitEquipment(PlayerMenuUI.selectedUnit);
-    ShowInfo(PlayerMenuUI.selectedUnit);
-  }
-
-  private static void IncreaseStat(CoreStat stat) {
-    Unit hero = Player.Instance.Army.Units.FirstOrDefault(u => u.IsHero);
-    if (hero == null) return;
-    int[] increase = { 0, 0, 0 };
-
-    switch (stat) {
-      case CoreStat.Strength: increase[0] = 1; break;
-      case CoreStat.Dexterity: increase[1] = 1; break;
-      case CoreStat.Intelligence: increase[2] = 1; break;
-    }
-
-    Player.Instance.SetStatPoints(-1);
-    hero.IncreaseStats(increase);
-    PlayerMenuUI.SelectHeroTab();
-  }
-
-  private static void UseItem() {
-    Item item = PlayerMenuUI.selectedItem;
-    Unit[] woundedUnits = Player.Instance.Army.Units
-      .Where(u => u.CurrentHealth > 0 && u.CurrentHealth < u.TotalHealth)
-      .ToArray();
-
-    if (item == null) return;
-    if (woundedUnits == null || woundedUnits.Length == 0) {
-      _ = Toast.Show("warning", "No wounded units");
-      return;
-    }
-
-    if (item is MedicineItem medItem) {
-      foreach (Unit unit in woundedUnits) unit.Health.Heal(medItem.intensity);
-      _ = Toast.Show("success", "Units are cured");
-    }
-
-    if (item.disposable) {
-      Player.Instance.Inventory.RemoveItem(item);
-      PlayerMenuUI.SelectInventoryTab();
-    }
-  }
+  public static void UpdateUnitEquipment(Unit unit) => PlayerMenuUIActions.UpdateUnitEquipment(unit, equipment);
+  private static void SwitchUnitInSquad() => PlayerMenuUIActions.SwitchUnitInSquad(inSquadMark);
+  private static void DismissConfirmation() => PlayerMenuUIActions.DismissConfirmation();
+  private static void OpenSelector(UnitEquipSlot slot) => PlayerMenuUIActions.OpenSelector(slot);
+  private static void IncreaseStat(CoreStat stat) => PlayerMenuUIActions.IncreaseStat(stat);
+  private static void UseItem() => PlayerMenuUIActions.UseItem();
 }

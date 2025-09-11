@@ -167,6 +167,10 @@ public enum MasteryLevel {
   Master
 }
 
+public enum SupportBonusType {
+  Healing
+}
+
 // Items
 public enum EquipmentType {
   OneHandWeapon,

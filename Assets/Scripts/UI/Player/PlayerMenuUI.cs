@@ -52,6 +52,7 @@ public class PlayerMenuUI : MonoBehaviour {
 
   public static MenuSlot selectedSlot;
   public static Unit selectedUnit;
+  public static SupportInstance selectedSupport;
   public static Item selectedItem;
 
   private void Awake() {
@@ -104,7 +105,6 @@ public class PlayerMenuUI : MonoBehaviour {
     await Task.Delay(10);
     UpdateSlotsSize(leftSlots);
     UpdateSlotsSize(rightSlots);
-    PlayerMenuUIInfo.UpdateSlotsSize(slotSize);
   }
 
   private static bool ComponentsInitialized() {
@@ -164,6 +164,7 @@ public class PlayerMenuUI : MonoBehaviour {
 
     selectedSlot = null;
     selectedUnit = null;
+    selectedSupport = null;
     selectedItem = null;
   }
 
@@ -216,12 +217,15 @@ public class PlayerMenuUI : MonoBehaviour {
     Clear();
     navUnits.interactable = false;
     ShowSlots(true);
-    leftSlotsTitle.text = "Army";
-    rightSlotsTitle.text = "Workers";
 
     Player player = Player.Instance;
-    Unit[] units = player.Army.Units
-      .Where(u => !u.IsHero).ToArray();
+    Unit[] units = player.Army.Units.Where(u => !u.IsHero).ToArray();
+    int unitsInSquad = units.Where(u => u.InSquad).ToArray().Length;
+    SupportInstance[] supports = player.Army.Supports.ToArray();
+    int supportsInSquad = supports.Where(u => u.inSquad).ToArray().Length;
+
+    leftSlotsTitle.text = $"Army ({unitsInSquad} in squad)";
+    rightSlotsTitle.text = $"Supports ({supportsInSquad} / {player.Army.SupportSlots} in squad)";
 
     PlayerMenuUIInfo.UnitDismiss.interactable = units.Length > 1;
 
@@ -230,8 +234,13 @@ public class PlayerMenuUI : MonoBehaviour {
       slot.GetComponent<MenuSlot>().Init(unit);
     }
 
+    foreach (SupportInstance support in supports) {
+      GameObject slot = Instantiate(Instance.menuSlotPrefab, rightSlots);
+      slot.GetComponent<MenuSlot>().Init(support);
+    }
+
     RenderEmptySlots(leftSlots, units.Length);
-    RenderEmptySlots(rightSlots, 0);
+    RenderEmptySlots(rightSlots, supports.Length);
 
     await Task.Yield();
     selectedSlot = leftSlots.GetChild(0).GetComponent<MenuSlot>();

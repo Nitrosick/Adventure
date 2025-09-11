@@ -6,6 +6,7 @@ public class InfoPopup : MonoBehaviour {
   // Panels
   private static Transform panel;
   private static Transform unitParams;
+  private static Transform supportParams;
   private static Transform equipRequirements;
   private static Transform weaponParams;
   private static Transform armorParams;
@@ -34,6 +35,7 @@ public class InfoPopup : MonoBehaviour {
   private static TextMeshProUGUI unitProjectiles;
   private static GameObject unitEffectsTitle;
   private static TextMeshProUGUI unitEffects;
+  private static TextMeshProUGUI supportLevel;
 
   Transform Get(string path) => transform.Find(path);
   Transform Find(Transform root, string path) => root.Find(path);
@@ -43,6 +45,7 @@ public class InfoPopup : MonoBehaviour {
     panel = Get("Info/ItemInfoPanel");
 
     unitParams = Find(panel, "UnitParams");
+    supportParams = Find(panel, "SupportParams");
     equipRequirements = Find(panel, "EquipRequirements");
     weaponParams = Find(panel, "WeaponParams");
     armorParams = Find(panel, "ArmorParams");
@@ -77,6 +80,8 @@ public class InfoPopup : MonoBehaviour {
     unitEffectsTitle = Find(panel, "EffectsTitle").gameObject;
     unitEffects = Get<TextMeshProUGUI>(panel, "Effects");
 
+    supportLevel = Get<TextMeshProUGUI>(supportParams, "Level/Value");
+
     if (
       title == null || description == null || medicineParams == null ||
       medIntensity == null || price == null || equipRequirements == null ||
@@ -86,7 +91,8 @@ public class InfoPopup : MonoBehaviour {
       unitParams == null || unitHP == null || unitLevel == null ||
       unitStats == null || unitMP == null || unitDamage == null ||
       unitDefense == null || unitRange == null || unitEffects == null ||
-      pricePanel == null || unitProjectiles == null || unitEffectsTitle == null
+      pricePanel == null || unitProjectiles == null || unitEffectsTitle == null ||
+      supportParams == null || supportLevel == null
     ) {
       Debug.LogError("Item info components initialization error");
       return;
@@ -197,9 +203,23 @@ public class InfoPopup : MonoBehaviour {
     weight.text = item.weight.ToString();
   }
 
+  public static void Show(SupportInstance unit) {
+    panel.gameObject.SetActive(true);
+    supportParams.gameObject.SetActive(true);
+
+    title.text = unit.data.unitName;
+    supportLevel.text = unit.level.ToString();
+    description.text = unit.data.description;
+
+    if (unit.effectDescription != "") {
+      description.text += $"\n({unit.effectDescription})";
+    }
+  }
+
   public static void Hide() {
     panel.gameObject.SetActive(false);
     unitParams.gameObject.SetActive(false);
+    supportParams.gameObject.SetActive(false);
     equipRequirements.gameObject.SetActive(false);
     weaponParams.gameObject.SetActive(false);
     armorParams.gameObject.SetActive(false);
@@ -227,5 +247,6 @@ public class InfoPopup : MonoBehaviour {
     unitRange.text = "";
     unitProjectiles.text = "";
     unitEffects.text = "";
+    supportLevel.text = "";
   }
 }

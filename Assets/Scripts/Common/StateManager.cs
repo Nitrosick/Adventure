@@ -43,9 +43,11 @@ public static class StateManager {
   public static int fame;
   public static int level;
   public static int statPoints;
+  public static int supportSlots;
 
   public static Dictionary<int, List<MapZoneType>> zonesState;
   public static UnitData[] playerUnits;
+  public static SupportData[] playerSupports;
   public static Equipment[] inventoryEquipment;
   public static Item[] inventoryItems;
 
@@ -75,9 +77,11 @@ public static class StateManager {
     fame = 0;
     level = 1;
     statPoints = 0;
+    supportSlots = 1;
 
     zonesState = new Dictionary<int, List<MapZoneType>> { };
     playerUnits = new UnitData[] { };
+    playerSupports = new SupportData[] { };
     inventoryEquipment = new Equipment[] { };
     inventoryItems = new Item[] { };
     ResetTemp();
@@ -100,6 +104,11 @@ public static class StateManager {
         playerUnits = newUnits.Concat(reserveUnits).ToArray();
       } else enemies = newUnits;
     }
+  }
+
+  public static void WriteSupportsData(SupportInstance[] units) {
+    SupportData[] newUnits = units.Select(u => u.ToData()).ToArray();
+    playerSupports = newUnits;
   }
 
   // Save / Load
@@ -165,8 +174,10 @@ public static class StateManager {
       fame = fame,
       level = level,
       statPoints = statPoints,
+      supportSlots = supportSlots,
       zonesState = zonesState,
       playerUnits = playerUnits,
+      playerSupports = playerSupports,
       inventoryEquipmentIds = equipIds,
       inventoryItemIds = itemIds
     };
@@ -190,8 +201,10 @@ public static class StateManager {
     fame = data.fame;
     level = data.level;
     statPoints = data.statPoints;
+    supportSlots = data.supportSlots;
     zonesState = data.zonesState;
     playerUnits = data.playerUnits;
+    playerSupports = data.playerSupports;
     inventoryEquipment = Factory.CreateEquipById(data.inventoryEquipmentIds);
     inventoryItems = Factory.CreateItemById(data.inventoryItemIds);
   }
@@ -201,6 +214,7 @@ public static class StateManager {
 
     foreach (string id in defaultArmyIds) {
       Unit prefab = PrefabDatabase.GetPrefab(id, true);
+      prefab.InSquad = true;
       defaultArmy.Add(prefab.ToData());
     }
 
