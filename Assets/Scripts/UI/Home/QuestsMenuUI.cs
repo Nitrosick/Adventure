@@ -1,10 +1,10 @@
-using System.Linq;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class QuestsMenuUI : HomeMenuFeature {
   private Transform questsList;
   private GameObject emptyText;
-  private Quest[] quests;
+  private List<QuestInstance> quests;
 
   protected override void Awake() {
     base.Awake();
@@ -24,16 +24,23 @@ public class QuestsMenuUI : HomeMenuFeature {
 
   public void Init(string name, MasteryLevel lvl, Quest[] _quests) {
     InitHeader(name, lvl);
-    quests = _quests.Where(q => q.state == QuestState.Inactive).ToArray();
+    List<QuestInstance> questsList = new();
+
+    foreach (Quest q in _quests) {
+      if (!QuestManager.IsQuestInactive(q.id)) continue;
+      questsList.Add(new QuestInstance(q, QuestState.Inactive));
+    }
+
+    quests = questsList;
     UpdateQuestsData();
   }
 
   private void UpdateQuestsData() {
     ClearSlots(questsList);
 
-    emptyText.SetActive(quests.Length == 0);
+    emptyText.SetActive(quests.Count == 0);
 
-    foreach (Quest quest in quests) {
+    foreach (QuestInstance quest in quests) {
       GameObject slot = Instantiate(slotPrefab, questsList);
       slot.GetComponent<QuestSlot>().Init(quest);
     }

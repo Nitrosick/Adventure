@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public static class Calculate {
-  private static readonly float dexterityScaleUnit = 3f;
+  private static readonly float dexterityScaleUnit = 2.5f;
   private static readonly float minHitChance = 5f;
   private static readonly float defaultCritChance = 5f;
   private static readonly float minDamage = 0.3f;

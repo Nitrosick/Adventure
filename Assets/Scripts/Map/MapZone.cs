@@ -5,12 +5,12 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class MapZone : MonoBehaviour {
-  public int id;
+  public string id;
   public Vector3 playerPosition;
   public string zoneName;
   [TextArea(5, 20)] public string description;
   [TextArea(5, 20)] public string descriptionCleared;
-  public List<MapZoneType> events;
+  public List<MapZoneType> events = new ();
   public bool isEmpty;
   public bool secret;
 
@@ -42,7 +42,7 @@ public class MapZone : MonoBehaviour {
   }
 
   private void Start() {
-    Dictionary<int, List<MapZoneType>> state = StateManager.zonesState;
+    Dictionary<string, List<MapZoneType>> state = StateManager.zonesState;
     if (state.Count > 0 && state[id] != null) {
       if (state[id].Count > 0) events = state[id];
       else SetCleared();
@@ -56,7 +56,7 @@ public class MapZone : MonoBehaviour {
     MapUI.Instance.ShowZoneInfo(zoneName, description, descriptionCleared, events, isEmpty);
 
     MapZone playerZone = Player.Instance.GetComponent<PlayerMove>().CurrentZone;
-    int[] wayIds = ways.Select(way => way.id).ToArray();
+    string[] wayIds = ways.Select(way => way.id).ToArray();
     if (playerZone == this || !wayIds.Contains(playerZone.id)) return;
 
     auraRender.material = MapZoneManager.Instance.highlightMaterial;
@@ -174,7 +174,7 @@ public class MapZone : MonoBehaviour {
   public void ActivateQuest(Quest quest) {
     if (!transform.TryGetComponent<MapZoneQuest>(out var questScript)) return;
     questScript.questsList.Insert(0, quest);
-    if (events[0] != MapZoneType.Quest) events.Insert(0, MapZoneType.Quest);
+    if (events.Count > 0 && events[0] != MapZoneType.Quest) events.Insert(0, MapZoneType.Quest);
     SetActive();
   }
 }

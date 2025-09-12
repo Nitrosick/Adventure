@@ -300,6 +300,7 @@ GameObject:
   - component: {fileID: 7139782067223697491}
   - component: {fileID: 3221303967009669670}
   - component: {fileID: 4953661195412875352}
+  - component: {fileID: 3971290927644732713}
   m_Layer: 5
   m_Name: ArrowIcon
   m_TagString: Untagged
@@ -324,7 +325,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 25, y: 45}
+  m_SizeDelta: {x: 20, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3221303967009669670
 CanvasRenderer:
@@ -364,6 +365,21 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &3971290927644732713
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3655689672961903029}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
+  m_EffectDistance: {x: 0, y: -3}
+  m_UseGraphicAlpha: 1
 --- !u!1 &4239449940192941065
 GameObject:
   m_ObjectHideFlags: 0
@@ -800,7 +816,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 449151577297971577}
   m_Direction: 0
   m_Value: 0
-  m_Size: 0
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -1357,7 +1373,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 120}
+  m_SizeDelta: {x: 450, y: 120}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &9111548087864747146
 CanvasRenderer:
@@ -1411,7 +1427,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   chainSlotPrefab: {fileID: 279035475939884220, guid: f697dc9604f830e479677b771e656c38,
     type: 3}
-  villagersSprite: {fileID: 21300000, guid: a9b6adb853c2297438d2ce6e6507fdf4, type: 3}
 --- !u!1 &8605060771320576561
 GameObject:
   m_ObjectHideFlags: 0
@@ -1423,6 +1438,7 @@ GameObject:
   - component: {fileID: 8860733426936254994}
   - component: {fileID: 2646093629906456887}
   - component: {fileID: 4863650987588044082}
+  - component: {fileID: 5179853226591415581}
   m_Layer: 5
   m_Name: Icon
   m_TagString: Untagged
@@ -1487,6 +1503,21 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &5179853226591415581
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8605060771320576561}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
+  m_EffectDistance: {x: 0, y: -3}
+  m_UseGraphicAlpha: 1
 --- !u!1 &9135556850128527596
 GameObject:
   m_ObjectHideFlags: 0

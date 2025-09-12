@@ -23,11 +23,11 @@ public class PlayerMove : MonoBehaviour
       return;
     }
 
-    if (StateManager.startPlayerZoneId > 0) {
+    if (int.Parse(StateManager.startPlayerZoneId) > 0) {
       startZone = MapZoneManager.FindById(StateManager.startPlayerZoneId);
     }
 
-    if (StateManager.currentPlayerZoneId > 0) {
+    if (int.Parse(StateManager.currentPlayerZoneId) > 0) {
       CurrentZone = MapZoneManager.FindById(StateManager.currentPlayerZoneId);
       transform.position = CurrentZone.playerPosition;
     } else {

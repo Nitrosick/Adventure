@@ -33,7 +33,7 @@ public class MapZoneManager : MonoBehaviour {
     Zones = null;
   }
 
-  public static MapZone FindById(int id) {
+  public static MapZone FindById(string id) {
     foreach (MapZone zone in Zones) {
       if (zone.id == id) return zone;
     }
@@ -61,15 +61,8 @@ public class MapZoneManager : MonoBehaviour {
   }
 
   public static void GetStateData() {
+    // Zone events
     var state = StateManager.zonesState;
-    var visited = StateManager.visitedZones;
-    var looted = StateManager.collectedZoneLoot;
-
-    var activeQuests = QuestManager.Instance.database.quests
-      .Where(q => q.state == QuestState.Accepted)
-      .Select(q => q.objectiveZoneId)
-      .ToHashSet();
-
     foreach (var kvp in state) {
       if (kvp.Value == null) continue;
       var zone = FindById(kvp.Key);
@@ -77,18 +70,41 @@ public class MapZoneManager : MonoBehaviour {
       zone.events = kvp.Value;
     }
 
-    foreach (var zone in Zones.Where(z => visited.Contains(z.id))) {
+    // Visited zones
+    var visited = StateManager.visitedZones;
+    foreach (MapZone zone in Zones.Where(z => visited.Contains(z.id))) {
       zone.ShowPathLines();
       zone.secret = false;
       zone.InitMarker();
     }
 
-    foreach (var loot in FindObjectsOfType<MapLoot>().Where(l => looted.Contains(l.id))) {
+    // Picked loot
+    var looted = StateManager.collectedZoneLoot;
+    foreach (MapLoot loot in FindObjectsOfType<MapLoot>().Where(l => looted.Contains(l.id))) {
       Destroy(loot.gameObject);
     }
 
-    foreach (var zone in Zones.Where(z => activeQuests.Contains(z.id))) {
-      if (zone.events.Count == 0 || zone.events[0] != MapZoneType.Quest) zone.events.Insert(0, MapZoneType.Quest);
+    // Zone quests
+    var activeQuestsZoneIds = QuestManager.questsList
+      .Where(q => q.state == QuestState.Accepted)
+      .Select(q => q.data.objectiveZoneId)
+      .ToHashSet();
+
+    var activeQuestsIds = QuestManager.questsList
+      .Where(q => activeQuestsZoneIds.Contains(q.data.objectiveZoneId))
+      .Select(q => q.data.id)
+      .ToHashSet();
+
+    foreach (MapZone zone in Zones.Where(z => activeQuestsZoneIds.Contains(z.id))) {
+      if (zone.events.Count == 0) zone.events.Add(MapZoneType.Quest);
+      else if (zone.events[0] != MapZoneType.Quest) zone.events.Insert(0, MapZoneType.Quest);
+      if (!zone.TryGetComponent<MapZoneQuest>(out var zoneQuests)) return;
+
+      foreach (string id in activeQuestsIds) {
+        if (zoneQuests.questsList.Any(q => q.id == id)) continue;
+        zoneQuests.questsList.Add(Factory.CreateQuestById(id));
+      }
+
       zone.SetActive();
     }
   }

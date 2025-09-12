@@ -33,12 +33,17 @@ public static class Factory {
     return Load<Support>(GetPath(id));
   }
 
+  public static Quest CreateQuestById(string id) {
+    return Load<Quest>(GetPath(id));
+  }
+
   private static string GetPath(string id) {
     if (string.IsNullOrEmpty(id)) return null;
     if (id.StartsWith("ai")) return "Additional/" + id;
     if (id.StartsWith("mi")) return "Medicine/" + id;
     if (id.StartsWith("su")) return "Supports/" + id;
     if (id.StartsWith("a") || id.StartsWith("s")) return "Armor/" + id;
+    if (id.StartsWith("q")) return "Quests/" + id;
     if (id.StartsWith("w")) return "Weapon/" + id;
     Debug.LogError($"Unknown equipment id: {id}");
     return null;

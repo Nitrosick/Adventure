@@ -9,7 +9,7 @@ public class QuestSlot : MonoBehaviour {
   private TextMeshProUGUI levelLabel;
   private TextMeshProUGUI level;
   private GameObject completedMark;
-  private Quest currentQuest;
+  private QuestInstance currentQuest;
 
   private void Awake() {
     button = transform.GetComponent<Button>();
@@ -30,14 +30,14 @@ public class QuestSlot : MonoBehaviour {
     button.onClick.RemoveListener(OpenDialog);
   }
 
-  public void Init(Quest quest) {
+  public void Init(QuestInstance quest) {
     currentQuest = quest;
-    title.text = quest.title;
+    title.text = quest.data.title;
 
-    bool available = Player.Instance.Level >= currentQuest.requiredLevel;
+    bool available = Player.Instance.Level >= quest.data.requiredLevel;
     level.text = !available
-      ? $"<color=#F61010>{currentQuest.requiredLevel}</color>"
-      : currentQuest.requiredLevel.ToString();
+      ? $"<color=#F61010>{quest.data.requiredLevel}</color>"
+      : quest.data.requiredLevel.ToString();
 
     levelLabel.gameObject.SetActive(quest.state != QuestState.Completed);
     level.gameObject.SetActive(quest.state != QuestState.Completed);
@@ -55,7 +55,7 @@ public class QuestSlot : MonoBehaviour {
   private void AcceptQuest(bool accepted) {
     if (!accepted) return;
     button.interactable = false;
-    QuestManager.AcceptQuest(currentQuest);
+    QuestManager.AcceptQuest(currentQuest.data);
     _ = Toast.Show("success", "Quest accepted");
   }
 }

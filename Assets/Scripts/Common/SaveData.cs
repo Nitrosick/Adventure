@@ -5,13 +5,11 @@ using System.Collections.Generic;
 public class SaveData {
   public string saveTime;
   public string currentScene;
-  public int startPlayerZoneId;
-  public int currentPlayerZoneId;
-  public HashSet<int> visitedZones;
+  public string startPlayerZoneId;
+  public string currentPlayerZoneId;
+  public HashSet<string> visitedZones;
   public HashSet<string> collectedZoneLoot;
   public HashSet<string> unlockedKnowledge;
-  public HashSet<string> activeQuests;
-  public HashSet<string> completedQuests;
   public int gold;
   public int[] resources;
   public int villagers;
@@ -21,9 +19,10 @@ public class SaveData {
   public int level;
   public int statPoints;
   public int supportSlots;
-  public Dictionary<int, List<MapZoneType>> zonesState;
+  public Dictionary<string, List<MapZoneType>> zonesState;
   public UnitData[] playerUnits;
   public SupportData[] playerSupports;
+  public QuestData[] quests;
   public string[] inventoryEquipmentIds;
   public string[] inventoryItemIds;
 }

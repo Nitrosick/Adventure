@@ -3,12 +3,7 @@ using System.Linq;
 using UnityEngine;
 
 public class QuestManager : MonoBehaviour {
-  public static QuestManager Instance;
-  public QuestsDatabase database;
-
-  private void Awake() {
-    Instance = this;
-  }
+  public static List<QuestInstance> questsList = new ();
 
   private void Start() {
     GetStateData();
@@ -16,49 +11,52 @@ public class QuestManager : MonoBehaviour {
 
   public static void AcceptQuest(Quest quest) {
     if (IsQuestActive(quest.id)) return;
-    quest.state = QuestState.Accepted;
+    questsList.Add(new QuestInstance(quest, QuestState.Accepted));
     MapZone zone = MapZoneManager.FindById(quest.objectiveZoneId);
     if (zone != null) zone.ActivateQuest(quest);
-    // FIXME: Квест может быть за пределами зоны
-    StateManager.activeQuests.Add(quest.id);
+    StateManager.WriteQuestsData(questsList.ToArray());
   }
 
   public static void CompleteQuest(Quest quest) {
-    if (IsQuestCompleted(quest.id)) return;
-    quest.state = QuestState.Completed;
+    QuestInstance questIns = questsList.FirstOrDefault(q => q.data.id == quest.id);
+    if (questIns == null || IsQuestCompleted(quest.id)) return;
+    questIns.state = QuestState.Completed;
     GiveRewards(quest);
-    QuestModalUI.ShowReward(quest);
-    StateManager.activeQuests.Remove(quest.id);
-    StateManager.completedQuests.Add(quest.id);
+    QuestModalUI.ShowReward(questIns);
+    StateManager.WriteQuestsData(questsList.ToArray());
   }
 
   private static void GiveRewards(Quest quest) {
     Player.Instance.CollectReward(quest.reward);
   }
 
-  public static bool IsQuestActive(string id) {
-    Quest quest = Instance.database.quests
-      .FirstOrDefault(q => q.id == id);
+  public static bool IsQuestInactive(string id) {
+    QuestInstance quest = questsList.FirstOrDefault(q => q.data.id == id);
+    return quest == null;
+  }
 
+  public static bool IsQuestActive(string id) {
+    QuestInstance quest = questsList.FirstOrDefault(q => q.data.id == id);
     if (quest == null) return false;
     return quest.state == QuestState.Accepted;
   }
 
   public static bool IsQuestCompleted(string id) {
-    Quest quest = Instance.database.quests
-      .FirstOrDefault(q => q.id == id);
-
+    QuestInstance quest = questsList.FirstOrDefault(q => q.data.id == id);
     if (quest == null) return false;
     return quest.state == QuestState.Completed;
   }
 
   private static void GetStateData() {
-    HashSet<string> active = StateManager.activeQuests;
-    HashSet<string> completed = StateManager.completedQuests;
+    QuestData[] questData = StateManager.quests;
+    if (questData.Length == 0) return;
 
-    foreach (Quest q in Instance.database.quests) {
-      if (active.Contains(q.id)) q.state = QuestState.Accepted;
-      else if (completed.Contains(q.id)) q.state = QuestState.Completed;
-    }
+    questsList = questData.Select(data => {
+      Quest quest = Factory.CreateQuestById(data.id);
+      if (quest == null) return null;
+      QuestInstance questIns = new(quest, data.state);
+      questIns.FromData(data);
+      return questIns;
+    }).ToList();
   }
 }

@@ -16,7 +16,7 @@ public class QuestModalUI : MonoBehaviour {
   private static Action<bool> callback;
   private static TextMeshProUGUI title;
   private static TextMeshProUGUI description;
-  private static Quest quest;
+  private static QuestInstance quest;
 
   // Reward
   private static TextMeshProUGUI rewardXP;
@@ -90,15 +90,15 @@ public class QuestModalUI : MonoBehaviour {
     Close();
   }
 
-  public static void Acception(Action<bool> action, Quest _quest) {
+  public static void Acception(Action<bool> action, QuestInstance _quest) {
     callback = action;
     quest = _quest;
-    title.text = quest.title;
+    title.text = quest.data.title;
     if (quest.state == QuestState.Completed) title.text += " (Completed)";
 
     description.text = quest.state == QuestState.Completed
-     ? quest.descriptionCompleted
-     : quest.description;
+     ? quest.data.descriptionCompleted
+     : quest.data.description;
 
     ShowReward();
     RenderSlots();
@@ -109,9 +109,9 @@ public class QuestModalUI : MonoBehaviour {
     Open();
   }
 
-  public static void ShowReward(Quest _quest) {
+  public static void ShowReward(QuestInstance _quest) {
     quest = _quest;
-    title.text = quest.title;
+    title.text = quest.data.title;
     description.text = "Quest completed!";
     ShowReward();
     RenderSlots();
@@ -126,7 +126,7 @@ public class QuestModalUI : MonoBehaviour {
   }
 
   private static void ShowReward() {
-    Reward reward = quest.reward;
+    Reward reward = quest.data.reward;
     if (reward.experience > 0) rewardXP.text = reward.experience.ToString();
     if (reward.fame > 0) rewardFame.text = reward.fame.ToString();
     if (reward.goldRange[1] > 0) rewardGold.text = reward.goldRange[0] == reward.goldRange[1]
@@ -135,7 +135,7 @@ public class QuestModalUI : MonoBehaviour {
   }
 
   private static void RenderSlots() {
-    Reward reward = quest.reward;
+    Reward reward = quest.data.reward;
     int slotsCount = 0;
 
     rewardSlots.gameObject.SetActive(

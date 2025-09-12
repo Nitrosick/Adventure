@@ -316,22 +316,24 @@ public class PlayerMenuUI : MonoBehaviour {
     leftSlotsTitle.text = "Active";
     rightSlotsTitle.text = "Completed";
 
-    List<Quest> quests = QuestManager.Instance.database.quests;
-    Quest[] active = quests.Where(q => q.state == QuestState.Accepted).ToArray();
-    Quest[] completed = quests.Where(q => q.state == QuestState.Completed).ToArray();
+    List<QuestInstance> quests = QuestManager.questsList;
+    QuestInstance[] active = quests.Where(q => q.state == QuestState.Accepted).ToArray();
+    QuestInstance[] completed = quests.Where(q => q.state == QuestState.Completed).ToArray();
 
-    foreach (var q in active) {
+    activeQuestsList.gameObject.SetActive(active.Length > 0);
+    completedQuestsList.gameObject.SetActive(completed.Length > 0);
+    activeQuestsEmpty.SetActive(active.Length == 0);
+    completedQuestsEmpty.SetActive(completed.Length == 0);
+
+    foreach (QuestInstance q in active) {
       GameObject slot = Instantiate(Instance.questSlotPrefab, activeQuestsList);
       slot.GetComponent<QuestSlot>().Init(q);
     }
 
-    foreach (var q in completed) {
+    foreach (QuestInstance q in completed) {
       GameObject slot = Instantiate(Instance.questSlotPrefab, completedQuestsList);
       slot.GetComponent<QuestSlot>().Init(q);
     }
-
-    activeQuestsEmpty.SetActive(active.Length == 0);
-    completedQuestsEmpty.SetActive(completed.Length == 0);
 
     RenderQuestEmptySlots(activeQuestsList, active.Length);
     RenderQuestEmptySlots(completedQuestsList, completed.Length);

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -33,6 +34,7 @@ public class MapUI : GeneralUI {
   private TextMeshProUGUI metalValue;
   private TextMeshProUGUI leatherValue;
   private TextMeshProUGUI villagersValue;
+  private TextMeshProUGUI totalPeopleValue;
   private TextMeshProUGUI location;
   public string[] resTooltips = { "Wood", "Stone", "Metal", "Leather" };
 
@@ -68,6 +70,7 @@ public class MapUI : GeneralUI {
     metalValue = Get<TextMeshProUGUI>(resources, "Metal/Value");
     leatherValue = Get<TextMeshProUGUI>(resources, "Leather/Value");
     villagersValue = Get<TextMeshProUGUI>(resources, "Villagers/Value");
+    totalPeopleValue = Get<TextMeshProUGUI>(resources, "TotalPeople/Value");
     location = Get<TextMeshProUGUI>(resources, "Location");
 
     if (!ComponentsInitialized()) {
@@ -84,7 +87,8 @@ public class MapUI : GeneralUI {
       woodValue != null && stoneValue != null && metalValue != null &&
       villagersValue != null && leatherValue != null && zoneInfoBattleMark != null &&
       zoneInfoClearedMark != null && zoneInfoRecruitMark != null && interactButton != null &&
-      location != null && interactButtonIcon != null && interactButtonText != null;
+      location != null && interactButtonIcon != null && interactButtonText != null &&
+      totalPeopleValue != null;
   }
 
   protected override void OnDestroy() {
@@ -175,16 +179,16 @@ public class MapUI : GeneralUI {
     stoneValue.text = player.Resources[1].ToString();
     metalValue.text = player.Resources[2].ToString();
     leatherValue.text = player.Resources[3].ToString();
+    villagersValue.text = player.Villagers.ToString();
 
-    int[] totalPeople = player.GetTotalPeople();
-    villagersValue.text = string.Format(
-      "{0} ({1}) / {2}",
-      totalPeople[0].ToString(),
-      totalPeople[1].ToString(),
+    int totalPeople = player.GetTotalPeople().Sum();
+    totalPeopleValue.text = string.Format(
+      "{0} / {1}",
+      totalPeople.ToString(),
       player.MaxVillagers.ToString()
     );
-    if (totalPeople[0] + totalPeople[1] > player.MaxVillagers) {
-      villagersValue.text = "<color=#F61010>" + villagersValue.text + "</color>";
+    if (totalPeople > player.MaxVillagers) {
+      totalPeopleValue.text = "<color=#F61010>" + totalPeopleValue.text + "</color>";
     }
   }
 

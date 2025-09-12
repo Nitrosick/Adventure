@@ -114,8 +114,7 @@ public class Player : MonoBehaviour {
   }
 
   public int[] GetTotalPeople() {
-    // FIXME: Прибавить supports юнитов
-    return new int[] { Villagers, Army.Units.Count };
+    return new int[] { Villagers, Army.Units.Count, Army.Supports.Count };
   }
 
   public void CollectReward(Reward reward) {

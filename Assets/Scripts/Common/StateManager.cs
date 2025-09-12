@@ -28,13 +28,11 @@ public static class StateManager {
 
   // Player data
   public static string currentScene;
-  public static int startPlayerZoneId;
-  public static int currentPlayerZoneId;
-  public static HashSet<int> visitedZones;
+  public static string startPlayerZoneId;
+  public static string currentPlayerZoneId;
+  public static HashSet<string> visitedZones;
   public static HashSet<string> collectedZoneLoot;
   public static HashSet<string> unlockedKnowledge;
-  public static HashSet<string> activeQuests;
-  public static HashSet<string> completedQuests;
   public static int gold;
   public static int[] resources;
   public static int villagers;
@@ -45,9 +43,10 @@ public static class StateManager {
   public static int statPoints;
   public static int supportSlots;
 
-  public static Dictionary<int, List<MapZoneType>> zonesState;
+  public static Dictionary<string, List<MapZoneType>> zonesState;
   public static UnitData[] playerUnits;
   public static SupportData[] playerSupports;
+  public static QuestData[] quests;
   public static Equipment[] inventoryEquipment;
   public static Item[] inventoryItems;
 
@@ -62,13 +61,11 @@ public static class StateManager {
   public static void ResetPlayerData() {
     saveSlot = 0;
     currentScene = "";
-    startPlayerZoneId = 6;
-    currentPlayerZoneId = 6;
-    visitedZones = new HashSet<int> { };
+    startPlayerZoneId = "6";
+    currentPlayerZoneId = "6";
+    visitedZones = new HashSet<string> { };
     collectedZoneLoot = new HashSet<string> { };
     unlockedKnowledge = new HashSet<string> { };
-    activeQuests = new HashSet<string> { };
-    completedQuests = new HashSet<string> { };
     gold = 0;
     resources = new int[] { 0, 0, 0, 0 };
     villagers = 0;
@@ -79,9 +76,10 @@ public static class StateManager {
     statPoints = 0;
     supportSlots = 1;
 
-    zonesState = new Dictionary<int, List<MapZoneType>> { };
+    zonesState = new Dictionary<string, List<MapZoneType>> { };
     playerUnits = new UnitData[] { };
     playerSupports = new SupportData[] { };
+    quests = new QuestData[] { };
     inventoryEquipment = new Equipment[] { };
     inventoryItems = new Item[] { };
     ResetTemp();
@@ -109,6 +107,11 @@ public static class StateManager {
   public static void WriteSupportsData(SupportInstance[] units) {
     SupportData[] newUnits = units.Select(u => u.ToData()).ToArray();
     playerSupports = newUnits;
+  }
+
+  public static void WriteQuestsData(QuestInstance[] array) {
+    QuestData[] newQuests = array.Select(q => q.ToData()).ToArray();
+    quests = newQuests;
   }
 
   // Save / Load
@@ -164,8 +167,6 @@ public static class StateManager {
       visitedZones = visitedZones,
       collectedZoneLoot = collectedZoneLoot,
       unlockedKnowledge = unlockedKnowledge,
-      activeQuests = activeQuests,
-      completedQuests = completedQuests,
       gold = gold,
       resources = resources,
       villagers = villagers,
@@ -177,6 +178,7 @@ public static class StateManager {
       supportSlots = supportSlots,
       zonesState = zonesState,
       playerUnits = playerUnits,
+      quests = quests,
       playerSupports = playerSupports,
       inventoryEquipmentIds = equipIds,
       inventoryItemIds = itemIds
@@ -191,8 +193,6 @@ public static class StateManager {
     visitedZones = data.visitedZones;
     collectedZoneLoot = data.collectedZoneLoot;
     unlockedKnowledge = data.unlockedKnowledge;
-    activeQuests = data.activeQuests;
-    completedQuests = data.completedQuests;
     gold = data.gold;
     resources = data.resources;
     villagers = data.villagers;
@@ -205,6 +205,7 @@ public static class StateManager {
     zonesState = data.zonesState;
     playerUnits = data.playerUnits;
     playerSupports = data.playerSupports;
+    quests = data.quests;
     inventoryEquipment = Factory.CreateEquipById(data.inventoryEquipmentIds);
     inventoryItems = Factory.CreateItemById(data.inventoryItemIds);
   }
