@@ -71,15 +71,14 @@ public class AlmanacUI : MonoBehaviour {
 
   private static void Init() {
     if (Instance.articleButtonPrefab == null) return;
-    List<KnowledgeArticle> articles = KnowledgeManager.GetUnlockedArticles();
 
-    foreach (KnowledgeArticle a in articles) {
+    foreach (KnowledgeInstance a in KnowledgeManager.articles) {
       GameObject btn = Instantiate(Instance.articleButtonPrefab, navigation);
-      btn.transform.Find("Icon").GetComponent<Image>().sprite = a.icon;
-      btn.transform.Find("Text").GetComponent<TextMeshProUGUI>().text = a.title;
+      btn.transform.Find("Icon").GetComponent<Image>().sprite = a.data.icon;
+      btn.transform.Find("Text").GetComponent<TextMeshProUGUI>().text = a.data.title;
 
       GameObject newMark = btn.transform.Find("New").gameObject;
-      buttons[a.id] = newMark;
+      buttons[a.data.id] = newMark;
       if (a.isNew) newMark.SetActive(true);
 
       Button btnScript = btn.transform.GetComponent<Button>();
@@ -87,16 +86,16 @@ public class AlmanacUI : MonoBehaviour {
       btnScript.onClick.AddListener(() => ShowContent(a));
     }
 
-    ShowContent(articles[0]);
+    ShowContent(KnowledgeManager.articles[0]);
   }
 
-  private static void ShowContent(KnowledgeArticle article) {
-    title.text = article.title;
-    text.text = article.content;
+  private static void ShowContent(KnowledgeInstance article) {
+    title.text = article.data.title;
+    text.text = article.data.content;
 
     if (article.isNew) {
       article.isNew = false;
-      buttons[article.id].SetActive(false);
+      buttons[article.data.id].SetActive(false);
       MapUI.Instance.UpdateAlmanacIcon();
     }
   }

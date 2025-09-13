@@ -1,69 +1,52 @@
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class KnowledgeManager : MonoBehaviour {
-  public static KnowledgeManager Instance;
-  public KnowledgeDatabase database;
-
-  private void Awake() {
-    Instance = this;
-  }
+  public static List<KnowledgeInstance> articles = new ();
 
   private void Start() {
     GetStateData();
   }
 
+  private void OnDestroy() {
+    articles.Clear();
+  }
+
   public static void UnlockArticle(string id) {
-    KnowledgeArticle article = Instance.database.articles
-      .FirstOrDefault(a => a.id == id);
-
-    if (article == null) {
-      Debug.LogError("Almanach article not found");
-      return;
-    }
-
-    if (!article.unlocked) {
-      article.unlocked = true;
-      StateManager.unlockedKnowledge.Add(id);
-    }
+    KnowledgeArticle article = Factory.CreateArticleById(id);
+    if (article == null) return;
+    KnowledgeInstance articleIns = new(article);
+    articles.Add(articleIns);
+    StateManager.unlockedKnowledge.Add(id);
   }
 
   public static void UnlockArticle(string[] ids) {
     foreach (string id in ids) {
-      KnowledgeArticle article = Instance.database.articles
-        .FirstOrDefault(a => a.id == id);
-
-      if (article == null) {
-        Debug.LogError("Almanach article not found");
-        continue;
-      }
-
-      article.unlocked = true;
+      KnowledgeArticle article = Factory.CreateArticleById(id);
+      if (article == null) continue;
+      KnowledgeInstance articleIns = new(article);
+      articles.Add(articleIns);
       StateManager.unlockedKnowledge.Add(id);
     }
   }
 
-  public static List<KnowledgeArticle> GetUnlockedArticles() {
-    return Instance.database.articles
-      .Where(a => a.unlocked)
-      .ToList();
-  }
-
   private static void GetStateData() {
-    HashSet<string> articles = StateManager.unlockedKnowledge;
+    HashSet<string> data = StateManager.unlockedKnowledge;
+    articles.Clear();
 
-    if (articles.Count == 0) {
+    if (data.Count == 0) {
       UnlockArticle(new string[] { "aa1", "aa2" });
-      List<KnowledgeArticle> db = Instance.database.articles;
-      Dialog.Info(db[0].title, db[0].content, "Continue");
-    }
-
-    foreach (KnowledgeArticle a in Instance.database.articles) {
-      if (articles.Contains(a.id)) {
-        a.unlocked = true;
-        a.isNew = false;
+      articles[0].isNew = false;
+      Dialog.Info(articles[0].data.title, articles[0].data.content, "Continue");
+    } else {
+      foreach (string id in data) {
+        KnowledgeArticle article = Factory.CreateArticleById(id);
+        if (article == null) continue;
+        KnowledgeInstance articleIns = new(article, false);
+        articles.Add(articleIns);
       }
     }
+
+    MapUI.Instance.UpdateAlmanacIcon();
   }
 }

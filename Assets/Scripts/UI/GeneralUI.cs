@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
@@ -61,8 +60,7 @@ public class GeneralUI : MonoBehaviour {
   protected virtual void OpenAlmanac() {}
 
   public void UpdateAlmanacIcon() {
-    List<KnowledgeArticle> articles = KnowledgeManager.GetUnlockedArticles();
-    if (articles.Any(a => a.isNew)) almanacIcon.color = highlightedColor;
+    if (KnowledgeManager.articles.Any(a => a.isNew)) almanacIcon.color = highlightedColor;
     else almanacIcon.color = defaultColor;
   }
 }

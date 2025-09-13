@@ -37,8 +37,13 @@ public static class Factory {
     return Load<Quest>(GetPath(id));
   }
 
+  public static KnowledgeArticle CreateArticleById(string id) {
+    return Load<KnowledgeArticle>(GetPath(id));
+  }
+
   private static string GetPath(string id) {
     if (string.IsNullOrEmpty(id)) return null;
+    if (id.StartsWith("aa")) return "Knowledge/" + id;
     if (id.StartsWith("ai")) return "Additional/" + id;
     if (id.StartsWith("mi")) return "Medicine/" + id;
     if (id.StartsWith("su")) return "Supports/" + id;

@@ -9,6 +9,10 @@ public class QuestManager : MonoBehaviour {
     GetStateData();
   }
 
+  private void OnDestroy() {
+    questsList.Clear();
+  }
+
   public static void AcceptQuest(Quest quest) {
     if (IsQuestActive(quest.id)) return;
     questsList.Add(new QuestInstance(quest, QuestState.Accepted));

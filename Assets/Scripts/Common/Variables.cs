@@ -244,3 +244,11 @@ public enum QuestObjective {
   GetItem,
   BringItem
 }
+
+// Almanac
+public enum KnowledgeSection {
+  Common,
+  AdventureMap,
+  Battlefield,
+  Lore
+}

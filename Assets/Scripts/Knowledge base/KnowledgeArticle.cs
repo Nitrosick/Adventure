@@ -6,6 +6,5 @@ public class KnowledgeArticle : ScriptableObject {
   public string title;
   [TextArea(5, 20)] public string content;
   public Sprite icon;
-  public bool unlocked;
-  public bool isNew = true;
+  public KnowledgeSection section;
 }
