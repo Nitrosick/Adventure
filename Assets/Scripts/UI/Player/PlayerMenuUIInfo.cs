@@ -28,6 +28,8 @@ public class PlayerMenuUIInfo : MonoBehaviour {
   private static GameObject coreStats;
   private static GameObject statPointsRow;
   private static TextMeshProUGUI statPoints;
+  private static GameObject abilityPointsRow;
+  private static TextMeshProUGUI abilityPoints;
   private static TextMeshProUGUI strength;
   private static TextMeshProUGUI dexterity;
   private static TextMeshProUGUI intelligence;
@@ -91,8 +93,10 @@ public class PlayerMenuUIInfo : MonoBehaviour {
     equipmentAdditional = Find<Button>("Equipment/Additional");
 
     coreStats = FindGO("CoreStats");
-    statPointsRow = FindGO("CoreStats/Points");
-    statPoints = Find<TextMeshProUGUI>("CoreStats/Points/Value");
+    statPointsRow = FindGO("CoreStats/StatPoints");
+    statPoints = Find<TextMeshProUGUI>("CoreStats/StatPoints/Value");
+    abilityPointsRow = FindGO("CoreStats/AbilityPoints");
+    abilityPoints = Find<TextMeshProUGUI>("CoreStats/AbilityPoints/Value");
     strength = Find<TextMeshProUGUI>("CoreStats/Strength/Value");
     dexterity = Find<TextMeshProUGUI>("CoreStats/Dexterity/Value");
     intelligence = Find<TextMeshProUGUI>("CoreStats/Intelligence/Value");
@@ -171,7 +175,7 @@ public class PlayerMenuUIInfo : MonoBehaviour {
     dexterityUp != null && intelligenceUp != null && statPointsRow != null &&
     deathMark != null && itemActions != null && useItem != null &&
     itemParams != null && itemIntensity != null && unitProjectiles != null &&
-    equipmentAdditional != null;
+    equipmentAdditional != null && abilityPointsRow != null && abilityPoints != null;
   }
 
   private void OnDestroy() {
@@ -204,6 +208,7 @@ public class PlayerMenuUIInfo : MonoBehaviour {
     dexterityUp.gameObject.SetActive(false);
     intelligenceUp.gameObject.SetActive(false);
     statPointsRow.SetActive(false);
+    abilityPointsRow.SetActive(false);
     unitParams.SetActive(false);
     equipRequirements.SetActive(false);
     weaponParams.SetActive(false);
@@ -218,15 +223,8 @@ public class PlayerMenuUIInfo : MonoBehaviour {
     Clear();
     Player player = Player.Instance;
 
-    if (!unit.IsHero) {
-      unitActions.SetActive(true);
-    }
-    else if (player.StatPoints > 0) {
-      statPointsRow.SetActive(true);
-      strengthUp.gameObject.SetActive(true);
-      dexterityUp.gameObject.SetActive(true);
-      intelligenceUp.gameObject.SetActive(true);
-    }
+    if (!unit.IsHero) unitActions.SetActive(true);
+    else RecalculatePoints();
 
     equipment.gameObject.SetActive(true);
     coreStats.SetActive(true);
@@ -252,7 +250,6 @@ public class PlayerMenuUIInfo : MonoBehaviour {
     InSquadButtonLabel(unit);
     UpdateUnitEquipment(unit);
 
-    statPoints.text = player.StatPoints.ToString();
     strength.text = "<color=#F61010>" + unit.Strength.ToString() + "</color>";
     dexterity.text = "<color=#81D11F>" + unit.Dexterity.ToString() + "</color>";
     intelligence.text = "<color=#2B8EF3>" + unit.Intelligence.ToString() + "</color>";
@@ -413,6 +410,23 @@ public class PlayerMenuUIInfo : MonoBehaviour {
     unitInSquad.transform.Find("Text").GetComponent<TextMeshProUGUI>().text = unit.inSquad
       ? "Remove from squad"
       : "Add to squad";
+  }
+
+  public static void RecalculatePoints() {
+    Player player = Player.Instance;
+
+    if (player.StatPoints > 0) {
+      statPointsRow.SetActive(true);
+      strengthUp.gameObject.SetActive(true);
+      dexterityUp.gameObject.SetActive(true);
+      intelligenceUp.gameObject.SetActive(true);
+    }
+    if (player.AbilityPoints > 0) {
+      abilityPointsRow.SetActive(true);
+    }
+
+    statPoints.text = player.StatPoints.ToString();
+    abilityPoints.text = player.AbilityPoints.ToString();
   }
 
   // Outer actions

@@ -47,4 +47,13 @@ public static class Utils {
       { MasteryLevel.Expert, c[3] },
       { MasteryLevel.Master, c[4] }
     });
+
+  public static Dictionary<AbilityLevel, Color> GetAbilityLevelPalette() =>
+    CreatePalette(new Dictionary<AbilityLevel, string>
+    {
+      { AbilityLevel.No, "#FFFFFF" },
+      { AbilityLevel.Bronze, "#C2771D" },
+      { AbilityLevel.Silver, "#CDCDCE" },
+      { AbilityLevel.Gold, "#E2B63F" }
+    });
 }

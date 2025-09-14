@@ -14,7 +14,8 @@ public class Player : MonoBehaviour {
   public int Experience { get; private set; }
   public int Fame { get; private set; }
   public int Level { get; private set; } = 1;
-  public int StatPoints { get; private set; } = 1;
+  public int StatPoints { get; private set; }
+  public int AbilityPoints { get; private set; }
 
   public int MaxFame { get; private set; } = 10000;
   public int MaxLevel { get; private set; } = 30;
@@ -113,6 +114,12 @@ public class Player : MonoBehaviour {
     StateManager.statPoints = StatPoints;
   }
 
+  public void SetAbilityPoints(int value) {
+    AbilityPoints += value;
+    if (AbilityPoints < 0) AbilityPoints = 0;
+    StateManager.statPoints = AbilityPoints;
+  }
+
   public int[] GetTotalPeople() {
     return new int[] { Villagers, Army.Units.Count, Army.Supports.Count };
   }
@@ -138,11 +145,13 @@ public class Player : MonoBehaviour {
     Fame = StateManager.fame;
     Level = StateManager.level;
     StatPoints = StateManager.statPoints;
+    AbilityPoints = StateManager.abilityPoints;
 
     if (StateManager.playerUnits.Length > 0) Army.UpdateUnits(StateManager.playerUnits);
     if (StateManager.playerSupports.Length > 0) Army.UpdateSupports(StateManager.playerSupports);
     if (StateManager.inventoryEquipment.Length > 0) Inventory.UpdateInventory(StateManager.inventoryEquipment);
     if (StateManager.inventoryItems.Length > 0) Inventory.UpdateInventory(StateManager.inventoryItems);
+    AbilityController.Init();
 
     MapUI.Instance.UpdateResources();
     MapUI.Instance.UpdateLocation(StateManager.currentScene);

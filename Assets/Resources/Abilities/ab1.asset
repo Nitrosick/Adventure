@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30b3bbd01cd3da047b4aacf85fb13ac7, type: 3}
+  m_Name: ab1
+  m_EditorClassIdentifier: 
+  id: ab1
+  abilityName: Fencer
+  description: Skill in fencing weapons. Increases damage from one-handed swords,
+    sabers, katanas, and other blades.
+  icon: {fileID: 21300000, guid: d4e59dc6a40001a4ca17ea72fbb3d2ae, type: 3}
+  effectValues:
+  - 5
+  - 10
+  - 15
+  effectPostfix: '%'

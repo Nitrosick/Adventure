@@ -34,6 +34,7 @@ public class PlayerMenuUI : MonoBehaviour {
   private static TextMeshProUGUI playerFameValue;
   private static RectTransform playerFameBar;
   private static RectTransform playerFameBarFill;
+  private static Transform abilities;
 
   // Quests
   private static Transform activeQuests;
@@ -82,6 +83,7 @@ public class PlayerMenuUI : MonoBehaviour {
     playerFameBar = Get<RectTransform>("Left/Blocks/Left/PlayerProgress/Viewport/Content/FameBar");
     playerFameBarFill = Get<RectTransform>("Left/Blocks/Left/PlayerProgress/Viewport/Content/FameBar/Fill");
 
+    abilities = Get<RectTransform>("Left/Blocks/Right/Abilities");
     activeQuests = Find("Left/Blocks/Left/ActiveQuests");
     completedQuests = Find("Left/Blocks/Right/CompletedQuests");
     activeQuestsEmpty = Find("Left/Blocks/Left/ActiveQuests/Viewport/Content/Empty").gameObject;
@@ -115,7 +117,7 @@ public class PlayerMenuUI : MonoBehaviour {
     playerFameValue != null && playerFameBar != null && playerFameBarFill != null &&
     navQuests != null && activeQuests != null && completedQuests != null &&
     activeQuestsEmpty != null && completedQuestsEmpty != null && activeQuestsList != null &&
-    completedQuestsList != null;
+    completedQuestsList != null && abilities != null;
   }
 
   private void OnDestroy() {
@@ -155,6 +157,7 @@ public class PlayerMenuUI : MonoBehaviour {
 
     ShowSlots(false);
     playerProgress.gameObject.SetActive(false);
+    abilities.gameObject.SetActive(false);
     activeQuests.gameObject.SetActive(false);
     completedQuests.gameObject.SetActive(false);
 
@@ -187,13 +190,15 @@ public class PlayerMenuUI : MonoBehaviour {
     Clear();
     navHero.interactable = false;
     leftSlotsTitle.text = "Progress";
-    rightSlotsTitle.text = "Skills";
+    rightSlotsTitle.text = "Abilities";
 
     Player player = Player.Instance;
     Unit hero = player.Army.Units.FirstOrDefault(u => u.IsHero);
     if (hero == null) return;
 
     playerProgress.gameObject.SetActive(true);
+    abilities.gameObject.SetActive(true);
+    PlayerMenuAbilitiesUI.Init();
 
     playerXpValue.text = string.Format(
       "{0} / {1} (Level {2})",

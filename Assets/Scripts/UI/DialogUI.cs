@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class Dialog : MonoBehaviour {
+  // private static IconDatabase IconDatabase;
   private static Transform window;
   private static GameObject background;
   private static Button submit;
@@ -11,23 +12,31 @@ public class Dialog : MonoBehaviour {
   private static Button decline;
   private static TextMeshProUGUI declineText;
   private static Action<bool> callback;
+  private static Image icon;
   private static TextMeshProUGUI title;
   private static TextMeshProUGUI text;
+  private static GameObject effect;
+  private static TextMeshProUGUI effectValue;
 
   private void Awake() {
+    // IconDatabase = Resources.Load<IconDatabase>("Databases/IconDatabase");
     window = transform.Find("Dialog/Panel").GetComponent<Transform>();
     background = transform.Find("Dialog/Background").gameObject;
     submit = window.Find("Control/Confirm").GetComponent<Button>();
     submitText = window.Find("Control/Confirm/Text").GetComponent<TextMeshProUGUI>();
     decline = window.Find("Control/Decline").GetComponent<Button>();
     declineText = window.Find("Control/Decline/Text").GetComponent<TextMeshProUGUI>();
+    icon = window.Find("Head/Icon").GetComponent<Image>();
     title = window.Find("Head/Title").GetComponent<TextMeshProUGUI>();
     text = window.Find("Text").GetComponent<TextMeshProUGUI>();
+    effect = window.Find("Effect").gameObject;
+    effectValue = window.Find("Effect/Value").GetComponent<TextMeshProUGUI>();
 
     if (
       window == null || background == null || submit == null ||
       decline == null || title == null || text == null ||
-      submitText == null || declineText == null
+      submitText == null || declineText == null || icon == null ||
+      effect == null || effectValue == null
     ) {
       Debug.LogError("Dialog components initialization error");
       return;
@@ -70,14 +79,42 @@ public class Dialog : MonoBehaviour {
     Close();
   }
 
-  public static void Confirmation(Action<bool> action, string _title = "", string _text = "") {
+  public static void Confirmation(
+    Action<bool> action,
+    string _title = "",
+    string _text = ""
+  ) {
     callback = action;
     title.text = _title;
     text.text = _text;
     Open();
   }
 
-  public static void Info(string _title = "", string _text = "", string btnText = "") {
+  public static void Learn(
+    Action<bool> action,
+    string _title,
+    string _text,
+    string _effect,
+    Sprite _icon,
+    bool active = true
+  ) {
+    submit.gameObject.SetActive(active);
+    effect.SetActive(_effect != "");
+    icon.sprite = _icon;
+    submitText.text = "Learn";
+    declineText.text = "Close";
+    callback = action;
+    title.text = _title;
+    text.text = _text;
+    effectValue.text = _effect;
+    Open();
+  }
+
+  public static void Info(
+    string _title = "",
+    string _text = "",
+    string btnText = ""
+  ) {
     submit.gameObject.SetActive(false);
     declineText.text = btnText == "" ? "Ok" : btnText;
     title.text = _title;

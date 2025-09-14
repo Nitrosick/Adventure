@@ -24,6 +24,10 @@ Adept: #306DAB
 Expert: #6948A4
 Master: #CF8F0B
 
+Bronze: #C2771D
+Silver: #CDCDCE
+Gold: #E2B63F
+
 Common
 ------
 Gap: 30
@@ -73,12 +77,6 @@ public enum DamageType {
   Chop,
   Crash,
   Blood
-}
-
-public enum SkillName {
-  Block,
-  Parry,
-  Wall
 }
 
 public enum AIBehaviorType {
@@ -251,4 +249,18 @@ public enum KnowledgeSection {
   AdventureMap,
   Battlefield,
   Lore
+}
+
+// Skills and effects
+public enum SkillName {
+  Block,
+  Parry,
+  Wall
+}
+
+public enum AbilityLevel {
+  No,
+  Bronze,
+  Silver,
+  Gold
 }

@@ -41,9 +41,14 @@ public static class Factory {
     return Load<KnowledgeArticle>(GetPath(id));
   }
 
+  public static Ability CreateAbilityById(string id) {
+    return Load<Ability>(GetPath(id));
+  }
+
   private static string GetPath(string id) {
     if (string.IsNullOrEmpty(id)) return null;
     if (id.StartsWith("aa")) return "Knowledge/" + id;
+    if (id.StartsWith("ab")) return "Abilities/" + id;
     if (id.StartsWith("ai")) return "Additional/" + id;
     if (id.StartsWith("mi")) return "Medicine/" + id;
     if (id.StartsWith("su")) return "Supports/" + id;

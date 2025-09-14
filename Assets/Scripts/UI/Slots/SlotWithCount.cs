@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
@@ -16,8 +15,6 @@ public class SlotWithCount : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
   private Unit currentUnit;
   private SupportInstance currentSupport;
 
-  protected Dictionary<MasteryLevel, Color> palette = new();
-
   private void Awake() {
     image = transform.Find("Image").GetComponent<Image>();
     background = transform.Find("Background").GetComponent<Image>();
@@ -27,8 +24,6 @@ public class SlotWithCount : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     if (image == null || background == null || itemCount == null || itemCountText == null) {
       Debug.LogError("Crafting recipe slot components initialization error");
     }
-
-    palette = Utils.GetMasteryPalette();
   }
 
   public async void Init(Sprite sprite, int count = 1, string hint = "") {
@@ -64,7 +59,7 @@ public class SlotWithCount : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
   public async void Init(SupportInstance unit) {
     await Task.Yield();
     image.sprite = unit.data.icon;
-    background.color = palette[unit.level];
+    background.color = MapUI.Instance.palette[unit.level];
     currentSupport = unit;
   }
 

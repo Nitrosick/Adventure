@@ -3,7 +3,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using TMPro;
-using System.Collections.Generic;
 
 public class MenuSlot : MonoBehaviour, IPointerClickHandler {
   public Unit UnitItem { get; private set; }
@@ -21,8 +20,6 @@ public class MenuSlot : MonoBehaviour, IPointerClickHandler {
   private RectTransform healthBarFill;
   private TextMeshProUGUI count;
   private bool preventPointerEvents;
-
-  protected Dictionary<MasteryLevel, Color> palette = new();
 
   private void Awake() {
     image = transform.Find("Image").GetComponent<Image>();
@@ -42,8 +39,6 @@ public class MenuSlot : MonoBehaviour, IPointerClickHandler {
     ) {
       Debug.LogError("Menu slot components initialization error");
     }
-
-    palette = Utils.GetMasteryPalette();
   }
 
   private void OnDestroy() {
@@ -97,7 +92,7 @@ public class MenuSlot : MonoBehaviour, IPointerClickHandler {
     preventPointerEvents = noPointer;
     SupportItem = unit;
     image.sprite = unit.data.icon;
-    background.color = palette[unit.level];
+    background.color = MapUI.Instance.palette[unit.level];
     if (unit.isNew) NewMark.SetActive(true);
     if (!preventPointerEvents && unit.inSquad) ActiveMark.SetActive(true);
   }

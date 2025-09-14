@@ -41,12 +41,14 @@ public static class StateManager {
   public static int fame;
   public static int level;
   public static int statPoints;
+  public static int abilityPoints;
   public static int supportSlots;
 
   public static Dictionary<string, List<MapZoneType>> zonesState;
   public static UnitData[] playerUnits;
   public static SupportData[] playerSupports;
   public static QuestData[] quests;
+  public static AbilityData[] abilities;
   public static Equipment[] inventoryEquipment;
   public static Item[] inventoryItems;
 
@@ -74,12 +76,14 @@ public static class StateManager {
     fame = 0;
     level = 1;
     statPoints = 0;
+    abilityPoints = 0;
     supportSlots = 1;
 
     zonesState = new Dictionary<string, List<MapZoneType>> { };
     playerUnits = new UnitData[] { };
     playerSupports = new SupportData[] { };
     quests = new QuestData[] { };
+    abilities = new AbilityData[] { };
     inventoryEquipment = new Equipment[] { };
     inventoryItems = new Item[] { };
     ResetTemp();
@@ -112,6 +116,11 @@ public static class StateManager {
   public static void WriteQuestsData(QuestInstance[] array) {
     QuestData[] newQuests = array.Select(q => q.ToData()).ToArray();
     quests = newQuests;
+  }
+
+  public static void WriteAbilitiesData(AbilityInstance[] array) {
+    AbilityData[] newAbilities = array.Select(q => q.ToData()).ToArray();
+    abilities = newAbilities;
   }
 
   // Save / Load
@@ -175,10 +184,12 @@ public static class StateManager {
       fame = fame,
       level = level,
       statPoints = statPoints,
+      abilityPoints = abilityPoints,
       supportSlots = supportSlots,
       zonesState = zonesState,
       playerUnits = playerUnits,
       quests = quests,
+      abilities = abilities,
       playerSupports = playerSupports,
       inventoryEquipmentIds = equipIds,
       inventoryItemIds = itemIds
@@ -201,11 +212,13 @@ public static class StateManager {
     fame = data.fame;
     level = data.level;
     statPoints = data.statPoints;
+    abilityPoints = data.abilityPoints;
     supportSlots = data.supportSlots;
     zonesState = data.zonesState;
     playerUnits = data.playerUnits;
     playerSupports = data.playerSupports;
     quests = data.quests;
+    abilities = data.abilities;
     inventoryEquipment = Factory.CreateEquipById(data.inventoryEquipmentIds);
     inventoryItems = Factory.CreateItemById(data.inventoryItemIds);
   }

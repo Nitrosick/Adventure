@@ -138,7 +138,7 @@ public static class PlayerMenuUIActions {
 
     Player.Instance.SetStatPoints(-1);
     hero.IncreaseStats(increase);
-    PlayerMenuUI.SelectHeroTab();
+    PlayerMenuUIInfo.RecalculatePoints();
   }
 
   public static void UseItem() {

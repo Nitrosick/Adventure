@@ -36,7 +36,9 @@ public class MapUI : GeneralUI {
   private TextMeshProUGUI villagersValue;
   private TextMeshProUGUI totalPeopleValue;
   private TextMeshProUGUI location;
+
   public string[] resTooltips = { "Wood", "Stone", "Metal", "Leather" };
+  public Dictionary<MasteryLevel, Color> palette = new();
 
   protected override void Awake() {
     base.Awake();
@@ -75,8 +77,10 @@ public class MapUI : GeneralUI {
 
     if (!ComponentsInitialized()) {
       Debug.LogError("Map UI components initialization error");
+      return;
     }
 
+    palette = Utils.GetMasteryPalette();
     playerMenuButton.onClick.AddListener(SwitchPlayerMenu);
     EnableUI();
   }

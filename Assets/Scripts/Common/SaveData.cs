@@ -18,11 +18,13 @@ public class SaveData {
   public int fame;
   public int level;
   public int statPoints;
+  public int abilityPoints;
   public int supportSlots;
   public Dictionary<string, List<MapZoneType>> zonesState;
   public UnitData[] playerUnits;
   public SupportData[] playerSupports;
   public QuestData[] quests;
+  public AbilityData[] abilities;
   public string[] inventoryEquipmentIds;
   public string[] inventoryItemIds;
 }
