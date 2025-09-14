@@ -264,3 +264,12 @@ public enum AbilityLevel {
   Silver,
   Gold
 }
+
+public enum AbilityBonusType {
+  DamagePercent,
+  DamagePoints,
+  BlockPercent,
+  BlockPoints,
+  Evasion,
+  Healing
+}

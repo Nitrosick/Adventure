@@ -15,6 +15,8 @@ public class UnitEquipment : MonoBehaviour {
   private Transform beard;
   private Transform hair;
 
+  private readonly float damageScalingFactor = 0.75f;
+
   private void Awake() {
     unit = transform.GetComponent<Unit>();
     armorSets = GetComponentsInChildren<ArmorSet>(true);
@@ -170,13 +172,12 @@ public class UnitEquipment : MonoBehaviour {
   }
 
   public float GetTotalDamage() {
-    // FIXME: Учет предмета во второй руке
     float result = primary.damage;
     foreach (CoreStat stat in primary.scalingStats) {
       switch (stat) {
-        case CoreStat.Strength: result += unit.Strength; break;
-        case CoreStat.Dexterity: result += unit.Dexterity; break;
-        case CoreStat.Intelligence: result += unit.Intelligence; break;
+        case CoreStat.Strength: result += unit.Strength * damageScalingFactor; break;
+        case CoreStat.Dexterity: result += unit.Dexterity * damageScalingFactor; break;
+        case CoreStat.Intelligence: result += unit.Intelligence * damageScalingFactor; break;
       }
     }
     return result;

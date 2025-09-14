@@ -13,6 +13,12 @@ public static class Calculate {
   private static readonly float distanceFinePerUnit = 4f;
 
   public static float HitChance(Unit attacker, Unit target) {
+    if (
+      target.Effects.HasEffect("Block") ||
+      target.Effects.HasEffect("Wall") ||
+      target.Effects.HasEffect("Root")
+    ) return 100f;
+
     float result = attacker.Equip.primary.precision;
 
     // Equipment weight
@@ -29,13 +35,10 @@ public static class Calculate {
     float dexDelta = attacker.Dexterity - target.Dexterity;
     if (dexDelta < 0) result -= Math.Abs(dexDelta) * dexterityScaleUnit;
 
-    // Effects
-    if (
-      target.Effects.HasEffect("Block") ||
-      target.Effects.HasEffect("Wall") ||
-      target.Effects.HasEffect("Root")
-    ) return 100f;
+    // Player abilities
+    if (target.IsHero) result *= AbilityController.EvasionBonus();
 
+    // Effects
     if (attacker.Type == UnitType.Range) {
       if (attacker.Effects.HasEffect("Cover") || target.Effects.HasEffect("Cover")) result /= 2;
     }
@@ -57,7 +60,6 @@ public static class Calculate {
     if (dexDelta > 0) chance += dexDelta * dexterityScaleUnit;
 
     bool success = Utils.RollChance(chance);
-    // FIXME: Учет предмета во второй руке и в доп. слоте
     if (success) multiplier = attacker.Equip.primary.critModifier;
 
     return multiplier;
@@ -75,7 +77,11 @@ public static class Calculate {
     if (attackerWeapon.armorPenetration > 0 && (targetArmor.weight != EquipmentWeight.Light)) {
       defense *= 1f - (attackerWeapon.armorPenetration / 100f);
     }
+
     float total = damage * Mathf.Exp(-defense / defenseFactor);
+
+    // Player abilities
+    if (attacker.IsHero) total *= AbilityController.DamageBonus(attackerWeapon.damageType);
 
     // Terrain
     int atkH = attacker.CurrentTile.height;
@@ -83,7 +89,15 @@ public static class Calculate {
     total *= 1f + (atkH - tarH) * 0.1f;
 
     // Effects
-    if (target.Effects.HasEffect("Block")) total /= 2;
+    float blockMultiplier = 1f;
+    if (target.Effects.HasEffect("Block")) {
+      blockMultiplier = 1.75f;
+      if (target.IsHero) blockMultiplier += AbilityController.BlockBonus();
+    } else if (target.Effects.HasEffect("Wall")) {
+      blockMultiplier = 2.25f;
+      if (target.IsHero) blockMultiplier += AbilityController.BlockBonus();
+    }
+    total /= blockMultiplier;
 
     return total < minDamage ? minDamage : total;
   }
@@ -94,7 +108,6 @@ public static class Calculate {
     Equipment secondary = attacker.Equip.secondary;
     Equipment attackerArmor = attacker.Equip.armor;
     Equipment targetArmor = target.Equip.armor;
-    // FIXME: Доп. слот
     Equipment[] items = { primary, secondary, attackerArmor };
 
     foreach (Equipment item in items) {
@@ -113,12 +126,13 @@ public static class Calculate {
     Equipment primary = unit.Equip.primary;
     Equipment secondary = unit.Equip.secondary;
     Equipment attackerArmor = unit.Equip.armor;
-    // FIXME: Доп. слот
     Equipment[] items = { primary, secondary, attackerArmor };
 
     foreach (Equipment item in items) {
       if (item == null || item.skill == null || item.skill.isActive) continue;
+
       float chance = item.skill.activateChance;
+      if (item.skill.displayName == "Parry" && unit.IsHero) chance += AbilityController.EvasionBonus(false);
       if (Utils.RollChance(chance)) result.Add(item.skill);
     }
 

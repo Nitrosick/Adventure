@@ -51,7 +51,7 @@ public class UnitEffects : MonoBehaviour {
     ActiveEffects.RemoveAll(e => e.effectData != null && e.effectData.name == effectName);
     if (effectName == "Stun") unit.Animator.SetStunned(false);
     if (effectName == "Root") unit.Animator.SetRooted(false);
-    else if (effectName == "Wall") unit.Animator.SetBlocking(false);
+    else if (effectName == "Wall" || effectName == "Block") unit.Animator.SetBlocking(false);
     unit.Ui.UpdateEffects();
   }
 

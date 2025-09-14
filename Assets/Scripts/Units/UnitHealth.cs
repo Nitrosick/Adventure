@@ -54,8 +54,10 @@ public class UnitHealth : MonoBehaviour {
     _ = MakeCorpse();
   }
 
-  public void Heal(float value, bool inBattle = true) {
+  public void Heal(float _value, bool inBattle = true) {
     if (unit.CurrentHealth == unit.TotalHealth) return;
+    float value = _value;
+    if (inBattle && unit.Relation == UnitRelation.Ally) value *= AbilityController.HealBonus();
     unit.CurrentHealth += value;
     if (unit.CurrentHealth > unit.TotalHealth) unit.CurrentHealth = unit.TotalHealth;
 
