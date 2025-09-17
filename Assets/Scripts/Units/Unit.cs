@@ -151,12 +151,13 @@ public class Unit : MonoBehaviour {
 
   public float GetPriority() {
     float result = Priority;
+    if (IsHero) result += AbilityController.PriorityBonus();
     // FIXME: Проверка на разные защитные эффекты и условия окружения
     if (Type == UnitType.Range && CurrentProjectiles == 0) return 0;
     if (Effects.HasEffect("Cover")) result -= 2;
     if (CurrentHealth < TotalHealth / 3) result *= 2;
     else if (CurrentHealth < TotalHealth / 2) result *= 1.5f;
-    if (Effects.HasEffect("Block") || Effects.HasEffect("Stun")) result /= 3;
+    if (Effects.HasAnyEffect(new string[] { "Block", "Stun" })) result /= 3;
     return result;
   }
 

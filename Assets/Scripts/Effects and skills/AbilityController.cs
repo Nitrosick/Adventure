@@ -11,6 +11,7 @@ public static class AbilityController {
 
     Ability[] abilitiesData = Resources.LoadAll<Ability>("Abilities");
     allAbilities = abilitiesData
+      .OrderBy(a => int.Parse(a.id[2..]))
       .Select(a => new AbilityInstance(a, AbilityLevel.No))
       .ToList();
 
@@ -30,58 +31,49 @@ public static class AbilityController {
     StateManager.WriteAbilitiesData(allAbilities.ToArray());
   }
 
-  public static float DamageBonus(DamageType damageType) {
-    float result = 1f;
-    AbilityInstance[] abilities = GetAbilitiesWithBonus(AbilityBonusType.DamagePercent);
+  private static float CalculateBonus(
+    AbilityBonusType type,
+    string id,
+    float initial,
+    Func<float, float, float> apply,
+    bool percent = true
+  ) {
+    float result = initial;
+    AbilityInstance[] abilities = GetAbilitiesWithBonus(type);
 
     foreach (AbilityInstance a in abilities) {
-      float value = a.data.effectValues[LevelIndex(a.level) - 1] / 100;
-      if (a.data.id == "ab1" && damageType == DamageType.Slash) result += value;
-      else if (a.data.id == "ab2" && damageType == DamageType.Chop) result += value;
-      else if (a.data.id == "ab3" && damageType == DamageType.Crash) result += value;
+      if (a.data.id != id) continue;
+      float value = a.data.effectValues[LevelIndex(a.level) - 1];
+      if (percent) value /= 100f;
+      result = apply(result, value);
     }
 
+    Debug.Log($"{type}: {result}"); // FIXME: Для отладки
     return result;
   }
 
-  public static float BlockBonus() {
-    float result = 0;
-    AbilityInstance[] abilities = GetAbilitiesWithBonus(AbilityBonusType.BlockPercent);
+  public static float DamageBonus(DamageType damageType) =>
+    damageType switch {
+      DamageType.Slash => CalculateBonus(AbilityBonusType.Damage, "ab1", 1f, (r, v) => r + v),
+      DamageType.Chop => CalculateBonus(AbilityBonusType.Damage, "ab2", 1f, (r, v) => r + v),
+      DamageType.Crash => CalculateBonus(AbilityBonusType.Damage, "ab3", 1f, (r, v) => r + v),
+      _ => 1f
+    };
 
-    foreach (AbilityInstance a in abilities) {
-      float value = a.data.effectValues[LevelIndex(a.level) - 1] / 100;
-      if (a.data.id == "ab4") result = value;
-    }
+  public static float EvasionBonus(bool isMultiplier = true) =>
+    isMultiplier
+      ? CalculateBonus(AbilityBonusType.Evasion, "ab5", 1f, (r, v) => r - v)
+      : CalculateBonus(AbilityBonusType.Evasion, "ab5", 0f, (r, v) => r + v * 100, false);
 
-    return result;
-  }
-
-  public static float EvasionBonus(bool isMultiplier = true) {
-    float result = isMultiplier ? 1f : 0f;
-    AbilityInstance[] abilities = GetAbilitiesWithBonus(AbilityBonusType.Evasion);
-
-    foreach (AbilityInstance a in abilities) {
-      float value = a.data.effectValues[LevelIndex(a.level) - 1] / 100;
-      if (a.data.id == "ab5") {
-        if (isMultiplier) result -= value;
-        else result += a.data.effectValues[LevelIndex(a.level) - 1];
-      }
-    }
-
-    return result;
-  }
-
-  public static float HealBonus() {
-    float result = 1f;
-    AbilityInstance[] abilities = GetAbilitiesWithBonus(AbilityBonusType.Healing);
-
-    foreach (AbilityInstance a in abilities) {
-      float value = a.data.effectValues[LevelIndex(a.level) - 1] / 100;
-      if (a.data.id == "ab6") result += value;
-    }
-
-    return result;
-  }
+  public static float BlockBonus() => CalculateBonus(AbilityBonusType.Block, "ab4", 0f, (r, v) => v);
+  public static float HealBonus() => CalculateBonus(AbilityBonusType.Healing, "ab6", 1f, (r, v) => r + v);
+  public static float StunResist() => CalculateBonus(AbilityBonusType.Resist, "ab7", 0f, (r, v) => r + v, false);
+  public static float PriorityBonus() => CalculateBonus(AbilityBonusType.Priority, "ab8", 0f, (r, v) => r + v, false);
+  public static float AmbushProtectBonus() => CalculateBonus(AbilityBonusType.AmbushProtect, "ab9", 0f, (r, v) => r + v, false);
+  public static float XpBonus() => CalculateBonus(AbilityBonusType.Experience, "ab10", 1f, (r, v) => r + v);
+  public static float PriceBonus() => CalculateBonus(AbilityBonusType.Prices, "ab11", 1f, (r, v) => r - v);
+  public static float ArmorReqBonus() => CalculateBonus(AbilityBonusType.Requirements, "ab12", 0f, (r, v) => r + v, false);
+  public static float CritChanceBonus() => CalculateBonus(AbilityBonusType.Crit, "ab13", 0f, (r, v) => r + v, false);
 
   private static AbilityInstance[] GetAbilitiesWithBonus(AbilityBonusType bonus) {
     return allAbilities

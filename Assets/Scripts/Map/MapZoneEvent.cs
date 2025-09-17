@@ -19,7 +19,9 @@ public class MapZoneEvent : MonoBehaviour {
     if (zone.events[eventIndex] == MapZoneType.Ambush) {
       eventIndex++;
       if (!ignoreBattle) {
-        bool check = Utils.RollChance(battleZone.ambushChance);
+        float chance = battleZone.ambushChance;
+        chance -= AbilityController.AmbushProtectBonus();
+        bool check = Utils.RollChance(chance);
         if (check || forceAmbush) {
           StartBattle(battleZone, true);
           return;

@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using UnityEngine;
 
 public class TradingMenuUI : HomeMenuFeature {
@@ -7,6 +9,7 @@ public class TradingMenuUI : HomeMenuFeature {
   private RectTransform equipmentSlots;
   private RectTransform miscSlots;
   public int[] resourcePrices;
+  private int[] resourceFinalPrices;
 
   private bool resourcesAvailable;
   private Equipment[] equipmentGoods;
@@ -23,6 +26,8 @@ public class TradingMenuUI : HomeMenuFeature {
     if (!ComponentsInitialized()) {
       Debug.LogError("Trading menu UI components initialization error");
     }
+
+    resourceFinalPrices = resourcePrices.ToArray();
   }
 
   private bool ComponentsInitialized() {
@@ -37,6 +42,10 @@ public class TradingMenuUI : HomeMenuFeature {
     Item[] items
   ) {
     InitHeader(name, lvl);
+
+    resourceFinalPrices = resourcePrices
+      .Select(p => (int)Math.Round(p * AbilityController.PriceBonus()))
+      .ToArray();
 
     resourcesAvailable = resAvailable;
     equipmentGoods = equip;
@@ -54,11 +63,12 @@ public class TradingMenuUI : HomeMenuFeature {
     ClearSlots(miscSlots);
 
     if (resourcesAvailable) {
-      for (int i = 0; i < resourcePrices.Length; i++) {
+      for (int i = 0; i < resourceFinalPrices.Length; i++) {
         GameObject slot = Instantiate(slotPrefab, resourceSlots);
         slot.GetComponent<SlotWithPrice>().Init(
           MapUI.Instance.resourceSprites[i],
-          resourcePrices[i], i,
+          resourceFinalPrices[i],
+          i,
           MapUI.Instance.resTooltips[i]
         );
       }
@@ -74,7 +84,7 @@ public class TradingMenuUI : HomeMenuFeature {
       slot.GetComponent<SlotWithPrice>().Init(item);
     }
 
-    RenderEmptySlots(resourceSlots, resourcesAvailable ? resourcePrices.Length : 0);
+    RenderEmptySlots(resourceSlots, resourcesAvailable ? resourceFinalPrices.Length : 0);
     RenderEmptySlots(equipmentSlots, equipmentGoods.Length);
     RenderEmptySlots(miscSlots, itemGoods.Length);
   }

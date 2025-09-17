@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public abstract class Item : ScriptableObject {
@@ -10,4 +11,8 @@ public abstract class Item : ScriptableObject {
   public Sprite icon;
   public int price;
   public bool isNew;
+
+  public int GetPrice() {
+    return (int)Math.Round(price * AbilityController.PriceBonus());
+  }
 }

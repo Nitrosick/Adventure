@@ -17,6 +17,13 @@ public class Trap : MonoBehaviour {
     transform.GetComponent<Animator>().SetTrigger("Trigger");
     if (effect == null || unit == null) return;
 
+    float avoidChance = 0f;
+    if (unit.IsHero) avoidChance += AbilityController.AmbushProtectBonus();
+    if (Utils.RollChance(avoidChance)) {
+      unit.Ui.ShowPopup("Avoid!");
+      return;
+    }
+
     float modifier = unit.Equip.armor.weight == EquipmentWeight.Heavy ? 0.5f : 1f;
     if (damage > 0) unit.Health.TakeDamage(damage, modifier, true);
 

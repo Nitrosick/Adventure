@@ -163,7 +163,7 @@ public class BattleUI : GeneralUI {
 
     List<Skill> filtered = skills
       .Where(s => {
-        if ((unit.Effects.HasEffect("Stun") || unit.Effects.HasEffect("Root")) && !s.canUseInRoot) return false;
+        if (unit.Effects.HasAnyEffect(new string[] { "Stun", "Root" }) && !s.canUseInRoot) return false;
         return s != null && s.skillPhases.Contains(phase);
       })
       .ToList();

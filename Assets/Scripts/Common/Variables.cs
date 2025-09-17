@@ -266,10 +266,15 @@ public enum AbilityLevel {
 }
 
 public enum AbilityBonusType {
-  DamagePercent,
-  DamagePoints,
-  BlockPercent,
-  BlockPoints,
+  Damage,
+  Block,
   Evasion,
-  Healing
+  Healing,
+  Resist,
+  Priority,
+  AmbushProtect,
+  Experience,
+  Prices,
+  Crit,
+  Requirements
 }

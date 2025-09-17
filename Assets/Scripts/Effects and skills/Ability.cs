@@ -7,6 +7,7 @@ public class Ability : ScriptableObject {
   [TextArea(5, 20)] public string description;
   public float[] effectValues = { 0, 0, 0 };
   public string effectPostfix;
+  public int tier = 1;
 
   public Sprite icon;
   public AbilityBonusType bonusType;

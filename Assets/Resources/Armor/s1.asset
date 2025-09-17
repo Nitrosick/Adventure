@@ -25,11 +25,13 @@ MonoBehaviour:
   weight: 1
   rarity: 0
   effect: {fileID: 0}
+  effectChance: 0
   skill: {fileID: 11400000, guid: 247a9212c31205c468b53aaa875bc20d, type: 2}
   icon: {fileID: 21300000, guid: 70e02f4249708204fb3c8ccb04ee427b, type: 3}
   price: 65
   isNew: 0
   defense: 3
+  blockMultiplier: 1.75
   prefab: {fileID: 953476025850262204, guid: 33ce09dae24722d41b521d7ddde93f65, type: 3}
   resistsMap:
   - type: 1
@@ -42,3 +44,5 @@ MonoBehaviour:
     value: 0
   - type: 5
     value: 0
+  hideBeard: 0
+  hideHair: 0

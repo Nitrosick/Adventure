@@ -36,7 +36,7 @@ public class UnitHealth : MonoBehaviour {
       unit.Ui.UpdateHealth(unit.TotalHealth, unit.CurrentHealth);
 
       if (!isTickDamage) {
-        if (unit.Effects.HasEffect("Stun") || unit.Effects.HasEffect("Root")) unit.FinishAction();
+        if (unit.Effects.HasAnyEffect(new string[] { "Stun", "Root" })) unit.FinishAction();
         else unit.Animator.TakeDamage();
       }
     }

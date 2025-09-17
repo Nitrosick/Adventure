@@ -151,8 +151,8 @@ public class InfoPopup : MonoBehaviour {
 
     title.text = item.itemName;
     description.text = item.description;
-    price.text = item.price.ToString();
-    int[] stats = item.requirementStats;
+    price.text = item.GetPrice().ToString();
+    int[] stats = item.GetRequirementStats();
     reqStats.text = string.Format(
       "<color=#F61010>{0}</color> / <color=#81D11F>{1}</color> / <color=#2B8EF3>{2}</color>",
       stats[0], stats[1], stats[2]
@@ -178,7 +178,7 @@ public class InfoPopup : MonoBehaviour {
 
     title.text = item.itemName;
     description.text = item.description;
-    price.text = item.price.ToString();
+    price.text = item.GetPrice().ToString();
 
     if (item is MedicineItem medItem) {
       medicineParams.gameObject.SetActive(true);
@@ -193,8 +193,8 @@ public class InfoPopup : MonoBehaviour {
 
     title.text = item.itemName;
     description.text = item.description;
-    price.text = item.price.ToString();
-    int[] stats = item.requirementStats;
+    price.text = item.GetPrice().ToString();
+    int[] stats = item.GetRequirementStats();
     reqStats.text = string.Format(
       "<color=#F61010>{0}</color> / <color=#81D11F>{1}</color> / <color=#2B8EF3>{2}</color>",
       stats[0], stats[1], stats[2]

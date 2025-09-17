@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 30b3bbd01cd3da047b4aacf85fb13ac7, type: 3}
-  m_Name: ab4
+  m_Name: ab13
   m_EditorClassIdentifier: 
-  id: ab4
-  abilityName: Vanguard
-  description: Mastery of standard and tower shields. While blocking, the hero takes
-    even less damage.
+  id: ab13
+  abilityName: Knowing the pain points
+  description: Knowledge of human anatomy and where to strike more effectively is
+    an indispensable skill for any warrior. The chance of a critical hit increases.
   effectValues:
   - 5
+  - 7.5
   - 10
-  - 15
   effectPostfix: '%'
-  tier: 1
-  icon: {fileID: 21300000, guid: 7317b4785be6ffb4cb1dbe470a491eec, type: 3}
-  bonusType: 1
+  tier: 2
+  icon: {fileID: 21300000, guid: c9b68bb6c9756c14b939128b976c0fe3, type: 3}
+  bonusType: 9

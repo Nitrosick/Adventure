@@ -222,7 +222,7 @@ public class UnitEquipment : MonoBehaviour {
   public bool HasAttackPhaseSkills() {
     if (unit.SkillCharges == 0) return false;
     foreach (Skill skill in GetActiveSkills()) {
-      if ((unit.Effects.HasEffect("Stun") || unit.Effects.HasEffect("Root")) && !skill.canUseInRoot) continue;
+      if (unit.Effects.HasAnyEffect(new string[] { "Stun", "Root" }) && !skill.canUseInRoot) continue;
       if (skill.skillPhases.Contains(BattlePhase.Attack)) return true;
     }
     return false;
@@ -273,8 +273,8 @@ public class UnitEquipment : MonoBehaviour {
     float[] unitStats = { unit.Strength, unit.Dexterity, unit.Intelligence };
 
     bool enoughStats = true;
-    for (int i = 0; i < item.requirementStats.Length; i++) {
-      if (item.requirementStats[i] > unitStats[i]) {
+    for (int i = 0; i < item.GetRequirementStats().Length; i++) {
+      if (item.GetRequirementStats()[i] > unitStats[i]) {
         enoughStats = false;
         break;
       }

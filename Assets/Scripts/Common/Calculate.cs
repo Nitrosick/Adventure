@@ -13,11 +13,7 @@ public static class Calculate {
   private static readonly float distanceFinePerUnit = 4f;
 
   public static float HitChance(Unit attacker, Unit target) {
-    if (
-      target.Effects.HasEffect("Block") ||
-      target.Effects.HasEffect("Wall") ||
-      target.Effects.HasEffect("Root")
-    ) return 100f;
+    if (target.Effects.HasAnyEffect(new string[] { "Block", "Wall", "Root" })) return 100f;
 
     float result = attacker.Equip.primary.precision;
 
@@ -59,6 +55,9 @@ public static class Calculate {
     float dexDelta = attacker.Dexterity - target.Dexterity;
     if (dexDelta > 0) chance += dexDelta * dexterityScaleUnit;
 
+    // Player abilities
+    if (attacker.IsHero) chance += AbilityController.CritChanceBonus();
+
     bool success = Utils.RollChance(chance);
     if (success) multiplier = attacker.Equip.primary.critModifier;
 
@@ -90,12 +89,11 @@ public static class Calculate {
 
     // Effects
     float blockMultiplier = 1f;
-    if (target.Effects.HasEffect("Block")) {
-      blockMultiplier = 1.75f;
-      if (target.IsHero) blockMultiplier += AbilityController.BlockBonus();
-    } else if (target.Effects.HasEffect("Wall")) {
-      blockMultiplier = 2.25f;
-      if (target.IsHero) blockMultiplier += AbilityController.BlockBonus();
+    if (target.Effects.HasAnyEffect(new string[] { "Block", "Wall" })) {
+      if (target.Equip.secondary is Armor shield) {
+        blockMultiplier = shield.blockMultiplier;
+        if (target.IsHero) blockMultiplier += AbilityController.BlockBonus();
+      }
     }
     total /= blockMultiplier;
 
@@ -112,9 +110,14 @@ public static class Calculate {
 
     foreach (Equipment item in items) {
       if (item == null || item.effect == null) continue;
+
       float chance = item.effectChance;
-      if (item.effect.effectName == "Bleeding" && targetArmor.weight == EquipmentWeight.Heavy) chance /= 2;
-      else if (item.effect.effectName == "Stun") chance += attacker.Strength - target.Strength;
+      if (item.effect.effectName == "Bleeding" && targetArmor.weight == EquipmentWeight.Heavy) {
+        chance /= 2;
+      } else if (item.effect.effectName == "Stun") {
+        if (target.IsHero) chance -= AbilityController.StunResist();
+        chance += attacker.Strength - target.Strength;
+      }
       if (Utils.RollChance(chance)) result.Add(item.effect);
     }
 

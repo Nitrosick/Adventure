@@ -1,4 +1,5 @@
 using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,6 +8,7 @@ public class AbilitySlot : MonoBehaviour {
   private Image frame;
   private Shadow frameShadow;
   private Image icon;
+  private TextMeshProUGUI tier;
   private Shadow iconShadow;
   private TooltipTrigger hint;
   private AbilityInstance ability;
@@ -16,12 +18,14 @@ public class AbilitySlot : MonoBehaviour {
     frame = transform.Find("Frame").GetComponent<Image>();
     frameShadow = transform.Find("Frame").GetComponent<Shadow>();
     icon = transform.Find("Icon").GetComponent<Image>();
+    tier = transform.Find("Tier").GetComponent<TextMeshProUGUI>();
     iconShadow = transform.Find("Icon").GetComponent<Shadow>();
     hint = transform.GetComponent<TooltipTrigger>();
 
     if (
       button == null || frame == null || icon == null ||
-      hint == null || frameShadow == null || iconShadow == null
+      hint == null || frameShadow == null || iconShadow == null ||
+      tier == null
     ) {
       Debug.LogError("Ability slot components initialization error");
       return;
@@ -41,9 +45,16 @@ public class AbilitySlot : MonoBehaviour {
     icon.color = PlayerMenuAbilitiesUI.palette[ability.level];
     hint.message = $"Learn: {ability.data.abilityName}";
 
+    tier.text = ability.data.tier switch {
+      1 => "I",
+      2 => "II",
+      3 => "III",
+      _ => "-",
+    };
+
     if (ability.level == AbilityLevel.No) {
       Color c = frame.color;
-      c.a = 0.05f;
+      c.a = 0.1f;
       frame.color = c;
       icon.color = c;
       frameShadow.enabled = false;
@@ -53,10 +64,23 @@ public class AbilitySlot : MonoBehaviour {
 
   private void OpenAbility() {
     int points = Player.Instance.AbilityPoints;
+    int playerLevel = Player.Instance.Level;
+    int tier = ability.data.tier;
+
     string effect = ability.level == AbilityLevel.No
       ? ""
       : $"{ability.data.effectValues[LevelIndex(ability.level) - 1]}{ability.data.effectPostfix}";
     if (ability.level == AbilityLevel.Gold) effect += " (max.)";
+
+    bool inactive = (tier == 3 && playerLevel < 20) ||
+      (tier == 2 && playerLevel < 10) ||
+      points < tier ||
+      ability.level == AbilityLevel.Gold;
+
+    string warning = "";
+    if (tier == 3 && playerLevel < 20) warning = "Requires hero level 20";
+    else if (tier == 2 && playerLevel < 10) warning = "Requires hero level 10";
+    else if (points < tier) warning = "Not enough stat points";
 
     Dialog.Learn(
       LearnAbility,
@@ -64,7 +88,9 @@ public class AbilitySlot : MonoBehaviour {
       ability.data.description,
       effect,
       ability.data.icon,
-      points > 0 && ability.level != AbilityLevel.Gold
+      ability.data.tier,
+      !inactive,
+      warning
     );
   }
 

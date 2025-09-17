@@ -17,6 +17,7 @@ public class Dialog : MonoBehaviour {
   private static TextMeshProUGUI text;
   private static GameObject effect;
   private static TextMeshProUGUI effectValue;
+  private static TextMeshProUGUI warning;
 
   private void Awake() {
     // IconDatabase = Resources.Load<IconDatabase>("Databases/IconDatabase");
@@ -31,12 +32,13 @@ public class Dialog : MonoBehaviour {
     text = window.Find("Text").GetComponent<TextMeshProUGUI>();
     effect = window.Find("Effect").gameObject;
     effectValue = window.Find("Effect/Value").GetComponent<TextMeshProUGUI>();
+    warning = window.Find("Warning").GetComponent<TextMeshProUGUI>();
 
     if (
       window == null || background == null || submit == null ||
       decline == null || title == null || text == null ||
       submitText == null || declineText == null || icon == null ||
-      effect == null || effectValue == null
+      effect == null || effectValue == null || warning == null
     ) {
       Debug.LogError("Dialog components initialization error");
       return;
@@ -62,10 +64,12 @@ public class Dialog : MonoBehaviour {
     window.gameObject.SetActive(false);
     submit.gameObject.SetActive(true);
     background.SetActive(false);
+    warning.gameObject.SetActive(false);
     title.text = "";
     text.text = "";
     submitText.text = "Yes";
     declineText.text = "No";
+    warning.text = "";
     SceneController.CloseWindow("dialog");
   }
 
@@ -82,11 +86,16 @@ public class Dialog : MonoBehaviour {
   public static void Confirmation(
     Action<bool> action,
     string _title = "",
-    string _text = ""
+    string _text = "",
+    string _warning = ""
   ) {
     callback = action;
     title.text = _title;
     text.text = _text;
+    if (_warning != "") {
+      warning.gameObject.SetActive(true);
+      warning.text = _warning;
+    }
     Open();
   }
 
@@ -96,7 +105,9 @@ public class Dialog : MonoBehaviour {
     string _text,
     string _effect,
     Sprite _icon,
-    bool active = true
+    int _tier = 0,
+    bool active = true,
+    string _warning = ""
   ) {
     submit.gameObject.SetActive(active);
     effect.SetActive(_effect != "");
@@ -105,8 +116,13 @@ public class Dialog : MonoBehaviour {
     declineText.text = "Close";
     callback = action;
     title.text = _title;
+    if (_tier > 0) title.text += $" (tier {_tier})";
     text.text = _text;
     effectValue.text = _effect;
+    if (_warning != "") {
+      warning.gameObject.SetActive(true);
+      warning.text = _warning;
+    }
     Open();
   }
 

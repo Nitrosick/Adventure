@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using UnityEngine;
 
@@ -71,7 +72,7 @@ public class Player : MonoBehaviour {
   }
 
   public void AddExpirience(int value) {
-    Experience += value;
+    Experience += (int)Math.Round(value * AbilityController.XpBonus());
     while (Experience >= XPForNextLevel) {
       Experience -= XPForNextLevel;
       LevelUp();

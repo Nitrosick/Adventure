@@ -49,7 +49,7 @@ public class SlotWithPrice : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     await Task.Yield();
     type = ItemType.Equipment;
     image.sprite = item.icon;
-    itemPrice = item.price;
+    itemPrice = item.GetPrice();
     itemId = item.id;
     currentEquip = item;
 
@@ -60,7 +60,7 @@ public class SlotWithPrice : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     await Task.Yield();
     type = ItemType.Misc;
     image.sprite = item.icon;
-    itemPrice = item.price;
+    itemPrice = item.GetPrice();
     itemId = item.id;
     currentItem = item;
 

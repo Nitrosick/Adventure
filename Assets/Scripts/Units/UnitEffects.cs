@@ -47,6 +47,10 @@ public class UnitEffects : MonoBehaviour {
     return ActiveEffects.Any(e => e.effectData != null && e.effectData.name == effectName);
   }
 
+  public bool HasAnyEffect(string[] effectNames) {
+    return ActiveEffects.Any(e => e.effectData != null && effectNames.Contains(e.effectData.name));
+  }
+
   public void ClearEffect(string effectName) {
     ActiveEffects.RemoveAll(e => e.effectData != null && e.effectData.name == effectName);
     if (effectName == "Stun") unit.Animator.SetStunned(false);

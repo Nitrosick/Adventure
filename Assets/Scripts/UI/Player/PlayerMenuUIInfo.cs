@@ -320,7 +320,7 @@ public class PlayerMenuUIInfo : MonoBehaviour {
     GameObject icon = Instantiate(PlayerMenuUI.Instance.menuSlotPrefab, avatar);
     icon.GetComponent<MenuSlot>().Init(equip, true);
 
-    int[] reqStats = equip.requirementStats;
+    int[] reqStats = equip.GetRequirementStats();
     equipRequiredStats.text = string.Format(
       "<color=#F61010>{0}</color> / <color=#81D11F>{1}</color> / <color=#2B8EF3>{2}</color>",
       reqStats[0], reqStats[1], reqStats[2]

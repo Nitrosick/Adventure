@@ -10,17 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 30b3bbd01cd3da047b4aacf85fb13ac7, type: 3}
-  m_Name: ab4
+  m_Name: ab9
   m_EditorClassIdentifier: 
-  id: ab4
-  abilityName: Vanguard
-  description: Mastery of standard and tower shields. While blocking, the hero takes
-    even less damage.
+  id: ab9
+  abilityName: Alertness
+  description: You are always on guard, watching for any shift in the wind and rustle
+    of leaves. The risk of falling into an ambush while traveling on the map is reduced.
+    In addition, with a small probability, the hero can avoid damage from a trap
+    on the battlefield.
   effectValues:
   - 5
   - 10
   - 15
   effectPostfix: '%'
   tier: 1
-  icon: {fileID: 21300000, guid: 7317b4785be6ffb4cb1dbe470a491eec, type: 3}
-  bonusType: 1
+  icon: {fileID: 21300000, guid: 047fe5f91a77aed4e88aced1e05b0cab, type: 3}
+  bonusType: 6
