@@ -110,8 +110,8 @@ public class InfoPopup : MonoBehaviour {
     description.text = unit.Description;
     unitHP.text = string.Format(
       "{0} / {1}",
-      unit.TotalHealth / 3 > unit.CurrentHealth ? $"<color=#F61010>{Math.Ceiling(unit.CurrentHealth)}</color>" : Math.Ceiling(unit.CurrentHealth),
-      unit.TotalHealth
+      unit.Health.GetMaxHP() / 3 > unit.CurrentHealth ? $"<color=#F61010>{Math.Ceiling(unit.CurrentHealth)}</color>" : Math.Ceiling(unit.CurrentHealth),
+      unit.Health.GetMaxHP()
     );
     unitLevel.text = unit.Level.ToString();
     unitStats.text = string.Format(

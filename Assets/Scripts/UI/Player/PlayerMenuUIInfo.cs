@@ -255,7 +255,7 @@ public class PlayerMenuUIInfo : MonoBehaviour {
     intelligence.text = "<color=#2B8EF3>" + unit.Intelligence.ToString() + "</color>";
     description.text = unit.Description;
 
-    float totalHp = unit.TotalHealth;
+    float totalHp = unit.Health.GetMaxHP();
     float hp = unit.CurrentHealth;
     unitHp.text = string.Format(
       "{0} / {1}",

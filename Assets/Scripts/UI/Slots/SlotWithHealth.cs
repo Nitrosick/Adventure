@@ -28,7 +28,7 @@ public class SlotWithHealth : MonoBehaviour {
     else if (withHp) {
       healthBar.gameObject.SetActive(true);
       float barWidth = Mathf.Abs(healthBar.rect.width);
-      float percent = Mathf.Clamp01(unit.CurrentHealth / unit.TotalHealth);
+      float percent = Mathf.Clamp01(unit.CurrentHealth / unit.Health.GetMaxHP());
       healthBarFill.sizeDelta = new Vector2(barWidth * percent, healthBarFill.sizeDelta.y);
     }
   }

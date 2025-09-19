@@ -55,12 +55,12 @@ public class MenuSlot : MonoBehaviour, IPointerClickHandler {
 
     if (!preventPointerEvents) {
       if (unit.InSquad) ActiveMark.SetActive(true);
-      if (unit.TotalHealth == unit.CurrentHealth) return;
+      if (unit.Health.GetMaxHP() == unit.CurrentHealth) return;
       if (unit.CurrentHealth <= 0) DeathMark.SetActive(true);
       else {
         healthBar.gameObject.SetActive(true);
         float barWidth = Mathf.Abs(healthBar.rect.width);
-        float percent = Mathf.Clamp01(unit.CurrentHealth / unit.TotalHealth);
+        float percent = Mathf.Clamp01(unit.CurrentHealth / unit.Health.GetMaxHP());
         healthBarFill.sizeDelta = new Vector2(barWidth * percent, healthBarFill.sizeDelta.y);
       }
     }

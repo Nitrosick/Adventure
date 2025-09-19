@@ -62,7 +62,7 @@ public class CraftingRecipeUI : MonoBehaviour {
       }
     }
 
-    int[] res = data.componentResources;
+    int[] res = data.GetComponentResources();
     for (int i = 0; i < res.Length; i++) {
       if (res[i] == 0) continue;
       GameObject obj = Instantiate(recipeSlotPrefab, componentsPanel);
@@ -79,9 +79,9 @@ public class CraftingRecipeUI : MonoBehaviour {
 
     if (player.Gold < recipe.cost) {
       check = false;
-      price.text = $"<color=#F61010>{recipe.cost}</color>";
+      price.text = $"<color=#F61010>{recipe.GetCost()}</color>";
     } else {
-      price.text = recipe.cost.ToString();
+      price.text = recipe.GetCost().ToString();
     }
 
     if (recipe.sourceEquip != null) {
@@ -92,7 +92,7 @@ public class CraftingRecipeUI : MonoBehaviour {
       if (!player.Inventory.HasItem(item)) check = false;
     }
 
-    int[] res = recipe.componentResources;
+    int[] res = recipe.GetComponentResources();
     for (int i = 0; i < res.Length; i++) {
       if (res[i] > player.Resources[i]) check = false;
     }
@@ -115,8 +115,8 @@ public class CraftingRecipeUI : MonoBehaviour {
 
     player.Inventory.RemoveItem(recipe.sourceEquip);
     foreach (Item item in recipe.componentItems) player.Inventory.RemoveItem(item);
-    player.SetResources(recipe.componentResources.Select(n => -n).ToArray());
-    player.SetGold(recipe.cost * -1);
+    player.SetResources(recipe.GetComponentResources().Select(n => -n).ToArray());
+    player.SetGold(recipe.GetCost() * -1);
 
     for (int i = 0; i < recipe.resultCount; i++) {
       if (recipe.resultEquip) player.Inventory.AddItems(recipe.resultEquip);

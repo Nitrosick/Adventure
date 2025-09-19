@@ -103,7 +103,7 @@ public class Player : MonoBehaviour {
   }
 
   public void SetFame(int value) {
-    Fame += value;
+    Fame += (int)Math.Round(value * AbilityController.FameBonus());
     if (Fame < 0) Fame = 0;
     SetMaxVillagers();
     StateManager.fame = Fame;
@@ -128,6 +128,8 @@ public class Player : MonoBehaviour {
   public void CollectReward(Reward reward) {
     AddExpirience(reward.experience);
     SetFame(reward.fame);
+    SetStatPoints(reward.statPoints);
+    SetAbilityPoints(reward.abilityPoints);
     int goldValue = Utils.GetRandomInRange(reward.goldRange[0], reward.goldRange[1]);
     SetGold(goldValue);
     SetResources(reward.resources);
@@ -138,6 +140,8 @@ public class Player : MonoBehaviour {
 
   private void GetStateData() {
     // FIXME: Перенос данных между локациями
+    AbilityController.Init();
+
     Gold = StateManager.gold;
     Resources = StateManager.resources;
     Villagers = StateManager.villagers;
@@ -152,7 +156,6 @@ public class Player : MonoBehaviour {
     if (StateManager.playerSupports.Length > 0) Army.UpdateSupports(StateManager.playerSupports);
     if (StateManager.inventoryEquipment.Length > 0) Inventory.UpdateInventory(StateManager.inventoryEquipment);
     if (StateManager.inventoryItems.Length > 0) Inventory.UpdateInventory(StateManager.inventoryItems);
-    AbilityController.Init();
 
     MapUI.Instance.UpdateResources();
     MapUI.Instance.UpdateLocation(StateManager.currentScene);

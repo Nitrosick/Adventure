@@ -14,11 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: ab1
   abilityName: Fencer
-  description: Skill in fencing weapons. Increases damage from one-handed swords,
-    sabers, katanas, and other blades.
-  icon: {fileID: 21300000, guid: d4e59dc6a40001a4ca17ea72fbb3d2ae, type: 3}
+  description: Skill in fencing weapons. Increases <b>Damage</b> from one-handed
+    swords, sabers, katanas, and other blades.
   effectValues:
   - 5
   - 10
   - 15
   effectPostfix: '%'
+  tier: 1
+  icon: {fileID: 21300000, guid: d4e59dc6a40001a4ca17ea72fbb3d2ae, type: 3}
+  bonusType: 0

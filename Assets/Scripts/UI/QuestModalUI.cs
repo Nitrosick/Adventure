@@ -22,6 +22,8 @@ public class QuestModalUI : MonoBehaviour {
   private static TextMeshProUGUI rewardXP;
   private static TextMeshProUGUI rewardFame;
   private static TextMeshProUGUI rewardGold;
+  private static TextMeshProUGUI rewardStatPoints;
+  private static TextMeshProUGUI rewardAbilityPoints;
   private static Transform rewardSlots;
 
   private static readonly int slotsInRow = 5;
@@ -42,13 +44,16 @@ public class QuestModalUI : MonoBehaviour {
     rewardXP = Get<TextMeshProUGUI>("Reward/Experience/Value");
     rewardFame = Get<TextMeshProUGUI>("Reward/Fame/Value");
     rewardGold = Get<TextMeshProUGUI>("Reward/Gold/Value");
+    rewardStatPoints = Get<TextMeshProUGUI>("Reward/StatPoints/Value");
+    rewardAbilityPoints = Get<TextMeshProUGUI>("Reward/AbilityPoints/Value");
     rewardSlots = Find("Reward/Slots");
 
     if (
       window == null || background == null || accept == null ||
       cancel == null || title == null || description == null ||
       rewardSlots == null || rewardXP == null || rewardFame == null ||
-      rewardGold == null || cancelText == null
+      rewardGold == null || cancelText == null || rewardStatPoints == null ||
+      rewardAbilityPoints == null
     ) {
       Debug.LogError("Quest dialog components initialization error");
       return;
@@ -132,6 +137,8 @@ public class QuestModalUI : MonoBehaviour {
     if (reward.goldRange[1] > 0) rewardGold.text = reward.goldRange[0] == reward.goldRange[1]
       ? reward.goldRange[0].ToString()
       : $"{reward.goldRange[0]} - {reward.goldRange[1]}";
+    if (reward.statPoints > 0) rewardStatPoints.text = reward.statPoints.ToString();
+    if (reward.abilityPoints > 0) rewardAbilityPoints.text = reward.abilityPoints.ToString();
   }
 
   private static void RenderSlots() {

@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30b3bbd01cd3da047b4aacf85fb13ac7, type: 3}
+  m_Name: ab16
+  m_EditorClassIdentifier: 
+  id: ab16
+  abilityName: Excitement
+  description: A true leader knows how to inspire their warriors and boost their
+    morale. The <b>Turn priority</b> of all allied units increases.
+  effectValues:
+  - 2
+  - 3
+  - 4
+  effectPostfix: ' pt.'
+  tier: 2
+  icon: {fileID: 21300000, guid: b85466d55388c464a9fcf400b734aa87, type: 3}
+  bonusType: 5

@@ -24,8 +24,10 @@ public class Trap : MonoBehaviour {
       return;
     }
 
+    float totalDamage = damage;
+    if (unit.Relation == UnitRelation.Ally) totalDamage *= AbilityController.TrapsResistBonus();
     float modifier = unit.Equip.armor.weight == EquipmentWeight.Heavy ? 0.5f : 1f;
-    if (damage > 0) unit.Health.TakeDamage(damage, modifier, true);
+    if (totalDamage > 0) unit.Health.TakeDamage(totalDamage, modifier, true);
 
     if (unit.IsDead) {
       QueueManager.NextUnit();

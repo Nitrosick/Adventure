@@ -21,7 +21,7 @@ public class QueueManager : MonoBehaviour
       return;
     }
 
-    Queue.Sort((a, b) => b.Initiative.CompareTo(a.Initiative));
+    Queue.Sort((a, b) => b.GetInitiative().CompareTo(a.GetInitiative()));
     orderNumber = 0;
     CurrentUnit = Queue[0];
     BattleUI.Instance.UpdateQueue(Queue);

@@ -13,13 +13,19 @@ public class UnitHealth : MonoBehaviour {
     }
   }
 
+  public float GetMaxHP() {
+    if (unit.IsHero) return unit.TotalHealth + AbilityController.HealthBonus();
+    return unit.TotalHealth;
+  }
+
   public void TakeDamage(float damage, float modifier, bool isTickDamage = false) {
     float totalDamage = damage * modifier;
 
     if (modifier > 1f) {
       unit.Ui.ShowPopup(totalDamage.ToString(), PopupType.Crit);
       if (!isTickDamage) _ = CameraController.Shake(1.2f);
-    } else {
+    }
+    else {
       unit.Ui.ShowPopup(totalDamage.ToString(), PopupType.Negative);
       if (!isTickDamage) _ = CameraController.Shake(0.8f);
     }
@@ -31,9 +37,10 @@ public class UnitHealth : MonoBehaviour {
     if (totalDamage >= unit.CurrentHealth) {
       unit.CurrentHealth = 0;
       Die();
-    } else {
+    }
+    else {
       unit.CurrentHealth -= totalDamage;
-      unit.Ui.UpdateHealth(unit.TotalHealth, unit.CurrentHealth);
+      unit.Ui.UpdateHealth(GetMaxHP(), unit.CurrentHealth);
 
       if (!isTickDamage) {
         if (unit.Effects.HasAnyEffect(new string[] { "Stun", "Root" })) unit.FinishAction();
@@ -55,17 +62,17 @@ public class UnitHealth : MonoBehaviour {
   }
 
   public void Heal(float _value, bool inBattle = true) {
-    if (unit.CurrentHealth == unit.TotalHealth) return;
+    if (unit.CurrentHealth == GetMaxHP()) return;
     float value = _value;
     if (inBattle && unit.Relation == UnitRelation.Ally) value *= AbilityController.HealBonus();
     unit.CurrentHealth += value;
-    if (unit.CurrentHealth > unit.TotalHealth) unit.CurrentHealth = unit.TotalHealth;
+    if (unit.CurrentHealth > GetMaxHP()) unit.CurrentHealth = GetMaxHP();
 
     if (!inBattle) {
       Player.Instance.Army.UpdateState();
     } else {
       unit.Ui.ShowPopup(value.ToString(), PopupType.Positive);
-      unit.Ui.UpdateHealth(unit.TotalHealth, unit.CurrentHealth);
+      unit.Ui.UpdateHealth(GetMaxHP(), unit.CurrentHealth);
       if (BattleManager.Instance.healEffect != null) {
         ParticleSystem effect = Instantiate(
           BattleManager.Instance.healEffect,

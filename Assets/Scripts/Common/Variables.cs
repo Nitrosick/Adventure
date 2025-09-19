@@ -276,5 +276,10 @@ public enum AbilityBonusType {
   Experience,
   Prices,
   Crit,
-  Requirements
+  Requirements,
+  Precision,
+  Skills,
+  Health,
+  Fame,
+  Movement
 }

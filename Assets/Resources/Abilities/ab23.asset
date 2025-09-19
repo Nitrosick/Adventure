@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30b3bbd01cd3da047b4aacf85fb13ac7, type: 3}
+  m_Name: ab23
+  m_EditorClassIdentifier: 
+  id: ab23
+  abilityName: Jack of all trades
+  description: You are capable of not only breaking but also building, or rather,
+    crafting high-quality gear while expending minimal resources. The cost of primary
+    <b>Resources</b> for creating equipment is reduced. Additionally, <b>Prices</b>
+    for crafting items with masters will also be lower.
+  effectValues:
+  - 1
+  - 2
+  - 3
+  effectPostfix: ' pcs.'
+  tier: 2
+  icon: {fileID: 21300000, guid: dc129a0ff78c0ae4f9bac9bb31ef9ff4, type: 3}
+  bonusType: 8

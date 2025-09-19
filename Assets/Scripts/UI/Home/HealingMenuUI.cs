@@ -113,7 +113,7 @@ public class HealingMenuUI : HomeMenuFeature {
     playerArmy = Player.Instance.Army.Units;
     int balance = Player.Instance.Gold;
     if (playerArmy == null || playerArmy.Count == 0) return;
-    wounded = playerArmy.Where(u => u.CurrentHealth < u.TotalHealth && u.CurrentHealth > 0).ToArray();
+    wounded = playerArmy.Where(u => u.CurrentHealth < u.Health.GetMaxHP() && u.CurrentHealth > 0).ToArray();
     dead = playerArmy.Where(u => u.CurrentHealth <= 0).ToArray();
 
     if (wounded.Length > 0) {

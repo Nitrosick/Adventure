@@ -32,7 +32,8 @@ public static class Calculate {
     if (dexDelta < 0) result -= Math.Abs(dexDelta) * dexterityScaleUnit;
 
     // Player abilities
-    if (target.IsHero) result *= AbilityController.EvasionBonus();
+    if (attacker.IsHero) result += AbilityController.PrecisionBonus();
+    if (target.IsHero) result -= AbilityController.EvasionBonus();
 
     // Effects
     if (attacker.Type == UnitType.Range) {
@@ -70,6 +71,7 @@ public static class Calculate {
 
     // Armor and weapon
     float resist = target.Equip.GetTotalResists()[attackerWeapon.damageType];
+    if (target.IsHero) resist += AbilityController.AllDamageResistBonus();
     float damage = attacker.Equip.GetTotalDamage();
     if (resist != 0) damage *= 1f - (resist / 100f);
     float defense = target.Equip.GetTotalDefense();
@@ -80,7 +82,10 @@ public static class Calculate {
     float total = damage * Mathf.Exp(-defense / defenseFactor);
 
     // Player abilities
-    if (attacker.IsHero) total *= AbilityController.DamageBonus(attackerWeapon.damageType);
+    if (attacker.IsHero) {
+      total *= AbilityController.DamageBonus(attackerWeapon.damageType);
+      if (target.IsBoss) total *= AbilityController.DamageVsBossesBonus();
+    }
 
     // Terrain
     int atkH = attacker.CurrentTile.height;
@@ -135,7 +140,7 @@ public static class Calculate {
       if (item == null || item.skill == null || item.skill.isActive) continue;
 
       float chance = item.skill.activateChance;
-      if (item.skill.displayName == "Parry" && unit.IsHero) chance += AbilityController.EvasionBonus(false);
+      if (item.skill.displayName == "Parry" && unit.IsHero) chance += AbilityController.EvasionBonus();
       if (Utils.RollChance(chance)) result.Add(item.skill);
     }
 

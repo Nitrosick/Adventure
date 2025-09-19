@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30b3bbd01cd3da047b4aacf85fb13ac7, type: 3}
+  m_Name: ab20
+  m_EditorClassIdentifier: 
+  id: ab20
+  abilityName: Hunter's intuition
+  description: Frequent hunting trips have paid off, you have learned to recognize
+    signs of traps and, if necessary, easily free yourself from them. <b>Damage from
+    traps</b> on the battlefield is significantly reduced for all units in the squad.
+  effectValues:
+  - 50
+  - 65
+  - 80
+  effectPostfix: '%'
+  tier: 2
+  icon: {fileID: 21300000, guid: f8e00f936b066ab4b93169d357ce8638, type: 3}
+  bonusType: 4

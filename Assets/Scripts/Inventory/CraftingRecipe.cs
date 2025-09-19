@@ -1,4 +1,7 @@
-[System.Serializable]
+using System;
+using System.Linq;
+
+[Serializable]
 public class CraftingRecipe {
   public Equipment sourceEquip;
 
@@ -10,4 +13,14 @@ public class CraftingRecipe {
   public Equipment resultEquip;
   public Item resultItem;
   public int resultCount = 1;
+
+  public int[] GetComponentResources() {
+    return componentResources
+      .Select(r => r == 0 ? 0 : Math.Max(1, r - (int)AbilityController.CraftPricesBonus()))
+      .ToArray();
+  }
+
+  public int GetCost() {
+    return Math.Max(1, cost - (int)AbilityController.CraftPricesBonus() * 10);
+  }
 }

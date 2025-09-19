@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30b3bbd01cd3da047b4aacf85fb13ac7, type: 3}
+  m_Name: ab24
+  m_EditorClassIdentifier: 
+  id: ab24
+  abilityName: Local celebrity
+  description: Your fame precedes you. No sooner do you win a battle than rumors
+    of it spread through all the taverns. You gain more <b>Fame</b> for winning battles
+    and completing quests, but you also lose more fame when defeated.
+  effectValues:
+  - 7.5
+  - 10
+  - 12.5
+  effectPostfix: '%'
+  tier: 2
+  icon: {fileID: 21300000, guid: 3b54def2c801cff44b1798f6445ec929, type: 3}
+  bonusType: 14

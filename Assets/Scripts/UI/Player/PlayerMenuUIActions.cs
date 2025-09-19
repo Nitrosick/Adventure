@@ -144,7 +144,7 @@ public static class PlayerMenuUIActions {
   public static void UseItem() {
     Item item = PlayerMenuUI.selectedItem;
     Unit[] woundedUnits = Player.Instance.Army.Units
-      .Where(u => u.CurrentHealth > 0 && u.CurrentHealth < u.TotalHealth)
+      .Where(u => u.CurrentHealth > 0 && u.CurrentHealth < u.Health.GetMaxHP())
       .ToArray();
 
     if (item == null) return;

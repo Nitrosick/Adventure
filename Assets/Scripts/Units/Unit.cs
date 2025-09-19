@@ -50,7 +50,6 @@ public class Unit : MonoBehaviour {
   public float CurrentMovePoints { get; set; }
   public float TotalHealth { get; protected set; }
   public float CurrentHealth { get; set; }
-  // FIXME: Управление зарядами скиллов
   public int TotalSkillCharges { get; protected set; } = 3;
   public int SkillCharges { get; protected set; }
   public int Projectiles { get; protected set; }
@@ -61,10 +60,11 @@ public class Unit : MonoBehaviour {
   public bool InSquad { get; set; }
   public bool IsNew { get; set; }
 
-  protected void Awake() {
+  async protected void Awake() {
     Health = transform.GetComponent<UnitHealth>();
     Equip = transform.GetComponent<UnitEquipment>();
-    if (!IsDead && CurrentHealth <= 0) CurrentHealth = TotalHealth;
+    await Task.Yield();
+    if (!IsDead && CurrentHealth <= 0) CurrentHealth = Health.GetMaxHP();
   }
 
   private void OnDestroy() {
@@ -100,12 +100,11 @@ public class Unit : MonoBehaviour {
 
     if (Relation == UnitRelation.Ally) Ui.MarkAsAlly();
     if (CurrentHealth <= 0) IsDead = true;
+    Ui.UpdateHealth(Health.GetMaxHP(), CurrentHealth);
 
-    Ui.UpdateHealth(TotalHealth, CurrentHealth);
+    if (IsHero) TotalSkillCharges += (int)AbilityController.ChargesBonus();
     SkillCharges = TotalSkillCharges;
-
     if (Equip.GetActiveSkills().Count > 0) Ui.UpdateCharges(TotalSkillCharges, SkillCharges);
-    return;
   }
 
   private void SetMovePoints() {
@@ -151,13 +150,19 @@ public class Unit : MonoBehaviour {
 
   public float GetPriority() {
     float result = Priority;
-    if (IsHero) result += AbilityController.PriorityBonus();
+    if (IsHero) result += AbilityController.AttackPriorityBonus();
     // FIXME: Проверка на разные защитные эффекты и условия окружения
     if (Type == UnitType.Range && CurrentProjectiles == 0) return 0;
     if (Effects.HasEffect("Cover")) result -= 2;
-    if (CurrentHealth < TotalHealth / 3) result *= 2;
-    else if (CurrentHealth < TotalHealth / 2) result *= 1.5f;
+    if (CurrentHealth < Health.GetMaxHP() / 3) result *= 2;
+    else if (CurrentHealth < Health.GetMaxHP() / 2) result *= 1.5f;
     if (Effects.HasAnyEffect(new string[] { "Block", "Stun" })) result /= 3;
+    return result;
+  }
+
+  public int GetInitiative() {
+    int result = Initiative;
+    if (Relation == UnitRelation.Ally) result += (int)AbilityController.MovePriorityBonus();
     return result;
   }
 
@@ -291,7 +296,7 @@ public class Unit : MonoBehaviour {
   // Data transfer
   public UnitData ToData() {
     float health = CurrentHealth;
-    if (!IsDead && CurrentHealth <= 0) health = TotalHealth;
+    if (!IsDead && CurrentHealth <= 0) health = Health.GetMaxHP();
     UnitEquipment equipment = transform.GetComponent<UnitEquipment>();
 
     return new UnitData {
