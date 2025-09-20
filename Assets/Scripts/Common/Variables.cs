@@ -229,7 +229,7 @@ public enum Building {
   Lumbercamp
 }
 
-// Quests
+// Quests and achievements
 public enum QuestState {
   Inactive,
   Accepted,
@@ -241,6 +241,10 @@ public enum QuestObjective {
   VisitZone,
   GetItem,
   BringItem
+}
+
+public enum AchievementObjective {
+  KillUnits
 }
 
 // Almanac

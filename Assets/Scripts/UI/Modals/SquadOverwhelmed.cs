@@ -23,8 +23,8 @@ public class SquadOverwhelmed : MonoBehaviour {
 
   private void Awake() {
     Instance = this;
-    window = transform.Find("SquadOverwhelmed/Panel").GetComponent<Transform>();
-    background = transform.Find("SquadOverwhelmed/Background").gameObject;
+    window = transform.Find("Modals/SquadOverwhelmed").GetComponent<Transform>();
+    background = transform.Find("Modals/Background").gameObject;
     text = window.Find("Text").GetComponent<TextMeshProUGUI>();
     slots = window.Find("Slots/Viewport/Content");
     confirm = window.Find("Control/Confirm").GetComponent<Button>();

@@ -37,7 +37,7 @@ public class KnowledgeManager : MonoBehaviour {
     if (data.Count == 0) {
       UnlockArticle(new string[] { "aa1", "aa2" });
       articles[0].isNew = false;
-      Dialog.Info(articles[0].data.title, articles[0].data.content, "Continue");
+      Dialog.Instance.Info(articles[0].data.title, articles[0].data.content, "Continue");
     } else {
       foreach (string id in data) {
         KnowledgeArticle article = Factory.CreateArticleById(id);

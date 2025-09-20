@@ -11,8 +11,8 @@ public class PauseMenu : MonoBehaviour {
   private static Button retreatButton;
 
   private void Awake() {
-    panel = transform.Find("PauseMenu/Panel");
-    background = transform.Find("PauseMenu/Background").gameObject;
+    panel = transform.Find("Menu/Pause");
+    background = transform.Find("Menu/Background").gameObject;
     continueGame = panel.Find("Buttons/Continue").GetComponent<Button>();
     optionsButton = panel.Find("Buttons/Options").GetComponent<Button>();
 
@@ -71,7 +71,7 @@ public class PauseMenu : MonoBehaviour {
   }
 
   private void RetreatConfirmation() {
-    Dialog.Confirmation(
+    Dialog.Instance.Confirmation(
       Retreat,
       "Retreating",
       "Do you really want to flee the battlefield?\nIn that case, you will not receive any rewards\nand will lose some fame."

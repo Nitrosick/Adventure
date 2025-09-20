@@ -48,6 +48,7 @@ public static class StateManager {
   public static UnitData[] playerUnits;
   public static SupportData[] playerSupports;
   public static QuestData[] quests;
+  public static AchievementData[] achievements;
   public static AbilityData[] abilities;
   public static Equipment[] inventoryEquipment;
   public static Item[] inventoryItems;
@@ -83,6 +84,7 @@ public static class StateManager {
     playerUnits = new UnitData[] { };
     playerSupports = new SupportData[] { };
     quests = new QuestData[] { };
+    achievements = new AchievementData[] { };
     abilities = new AbilityData[] { };
     inventoryEquipment = new Equipment[] { };
     inventoryItems = new Item[] { };
@@ -116,6 +118,11 @@ public static class StateManager {
   public static void WriteQuestsData(QuestInstance[] array) {
     QuestData[] newQuests = array.Select(q => q.ToData()).ToArray();
     quests = newQuests;
+  }
+
+  public static void WriteAchievementsData(AchievementInstance[] array) {
+    AchievementData[] newAchievements = array.Select(q => q.ToData()).ToArray();
+    achievements = newAchievements;
   }
 
   public static void WriteAbilitiesData(AbilityInstance[] array) {
@@ -189,6 +196,7 @@ public static class StateManager {
       zonesState = zonesState,
       playerUnits = playerUnits,
       quests = quests,
+      achievements = achievements,
       abilities = abilities,
       playerSupports = playerSupports,
       inventoryEquipmentIds = equipIds,
@@ -218,6 +226,7 @@ public static class StateManager {
     playerUnits = data.playerUnits;
     playerSupports = data.playerSupports;
     quests = data.quests;
+    achievements = data.achievements;
     abilities = data.abilities;
     inventoryEquipment = Factory.CreateEquipById(data.inventoryEquipmentIds);
     inventoryItems = Factory.CreateItemById(data.inventoryItemIds);

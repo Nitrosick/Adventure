@@ -82,7 +82,7 @@ public class AbilitySlot : MonoBehaviour {
     else if (tier == 2 && playerLevel < 10) warning = "Requires hero level 10";
     else if (points < tier) warning = "Not enough ability points";
 
-    Dialog.Learn(
+    Dialog.Instance.Learn(
       LearnAbility,
       ability.data.abilityName,
       ability.data.description,

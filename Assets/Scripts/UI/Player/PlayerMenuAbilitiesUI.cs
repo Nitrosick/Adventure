@@ -19,6 +19,7 @@ public class PlayerMenuAbilitiesUI : MonoBehaviour {
 
     if (panel == null) {
       Debug.LogError("Abilities UI components initialization error");
+      return;
     }
 
     palette = Utils.GetAbilityLevelPalette();

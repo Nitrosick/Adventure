@@ -46,7 +46,7 @@ public class QuestSlot : MonoBehaviour {
   }
 
   private void OpenDialog() {
-    QuestModalUI.Acception(
+    QuestModalUI.Instance.Acception(
       AcceptQuest,
       currentQuest
     );

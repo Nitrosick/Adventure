@@ -296,7 +296,10 @@ public class Unit : MonoBehaviour {
   // Data transfer
   public UnitData ToData() {
     float health = CurrentHealth;
-    if (!IsDead && CurrentHealth <= 0) health = Health.GetMaxHP();
+    if (!IsDead && CurrentHealth <= 0) health = Health == null
+      ? TotalHealth
+      : Health.GetMaxHP();
+
     UnitEquipment equipment = transform.GetComponent<UnitEquipment>();
 
     return new UnitData {

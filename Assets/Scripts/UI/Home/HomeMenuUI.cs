@@ -32,7 +32,7 @@ public class HomeMenuUI : MonoBehaviour {
   private static readonly int saveDelay = 3;
 
   private void Awake() {
-    menu = transform.Find("HomeMenu/Panel");
+    menu = transform.Find("Menu/Home");
     content = menu.Find("Content/Viewport/Scroll");
 
     static Transform Find(string path) => menu.Find(path);

@@ -73,7 +73,7 @@ public static class PlayerMenuUIActions {
     }
 
     if (title == "") return;
-    Dialog.Confirmation(DismissUnit, title, text);
+    Dialog.Instance.Confirmation(DismissUnit, title, text);
   }
 
   private static void DismissUnit(bool accepted) {

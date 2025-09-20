@@ -70,7 +70,7 @@ public class PlayerMenuUIInfo : MonoBehaviour {
   private GameObject FindGO(string path) => panel.Find(path).gameObject;
 
   private void Awake() {
-    panel = transform.Find("PlayerMenu/Panel/Right/Viewport/Content");
+    panel = transform.Find("Menu/Player/Right/Viewport/Content");
 
     displayName = Find<TextMeshProUGUI>("Head/Data/Name");
     Level = Find<TextMeshProUGUI>("Head/Data/Level");

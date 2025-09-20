@@ -26,7 +26,7 @@ public class QuestManager : MonoBehaviour {
     if (questIns == null || IsQuestCompleted(quest.id)) return;
     questIns.state = QuestState.Completed;
     GiveRewards(quest);
-    QuestModalUI.ShowReward(questIns);
+    QuestModalUI.Instance.ShowReward(questIns);
     StateManager.WriteQuestsData(questsList.ToArray());
   }
 

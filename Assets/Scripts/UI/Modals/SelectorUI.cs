@@ -17,8 +17,8 @@ public class Selector : MonoBehaviour {
 
   private void Awake() {
     Instance = this;
-    window = transform.Find("Selector/Panel").GetComponent<Transform>();
-    background = transform.Find("Selector/Background").gameObject;
+    window = transform.Find("Modals/Selector").GetComponent<Transform>();
+    background = transform.Find("Modals/Background").gameObject;
     placeholder = window.Find("Empty").gameObject;
     list = window.Find("List").gameObject;
     cancel = window.Find("Cancel").GetComponent<Button>();

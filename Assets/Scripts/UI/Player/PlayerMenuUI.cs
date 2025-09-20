@@ -58,7 +58,7 @@ public class PlayerMenuUI : MonoBehaviour {
 
   private void Awake() {
     Instance = this;
-    menu = transform.Find("PlayerMenu/Panel");
+    menu = transform.Find("Menu/Player");
 
     Transform Find(string path) => menu.Find(path);
     T Get<T>(string path) where T : Component => Find(path).GetComponent<T>();
@@ -199,6 +199,7 @@ public class PlayerMenuUI : MonoBehaviour {
     playerProgress.gameObject.SetActive(true);
     abilities.gameObject.SetActive(true);
     PlayerMenuAbilitiesUI.Init();
+    PlayerMenuAchievementsUI.Init();
 
     playerXpValue.text = string.Format(
       "{0} / {1} (Level {2})",

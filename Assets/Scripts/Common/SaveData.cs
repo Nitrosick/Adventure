@@ -24,6 +24,7 @@ public class SaveData {
   public UnitData[] playerUnits;
   public SupportData[] playerSupports;
   public QuestData[] quests;
+  public AchievementData[] achievements;
   public AbilityData[] abilities;
   public string[] inventoryEquipmentIds;
   public string[] inventoryItemIds;

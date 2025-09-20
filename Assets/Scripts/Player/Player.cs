@@ -141,6 +141,7 @@ public class Player : MonoBehaviour {
   private void GetStateData() {
     // FIXME: Перенос данных между локациями
     AbilityController.Init();
+    AchievementManager.Init();
 
     Gold = StateManager.gold;
     Resources = StateManager.resources;

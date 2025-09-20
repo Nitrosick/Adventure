@@ -68,7 +68,7 @@ public class SaveSlot : MonoBehaviour {
 
   private void DeleteConfirmation() {
     if (SceneController.Locked) return;
-    Dialog.Confirmation(
+    Dialog.Instance.Confirmation(
       DeleteSlot,
       "Save slot deleting",
       "Do you really want to delete this save slot?\nAll progress will be lost and cannot be recovered."
