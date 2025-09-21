@@ -67,11 +67,15 @@ public class QueueManager : MonoBehaviour
   private static void AfterSwitch() {
     if (CurrentUnit.Effects.PreventsTurn()) {
       CurrentUnit.Effects.ProcessTurnEffects();
+      if (CurrentUnit.IsDead) return;
+      // FIXME: Проверить, что работает убийство эффектом
       NextUnit();
       return;
     }
 
     CurrentUnit.Effects.ProcessTurnEffects();
+    if (CurrentUnit.IsDead) return;
+    // FIXME: Проверить, что работает убийство эффектом
     CurrentUnit.Animator.Reset();
     CurrentUnit.Ui.MarkAsActive();
     BattleUI.Instance.UpdateQueue(Queue, orderNumber);

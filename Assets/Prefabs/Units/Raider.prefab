@@ -123,6 +123,7 @@ GameObject:
   - component: {fileID: 5534043588480448948}
   - component: {fileID: 8113060124673339358}
   - component: {fileID: -6268994605874723547}
+  - component: {fileID: 1215130739959441785}
   m_Layer: 7
   m_Name: Raider
   m_TagString: Unit
@@ -188,6 +189,8 @@ MonoBehaviour:
   killReward:
     experience: 15
     fame: 0
+    statPoints: 0
+    abilityPoints: 0
     goldRange: 050000000c000000
     resources: 00000000000000000000000000000000
     equipment: []
@@ -232,6 +235,7 @@ MonoBehaviour:
   primary: {fileID: 11400000, guid: c69b631a58646bd469ce1e9cdfbb8c0f, type: 2}
   secondary: {fileID: 11400000, guid: 278e8e684484d8a4ea60f0d745011d4a, type: 2}
   armor: {fileID: 11400000, guid: c9efec1cde04d3e46bfa457def16a4c4, type: 2}
+  additional: {fileID: 0}
   rightHand: {fileID: 4276616478903553620}
   leftHand: {fileID: 5140691264696657861}
 --- !u!114 &5534043588480448948
@@ -271,6 +275,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd8d4958156e16c4f80f458aa665da20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1215130739959441785
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2548740166397950227}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba98051c2116d5545b82a463074619ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: ac1
+  value: 1
 --- !u!1 &4878412818272320193
 GameObject:
   m_ObjectHideFlags: 0
@@ -398,8 +416,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: a6
-  showHair: 0
-  showBeard: 0
 --- !u!1 &6857052778525033487
 GameObject:
   m_ObjectHideFlags: 0
@@ -728,8 +744,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: a2
-  showHair: 0
-  showBeard: 0
 --- !u!4 &731032814583735347 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8069032694317455793, guid: 6c05a2637b3186a4f8864ff29029bee1,
@@ -800,8 +814,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: a3
-  showHair: 1
-  showBeard: 0
 --- !u!4 &2137686456635123095 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 6c05a2637b3186a4f8864ff29029bee1,
@@ -833,8 +845,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: a8
-  showHair: 1
-  showBeard: 1
 --- !u!4 &2717828931508294763 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4582277379452294679, guid: 6c05a2637b3186a4f8864ff29029bee1,
@@ -902,8 +912,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: a1
-  showHair: 0
-  showBeard: 0
 --- !u!4 &4276616478903553620 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2412161367050800168, guid: 6c05a2637b3186a4f8864ff29029bee1,
@@ -935,8 +943,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: a7
-  showHair: 0
-  showBeard: 0
 --- !u!4 &5053444656619839745 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -2593687625098271875, guid: 6c05a2637b3186a4f8864ff29029bee1,
@@ -986,8 +992,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: a5
-  showHair: 1
-  showBeard: 1
 --- !u!1 &6996344279899862911 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -344474857450277629, guid: 6c05a2637b3186a4f8864ff29029bee1,
@@ -1007,8 +1011,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: a4
-  showHair: 0
-  showBeard: 0
 --- !u!4 &7162176213243149412 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -484974042906411496, guid: 6c05a2637b3186a4f8864ff29029bee1,

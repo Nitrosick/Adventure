@@ -55,7 +55,7 @@ public static class SupportController {
   private static Unit[] GetUnits(UnitRelation relation, bool onlyWounded = false) {
     return QueueManager.Queue
       .Where(u => {
-        if (onlyWounded && u.Health.GetMaxHP() == u.CurrentHealth) return false;
+        if (u.IsDead || (onlyWounded && u.Health.GetMaxHP() == u.CurrentHealth)) return false;
         return u.Relation == relation;
       })
       .ToArray();

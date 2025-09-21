@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 2521036456178082933}
   - component: {fileID: 6686146405576298908}
   - component: {fileID: 8725112281255501486}
+  - component: {fileID: 6872333608951447546}
   m_Layer: 7
   m_Name: Poacher
   m_TagString: Unit
@@ -82,6 +83,8 @@ MonoBehaviour:
   killReward:
     experience: 0
     fame: 0
+    statPoints: 0
+    abilityPoints: 0
     goldRange: 0000000000000000
     resources: 00000000000000000000000000000000
     equipment: []
@@ -128,6 +131,7 @@ MonoBehaviour:
   primary: {fileID: 11400000, guid: e47eee2911244504ba45c1ba92f949a2, type: 2}
   secondary: {fileID: 0}
   armor: {fileID: 11400000, guid: 77cd4b1b11fd6104b8b018de7c767c1e, type: 2}
+  additional: {fileID: 0}
   rightHand: {fileID: 75128169137014006}
   leftHand: {fileID: 9008351386019818855}
 --- !u!114 &2521036456178082933
@@ -167,6 +171,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd8d4958156e16c4f80f458aa665da20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &6872333608951447546
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2548740166397950227}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba98051c2116d5545b82a463074619ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: ac1
+  value: 1
 --- !u!1 &3829476033744859008
 GameObject:
   m_ObjectHideFlags: 0
@@ -1063,8 +1081,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: a1
-  showHair: 0
-  showBeard: 0
 --- !u!4 &75128169137014006 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2412161367050800168, guid: 76d0d77c9c66355468b4e83d83aec994,
@@ -1090,8 +1106,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: a7
-  showHair: 0
-  showBeard: 1
 --- !u!1 &2525467421330269808 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -8971420676447261010, guid: 76d0d77c9c66355468b4e83d83aec994,
@@ -1111,8 +1125,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: a3
-  showHair: 1
-  showBeard: 0
 --- !u!4 &2880586518354669365 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 76d0d77c9c66355468b4e83d83aec994,
@@ -1177,8 +1189,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: a2
-  showHair: 0
-  showBeard: 0
 --- !u!1 &6578477718171368925 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -344474857450277629, guid: 76d0d77c9c66355468b4e83d83aec994,
@@ -1198,8 +1208,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: a4
-  showHair: 0
-  showBeard: 0
 --- !u!1 &7669247943187054207 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5340700773397132961, guid: 76d0d77c9c66355468b4e83d83aec994,
@@ -1219,8 +1227,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: a5
-  showHair: 1
-  showBeard: 1
 --- !u!4 &9008351386019818855 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6734931530170869177, guid: 76d0d77c9c66355468b4e83d83aec994,

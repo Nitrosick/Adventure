@@ -145,6 +145,7 @@ GameObject:
   - component: {fileID: 2933146384353619192}
   - component: {fileID: 2252012317205545322}
   - component: {fileID: -6192711026490760115}
+  - component: {fileID: 5439710889016411247}
   m_Layer: 7
   m_Name: Bandit
   m_TagString: Unit
@@ -210,6 +211,8 @@ MonoBehaviour:
   killReward:
     experience: 10
     fame: 0
+    statPoints: 0
+    abilityPoints: 0
     goldRange: 000000000a000000
     resources: 00000000000000000000000000000000
     equipment: []
@@ -254,6 +257,7 @@ MonoBehaviour:
   primary: {fileID: 11400000, guid: 365a35aeda64b7e449cbcc504f7aa476, type: 2}
   secondary: {fileID: 0}
   armor: {fileID: 11400000, guid: 50dc9a5d42fe8fc4bbe68c5651250013, type: 2}
+  additional: {fileID: 0}
   rightHand: {fileID: 1081873019822634086}
   leftHand: {fileID: 8290399823321439735}
 --- !u!114 &2933146384353619192
@@ -268,6 +272,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec5b028da6dc547439d86efcce72f644, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fakeMissle: {fileID: 0}
 --- !u!114 &2252012317205545322
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -292,6 +297,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd8d4958156e16c4f80f458aa665da20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &5439710889016411247
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2548740166397950227}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba98051c2116d5545b82a463074619ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: ac1
+  value: 1
 --- !u!1 &6230598250965387884
 GameObject:
   m_ObjectHideFlags: 0
@@ -694,8 +713,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: a1
-  showHair: 0
-  showBeard: 0
 --- !u!4 &1081873019822634086 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2412161367050800168, guid: 0f59218f906856441a8c74ebba306787,
@@ -766,8 +783,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: a3
-  showHair: 1
-  showBeard: 0
 --- !u!1 &3774804203078562149 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1880514873474320683, guid: 0f59218f906856441a8c74ebba306787,
@@ -787,8 +802,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: a2
-  showHair: 0
-  showBeard: 0
 --- !u!1 &6143490215215353165 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -344474857450277629, guid: 0f59218f906856441a8c74ebba306787,
@@ -808,8 +821,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: a4
-  showHair: 0
-  showBeard: 0
 --- !u!1 &7234990137323409135 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5340700773397132961, guid: 0f59218f906856441a8c74ebba306787,
@@ -829,8 +840,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: a5
-  showHair: 1
-  showBeard: 1
 --- !u!4 &8290399823321439735 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6734931530170869177, guid: 0f59218f906856441a8c74ebba306787,

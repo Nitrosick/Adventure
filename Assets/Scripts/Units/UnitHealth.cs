@@ -50,6 +50,7 @@ public class UnitHealth : MonoBehaviour {
   }
 
   private void Die() {
+    if (unit.Relation == UnitRelation.Enemy && transform.TryGetComponent<AchievementTrigger>(out var t)) t.Trigger(true);
     unit.IsDead = true;
     unit.CurrentTile.OccupiedBy = null;
     unit.UnitCollider.enabled = false;
