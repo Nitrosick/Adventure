@@ -31,9 +31,15 @@ public class AchievementSlot : MonoBehaviour {
     currentAchievement = achievement;
     title.text = achievement.data.title;
     progress.text = $"{achievement.progress} / {achievement.data.objectiveCount}";
+
+    if (achievement.progress == 0) {
+      Color color = progress.color;
+      color.a = 0.5f;
+      progress.color = color;
+    }
+
     progress.gameObject.SetActive(!achievement.completed);
     completedMark.SetActive(achievement.completed);
-    // FIXME: Менять вид кнопки когда прогресс = 0
   }
 
   private void OpenInfo() {

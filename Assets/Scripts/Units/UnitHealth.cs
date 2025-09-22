@@ -34,6 +34,8 @@ public class UnitHealth : MonoBehaviour {
       unit.BehaviorType = AIBehaviorType.KeepDistance;
     }
 
+    if (totalDamage >= GetMaxHP()) TriggerAchievement(new string[] { "ac2" });
+
     if (totalDamage >= unit.CurrentHealth) {
       unit.CurrentHealth = 0;
       Die();
@@ -50,7 +52,7 @@ public class UnitHealth : MonoBehaviour {
   }
 
   private void Die() {
-    if (unit.Relation == UnitRelation.Enemy && transform.TryGetComponent<AchievementTrigger>(out var t)) t.Trigger(true);
+    TriggerAchievement(new string[] { "ac1" });
     unit.IsDead = true;
     unit.CurrentTile.OccupiedBy = null;
     unit.UnitCollider.enabled = false;
@@ -71,7 +73,8 @@ public class UnitHealth : MonoBehaviour {
 
     if (!inBattle) {
       Player.Instance.Army.UpdateState();
-    } else {
+    }
+    else {
       unit.Ui.ShowPopup(value.ToString(), PopupType.Positive);
       unit.Ui.UpdateHealth(GetMaxHP(), unit.CurrentHealth);
       if (BattleManager.Instance.healEffect != null) {
@@ -96,5 +99,12 @@ public class UnitHealth : MonoBehaviour {
       transform.position,
       Quaternion.Euler(0, 65, 0)
     );
+  }
+
+  private void TriggerAchievement(string[] ids) {
+    if (unit.Relation != UnitRelation.Enemy) return;
+    if (transform.TryGetComponent<AchievementTriggers>(out var t)) {
+      t.Trigger(ids, true);
+    }
   }
 }
