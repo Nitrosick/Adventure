@@ -292,5 +292,12 @@ public enum MenuFilter {
   UnitsInSquad,
   AllSupports,
   FreeSupports,
-  SupportsInSquad
+  SupportsInSquad,
+  AllEquipment,
+  Weapon,
+  Armor,
+  Additional,
+  AllItems,
+  Medicine
+  // FIXME: Добавить фильтры по стрелкам и разным типам предметов
 }

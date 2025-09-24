@@ -136,6 +136,7 @@ public class PlayerMenuUI : MonoBehaviour {
   public static void Close() {
     menu.gameObject.SetActive(false);
     Clear();
+    PlayerMenuUIFilters.value = MenuFilter.All;
     SceneController.CloseWindow("player");
   }
 
@@ -278,16 +279,29 @@ public class PlayerMenuUI : MonoBehaviour {
     Clear();
     navInventory.interactable = false;
     ShowSlots(true);
-    PlayerMenuUIFilters.InitInventoryFilters();
     leftSlotsTitle.text = "Equipment";
     rightSlotsTitle.text = "Miscellaneous items";
 
+    PlayerMenuUIFilters.InitInventoryFilters();
+    MenuFilter filter = PlayerMenuUIFilters.value;
     Player player = Player.Instance;
-    List<Equipment> unequipped = player.Inventory.Equip;
+
+    Equipment[] allEquip = player.Inventory.Equip
+      .Where(e => {
+        if (
+          (filter == MenuFilter.Weapon && e is not Weapon) ||
+          (filter == MenuFilter.Armor && e is not Armor) ||
+          (filter == MenuFilter.Additional && e is not AdditionalItem)
+        ) return false;
+        return true;
+      })
+      .ToArray();
+
+    List<Equipment> unequipped = allEquip.ToList();
     List<Equipment> equipped = new();
 
     foreach (Unit unit in player.Army.Units)
-      equipped.AddRange(unit.Equip.GetEquipmentList());
+      equipped.AddRange(unit.Equip.GetEquipmentList(filter));
 
     var groupedUnequipped = unequipped
       .GroupBy(e => e.id)
@@ -316,6 +330,10 @@ public class PlayerMenuUI : MonoBehaviour {
     }
 
     var groupedItems = player.Inventory.Items
+      .Where(i => {
+        if (filter == MenuFilter.Medicine && i is not MedicineItem) return false;
+        return true;
+      })
       .GroupBy(item => item.id)
       .Select(group => new {
         item = group.First(),

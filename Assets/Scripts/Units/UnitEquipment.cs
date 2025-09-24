@@ -141,11 +141,20 @@ public class UnitEquipment : MonoBehaviour {
     Player.Instance.Inventory.UpdateState();
   }
 
-  public List<Equipment> GetEquipmentList() {
+  public List<Equipment> GetEquipmentList(MenuFilter filter = MenuFilter.All) {
     List<Equipment> result = new() { primary, armor };
     if (secondary != null) result.Add(secondary);
     if (additional != null) result.Add(additional);
-    return result;
+    return result
+      .Where(e => {
+        if (
+          (filter == MenuFilter.Weapon && e is not Weapon) ||
+          (filter == MenuFilter.Armor && e is not Armor) ||
+          (filter == MenuFilter.Additional && e is not AdditionalItem)
+        ) return false;
+        return true;
+      })
+      .ToList();
   }
 
   public float GetTotalDefense() {
