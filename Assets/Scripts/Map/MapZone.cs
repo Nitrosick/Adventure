@@ -10,7 +10,7 @@ public class MapZone : MonoBehaviour {
   public string zoneName;
   [TextArea(5, 20)] public string description;
   [TextArea(5, 20)] public string descriptionCleared;
-  public List<MapZoneType> events = new ();
+  public List<MapZoneType> events = new();
   public bool isEmpty;
   public bool secret;
 
@@ -94,6 +94,7 @@ public class MapZone : MonoBehaviour {
 
   public void Visit() {
     if (secret) {
+      TriggerAchievement("ac6");
       _ = Toast.Show("star", "Secret zone found");
       secret = false;
       InitMarker();
@@ -176,5 +177,9 @@ public class MapZone : MonoBehaviour {
     questScript.questsList.Insert(0, quest);
     if (events.Count > 0 && events[0] != MapZoneType.Quest) events.Insert(0, MapZoneType.Quest);
     SetActive();
+  }
+
+  private void TriggerAchievement(string id, float value = 1f) {
+    AchievementManager.UpdateAchievement(id, value, false);
   }
 }

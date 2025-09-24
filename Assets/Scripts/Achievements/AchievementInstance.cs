@@ -3,6 +3,7 @@ public class AchievementInstance {
   public Achievement data;
   public bool completed;
   public float progress;
+  public long timestamp;
 
   public AchievementInstance(Achievement _data) {
     data = _data;
@@ -12,12 +13,14 @@ public class AchievementInstance {
     return new AchievementData {
       id = data.id,
       completed = completed,
-      progress = progress
+      progress = progress,
+      timestamp = timestamp
     };
   }
 
   public void FromData(AchievementData data) {
     completed = data.completed;
     progress = data.progress;
+    timestamp = data.timestamp;
   }
 }

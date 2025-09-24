@@ -3,4 +3,5 @@ public class AchievementData {
   public string id;
   public bool completed;
   public float progress;
+  public long timestamp;
 }

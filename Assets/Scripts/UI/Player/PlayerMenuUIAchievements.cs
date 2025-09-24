@@ -3,8 +3,8 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerMenuAchievementsUI : MonoBehaviour {
-  public static PlayerMenuAchievementsUI Instance;
+public class PlayerMenuUIAchievements : MonoBehaviour {
+  public static PlayerMenuUIAchievements Instance;
   public GameObject achievementButton;
   private static Transform panel;
   private static AchievementsFilter filter;
@@ -77,7 +77,15 @@ public class PlayerMenuAchievementsUI : MonoBehaviour {
       })
       .ToArray();
 
-    foreach (AchievementInstance a in list) {
+    AchievementInstance[] sorted = list;
+    if (value == AchievementsFilter.InProgress) sorted = list
+      .OrderByDescending(a => 100 / a.data.objectiveCount * a.progress)
+      .ToArray();
+    else if (value == AchievementsFilter.Completed) sorted = list
+      .OrderByDescending(a => a.timestamp)
+      .ToArray();
+
+    foreach (AchievementInstance a in sorted) {
       GameObject achievementObj = Instantiate(Instance.achievementButton, panel);
       achievementObj.GetComponent<AchievementSlot>().Init(a);
     }

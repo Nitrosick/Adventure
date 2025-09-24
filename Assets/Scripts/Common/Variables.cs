@@ -243,10 +243,6 @@ public enum QuestObjective {
   BringItem
 }
 
-public enum AchievementObjective {
-  KillUnits
-}
-
 // Almanac
 public enum KnowledgeSection {
   Common,
@@ -286,4 +282,15 @@ public enum AbilityBonusType {
   Health,
   Fame,
   Movement
+}
+
+// Filters
+public enum MenuFilter {
+  All,
+  AllUnits,
+  FreeUnits,
+  UnitsInSquad,
+  AllSupports,
+  FreeSupports,
+  SupportsInSquad
 }

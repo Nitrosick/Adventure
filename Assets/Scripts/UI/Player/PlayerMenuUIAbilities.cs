@@ -2,8 +2,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerMenuAbilitiesUI : MonoBehaviour {
-  public static PlayerMenuAbilitiesUI Instance;
+public class PlayerMenuUIAbilities : MonoBehaviour {
+  public static PlayerMenuUIAbilities Instance;
   public GameObject abilityButton;
   private static RectTransform panel;
   public static Dictionary<AbilityLevel, Color> palette = new();

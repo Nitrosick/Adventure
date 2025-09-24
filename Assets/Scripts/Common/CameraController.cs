@@ -48,7 +48,7 @@ public class CameraController : MonoBehaviour {
   }
 
   private void Update() {
-    if (isFocusing || SceneController.Locked) return;
+    if (isFocusing || SceneController.Locked || StateManager.openedWindows.Count > 0) return;
     if (ShouldMove()) Move();
   }
 

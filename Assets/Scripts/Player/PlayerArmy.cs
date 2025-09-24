@@ -91,6 +91,7 @@ public class PlayerArmy : MonoBehaviour {
 
   public void SetSupportSlots(int value) {
     SupportSlots += value;
+    if (SupportSlots > 3) SupportSlots = 3;
     StateManager.supportSlots = SupportSlots;
   }
 }

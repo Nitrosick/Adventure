@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -34,7 +35,7 @@ public class UnitHealth : MonoBehaviour {
       unit.BehaviorType = AIBehaviorType.KeepDistance;
     }
 
-    if (totalDamage >= GetMaxHP()) TriggerAchievement(new string[] { "ac2" });
+    if (totalDamage >= GetMaxHP()) TriggerAchievement("ac2");
 
     if (totalDamage >= unit.CurrentHealth) {
       unit.CurrentHealth = 0;
@@ -52,7 +53,9 @@ public class UnitHealth : MonoBehaviour {
   }
 
   private void Die() {
-    TriggerAchievement(new string[] { "ac1" });
+    // Bandit ids
+    if (new string[] { "u3", "u6", "u7" }.Contains(unit.PrefabId)) TriggerAchievement("ac1");
+
     unit.IsDead = true;
     unit.CurrentTile.OccupiedBy = null;
     unit.UnitCollider.enabled = false;
@@ -101,10 +104,8 @@ public class UnitHealth : MonoBehaviour {
     );
   }
 
-  private void TriggerAchievement(string[] ids) {
+  private void TriggerAchievement(string id, float value = 1f) {
     if (unit.Relation != UnitRelation.Enemy) return;
-    if (transform.TryGetComponent<AchievementTriggers>(out var t)) {
-      t.Trigger(ids, true);
-    }
+    AchievementManager.UpdateAchievement(id, value, true);
   }
 }

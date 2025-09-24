@@ -41,8 +41,8 @@ public class AbilitySlot : MonoBehaviour {
   public void Init(AbilityInstance _ability) {
     ability = _ability;
     icon.sprite = ability.data.icon;
-    frame.color = PlayerMenuAbilitiesUI.palette[ability.level];
-    icon.color = PlayerMenuAbilitiesUI.palette[ability.level];
+    frame.color = PlayerMenuUIAbilities.palette[ability.level];
+    icon.color = PlayerMenuUIAbilities.palette[ability.level];
     hint.message = $"Learn: {ability.data.abilityName}";
 
     tier.text = ability.data.tier switch {
@@ -97,7 +97,7 @@ public class AbilitySlot : MonoBehaviour {
   private void LearnAbility(bool accepted) {
     if (!accepted) return;
     AbilityController.Learn(ability.data.id);
-    PlayerMenuAbilitiesUI.Init();
+    PlayerMenuUIAbilities.Init();
     PlayerMenuUIInfo.RecalculatePoints();
     _ = Toast.Show("success", "Ability learned");
   }

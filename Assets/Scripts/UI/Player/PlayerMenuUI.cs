@@ -70,8 +70,8 @@ public class PlayerMenuUI : MonoBehaviour {
 
     leftSlots = Get<RectTransform>("Left/Blocks/Left/Slots/Viewport/Content");
     rightSlots = Get<RectTransform>("Left/Blocks/Right/Slots/Viewport/Content");
-    leftSlotsTitle = Get<TextMeshProUGUI>("Left/Blocks/Left/Title");
-    rightSlotsTitle = Get<TextMeshProUGUI>("Left/Blocks/Right/Title");
+    leftSlotsTitle = Get<TextMeshProUGUI>("Left/Blocks/Left/Header/Title");
+    rightSlotsTitle = Get<TextMeshProUGUI>("Left/Blocks/Right/Header/Title");
     playerProgress = Find("Left/Blocks/Left/PlayerProgress");
 
     Transform progressContent = Get<Transform>("Left/Blocks/Left/PlayerProgress/Viewport/Content");
@@ -111,13 +111,13 @@ public class PlayerMenuUI : MonoBehaviour {
 
   private static bool ComponentsInitialized() {
     return menu != null && leftSlots != null && rightSlots != null &&
-    leftSlotsTitle != null && rightSlotsTitle != null && navHero != null &&
-    navUnits != null && navInventory != null && playerProgress != null &&
-    playerXpValue != null && playerXpBar != null && playerXpBarFill != null &&
-    playerFameValue != null && playerFameBar != null && playerFameBarFill != null &&
-    navQuests != null && activeQuests != null && completedQuests != null &&
-    activeQuestsEmpty != null && completedQuestsEmpty != null && activeQuestsList != null &&
-    completedQuestsList != null && abilities != null;
+      leftSlotsTitle != null && rightSlotsTitle != null && navHero != null &&
+      navUnits != null && navInventory != null && playerProgress != null &&
+      playerXpValue != null && playerXpBar != null && playerXpBarFill != null &&
+      playerFameValue != null && playerFameBar != null && playerFameBarFill != null &&
+      navQuests != null && activeQuests != null && completedQuests != null &&
+      activeQuestsEmpty != null && completedQuestsEmpty != null && activeQuestsList != null &&
+      completedQuestsList != null && abilities != null;
   }
 
   private void OnDestroy() {
@@ -164,6 +164,7 @@ public class PlayerMenuUI : MonoBehaviour {
     leftSlotsTitle.text = "";
     rightSlotsTitle.text = "";
     PlayerMenuUIInfo.Clear();
+    PlayerMenuUIFilters.Reset();
 
     selectedSlot = null;
     selectedUnit = null;
@@ -191,15 +192,12 @@ public class PlayerMenuUI : MonoBehaviour {
     navHero.interactable = false;
     leftSlotsTitle.text = "Progress";
     rightSlotsTitle.text = "Abilities";
-
     Player player = Player.Instance;
-    Unit hero = player.Army.Units.FirstOrDefault(u => u.IsHero);
-    if (hero == null) return;
 
     playerProgress.gameObject.SetActive(true);
     abilities.gameObject.SetActive(true);
-    PlayerMenuAbilitiesUI.Init();
-    PlayerMenuAchievementsUI.Init();
+    PlayerMenuUIAbilities.Init();
+    PlayerMenuUIAchievements.Init();
 
     playerXpValue.text = string.Format(
       "{0} / {1} (Level {2})",
@@ -216,7 +214,7 @@ public class PlayerMenuUI : MonoBehaviour {
     playerFameBarFill.sizeDelta = new Vector2(barsWidth * famePercent, playerFameBarFill.sizeDelta.y);
 
     await Task.Yield();
-    PlayerMenuUIInfo.ShowInfo(hero);
+    ShowDefaultInfo();
   }
 
   public async static void SelectUnitsTab() {
@@ -224,11 +222,33 @@ public class PlayerMenuUI : MonoBehaviour {
     navUnits.interactable = false;
     ShowSlots(true);
 
+    PlayerMenuUIFilters.InitUnitFilters();
+    MenuFilter filter = PlayerMenuUIFilters.value;
     Player player = Player.Instance;
-    Unit[] units = player.Army.Units.Where(u => !u.IsHero).ToArray();
-    int unitsInSquad = units.Where(u => u.InSquad).ToArray().Length;
-    SupportInstance[] supports = player.Army.Supports.ToArray();
-    int supportsInSquad = supports.Where(u => u.inSquad).ToArray().Length;
+
+    Unit[] units = player.Army.Units
+      .Where(u => {
+        if (
+          u.IsHero ||
+          (filter == MenuFilter.FreeUnits && u.InSquad) ||
+          (filter == MenuFilter.UnitsInSquad && !u.InSquad)
+        ) return false;
+        return true;
+      })
+      .ToArray();
+
+    SupportInstance[] supports = player.Army.Supports
+      .Where(s => {
+        if (
+          (filter == MenuFilter.FreeSupports && s.inSquad) ||
+          (filter == MenuFilter.SupportsInSquad && !s.inSquad)
+        ) return false;
+        return true;
+      })
+      .ToArray();
+
+    int unitsInSquad = player.Army.Units.Where(u => u.InSquad).ToArray().Length;
+    int supportsInSquad = player.Army.Supports.Where(u => u.inSquad).ToArray().Length;
 
     leftSlotsTitle.text = $"Army ({unitsInSquad} in squad)";
     rightSlotsTitle.text = $"Supports ({supportsInSquad} / {player.Army.SupportSlots} in squad)";
@@ -251,12 +271,14 @@ public class PlayerMenuUI : MonoBehaviour {
     await Task.Yield();
     selectedSlot = leftSlots.GetChild(0).GetComponent<MenuSlot>();
     if (selectedSlot != null) PlayerMenuUIInfo.ShowInfo(selectedSlot.UnitItem);
+    else ShowDefaultInfo();
   }
 
   public async static void SelectInventoryTab() {
     Clear();
     navInventory.interactable = false;
     ShowSlots(true);
+    PlayerMenuUIFilters.InitInventoryFilters();
     leftSlotsTitle.text = "Equipment";
     rightSlotsTitle.text = "Miscellaneous items";
 
@@ -312,6 +334,7 @@ public class PlayerMenuUI : MonoBehaviour {
     await Task.Yield();
     selectedSlot = leftSlots.GetChild(0).GetComponent<MenuSlot>();
     if (selectedSlot != null) PlayerMenuUIInfo.ShowInfo(selectedSlot.EquipmentItem);
+    else ShowDefaultInfo();
   }
 
   private async static void SelectQuestsTab() {
@@ -344,12 +367,8 @@ public class PlayerMenuUI : MonoBehaviour {
     RenderQuestEmptySlots(activeQuestsList, active.Length);
     RenderQuestEmptySlots(completedQuestsList, completed.Length);
 
-    Player player = Player.Instance;
-    Unit hero = player.Army.Units.FirstOrDefault(u => u.IsHero);
-    if (hero == null) return;
-
     await Task.Yield();
-    PlayerMenuUIInfo.ShowInfo(hero);
+    ShowDefaultInfo();
   }
 
   private static void RenderEmptySlots(RectTransform panel, int filled) {
@@ -383,5 +402,11 @@ public class PlayerMenuUI : MonoBehaviour {
       foreach (MenuSlot slot in allSlots) slot.SwitchActiveFrame(false);
       if (selectedSlot != null) selectedSlot.SwitchActiveFrame(true);
     }
+  }
+
+  private static void ShowDefaultInfo() {
+    Unit hero = Player.Instance.Army.Units.FirstOrDefault(u => u.IsHero);
+    if (hero == null) return;
+    PlayerMenuUIInfo.ShowInfo(hero);
   }
 }
