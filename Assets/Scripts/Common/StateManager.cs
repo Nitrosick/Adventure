@@ -16,8 +16,9 @@ public static class StateManager {
 
   // Global
   public static int saveSlot;
+  public static int globalTicks;
   private readonly static string[] defaultArmyIds = { "u1", "u2", "u2" };
-  public static HashSet<string> openedWindows = new ();
+  public static HashSet<string> openedWindows = new();
 
   // Moving between scenes
   public static string enterScene;
@@ -30,9 +31,6 @@ public static class StateManager {
   public static string currentScene;
   public static string startPlayerZoneId;
   public static string currentPlayerZoneId;
-  public static HashSet<string> visitedZones;
-  public static HashSet<string> collectedZoneLoot;
-  public static HashSet<string> unlockedKnowledge;
   public static int gold;
   public static int[] resources;
   public static int villagers;
@@ -44,7 +42,9 @@ public static class StateManager {
   public static int abilityPoints;
   public static int supportSlots;
 
-  public static Dictionary<string, List<MapZoneType>> zonesState;
+  public static Dictionary<string, MapZoneData> zonesState;
+  public static HashSet<string> collectedZoneLoot;
+  public static HashSet<string> unlockedKnowledge;
   public static UnitData[] playerUnits;
   public static SupportData[] playerSupports;
   public static QuestData[] quests;
@@ -63,10 +63,10 @@ public static class StateManager {
 
   public static void ResetPlayerData() {
     saveSlot = 0;
+    globalTicks = 1;
     currentScene = "";
     startPlayerZoneId = "6";
     currentPlayerZoneId = "6";
-    visitedZones = new HashSet<string> { };
     collectedZoneLoot = new HashSet<string> { };
     unlockedKnowledge = new HashSet<string> { };
     gold = 0;
@@ -80,7 +80,7 @@ public static class StateManager {
     abilityPoints = 0;
     supportSlots = 1;
 
-    zonesState = new Dictionary<string, List<MapZoneType>> { };
+    zonesState = new Dictionary<string, MapZoneData> { };
     playerUnits = new UnitData[] { };
     playerSupports = new SupportData[] { };
     quests = new QuestData[] { };
@@ -92,11 +92,6 @@ public static class StateManager {
   }
 
   public static void WriteUnitsData(Unit[] units, string to, bool rewrite = true) {
-    if (to != "allies" && to != "enemies") {
-      Debug.LogError("Invalid units type");
-      return;
-    }
-
     UnitData[] newUnits = units.Select(u => u.ToData()).ToArray();
 
     if (rewrite) {
@@ -106,29 +101,30 @@ public static class StateManager {
       if (to == "allies") {
         UnitData[] reserveUnits = playerUnits.Where(u => !u.inSquad).ToArray();
         playerUnits = newUnits.Concat(reserveUnits).ToArray();
-      } else enemies = newUnits;
+      }
+      else enemies = newUnits;
     }
   }
 
-  public static void WriteSupportsData(SupportInstance[] units) {
-    SupportData[] newUnits = units.Select(u => u.ToData()).ToArray();
-    playerSupports = newUnits;
+  private static TData[] ConvertAndAssign<TInstance, TData>(
+    TInstance[] array, out TData[] field)
+    where TInstance : IDataConvertible<TData>
+  {
+    field = array.Select(x => x.ToData()).ToArray();
+    return field;
   }
 
-  public static void WriteQuestsData(QuestInstance[] array) {
-    QuestData[] newQuests = array.Select(q => q.ToData()).ToArray();
-    quests = newQuests;
-  }
+  public static void WriteSupportsData(SupportInstance[] units) =>
+    ConvertAndAssign(units, out playerSupports);
 
-  public static void WriteAchievementsData(AchievementInstance[] array) {
-    AchievementData[] newAchievements = array.Select(q => q.ToData()).ToArray();
-    achievements = newAchievements;
-  }
+  public static void WriteQuestsData(QuestInstance[] array) =>
+    ConvertAndAssign(array, out quests);
 
-  public static void WriteAbilitiesData(AbilityInstance[] array) {
-    AbilityData[] newAbilities = array.Select(q => q.ToData()).ToArray();
-    abilities = newAbilities;
-  }
+  public static void WriteAchievementsData(AchievementInstance[] array) =>
+    ConvertAndAssign(array, out achievements);
+
+  public static void WriteAbilitiesData(AbilityInstance[] array) =>
+    ConvertAndAssign(array, out abilities);
 
   // Save / Load
   private static string GetSavePath(int slot) => Path.Combine(Application.persistentDataPath, $"save_{slot}.json");
@@ -177,10 +173,10 @@ public static class StateManager {
 
     SaveData data = new() {
       saveTime = DateTime.Now.ToString(),
+      globalTicks = globalTicks,
       currentScene = scene == "Menu" ? "Dunpine village" : scene,
       startPlayerZoneId = startPlayerZoneId,
       currentPlayerZoneId = currentPlayerZoneId,
-      visitedZones = visitedZones,
       collectedZoneLoot = collectedZoneLoot,
       unlockedKnowledge = unlockedKnowledge,
       gold = gold,
@@ -206,10 +202,10 @@ public static class StateManager {
   }
 
   private static void SetLoadedData(SaveData data) {
+    globalTicks = data.globalTicks;
     currentScene = data.currentScene;
     startPlayerZoneId = data.startPlayerZoneId;
     currentPlayerZoneId = data.currentPlayerZoneId;
-    visitedZones = data.visitedZones;
     collectedZoneLoot = data.collectedZoneLoot;
     unlockedKnowledge = data.unlockedKnowledge;
     gold = data.gold;

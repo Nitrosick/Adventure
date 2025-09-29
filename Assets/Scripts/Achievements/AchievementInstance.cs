@@ -1,5 +1,5 @@
 [System.Serializable]
-public class AchievementInstance {
+public class AchievementInstance : IDataConvertible<AchievementData> {
   public Achievement data;
   public bool completed;
   public float progress;

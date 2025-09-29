@@ -15,16 +15,16 @@ public class MapZone : MonoBehaviour {
   public bool secret;
 
   public GameObject[] interactiveObjects;
-  protected Renderer auraRender;
-  protected SpriteRenderer markerRender;
-  protected MeshRenderer markIcon;
-  protected Way[] ways;
-  protected Transform pathLines;
+  private Renderer auraRender;
+  private SpriteRenderer markerRender;
+  private MeshRenderer markIcon;
+  private Way[] ways;
+  private Transform pathLines;
 
   private readonly float fadeDuration = 1f;
   private readonly float linesTransparency = 0.6f;
 
-  protected void Awake() {
+  private void Awake() {
     auraRender = transform.GetComponent<Renderer>();
     markerRender = transform.Find("Marker").GetComponent<SpriteRenderer>();
     Transform markIconObj = transform.Find("Mark");
@@ -32,7 +32,7 @@ public class MapZone : MonoBehaviour {
     ways = transform.GetComponentsInChildren<Way>();
     pathLines = transform.Find("Pathes");
 
-    if (auraRender == null || markerRender == null || ways == null || pathLines == null || ways.Length < 1) {
+    if (auraRender == null || markerRender == null || ways == null || ways.Length < 1) {
       Debug.LogError("Map zone components initialization error");
       return;
     }
@@ -42,16 +42,16 @@ public class MapZone : MonoBehaviour {
   }
 
   private void Start() {
-    Dictionary<string, List<MapZoneType>> state = StateManager.zonesState;
-    if (state.Count > 0 && state[id] != null) {
-      if (state[id].Count > 0) events = state[id];
+    Dictionary<string, MapZoneData> state = StateManager.zonesState;
+    if (state.Count > 0 && state.ContainsKey(id)) {
+      if (state[id].events.Count > 0) events = state[id].events;
       else SetCleared();
     }
 
     auraRender.material = MapZoneManager.Instance.defaultMaterial;
   }
 
-  protected void OnMouseEnter() {
+  private void OnMouseEnter() {
     if (SceneController.Locked || EventSystem.current.IsPointerOverGameObject() || secret) return;
     MapUI.Instance.ShowZoneInfo(zoneName, description, descriptionCleared, events, isEmpty);
 
@@ -65,21 +65,23 @@ public class MapZone : MonoBehaviour {
     markerRender.color = color;
   }
 
-  protected void OnMouseExit() {
+  private void OnMouseExit() {
     MapUI.Instance.HideZoneInfo();
-
     auraRender.material = MapZoneManager.Instance.defaultMaterial;
     InitMarker();
   }
 
-  public virtual void SetCleared() {
-    if (markIcon != null) markIcon.material = MapZoneManager.Instance.stoneMaterial;
+  private void SetCleared() {
+    if (isEmpty) return;
+    SwitchIcon(false);
+    events.Clear();
     isEmpty = true;
     SwitchInteractiveObjects();
   }
 
   public void SetActive() {
-    if (markIcon != null) markIcon.material = MapZoneManager.Instance.goldMaterial;
+    if (!isEmpty) return;
+    SwitchIcon(true);
     isEmpty = false;
     SwitchInteractiveObjects();
   }
@@ -92,6 +94,13 @@ public class MapZone : MonoBehaviour {
     }
   }
 
+  public void SwitchIcon(bool on) {
+    if (markIcon == null) return;
+    Material stone = MapZoneManager.Instance.stoneMaterial;
+    Material gold = MapZoneManager.Instance.goldMaterial;
+    markIcon.material = on ? gold : stone;
+  }
+
   public void Visit() {
     if (secret) {
       TriggerAchievement("ac6");
@@ -100,9 +109,16 @@ public class MapZone : MonoBehaviour {
       InitMarker();
     }
 
-    if (!StateManager.visitedZones.Contains(id)) {
+    Dictionary<string, MapZoneData> state = StateManager.zonesState;
+    if (!state.ContainsKey(id)) {
       ShowPathLines();
-      StateManager.visitedZones.Add(id);
+      state[id] = new MapZoneData {
+        events = events,
+        visited = true
+      };
+    }
+    else {
+      state[id].visited = true;
     }
 
     if (events.Count > 0 && events[0] == MapZoneType.Home) {
@@ -114,23 +130,10 @@ public class MapZone : MonoBehaviour {
     transform.GetComponent<MapZoneEvent>().CheckEvents();
   }
 
-  public void UnshiftEvent() {
-    if (events[0] == MapZoneType.Ambush) return;
-    events.RemoveAt(0);
-
-    if (events.Count == 0) {
-      SetCleared();
-      MapUI.Instance.HideInteractableButton();
-    }
-
-    StateManager.zonesState[id] = events;
-  }
-
-  public void RemoveAmbush() {
-    events = events
-      .Where(e => e != MapZoneType.Ambush)
-      .ToList();
-    StateManager.zonesState[id] = events;
+  public void RemoveEvent(MapZoneType type) {
+    events = events.Where(e => e != type).ToList();
+    if (events.Count == 0) SetCleared();
+    StateManager.zonesState[id].events = events;
   }
 
   public void InitMarker() {
@@ -140,6 +143,8 @@ public class MapZone : MonoBehaviour {
   }
 
   private void InitPathLines() {
+    if (pathLines == null) return;
+
     foreach (Transform path in pathLines) {
       LineRenderer renderer = path.GetComponent<LineRenderer>();
       renderer.material = new Material(renderer.material);
@@ -150,6 +155,8 @@ public class MapZone : MonoBehaviour {
   }
 
   public void ShowPathLines() {
+    if (pathLines == null) return;
+
     foreach (Transform path in pathLines) {
       _ = PathLineFade(path);
     }
@@ -175,7 +182,7 @@ public class MapZone : MonoBehaviour {
   public void ActivateQuest(Quest quest) {
     if (!transform.TryGetComponent<MapZoneQuest>(out var questScript)) return;
     questScript.questsList.Insert(0, quest);
-    if (events.Count > 0 && events[0] != MapZoneType.Quest) events.Insert(0, MapZoneType.Quest);
+    events.Insert(0, MapZoneType.Quest);
     SetActive();
   }
 

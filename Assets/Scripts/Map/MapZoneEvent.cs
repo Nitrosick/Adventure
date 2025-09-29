@@ -12,6 +12,8 @@ public class MapZoneEvent : MonoBehaviour {
 
   public void CheckEvents(bool ignoreBattle = false, bool forceAmbush = false) {
     if (zone == null || zone.events.Count < 1) return;
+    MapUI.Instance.HideInteractableButton();
+
     T Get<T>() where T : Component => transform.GetComponent<T>();
     MapZoneBattle battleZone = Get<MapZoneBattle>();
     int eventIndex = 0;
@@ -55,6 +57,16 @@ public class MapZoneEvent : MonoBehaviour {
           Get<MapZoneBuilding>().OpenBuildingPanel
         );
         break;
+      case MapZoneType.Collecting:
+        MapZoneCollecting collecting = Get<MapZoneCollecting>();
+        if (collecting.CollectedAt > 0 && StateManager.globalTicks < collecting.CollectedAt + collecting.respawn) break;
+
+        MapUI.Instance.ShowInteractableButton(
+          collecting.OpenCollectingPanel,
+          "collect",
+          "Collect"
+        );
+        break;
     }
   }
 
@@ -70,7 +82,7 @@ public class MapZoneEvent : MonoBehaviour {
         case QuestObjective.VisitZone:
           QuestManager.CompleteQuest(q);
           quests.Remove(q);
-          if (quests.Count == 0) zone.UnshiftEvent();
+          if (quests.Count == 0) zone.RemoveEvent(MapZoneType.Quest);
           return;
         case QuestObjective.BringItem:
           // FIXME: Добавить проверку (возможно открывать диалог о сдаче предмета)

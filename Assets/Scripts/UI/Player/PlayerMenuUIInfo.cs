@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -221,7 +219,6 @@ public class PlayerMenuUIInfo : MonoBehaviour {
 
   public static void ShowInfo(Unit unit) {
     Clear();
-    Player player = Player.Instance;
 
     if (!unit.IsHero) unitActions.SetActive(true);
     else RecalculatePoints();
@@ -247,6 +244,8 @@ public class PlayerMenuUIInfo : MonoBehaviour {
 
     GameObject unitAvatar = Instantiate(PlayerMenuUI.Instance.menuSlotPrefab, avatar);
     unitAvatar.GetComponent<MenuSlot>().Init(unit, true);
+
+    unitInSquad.interactable = unit.CurrentHealth > 0;
     InSquadButtonLabel(unit);
     UpdateUnitEquipment(unit);
 
@@ -374,7 +373,7 @@ public class PlayerMenuUIInfo : MonoBehaviour {
   public static void ShowInfo(Item item) {
     Clear();
     itemActions.SetActive(true);
-    itemParams.SetActive(true);
+    itemParams.SetActive(item is MedicineItem);
 
     PlayerMenuUI.FrameSlot();
     PlayerMenuUI.selectedItem = item;
@@ -390,6 +389,8 @@ public class PlayerMenuUIInfo : MonoBehaviour {
     if (item is MedicineItem medItem) {
       type.text = "Type: Medicine item";
       itemIntensity.text = medItem.intensity + " HP";
+    } else if (item is Goods) {
+      type.text = "Type: Goods";
     }
     // FIXME: Добавить все типы предметов
 

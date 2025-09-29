@@ -29,13 +29,17 @@ public class PlayerMove : MonoBehaviour
 
     if (int.Parse(StateManager.currentPlayerZoneId) > 0) {
       CurrentZone = MapZoneManager.FindById(StateManager.currentPlayerZoneId);
-      transform.position = CurrentZone.playerPosition;
+      SetPlayerPosition(CurrentZone);
     } else {
       CurrentZone = startZone;
     }
 
-    if (StateManager.visitedZones.Count == 0) {
-      StateManager.visitedZones.Add(CurrentZone.id);
+    Dictionary<string, MapZoneData> state = StateManager.zonesState;
+    if (state.Count == 0) {
+      state[CurrentZone.id] = new MapZoneData {
+        events = CurrentZone.events,
+        visited = true
+      };
       CurrentZone.ShowPathLines();
     }
   }
@@ -57,6 +61,13 @@ public class PlayerMove : MonoBehaviour
     }
 
     return null;
+  }
+
+  public void SetPlayerPosition(MapZone zone) {
+    transform.position = zone.playerPosition;
+    CurrentZone = zone;
+    StateManager.currentPlayerZoneId = zone.id;
+    _ = CameraController.FocusOn(transform.position, true);
   }
 
   public async Task Move(List<Vector3> path) {
@@ -84,7 +95,8 @@ public class PlayerMove : MonoBehaviour
 
           await Task.Yield();
         }
-      } else {
+      }
+      else {
         transform.position = target;
       }
     }

@@ -363,7 +363,7 @@ public class PlayerMenuUI : MonoBehaviour {
     leftSlotsTitle.text = "Active";
     rightSlotsTitle.text = "Completed";
 
-    List<QuestInstance> quests = QuestManager.questsList;
+    List<QuestInstance> quests = QuestManager.questsList.OrderByDescending(q => q.data.requiredLevel).ToList();
     QuestInstance[] active = quests.Where(q => q.state == QuestState.Accepted).ToArray();
     QuestInstance[] completed = quests.Where(q => q.state == QuestState.Completed).ToArray();
 

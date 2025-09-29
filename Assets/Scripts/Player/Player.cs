@@ -176,35 +176,35 @@ public class Player : MonoBehaviour {
     MapUI.Instance.UpdateResources();
     MapUI.Instance.UpdateLocation(StateManager.currentScene);
 
-    MapZoneEvent events = Move.CurrentZone.GetComponent<MapZoneEvent>();
-    events.CheckEvents(true);
+    if (Move.CurrentZone.TryGetComponent<MapZoneBattle>(out var battleZone)) {
+      BattleResult? result = StateManager.battleResult;
 
-    if (!Move.CurrentZone.TryGetComponent<MapZoneBattle>(out var battleZone)) return;
-    BattleResult? result = StateManager.battleResult;
-    if (result == null) return;
+      if (result != null) {
+        MapZoneManager.UpdateAfterBattle(result);
+        Reward fixedReward = battleZone.fixedReward;
 
-    MapZoneManager.UpdateAfterBattle(result);
-    Reward fixedReward = battleZone.fixedReward;
+        switch (result) {
+          case BattleResult.Victory:
+            Reward reward = StateManager.battleReward;
+            if (reward != null) {
+              reward.Add(fixedReward);
+              battleZone.fixedReward = new Reward();
+              CollectReward(reward);
+            }
+            break;
+          case BattleResult.Defeat:
+          case BattleResult.Retreat:
+            Move.SetPlayerPosition(Move.startZone);
+            SetFame(fixedReward.fame / 2 * -1);
+            break;
+        }
 
-    switch (result) {
-      case BattleResult.Victory:
-        Reward reward = StateManager.battleReward;
-        if (reward == null) return;
-        reward.Add(fixedReward);
-        battleZone.fixedReward = new Reward();
-        CollectReward(reward);
-        break;
-      case BattleResult.Defeat:
-      case BattleResult.Retreat:
-        transform.position = Move.startZone.playerPosition;
-        Move.CurrentZone = Move.startZone;
-        StateManager.currentPlayerZoneId = Move.CurrentZone.id;
-        events.CheckEvents(true);
-        _ = CameraController.FocusOn(transform.position, true);
-        SetFame(fixedReward.fame / 2 * -1);
-        break;
+        StateManager.globalTicks++;
+        StateManager.SaveGame();
+      }
     }
 
-    StateManager.SaveGame();
+    MapZoneEvent events = Move.CurrentZone.GetComponent<MapZoneEvent>();
+    events.CheckEvents(true);
   }
 }

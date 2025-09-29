@@ -240,7 +240,7 @@ public class RecruitingUI : MonoBehaviour {
     player.SetVillagers(mapZone.recruitVillagers);
     foreach (Unit unit in mapZone.recruits) player.Army.AddUnit(unit);
 
-    mapZone.GetComponent<MapZone>().UnshiftEvent();
+    mapZone.GetComponent<MapZone>().RemoveEvent(MapZoneType.Recruitment);
     _ = Toast.Show("success", "People have joined you");
     Close();
   }

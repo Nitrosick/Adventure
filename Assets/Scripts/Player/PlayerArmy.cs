@@ -17,15 +17,14 @@ public class PlayerArmy : MonoBehaviour {
       Unit unit = StateManager.PrefabDatabase.GetPrefab(data.prefabId);
       if (unit == null) return null;
       unit.FromData(data);
-      return unit;
-    }).ToList();
 
-    foreach (Unit unit in Units) {
-      if (unit.CurrentHealth <= 0) {
+      if (unit.CurrentHealth == 0) {
         if (unit.IsHero) unit.CurrentHealth = 1f;
         else unit.InSquad = false;
       }
-    }
+
+      return unit;
+    }).ToList();
   }
 
   public void UpdateSupports(SupportData[] array) {

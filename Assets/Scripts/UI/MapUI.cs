@@ -20,6 +20,8 @@ public class MapUI : GeneralUI {
   private GameObject zoneInfoClearedMark;
   private GameObject zoneInfoRecruitMark;
   private GameObject zoneInfoQuestMark;
+  private GameObject zoneInfoCollectMark;
+  private GameObject zoneInfoRespawnMark;
 
   // Buttons
   private Button playerMenuButton;
@@ -60,6 +62,8 @@ public class MapUI : GeneralUI {
     zoneInfoClearedMark = Find(markers, "Clear");
     zoneInfoRecruitMark = Find(markers, "Recruitment");
     zoneInfoQuestMark = Find(markers, "Quest");
+    zoneInfoCollectMark = Find(markers, "Collecting");
+    zoneInfoRespawnMark = Find(markers, "Respawning");
 
     playerMenuButton = Get<Button>(mainMenu, "Player");
     interactButton = Get<Button>(actions, "Interact");
@@ -92,7 +96,7 @@ public class MapUI : GeneralUI {
       villagersValue != null && leatherValue != null && zoneInfoBattleMark != null &&
       zoneInfoClearedMark != null && zoneInfoRecruitMark != null && interactButton != null &&
       location != null && interactButtonIcon != null && interactButtonText != null &&
-      totalPeopleValue != null;
+      totalPeopleValue != null && zoneInfoCollectMark != null && zoneInfoRespawnMark != null;
   }
 
   protected override void OnDestroy() {
@@ -103,11 +107,13 @@ public class MapUI : GeneralUI {
   public override void DisableUI() {
     base.DisableUI();
     playerMenuButton.interactable = false;
+    interactButton.interactable = false;
   }
 
   public override void EnableUI() {
     base.EnableUI();
     playerMenuButton.interactable = true;
+    interactButton.interactable = true;
   }
 
   protected override void OpenPauseMenu() {
@@ -140,15 +146,22 @@ public class MapUI : GeneralUI {
     zoneInfoTitle.text = title;
 
     if (empty) {
-      zoneInfoDescription.text = desc;
+      if (events.Contains(MapZoneType.Collecting)) {
+        zoneInfoDescription.text = descCleared;
+        zoneInfoRespawnMark.SetActive(true);
+      } else {
+        zoneInfoDescription.text = desc;
+      }
       return;
     }
 
     zoneInfoDescription.text = events.Count == 0 ? descCleared : desc;
+
     if (events.Count == 0) zoneInfoClearedMark.SetActive(true);
     else if (events.Contains(MapZoneType.Battle)) zoneInfoBattleMark.SetActive(true);
     else if (events.Contains(MapZoneType.Recruitment)) zoneInfoRecruitMark.SetActive(true);
     else if (events.Contains(MapZoneType.Quest)) zoneInfoQuestMark.SetActive(true);
+    else if (events.Contains(MapZoneType.Collecting)) zoneInfoCollectMark.SetActive(true);
   }
 
   public void HideZoneInfo() {
@@ -160,6 +173,8 @@ public class MapUI : GeneralUI {
     zoneInfoClearedMark.SetActive(false);
     zoneInfoRecruitMark.SetActive(false);
     zoneInfoQuestMark.SetActive(false);
+    zoneInfoCollectMark.SetActive(false);
+    zoneInfoRespawnMark.SetActive(false);
   }
 
   public void ShowInteractableButton(UnityAction callback, string icon = "settings", string text = "Interact") {

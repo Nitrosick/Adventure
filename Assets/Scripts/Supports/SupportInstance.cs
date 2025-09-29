@@ -1,5 +1,5 @@
 [System.Serializable]
-public class SupportInstance {
+public class SupportInstance : IDataConvertible<SupportData> {
   public Support data;
   public MasteryLevel level;
   public UnitRelation relation;

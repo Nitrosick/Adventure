@@ -230,8 +230,8 @@ public class BuildingUI : MonoBehaviour {
     await SceneController.Fade(0f, 1f, true);
 
     MapZone parentZone = mapZone.GetComponent<MapZone>();
-    if (mapZone.building == Building.Watchtower) parentZone.RemoveAmbush();
-    parentZone.UnshiftEvent();
+    if (mapZone.building == Building.Watchtower) parentZone.RemoveEvent(MapZoneType.Ambush);
+    parentZone.RemoveEvent(MapZoneType.Constructing);
 
     await SceneController.Fade(1f, 0f, false);
     SceneController.HideEventInfo();

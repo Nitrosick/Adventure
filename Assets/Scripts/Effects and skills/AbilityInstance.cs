@@ -1,5 +1,5 @@
 [System.Serializable]
-public class AbilityInstance {
+public class AbilityInstance : IDataConvertible<AbilityData> {
   public Ability data;
   public AbilityLevel level;
 

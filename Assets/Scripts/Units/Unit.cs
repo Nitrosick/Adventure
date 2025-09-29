@@ -60,11 +60,9 @@ public class Unit : MonoBehaviour {
   public bool InSquad { get; set; }
   public bool IsNew { get; set; }
 
-  async protected void Awake() {
+  protected void Awake() {
     Health = transform.GetComponent<UnitHealth>();
     Equip = transform.GetComponent<UnitEquipment>();
-    await Task.Yield();
-    if (!IsDead && CurrentHealth <= 0) CurrentHealth = Health.GetMaxHP();
   }
 
   private void OnDestroy() {
@@ -99,7 +97,7 @@ public class Unit : MonoBehaviour {
     _ = Animator.RotateTowards(direction, true);
 
     if (Relation == UnitRelation.Ally) Ui.MarkAsAlly();
-    if (CurrentHealth <= 0) IsDead = true;
+    if (CurrentHealth == 0) CurrentHealth = Health.GetMaxHP();
     Ui.UpdateHealth(Health.GetMaxHP(), CurrentHealth);
 
     if (IsHero) TotalSkillCharges += (int)AbilityController.ChargesBonus();
@@ -295,16 +293,11 @@ public class Unit : MonoBehaviour {
 
   // Data transfer
   public UnitData ToData() {
-    float health = CurrentHealth;
-    if (!IsDead && CurrentHealth <= 0) health = Health == null
-      ? TotalHealth
-      : Health.GetMaxHP();
-
     UnitEquipment equipment = transform.GetComponent<UnitEquipment>();
 
     return new UnitData {
       prefabId = PrefabId,
-      currentHealth = health,
+      currentHealth = CurrentHealth,
       inSquad = InSquad,
       isBoss = IsBoss,
       strength = Strength,

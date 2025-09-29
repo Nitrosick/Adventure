@@ -32,17 +32,30 @@ public class SceneController : MonoBehaviour
 
     if (background == null || overlay == null || eventPanel == null || eventIcon == null || eventText == null) {
       Debug.LogError("Scene controller components initialization error");
-      return;
     }
+  }
 
+  private void Start() {
+    _ = FadeOut();
+    StateManager.openedWindows.Clear();
     Unlock();
   }
 
-  private void Start() { _ = FadeOut(); }
-  private void OnDestroy() { HideEventInfo(); }
+  private void OnDestroy() {
+    HideEventInfo();
+  }
 
-  public static void Lock() { Locked = true; }
-  public static void Unlock() { Locked = false; }
+  public static void Lock() {
+    Locked = true;
+    if (FindObjectOfType<MapUI>() != null) MapUI.Instance.DisableUI();
+    else if (FindObjectOfType<BattleUI>() != null) BattleUI.Instance.DisableUI();
+  }
+
+  public static void Unlock() {
+    Locked = false;
+    if (FindObjectOfType<MapUI>() != null) MapUI.Instance.EnableUI();
+    else if (FindObjectOfType<BattleUI>() != null) BattleUI.Instance.EnableUI();
+  }
 
   public static void OpenWindow(string name) {
     HashSet<string> windows = StateManager.openedWindows;

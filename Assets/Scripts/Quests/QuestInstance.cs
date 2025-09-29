@@ -1,5 +1,5 @@
 [System.Serializable]
-public class QuestInstance {
+public class QuestInstance : IDataConvertible<QuestData> {
   public Quest data;
   public QuestState state = QuestState.Inactive;
 

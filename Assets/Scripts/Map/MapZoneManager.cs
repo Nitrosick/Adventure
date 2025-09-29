@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -17,12 +18,6 @@ public class MapZoneManager : MonoBehaviour {
       .Select(zone => zone.GetComponent<MapZone>())
       .Where(zone => zone != null)
       .ToArray();
-
-    if (StateManager.zonesState.Count == 0) {
-      foreach (MapZone zone in Zones) {
-        StateManager.zonesState.Add(zone.id, zone.events);
-      }
-    }
   }
 
   private void Start() {
@@ -53,25 +48,27 @@ public class MapZoneManager : MonoBehaviour {
       if (quest != null) {
         QuestManager.CompleteQuest(quest);
         questZone.questsList.Remove(quest);
-        if (questZone.questsList.Count == 0) currentZone.UnshiftEvent();
+        if (questZone.questsList.Count == 0) currentZone.RemoveEvent(MapZoneType.Quest);
         return;
       }
     }
-    currentZone.UnshiftEvent();
+    currentZone.RemoveEvent(MapZoneType.Battle);
   }
 
   public static void GetStateData() {
+    Dictionary<string, MapZoneData> state = StateManager.zonesState;
+    List<string> visited = new() { };
+
     // Zone events
-    var state = StateManager.zonesState;
     foreach (var kvp in state) {
       if (kvp.Value == null) continue;
+      if (kvp.Value.visited) visited.Add(kvp.Key);
       var zone = FindById(kvp.Key);
       if (zone == null) continue;
-      zone.events = kvp.Value;
+      zone.events = kvp.Value.events;
     }
 
     // Visited zones
-    var visited = StateManager.visitedZones;
     foreach (MapZone zone in Zones.Where(z => visited.Contains(z.id))) {
       zone.ShowPathLines();
       zone.secret = false;
@@ -106,6 +103,21 @@ public class MapZoneManager : MonoBehaviour {
       }
 
       zone.SetActive();
+    }
+
+    // Collecting
+    foreach (MapZone zone in Zones.Where(z => z.events.Contains(MapZoneType.Collecting))) {
+      if (!state.ContainsKey(zone.id)) continue;
+      MapZoneCollecting collecting = zone.GetComponent<MapZoneCollecting>();
+      collecting.CollectedAt = state[zone.id].collectedAt;
+
+      if (collecting.CollectedAt > 0 && StateManager.globalTicks < collecting.CollectedAt + collecting.respawn) {
+        zone.SwitchIcon(false);
+        zone.isEmpty = true;
+      } else {
+        zone.SwitchIcon(true);
+        zone.isEmpty = false;
+      }
     }
   }
 
