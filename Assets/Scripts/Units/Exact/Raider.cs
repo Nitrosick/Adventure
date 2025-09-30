@@ -10,6 +10,7 @@ public class Raider : Unit
     PrefabId = "u7";
     Type = UnitType.Melee;
     AllowedWeapon = EquipmentType.OneHandWeapon;
+    LevelingCoreStat = CoreStat.Strength;
     TotalHealth = 30f;
     MoveSpeed = 3f;
     DefaultMovePoints = 5;

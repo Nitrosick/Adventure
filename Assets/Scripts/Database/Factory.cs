@@ -51,7 +51,7 @@ public static class Factory {
     if (id.StartsWith("ab")) return "Abilities/" + id;
     if (id.StartsWith("ai")) return "Additional/" + id;
     if (id.StartsWith("su")) return "Supports/" + id;
-    if (id.StartsWith("mi") || id.StartsWith("g")) return "Misc/" + id;
+    if (id.StartsWith("mi") || id.StartsWith("li") || id.StartsWith("g")) return "Misc/" + id;
     if (id.StartsWith("a") || id.StartsWith("s")) return "Armor/" + id;
     if (id.StartsWith("q")) return "Quests/" + id;
     if (id.StartsWith("w")) return "Weapon/" + id;

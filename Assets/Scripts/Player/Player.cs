@@ -153,6 +153,13 @@ public class Player : MonoBehaviour {
     }
   }
 
+  private void CheckVillagersOverwhelmed() {
+    int delta = MaxVillagers - GetTotalPeople().Sum();
+    if (delta >= 0) return;
+    SetGold(delta * Level);
+    _ = Toast.Show("warning", "You have too many villagers");
+  }
+
   private void GetStateData() {
     // FIXME: Перенос данных между локациями
     AbilityController.Init();
@@ -199,6 +206,7 @@ public class Player : MonoBehaviour {
             break;
         }
 
+        CheckVillagersOverwhelmed();
         StateManager.globalTicks++;
         StateManager.SaveGame();
       }

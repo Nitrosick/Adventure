@@ -62,7 +62,10 @@ public class PlayerMenuUIInfo : MonoBehaviour {
   private static Image equipSkillIcon;
   private static TooltipTrigger skillTip;
   private static GameObject itemParams;
-  private static TextMeshProUGUI itemIntensity;
+  private static TextMeshProUGUI itemEffectValue;
+  private static GameObject levelingItemParams;
+  private static TextMeshProUGUI levelingItemEffectValue;
+  private static TextMeshProUGUI levelingMax;
 
   private T Find<T>(string path) where T : Component => panel.Find(path).GetComponent<T>();
   private GameObject FindGO(string path) => panel.Find(path).gameObject;
@@ -136,7 +139,10 @@ public class PlayerMenuUIInfo : MonoBehaviour {
     equipSkillIcon = Find<Image>("EquipParameters/Skill/Value/Icon");
     skillTip = Find<TooltipTrigger>("EquipParameters/Skill/Value");
     itemParams = FindGO("ItemParameters");
-    itemIntensity = Find<TextMeshProUGUI>("ItemParameters/Intensity/Value");
+    itemEffectValue = Find<TextMeshProUGUI>("ItemParameters/EffectValue/Value");
+    levelingItemParams = FindGO("LevelingItemParameters");
+    levelingItemEffectValue = Find<TextMeshProUGUI>("LevelingItemParameters/EffectValue/Value");
+    levelingMax = Find<TextMeshProUGUI>("LevelingItemParameters/MaxLevel/Value");
 
     if (!ComponentsInitialized()) {
       Debug.LogError("Player menu UI components initialization error");
@@ -172,8 +178,9 @@ public class PlayerMenuUIInfo : MonoBehaviour {
     equipRequiredLevel != null && statPoints != null && strengthUp != null &&
     dexterityUp != null && intelligenceUp != null && statPointsRow != null &&
     deathMark != null && itemActions != null && useItem != null &&
-    itemParams != null && itemIntensity != null && unitProjectiles != null &&
-    equipmentAdditional != null && abilityPointsRow != null && abilityPoints != null;
+    itemParams != null && itemEffectValue != null && unitProjectiles != null &&
+    equipmentAdditional != null && abilityPointsRow != null && abilityPoints != null &&
+    levelingItemParams != null && levelingItemEffectValue != null && levelingMax != null;
   }
 
   private void OnDestroy() {
@@ -213,6 +220,7 @@ public class PlayerMenuUIInfo : MonoBehaviour {
     armorParams.SetActive(false);
     equipParams.SetActive(false);
     itemParams.SetActive(false);
+    levelingItemParams.SetActive(false);
 
     foreach (Transform child in avatar) Destroy(child.gameObject);
   }
@@ -374,6 +382,7 @@ public class PlayerMenuUIInfo : MonoBehaviour {
     Clear();
     itemActions.SetActive(true);
     itemParams.SetActive(item is MedicineItem);
+    levelingItemParams.SetActive(item is LevelingItem);
 
     PlayerMenuUI.FrameSlot();
     PlayerMenuUI.selectedItem = item;
@@ -388,9 +397,15 @@ public class PlayerMenuUIInfo : MonoBehaviour {
 
     if (item is MedicineItem medItem) {
       type.text = "Type: Medicine item";
-      itemIntensity.text = medItem.intensity + " HP";
-    } else if (item is Goods) {
+      itemEffectValue.text = medItem.intensity + " HP";
+    }
+    else if (item is Goods) {
       type.text = "Type: Goods";
+    }
+    else if (item is LevelingItem levItem) {
+      type.text = "Type: Leveling item";
+      levelingItemEffectValue.text = $"+{levItem.effectValue} lvl";
+      levelingMax.text = levItem.maxLevel.ToString();
     }
     // FIXME: Добавить все типы предметов
 

@@ -23,6 +23,7 @@ public class PlayerMenuUIFilters : MonoBehaviour {
   private static GameObject itemFilters;
   private static Button allItems;
   private static Button medicineItems;
+  private static Button levelingItems;
 
   public static MenuFilter value;
 
@@ -51,6 +52,7 @@ public class PlayerMenuUIFilters : MonoBehaviour {
     itemFilters = Find("Left/Blocks/Right/Header/ItemFilters").gameObject;
     allItems = Get<Button>("Left/Blocks/Right/Header/ItemFilters/All");
     medicineItems = Get<Button>("Left/Blocks/Right/Header/ItemFilters/Medicine");
+    levelingItems = Get<Button>("Left/Blocks/Right/Header/ItemFilters/Leveling");
 
     if (!ComponentsInitialized()) {
       Debug.LogError("Player menu UI filters initialization error");
@@ -72,6 +74,7 @@ public class PlayerMenuUIFilters : MonoBehaviour {
 
     allItems.onClick.AddListener(() => SetFilter(MenuFilter.AllItems));
     medicineItems.onClick.AddListener(() => SetFilter(MenuFilter.Medicine));
+    levelingItems.onClick.AddListener(() => SetFilter(MenuFilter.Leveling));
   }
 
   private static bool ComponentsInitialized() {
@@ -80,7 +83,7 @@ public class PlayerMenuUIFilters : MonoBehaviour {
       freeSupports != null && inSquadSupports != null && equipFilters != null &&
       allEquip != null && weaponEquip != null && armorEquip != null &&
       additionalEquip != null && itemFilters != null && allItems != null &&
-      medicineItems != null;
+      medicineItems != null && levelingItems != null;
   }
 
   private void OnDestroy() {
@@ -99,6 +102,7 @@ public class PlayerMenuUIFilters : MonoBehaviour {
 
     allItems.onClick.RemoveListener(() => {});
     medicineItems.onClick.RemoveListener(() => {});
+    levelingItems.onClick.RemoveListener(() => {});
   }
 
   public static void InitUnitFilters() {
@@ -130,6 +134,7 @@ public class PlayerMenuUIFilters : MonoBehaviour {
       case MenuFilter.Additional:
       case MenuFilter.AllItems:
       case MenuFilter.Medicine:
+      case MenuFilter.Leveling:
         PlayerMenuUI.SelectInventoryTab();
         break;
     }

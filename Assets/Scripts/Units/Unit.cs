@@ -43,6 +43,7 @@ public class Unit : MonoBehaviour {
   public bool ShieldIsAllow { get; protected set; } = false;
 
   public int Level { get; protected set; } = 1;
+  public CoreStat LevelingCoreStat { get; protected set; }
   public int Initiative { get; protected set; }
   public float MoveSpeed { get; protected set; }
   public float DefaultMovePoints { get; protected set; }
@@ -164,9 +165,16 @@ public class Unit : MonoBehaviour {
     return result;
   }
 
-  public void LevelUp() {
-    Level++;
-    // FIXME: Добавление статов если юнит не герой
+  public void LevelUp(int value = 1) {
+    Level += value;
+    if (!IsHero) {
+      switch (LevelingCoreStat) {
+        case CoreStat.Strength: Strength += value; break;
+        case CoreStat.Dexterity: Dexterity += value; break;
+        case CoreStat.Intelligence: Intelligence += value; break;
+      }
+    }
+    Player.Instance.Army.UpdateState();
   }
 
   public void IncreaseStats(int[] stats) {

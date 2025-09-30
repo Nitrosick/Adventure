@@ -331,7 +331,10 @@ public class PlayerMenuUI : MonoBehaviour {
 
     var groupedItems = player.Inventory.Items
       .Where(i => {
-        if (filter == MenuFilter.Medicine && i is not MedicineItem) return false;
+        if (
+          filter == MenuFilter.Medicine && i is not MedicineItem ||
+          filter == MenuFilter.Leveling && i is not LevelingItem
+        ) return false;
         return true;
       })
       .GroupBy(item => item.id)

@@ -9,6 +9,7 @@ public class OneEyedRupert : Unit {
     PrefabId = "u9";
     Type = UnitType.Melee;
     AllowedWeapon = EquipmentType.OneHandWeapon;
+    LevelingCoreStat = CoreStat.Strength;
     TotalHealth = 45f;
     MoveSpeed = 2.8f;
     DefaultMovePoints = 4;
