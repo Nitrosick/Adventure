@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class QuestsMenuUI : HomeMenuFeature {
@@ -19,7 +20,9 @@ public class QuestsMenuUI : HomeMenuFeature {
   }
 
   private bool ComponentsInitialized() {
-    return questsList != null && emptyText != null;
+    return new object[] {
+      questsList, emptyText
+    }.All(x => x != null);
   }
 
   public void Init(string name, MasteryLevel lvl, Quest[] _quests) {

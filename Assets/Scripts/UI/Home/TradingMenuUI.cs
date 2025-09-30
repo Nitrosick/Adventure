@@ -31,7 +31,7 @@ public class TradingMenuUI : HomeMenuFeature {
   }
 
   private bool ComponentsInitialized() {
-    return resourcePrices.Length == 4 && resourceSlots != null && equipmentSlots != null && miscSlots != null;
+    return new object[] { resourceSlots, equipmentSlots, miscSlots }.All(x => x != null) && resourcePrices.Length == 4;
   }
 
   public void Init(

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -30,7 +31,9 @@ public class HomeMenuFeature : MonoBehaviour {
   }
 
   private bool ComponentsInitialized() {
-    return title != null && level != null && avatarBackground != null;
+    return new object[] {
+      title, level, avatarBackground
+    }.All(x => x != null);
   }
 
   protected void InitHeader(string name, MasteryLevel lvl) {

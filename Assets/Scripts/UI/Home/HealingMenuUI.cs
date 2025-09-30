@@ -56,9 +56,10 @@ public class HealingMenuUI : HomeMenuFeature {
   }
 
   private bool ComponentsInitialized() {
-    return intensity != null && reanimationChance != null && healCost != null &&
-    woundedSlots != null && reanimationCost != null && deadSlots != null &&
-    healButton != null && reanimateButton != null;
+    return new object[] {
+      intensity, reanimationChance, healCost, woundedSlots, reanimationCost,
+      deadSlots, healButton, reanimateButton
+    }.All(x => x != null);
   }
 
   private void OnDestroy() {

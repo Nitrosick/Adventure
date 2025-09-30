@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
@@ -82,12 +83,12 @@ public class HomeMenuUI : MonoBehaviour {
   }
 
   private static bool ComponentsInitialized() {
-    return menu != null && navigation != null && closeButton != null &&
-    saveButton != null && healingFeature != null && healingSection != null &&
-    welcomeSection != null && tradingFeature != null && tradingSection != null &&
-    weaponUpFeature != null && armorUpFeature != null && craftingSection != null &&
-    trainingFeature != null && trainingSection != null && questsFeature != null &&
-    questsSection != null;
+    return new object[] {
+      menu, navigation, closeButton, saveButton, healingFeature,
+      healingSection, welcomeSection, tradingFeature, tradingSection, weaponUpFeature,
+      armorUpFeature, craftingSection, trainingFeature, trainingSection, questsFeature,
+      questsSection
+    }.All(x => x != null);
   }
 
   private void OnDestroy() {

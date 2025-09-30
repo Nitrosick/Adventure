@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -33,8 +34,9 @@ public class CraftingMenuUI : HomeMenuFeature {
   }
 
   private bool ComponentsInitialized() {
-    return masterIcon != null && weaponsmithDesc != null && armorerDesc != null &&
-    recipesPanel != null;
+    return new object[] {
+      masterIcon, weaponsmithDesc, armorerDesc, recipesPanel
+    }.All(x => x != null);
   }
 
   public void Init(string name, MasteryLevel lvl, MapZoneFeature type, CraftingRecipe[] recipes) {

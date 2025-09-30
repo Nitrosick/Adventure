@@ -1,6 +1,9 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class PlayerMenuUIInfo : MonoBehaviour {
@@ -66,6 +69,8 @@ public class PlayerMenuUIInfo : MonoBehaviour {
   private static GameObject levelingItemParams;
   private static TextMeshProUGUI levelingItemEffectValue;
   private static TextMeshProUGUI levelingMax;
+
+  private readonly Dictionary<Button, UnityAction> actions = new();
 
   private T Find<T>(string path) where T : Component => panel.Find(path).GetComponent<T>();
   private GameObject FindGO(string path) => panel.Find(path).gameObject;
@@ -151,49 +156,41 @@ public class PlayerMenuUIInfo : MonoBehaviour {
     unitInSquad.onClick.AddListener(SwitchUnitInSquad);
     UnitDismiss.onClick.AddListener(DismissConfirmation);
     useItem.onClick.AddListener(UseItem);
-    equipmentPrimary.onClick.AddListener(() => OpenSelector(UnitEquipSlot.Primary));
-    equipmentArmor.onClick.AddListener(() => OpenSelector(UnitEquipSlot.Armor));
-    equipmentSecondary.onClick.AddListener(() => OpenSelector(UnitEquipSlot.Secondary));
-    equipmentAdditional.onClick.AddListener(() => OpenSelector(UnitEquipSlot.Additional));
-    strengthUp.onClick.AddListener(() => IncreaseStat(CoreStat.Strength));
-    dexterityUp.onClick.AddListener(() => IncreaseStat(CoreStat.Dexterity));
-    intelligenceUp.onClick.AddListener(() => IncreaseStat(CoreStat.Intelligence));
+
+    actions[equipmentPrimary] = () => OpenSelector(UnitEquipSlot.Primary);
+    actions[equipmentArmor] = () => OpenSelector(UnitEquipSlot.Armor);
+    actions[equipmentSecondary] = () => OpenSelector(UnitEquipSlot.Secondary);
+    actions[equipmentAdditional] = () => OpenSelector(UnitEquipSlot.Additional);
+    actions[strengthUp] = () => IncreaseStat(CoreStat.Strength);
+    actions[dexterityUp] = () => IncreaseStat(CoreStat.Dexterity);
+    actions[intelligenceUp] = () => IncreaseStat(CoreStat.Intelligence);
+
+    foreach (var pair in actions) pair.Key.onClick.AddListener(pair.Value);
   }
 
   private static bool ComponentsInitialized() {
-    return panel != null && displayName != null && Level != null &&
-    type != null && avatar != null && unitActions != null &&
-    unitInSquad != null && UnitDismiss != null && equipment != null &&
-    coreStats != null && strength != null && dexterity != null &&
-    intelligence != null && description != null && unitParams != null &&
-    unitMp != null && unitDamage != null && unitDefense != null &&
-    unitRange != null && inSquadMark != null && equippedMark != null &&
-    weaponParams != null && weaponDamage != null && weaponDamageType != null &&
-    weaponRange != null && weaponCritMod != null && weaponArmorPen != null &&
-    equipParams != null && equipWeight != null && equipEffect != null &&
-    equipSkill != null && armorParams != null && armorDefense != null &&
-    equipEffectIcon != null && equipSkillIcon != null && effectTip != null &&
-    skillTip != null && equipmentPrimary != null && equipmentArmor != null &&
-    equipmentSecondary != null && equipRequirements != null && equipRequiredStats != null &&
-    equipRequiredLevel != null && statPoints != null && strengthUp != null &&
-    dexterityUp != null && intelligenceUp != null && statPointsRow != null &&
-    deathMark != null && itemActions != null && useItem != null &&
-    itemParams != null && itemEffectValue != null && unitProjectiles != null &&
-    equipmentAdditional != null && abilityPointsRow != null && abilityPoints != null &&
-    levelingItemParams != null && levelingItemEffectValue != null && levelingMax != null;
+    return new object[] {
+      panel, displayName, Level, type, avatar,
+      unitActions, unitInSquad, UnitDismiss, equipment, coreStats,
+      strength, dexterity, intelligence, description, unitParams,
+      unitMp, unitDamage, unitDefense, unitRange, inSquadMark,
+      equippedMark, weaponParams, weaponDamage, weaponDamageType, weaponRange,
+      weaponCritMod, weaponArmorPen, equipParams, equipWeight, equipEffect,
+      equipSkill, armorParams, armorDefense, equipEffectIcon, equipSkillIcon,
+      effectTip, skillTip, equipmentPrimary, equipmentArmor, equipmentSecondary,
+      equipRequirements, equipRequiredStats, equipRequiredLevel, statPoints, strengthUp,
+      dexterityUp, intelligenceUp, statPointsRow, deathMark, itemActions,
+      useItem, itemParams, itemEffectValue, unitProjectiles, equipmentAdditional,
+      abilityPointsRow, abilityPoints, levelingItemParams, levelingItemEffectValue
+    }.All(x => x != null);
   }
 
   private void OnDestroy() {
     unitInSquad.onClick.RemoveListener(SwitchUnitInSquad);
     UnitDismiss.onClick.RemoveListener(DismissConfirmation);
     useItem.onClick.RemoveListener(UseItem);
-    equipmentPrimary.onClick.RemoveListener(() => { });
-    equipmentArmor.onClick.RemoveListener(() => { });
-    equipmentSecondary.onClick.RemoveListener(() => { });
-    equipmentAdditional.onClick.RemoveListener(() => { });
-    strengthUp.onClick.RemoveListener(() => { });
-    dexterityUp.onClick.RemoveListener(() => { });
-    intelligenceUp.onClick.RemoveListener(() => { });
+
+    foreach (var pair in actions) pair.Key.onClick.RemoveListener(pair.Value);
   }
 
   public static void Clear() {

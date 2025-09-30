@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class TrainingMenuUI : HomeMenuFeature {
@@ -24,7 +25,9 @@ public class TrainingMenuUI : HomeMenuFeature {
   }
 
   private bool ComponentsInitialized() {
-    return soldiersPanel != null && supportsPanel != null;
+    return new object[] {
+      soldiersPanel, supportsPanel
+    }.All(x => x != null);
   }
 
   public void Init(string name, MasteryLevel lvl, TrainingChain[] soldiers, TrainingChain[] supports) {

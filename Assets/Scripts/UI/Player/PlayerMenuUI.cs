@@ -110,14 +110,13 @@ public class PlayerMenuUI : MonoBehaviour {
   }
 
   private static bool ComponentsInitialized() {
-    return menu != null && leftSlots != null && rightSlots != null &&
-      leftSlotsTitle != null && rightSlotsTitle != null && navHero != null &&
-      navUnits != null && navInventory != null && playerProgress != null &&
-      playerXpValue != null && playerXpBar != null && playerXpBarFill != null &&
-      playerFameValue != null && playerFameBar != null && playerFameBarFill != null &&
-      navQuests != null && activeQuests != null && completedQuests != null &&
-      activeQuestsEmpty != null && completedQuestsEmpty != null && activeQuestsList != null &&
-      completedQuestsList != null && abilities != null;
+    return new object[] {
+      menu, leftSlots, rightSlots, leftSlotsTitle, rightSlotsTitle,
+      navHero, navUnits, navInventory, playerProgress, playerXpValue,
+      playerXpBar, playerXpBarFill, playerFameValue, playerFameBar, playerFameBarFill,
+      navQuests, activeQuests, completedQuests, activeQuestsEmpty, completedQuestsEmpty,
+      activeQuestsList, completedQuestsList
+    }.All(x => x != null);
   }
 
   private void OnDestroy() {
@@ -333,7 +332,8 @@ public class PlayerMenuUI : MonoBehaviour {
       .Where(i => {
         if (
           filter == MenuFilter.Medicine && i is not MedicineItem ||
-          filter == MenuFilter.Leveling && i is not LevelingItem
+          filter == MenuFilter.Leveling && i is not LevelingItem ||
+          filter == MenuFilter.Goods && i is not Goods
         ) return false;
         return true;
       })

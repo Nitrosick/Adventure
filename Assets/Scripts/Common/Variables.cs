@@ -300,6 +300,7 @@ public enum MenuFilter {
   Additional,
   AllItems,
   Medicine,
-  Leveling
+  Leveling,
+  Goods
   // FIXME: Добавить фильтры по стрелкам и разным типам предметов
 }

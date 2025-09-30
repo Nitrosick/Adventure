@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -41,8 +42,9 @@ public class AlmanacUI : MonoBehaviour {
   }
 
   private static bool ComponentsInitialized() {
-    return menu != null && navigation != null && closeButton != null &&
-    title != null && text != null;
+    return new object[] {
+      menu, navigation, closeButton, title, text
+    }.All(x => x != null);
   }
 
   private void OnDestroy() {

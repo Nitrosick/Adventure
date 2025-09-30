@@ -1,4 +1,7 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class PlayerMenuUIFilters : MonoBehaviour {
@@ -24,8 +27,10 @@ public class PlayerMenuUIFilters : MonoBehaviour {
   private static Button allItems;
   private static Button medicineItems;
   private static Button levelingItems;
+  private static Button goods;
 
   public static MenuFilter value;
+  private readonly Dictionary<Button, UnityAction> actions = new();
 
   private void Awake() {
     Transform menu = transform.Find("Menu/Player");
@@ -53,56 +58,42 @@ public class PlayerMenuUIFilters : MonoBehaviour {
     allItems = Get<Button>("Left/Blocks/Right/Header/ItemFilters/All");
     medicineItems = Get<Button>("Left/Blocks/Right/Header/ItemFilters/Medicine");
     levelingItems = Get<Button>("Left/Blocks/Right/Header/ItemFilters/Leveling");
+    goods = Get<Button>("Left/Blocks/Right/Header/ItemFilters/Goods");
 
     if (!ComponentsInitialized()) {
       Debug.LogError("Player menu UI filters initialization error");
       return;
     }
 
-    allUnits.onClick.AddListener(() => SetFilter(MenuFilter.AllUnits));
-    freeUnits.onClick.AddListener(() => SetFilter(MenuFilter.FreeUnits));
-    inSquadUnits.onClick.AddListener(() => SetFilter(MenuFilter.UnitsInSquad));
+    actions[allUnits] = () => SetFilter(MenuFilter.AllUnits);
+    actions[freeUnits] = () => SetFilter(MenuFilter.FreeUnits);
+    actions[inSquadUnits] = () => SetFilter(MenuFilter.UnitsInSquad);
+    actions[allSupports] = () => SetFilter(MenuFilter.AllSupports);
+    actions[freeSupports] = () => SetFilter(MenuFilter.FreeSupports);
+    actions[inSquadSupports] = () => SetFilter(MenuFilter.SupportsInSquad);
+    actions[allEquip] = () => SetFilter(MenuFilter.AllEquipment);
+    actions[weaponEquip] = () => SetFilter(MenuFilter.Weapon);
+    actions[armorEquip] = () => SetFilter(MenuFilter.Armor);
+    actions[additionalEquip] = () => SetFilter(MenuFilter.Additional);
+    actions[allItems] = () => SetFilter(MenuFilter.AllItems);
+    actions[medicineItems] = () => SetFilter(MenuFilter.Medicine);
+    actions[levelingItems] = () => SetFilter(MenuFilter.Leveling);
+    actions[goods] = () => SetFilter(MenuFilter.Goods);
 
-    allSupports.onClick.AddListener(() => SetFilter(MenuFilter.AllSupports));
-    freeSupports.onClick.AddListener(() => SetFilter(MenuFilter.FreeSupports));
-    inSquadSupports.onClick.AddListener(() => SetFilter(MenuFilter.SupportsInSquad));
-
-    allEquip.onClick.AddListener(() => SetFilter(MenuFilter.AllEquipment));
-    weaponEquip.onClick.AddListener(() => SetFilter(MenuFilter.Weapon));
-    armorEquip.onClick.AddListener(() => SetFilter(MenuFilter.Armor));
-    additionalEquip.onClick.AddListener(() => SetFilter(MenuFilter.Additional));
-
-    allItems.onClick.AddListener(() => SetFilter(MenuFilter.AllItems));
-    medicineItems.onClick.AddListener(() => SetFilter(MenuFilter.Medicine));
-    levelingItems.onClick.AddListener(() => SetFilter(MenuFilter.Leveling));
+    foreach (var pair in actions) pair.Key.onClick.AddListener(pair.Value);
   }
 
   private static bool ComponentsInitialized() {
-    return allUnits != null && freeUnits != null && inSquadUnits != null &&
-      unitFilters != null && supportFilters != null && allSupports != null &&
-      freeSupports != null && inSquadSupports != null && equipFilters != null &&
-      allEquip != null && weaponEquip != null && armorEquip != null &&
-      additionalEquip != null && itemFilters != null && allItems != null &&
-      medicineItems != null && levelingItems != null;
+    return new object[] {
+      allUnits, freeUnits, inSquadUnits, unitFilters, supportFilters,
+      allSupports, freeSupports, inSquadSupports, equipFilters, allEquip,
+      weaponEquip, armorEquip, additionalEquip, itemFilters, allItems,
+      medicineItems, levelingItems, goods
+    }.All(x => x != null);
   }
 
   private void OnDestroy() {
-    allUnits.onClick.RemoveListener(() => { });
-    freeUnits.onClick.RemoveListener(() => { });
-    inSquadUnits.onClick.RemoveListener(() => { });
-
-    allSupports.onClick.RemoveListener(() => { });
-    freeSupports.onClick.RemoveListener(() => { });
-    inSquadSupports.onClick.RemoveListener(() => { });
-
-    allEquip.onClick.RemoveListener(() => {});
-    weaponEquip.onClick.RemoveListener(() => {});
-    armorEquip.onClick.RemoveListener(() => {});
-    additionalEquip.onClick.RemoveListener(() => {});
-
-    allItems.onClick.RemoveListener(() => {});
-    medicineItems.onClick.RemoveListener(() => {});
-    levelingItems.onClick.RemoveListener(() => {});
+    foreach (var pair in actions) pair.Key.onClick.RemoveListener(pair.Value);
   }
 
   public static void InitUnitFilters() {
@@ -135,6 +126,7 @@ public class PlayerMenuUIFilters : MonoBehaviour {
       case MenuFilter.AllItems:
       case MenuFilter.Medicine:
       case MenuFilter.Leveling:
+      case MenuFilter.Goods:
         PlayerMenuUI.SelectInventoryTab();
         break;
     }

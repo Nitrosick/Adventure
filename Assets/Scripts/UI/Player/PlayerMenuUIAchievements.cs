@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class PlayerMenuUIAchievements : MonoBehaviour {
@@ -11,6 +12,8 @@ public class PlayerMenuUIAchievements : MonoBehaviour {
   private static Button inProgressFilter;
   private static Button completedFilter;
   private static Button lockedFilter;
+
+  private readonly Dictionary<Button, UnityAction> actions = new();
 
   public enum AchievementsFilter {
     InProgress,
@@ -32,15 +35,15 @@ public class PlayerMenuUIAchievements : MonoBehaviour {
       return;
     }
 
-    inProgressFilter.onClick.AddListener(() => FilterItems(AchievementsFilter.InProgress));
-    completedFilter.onClick.AddListener(() => FilterItems(AchievementsFilter.Completed));
-    lockedFilter.onClick.AddListener(() => FilterItems(AchievementsFilter.Locked));
+    actions[inProgressFilter] = () => FilterItems(AchievementsFilter.InProgress);
+    actions[completedFilter] = () => FilterItems(AchievementsFilter.Completed);
+    actions[lockedFilter] = () => FilterItems(AchievementsFilter.Locked);
+
+    foreach (var pair in actions) pair.Key.onClick.AddListener(pair.Value);
   }
 
   private void OnDestroy() {
-    inProgressFilter.onClick.RemoveListener(() => {});
-    completedFilter.onClick.RemoveListener(() => {});
-    lockedFilter.onClick.RemoveListener(() => {});
+    foreach (var pair in actions) pair.Key.onClick.RemoveListener(pair.Value);
   }
 
   public static void Init() {

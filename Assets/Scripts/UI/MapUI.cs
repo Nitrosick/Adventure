@@ -90,13 +90,13 @@ public class MapUI : GeneralUI {
   }
 
   private bool ComponentsInitialized() {
-    return zoneInfoPanel != null && zoneInfoTitle != null && zoneInfoDescription != null &&
-      zoneInfoQuestMark != null && playerMenuButton != null && goldValue != null &&
-      woodValue != null && stoneValue != null && metalValue != null &&
-      villagersValue != null && leatherValue != null && zoneInfoBattleMark != null &&
-      zoneInfoClearedMark != null && zoneInfoRecruitMark != null && interactButton != null &&
-      location != null && interactButtonIcon != null && interactButtonText != null &&
-      totalPeopleValue != null && zoneInfoCollectMark != null && zoneInfoRespawnMark != null;
+    return new object[] {
+      zoneInfoPanel, zoneInfoTitle, zoneInfoDescription,  zoneInfoQuestMark, playerMenuButton,
+      goldValue,  woodValue, stoneValue, metalValue,  villagersValue,
+      leatherValue, zoneInfoBattleMark,  zoneInfoClearedMark, zoneInfoRecruitMark, interactButton,
+      location, interactButtonIcon, interactButtonText,  totalPeopleValue, zoneInfoCollectMark,
+      zoneInfoRespawnMark
+    }.All(x => x != null);
   }
 
   protected override void OnDestroy() {
