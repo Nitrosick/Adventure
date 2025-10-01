@@ -37,6 +37,7 @@ public static class StateManager {
   public static int maxVillagers;
   public static int experience;
   public static int fame;
+  public static int reputation;
   public static int level;
   public static int statPoints;
   public static int abilityPoints;
@@ -75,6 +76,7 @@ public static class StateManager {
     maxVillagers = 5;
     experience = 0;
     fame = 0;
+    reputation = 0;
     level = 1;
     statPoints = 0;
     abilityPoints = 0;
@@ -185,6 +187,7 @@ public static class StateManager {
       maxVillagers = maxVillagers,
       experience = experience,
       fame = fame,
+      reputation = reputation,
       level = level,
       statPoints = statPoints,
       abilityPoints = abilityPoints,
@@ -214,6 +217,7 @@ public static class StateManager {
     maxVillagers = data.maxVillagers;
     experience = data.experience;
     fame = data.fame;
+    reputation = data.reputation;
     level = data.level;
     statPoints = data.statPoints;
     abilityPoints = data.abilityPoints;

@@ -10,6 +10,7 @@ public class Bandit : Unit
     PrefabId = "u3";
     Type = UnitType.Melee;
     AllowedWeapon = EquipmentType.OneHandWeapon;
+    MaxLevel = 6;
     LevelingCoreStat = CoreStat.Strength;
     TotalHealth = 20f;
     MoveSpeed = 3.3f;

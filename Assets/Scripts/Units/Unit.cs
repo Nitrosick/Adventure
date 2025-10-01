@@ -43,6 +43,7 @@ public class Unit : MonoBehaviour {
   public bool ShieldIsAllow { get; protected set; } = false;
 
   public int Level { get; protected set; } = 1;
+  public int MaxLevel { get; protected set; }
   public CoreStat LevelingCoreStat { get; protected set; }
   public int Initiative { get; protected set; }
   public float MoveSpeed { get; protected set; }
@@ -166,14 +167,26 @@ public class Unit : MonoBehaviour {
   }
 
   public void LevelUp(int value = 1) {
-    Level += value;
-    if (!IsHero) {
-      switch (LevelingCoreStat) {
-        case CoreStat.Strength: Strength += value; break;
-        case CoreStat.Dexterity: Dexterity += value; break;
-        case CoreStat.Intelligence: Intelligence += value; break;
+    if (Level >= MaxLevel) return;
+    int levels = value;
+
+    while (levels > 0) {
+      if (Level >= MaxLevel) {
+        Player.Instance.Army.UpdateState();
+        return;
       }
+
+      Level++;
+      if (!IsHero) {
+        switch (LevelingCoreStat) {
+          case CoreStat.Strength: Strength++; break;
+          case CoreStat.Dexterity: Dexterity++; break;
+          case CoreStat.Intelligence: Intelligence++; break;
+        }
+      }
+      levels--;
     }
+
     Player.Instance.Army.UpdateState();
   }
 

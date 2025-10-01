@@ -34,6 +34,11 @@ public class PlayerMenuUI : MonoBehaviour {
   private static TextMeshProUGUI playerFameValue;
   private static RectTransform playerFameBar;
   private static RectTransform playerFameBarFill;
+  private static TextMeshProUGUI playerReputationValue;
+  private static RectTransform playerReputationBar;
+  private static RectTransform playerReputationBarFill;
+  private static Color positiveColor;
+  private static Color negativeColor;
   private static Transform abilities;
 
   // Quests
@@ -82,6 +87,9 @@ public class PlayerMenuUI : MonoBehaviour {
     playerFameValue = Get<TextMeshProUGUI>("Left/Blocks/Left/PlayerProgress/Viewport/Content/Fame/Value");
     playerFameBar = Get<RectTransform>("Left/Blocks/Left/PlayerProgress/Viewport/Content/FameBar");
     playerFameBarFill = Get<RectTransform>("Left/Blocks/Left/PlayerProgress/Viewport/Content/FameBar/Fill");
+    playerReputationValue = Get<TextMeshProUGUI>("Left/Blocks/Left/PlayerProgress/Viewport/Content/Reputation/Value");
+    playerReputationBar = Get<RectTransform>("Left/Blocks/Left/PlayerProgress/Viewport/Content/ReputationBar");
+    playerReputationBarFill = Get<RectTransform>("Left/Blocks/Left/PlayerProgress/Viewport/Content/ReputationBar/Fill");
 
     abilities = Get<RectTransform>("Left/Blocks/Right/Abilities");
     activeQuests = Find("Left/Blocks/Left/ActiveQuests");
@@ -100,6 +108,9 @@ public class PlayerMenuUI : MonoBehaviour {
     navUnits.onClick.AddListener(SelectUnitsTab);
     navInventory.onClick.AddListener(SelectInventoryTab);
     navQuests.onClick.AddListener(SelectQuestsTab);
+
+    ColorUtility.TryParseHtmlString("#2B8EF3", out positiveColor);
+    ColorUtility.TryParseHtmlString("#F61010", out negativeColor);
   }
 
   private async void Start() {
@@ -115,7 +126,7 @@ public class PlayerMenuUI : MonoBehaviour {
       navHero, navUnits, navInventory, playerProgress, playerXpValue,
       playerXpBar, playerXpBarFill, playerFameValue, playerFameBar, playerFameBarFill,
       navQuests, activeQuests, completedQuests, activeQuestsEmpty, completedQuestsEmpty,
-      activeQuestsList, completedQuestsList
+      activeQuestsList, completedQuestsList, playerReputationBar, playerReputationBarFill, playerReputationValue
     }.All(x => x != null);
   }
 
@@ -206,12 +217,24 @@ public class PlayerMenuUI : MonoBehaviour {
       player.Level
     );
     playerFameValue.text = player.Fame.ToString();
+    playerReputationValue.text = player.Reputation.ToString();
 
     float barsWidth = Mathf.Abs(playerXpBar.rect.width) - 8f;
     float xpPercent = Mathf.Clamp01((float)player.Experience / player.XPForNextLevel);
     playerXpBarFill.sizeDelta = new Vector2(barsWidth * xpPercent, playerXpBarFill.sizeDelta.y);
-    float famePercent = Mathf.Clamp01((float)player.Fame / player.MaxFame);
+    float famePercent = Mathf.Clamp01((float)player.Fame / player.maxFame);
     playerFameBarFill.sizeDelta = new Vector2(barsWidth * famePercent, playerFameBarFill.sizeDelta.y);
+
+    int rep = player.Reputation;
+    float maxAbs = Mathf.Max(Mathf.Abs(player.reputationMinMax[0]), Mathf.Abs(player.reputationMinMax[1]));
+    float repPercent = Mathf.Abs((float)rep) / maxAbs;
+    float width = barsWidth / 2 * repPercent;
+    playerReputationBarFill.sizeDelta = new Vector2(width, playerReputationBarFill.sizeDelta.y);
+    playerReputationBarFill.localScale = new Vector3(rep >= 0 ? 1 : -1, 1, 1);
+
+    playerReputationBarFill.GetComponent<Image>().color = player.Reputation < 0
+      ? negativeColor
+      : positiveColor;
 
     await Task.Yield();
     ShowDefaultInfo();
@@ -395,11 +418,13 @@ public class PlayerMenuUI : MonoBehaviour {
   private static void RenderEmptySlots(RectTransform panel, int filled) {
     if (filled == defaultSlotsCount) {
       return;
-    } else if (filled < defaultSlotsCount) {
+    }
+    else if (filled < defaultSlotsCount) {
       for (int i = filled; i < defaultSlotsCount; i++) {
         Instantiate(MapUI.Instance.emptySlotPrefab, panel);
       }
-    } else {
+    }
+    else {
       int remainder = filled % slotColumns;
       int placeholders = remainder == 0 ? 0 : slotColumns - remainder;
 

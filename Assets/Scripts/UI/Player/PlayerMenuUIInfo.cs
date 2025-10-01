@@ -243,6 +243,7 @@ public class PlayerMenuUIInfo : MonoBehaviour {
 
     displayName.text = unit.Name;
     Level.text = "Level: " + unit.Level.ToString();
+    if (unit.Level >= unit.MaxLevel) Level.text += " (max.)";
     type.text = "Type: " + unit.Type.ToString();
     deathMark.SetActive(unit.CurrentHealth <= 0);
     inSquadMark.SetActive(unit.InSquad);

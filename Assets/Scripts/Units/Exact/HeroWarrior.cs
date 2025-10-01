@@ -12,6 +12,7 @@ public class HeroWarrior : Unit {
     PrefabId = "u1";
     Type = UnitType.Melee;
     AllowedWeapon = EquipmentType.OneHandWeapon;
+    MaxLevel = 30;
     LevelingCoreStat = CoreStat.Strength;
     ShieldIsAllow = true;
     TotalHealth = 40f;

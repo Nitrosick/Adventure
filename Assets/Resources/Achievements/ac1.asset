@@ -15,11 +15,12 @@ MonoBehaviour:
   id: ac1
   title: Crime fighter
   description: Defeat 10 bandits.
-  objectiveType: 0
   objectiveCount: 10
+  defaultProgress: 0
   reward:
     experience: 50
     fame: 50
+    reputation: 15
     statPoints: 0
     abilityPoints: 1
     goldRange: 0000000000000000

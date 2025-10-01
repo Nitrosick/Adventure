@@ -10,6 +10,7 @@ public class ArmedPeasant : Unit
     PrefabId = "u5";
     Type = UnitType.Melee;
     AllowedWeapon = EquipmentType.OneHandWeapon;
+    MaxLevel = 4;
     LevelingCoreStat = CoreStat.Strength;
     TotalHealth = 20f;
     MoveSpeed = 3f;

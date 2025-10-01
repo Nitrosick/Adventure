@@ -14,6 +14,7 @@ public class SaveData {
   public int maxVillagers;
   public int experience;
   public int fame;
+  public int reputation;
   public int level;
   public int statPoints;
   public int abilityPoints;

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 public class Reward {
   public int experience;
   public int fame;
+  public int reputation;
   public int statPoints;
   public int abilityPoints;
   public int[] goldRange = { 0, 0 }; // Min, Max Gold
@@ -15,6 +16,7 @@ public class Reward {
   public void Add(Reward other) {
     experience += other.experience;
     fame += other.fame;
+    reputation += other.reputation;
     statPoints += other.statPoints;
     abilityPoints += other.abilityPoints;
 

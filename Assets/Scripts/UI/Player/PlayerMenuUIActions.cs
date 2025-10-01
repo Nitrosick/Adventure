@@ -160,7 +160,7 @@ public static class PlayerMenuUIActions {
     }
     else if (item is LevelingItem levItem) {
       Unit[] units = Player.Instance.Army.Units
-        .Where(u => u.Type == levItem.unitType && u.Level < levItem.maxLevel)
+        .Where(u => u.Type == levItem.unitType && u.Level < levItem.maxLevel && u.Level < u.MaxLevel)
         .ToArray();
 
       if (units.Length == 0) {

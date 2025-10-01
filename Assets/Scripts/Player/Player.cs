@@ -14,13 +14,14 @@ public class Player : MonoBehaviour {
   public int MaxVillagers { get; private set; } = 5;
   public int Experience { get; private set; }
   public int Fame { get; private set; }
+  public int Reputation { get; private set; }
   public int Level { get; private set; } = 1;
   public int StatPoints { get; private set; }
   public int AbilityPoints { get; private set; }
 
-  public int MaxFame { get; private set; } = 10000;
-  public int MaxLevel { get; private set; } = 30;
-
+  public readonly int maxFame = 10000;
+  public readonly int maxLevel = 30;
+  public readonly int[] reputationMinMax = { -500, 500 };
   private readonly int baseMaxVillagers = 5;
   private readonly int bonusVillagersPerStep = 5;
   private readonly int fameStepSize = 500;
@@ -73,6 +74,7 @@ public class Player : MonoBehaviour {
   }
 
   public void AddExpirience(int value) {
+    if (Level >= maxLevel) return;
     Experience += (int)Math.Round(value * AbilityController.XpBonus());
     while (Experience >= XPForNextLevel) {
       Experience -= XPForNextLevel;
@@ -114,6 +116,13 @@ public class Player : MonoBehaviour {
     StateManager.fame = Fame;
   }
 
+  public void SetReputation(int value) {
+    Reputation += value;
+    if (Reputation < reputationMinMax[0]) Reputation = reputationMinMax[0];
+    else if (Reputation > reputationMinMax[1]) Reputation = reputationMinMax[1];
+    StateManager.reputation = Reputation;
+  }
+
   public void SetStatPoints(int value) {
     StatPoints += value;
     if (StatPoints < 0) StatPoints = 0;
@@ -133,6 +142,7 @@ public class Player : MonoBehaviour {
   public void CollectReward(Reward reward) {
     AddExpirience(reward.experience);
     SetFame(reward.fame);
+    SetReputation(reward.reputation);
     SetStatPoints(reward.statPoints);
     SetAbilityPoints(reward.abilityPoints);
     int goldValue = Utils.GetRandomInRange(reward.goldRange[0], reward.goldRange[1]);
@@ -171,6 +181,7 @@ public class Player : MonoBehaviour {
     MaxVillagers = StateManager.maxVillagers;
     Experience = StateManager.experience;
     Fame = StateManager.fame;
+    Reputation = StateManager.reputation;
     Level = StateManager.level;
     StatPoints = StateManager.statPoints;
     AbilityPoints = StateManager.abilityPoints;

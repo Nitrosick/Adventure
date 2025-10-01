@@ -13,6 +13,7 @@ public class Poacher : Unit {
     PrefabId = "u6";
     Type = UnitType.Range;
     AllowedWeapon = EquipmentType.Bow;
+    MaxLevel = 6;
     LevelingCoreStat = CoreStat.Dexterity;
     TotalHealth = 20f;
     MoveSpeed = 3.5f;

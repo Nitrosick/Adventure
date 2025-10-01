@@ -9,6 +9,7 @@ public class Sailor : Unit {
     PrefabId = "u8";
     Type = UnitType.Melee;
     AllowedWeapon = EquipmentType.OneHandWeapon;
+    MaxLevel = 4;
     LevelingCoreStat = CoreStat.Strength;
     TotalHealth = 22f;
     MoveSpeed = 3.3f;

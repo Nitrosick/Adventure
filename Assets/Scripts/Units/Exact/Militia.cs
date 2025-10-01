@@ -10,6 +10,7 @@ public class Militia : Unit
     PrefabId = "u2";
     Type = UnitType.Melee;
     AllowedWeapon = EquipmentType.OneHandWeapon;
+    MaxLevel = 5;
     LevelingCoreStat = CoreStat.Strength;
     TotalHealth = 25f;
     MoveSpeed = 3f;
