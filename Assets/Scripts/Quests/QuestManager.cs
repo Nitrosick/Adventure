@@ -19,6 +19,7 @@ public class QuestManager : MonoBehaviour {
     MapZone zone = MapZoneManager.FindById(quest.objectiveZoneId);
     if (zone != null) zone.ActivateQuest(quest);
     StateManager.WriteQuestsData(questsList.ToArray());
+    _ = Toast.Show("success", "Quest accepted");
   }
 
   public static void CompleteQuest(Quest quest) {
@@ -28,6 +29,7 @@ public class QuestManager : MonoBehaviour {
     GiveRewards(quest);
     QuestModalUI.Instance.ShowReward(questIns);
     StateManager.WriteQuestsData(questsList.ToArray());
+    _ = Toast.Show("success", "Quest completed");
   }
 
   private static void GiveRewards(Quest quest) {
@@ -49,6 +51,29 @@ public class QuestManager : MonoBehaviour {
     QuestInstance quest = questsList.FirstOrDefault(q => q.data.id == id);
     if (quest == null) return false;
     return quest.state == QuestState.Completed;
+  }
+
+  public static string GetObjectiveItemsDescription(Quest quest) {
+    List<string> strings = new() { };
+    if (quest.objectiveEquipment.Length > 0) strings.Add(GetQuestItemsDescription(quest.objectiveEquipment));
+    if (quest.objectiveItems.Length > 0) strings.Add(GetQuestItemsDescription(quest.objectiveItems));
+    return string.Join(", ", strings);
+  }
+
+  private static string GetQuestItemsDescription(Item[] items) {
+    if (items.Length == 0) return null;
+    var grouped = items
+      .GroupBy(i => i.id)
+      .Select(g => new { Item = g.First(), Count = g.Count() });
+    return string.Join(", ", grouped.Select(g => $"<b>{g.Item.itemName} x{g.Count}</b>"));
+  }
+
+  private static string GetQuestItemsDescription(Equipment[] items) {
+    if (items.Length == 0) return null;
+    var grouped = items
+      .GroupBy(i => i.id)
+      .Select(g => new { Item = g.First(), Count = g.Count() });
+    return string.Join(", ", grouped.Select(g => $"<b>{g.Item.itemName} x{g.Count}</b>"));
   }
 
   private static void GetStateData() {

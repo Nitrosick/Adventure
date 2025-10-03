@@ -6,19 +6,16 @@ using UnityEngine.UI;
 public class Dialog : ModalUI {
   public static Dialog Instance;
 
-  private static Button submit;
-  private static TextMeshProUGUI submitText;
-  private static Button decline;
-  private static TextMeshProUGUI declineText;
-  private static GameObject effect;
-  private static TextMeshProUGUI effectValue;
-  private static TextMeshProUGUI warning;
+  private Button submit;
+  private TextMeshProUGUI submitText;
+  private Button decline;
+  private TextMeshProUGUI declineText;
+  private GameObject effect;
+  private TextMeshProUGUI effectValue;
+  private TextMeshProUGUI warning;
 
   private void Awake() {
     Instance = this;
-  }
-
-  private void Init() {
     window = transform.Find("Modals/Dialog").GetComponent<Transform>();
     base.Init(window);
 
@@ -79,7 +76,6 @@ public class Dialog : ModalUI {
     string _text = "",
     string _warning = ""
   ) {
-    Init();
     callback = action;
     title.text = _title;
     text.text = _text;
@@ -100,7 +96,6 @@ public class Dialog : ModalUI {
     bool active = true,
     string _warning = ""
   ) {
-    Init();
     submit.gameObject.SetActive(active);
     effect.SetActive(_effect != "");
     icon.sprite = _icon;
@@ -123,7 +118,6 @@ public class Dialog : ModalUI {
     string _text = "",
     string btnText = ""
   ) {
-    Init();
     submit.gameObject.SetActive(false);
     declineText.text = btnText == "" ? "Ok" : btnText;
     title.text = _title;

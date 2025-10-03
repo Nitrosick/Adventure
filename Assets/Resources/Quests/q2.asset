@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe00ffcbb90a67b48a662f89560245b4, type: 3}
+  m_Name: q2
+  m_EditorClassIdentifier: 
+  id: q2
+  title: Self-defense
+  description: A husband, wife, and their son had never been to war, nor had they
+    ever held weapons, but they lived in a rather dangerous place. A bandit camp
+    was located in the forest near them, and they often robbed the villagers. These
+    people asked them to bring a couple of <b>Spiked clubs (x3)</b> for self-defense.
+  descriptionCompleted: The family received their weapon. Let it not be a guarantee
+    of safety, but with it, they feel much calmer. They don't really have money to
+    pay me back, but they gave me a useful book as a token of gratitude.
+  requiredLevel: 1
+  reward:
+    experience: 35
+    fame: 50
+    reputation: 20
+    statPoints: 0
+    abilityPoints: 0
+    goldRange: 0000000000000000
+    resources: 00000000000000000000000000000000
+    equipment: []
+    items:
+    - {fileID: 11400000, guid: 5fac47bed8df80840a35dfb1a57a84e5, type: 2}
+    projectiles: 0
+  objectiveType: 3
+  objectiveZoneId: 14
+  objectiveEquipment:
+  - {fileID: 11400000, guid: dad807ae60ccc5048b476b3857b73137, type: 2}
+  - {fileID: 11400000, guid: dad807ae60ccc5048b476b3857b73137, type: 2}
+  - {fileID: 11400000, guid: dad807ae60ccc5048b476b3857b73137, type: 2}
+  objectiveItems: []

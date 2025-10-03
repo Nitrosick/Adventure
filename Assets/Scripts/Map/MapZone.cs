@@ -18,6 +18,7 @@ public class MapZone : MonoBehaviour {
   private Renderer auraRender;
   private SpriteRenderer markerRender;
   private MeshRenderer markIcon;
+  private Transform markQuestIcon;
   private Way[] ways;
   private Transform pathLines;
 
@@ -27,8 +28,13 @@ public class MapZone : MonoBehaviour {
   private void Awake() {
     auraRender = transform.GetComponent<Renderer>();
     markerRender = transform.Find("Marker").GetComponent<SpriteRenderer>();
+
     Transform markIconObj = transform.Find("Mark");
-    if (markIconObj != null) markIcon = markIconObj.Find("Icon").GetComponent<MeshRenderer>();
+    if (markIconObj != null) {
+      markIcon = markIconObj.Find("Icon").GetComponent<MeshRenderer>();
+      markQuestIcon = markIconObj.Find("QuestIcon");
+    }
+
     ways = transform.GetComponentsInChildren<Way>();
     pathLines = transform.Find("Pathes");
 
@@ -80,7 +86,6 @@ public class MapZone : MonoBehaviour {
   }
 
   public void SetActive() {
-    if (!isEmpty) return;
     SwitchIcon(true);
     isEmpty = false;
     SwitchInteractiveObjects();
@@ -99,6 +104,18 @@ public class MapZone : MonoBehaviour {
     Material stone = MapZoneManager.Instance.stoneMaterial;
     Material gold = MapZoneManager.Instance.goldMaterial;
     markIcon.material = on ? gold : stone;
+  }
+
+  public void SwitchQuestIcon() {
+    if (markIcon == null || markQuestIcon == null) return;
+
+    if (markQuestIcon.gameObject.activeSelf) {
+      markQuestIcon.gameObject.SetActive(false);
+      markIcon.gameObject.SetActive(true);
+    } else {
+      markQuestIcon.gameObject.SetActive(true);
+      markIcon.gameObject.SetActive(false);
+    }
   }
 
   public void Visit() {

@@ -6,9 +6,11 @@ public class Quest : ScriptableObject {
   public string title;
   [TextArea(5, 20)] public string description;
   [TextArea(5, 20)] public string descriptionCompleted;
-  public QuestObjective objectiveType;
-  public string objectiveZoneId;
-  public Item objectiveItem;
   public int requiredLevel = 1;
   public Reward reward;
+
+  public QuestObjective objectiveType;
+  public string objectiveZoneId;
+  public Equipment[] objectiveEquipment;
+  public Item[] objectiveItems;
 }

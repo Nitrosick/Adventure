@@ -118,20 +118,64 @@ public class PlayerInventory : MonoBehaviour {
     }
   }
 
+  public void RemoveItems(Equipment[] items) {
+    foreach (Equipment item in items) RemoveItem(item);
+  }
+
+  public void RemoveItems(Item[] items) {
+    foreach (Item item in items) RemoveItem(item);
+  }
+
   public bool HasItem(Equipment item, bool onlyUnequipped = false) {
     if (Equip.Any(i => i.id == item.id)) return true;
-
     if (!onlyUnequipped) {
       foreach (Unit unit in army.Units) {
         if (unit.Equip.HasItem(item)) return true;
       }
     }
-
     return false;
   }
 
   public bool HasItem(Item item) {
     return Items.Any(i => i.id == item.id);
+  }
+
+  public bool HasItems(Equipment[] items, bool onlyUnequipped = false) {
+    var grouped = items
+      .GroupBy(i => i.id)
+      .Select(g => new { Item = g.First(), Count = g.Count() });
+
+    foreach (var req in grouped) {
+      if (GetEquipmentCount(req.Item, onlyUnequipped) < req.Count) return false;
+    }
+
+    return true;
+  }
+
+  public bool HasItems(Item[] items) {
+    var grouped = items
+      .GroupBy(i => i.id)
+      .Select(g => new { Item = g.First(), Count = g.Count() });
+
+    foreach (var req in grouped) {
+      if (GetItemCount(req.Item) < req.Count) return false;
+    }
+
+    return true;
+  }
+
+  private int GetEquipmentCount(Equipment item, bool onlyUnequipped = false) {
+    int count = Equip.Count(i => i.id == item.id);
+    if (!onlyUnequipped) {
+      foreach (Unit unit in army.Units) {
+        if (unit.Equip.HasItem(item)) count++;
+      }
+    }
+    return count;
+  }
+
+  private int GetItemCount(Item item) {
+    return Items.Count(i => i.id == item.id);
   }
 
   public void UpdateState() {

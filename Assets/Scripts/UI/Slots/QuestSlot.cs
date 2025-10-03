@@ -56,6 +56,5 @@ public class QuestSlot : MonoBehaviour {
     if (!accepted) return;
     button.interactable = false;
     QuestManager.AcceptQuest(currentQuest.data);
-    _ = Toast.Show("success", "Quest accepted");
   }
 }

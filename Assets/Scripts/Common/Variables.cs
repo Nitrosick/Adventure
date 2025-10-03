@@ -213,7 +213,8 @@ public enum MapZoneType {
   Recruitment,
   Ambush,
   Quest,
-  Collecting
+  Collecting,
+  Task
 }
 
 public enum MapZoneFeature {

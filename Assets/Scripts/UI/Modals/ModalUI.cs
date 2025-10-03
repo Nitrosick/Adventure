@@ -4,12 +4,12 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class ModalUI : MonoBehaviour {
-  protected static Transform window;
-  protected static GameObject background;
-  protected static Action<bool> callback;
-  protected static Image icon;
-  protected static TextMeshProUGUI title;
-  protected static TextMeshProUGUI text;
+  protected Transform window;
+  protected GameObject background;
+  protected Action<bool> callback;
+  protected Image icon;
+  protected TextMeshProUGUI title;
+  protected TextMeshProUGUI text;
 
   protected virtual void Init(Transform _window) {
     window = _window;
