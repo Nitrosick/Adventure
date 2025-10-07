@@ -21,7 +21,7 @@ public class Poacher : Unit {
     Initiative = 8;
     Priority = 16;
     Projectiles = 25;
-    BehaviorType = AIBehaviorType.HoldPosition;
+    BehaviorType = AIBehaviorType.KeepDistance;
   }
 
   public GameObject arrowPrefab;

@@ -238,6 +238,7 @@ public static class StateManager {
     foreach (string id in defaultArmyIds) {
       Unit prefab = PrefabDatabase.GetPrefab(id, true);
       prefab.InSquad = true;
+      prefab.CurrentHealth = prefab.Health.GetMaxHP();
       defaultArmy.Add(prefab.ToData());
     }
 

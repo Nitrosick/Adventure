@@ -18,13 +18,8 @@ public static class SceneSwitcher
     EditorSceneManager.OpenScene("Assets/Scenes/Battlefield/bf1.unity");
   }
 
-  [MenuItem("Scenes/Open Battle Scene 2 %#&2")] // Ctrl+Shift+Alt+2
-  public static void OpenSceneBF2() {
-    EditorSceneManager.OpenScene("Assets/Scenes/Battlefield/bf2.unity");
-  }
-
-  [MenuItem("Scenes/Open Battle Scene 3 %#&3")] // Ctrl+Shift+Alt+3
-  public static void OpenSceneBF3() {
-    EditorSceneManager.OpenScene("Assets/Scenes/Battlefield/bf3.unity");
+  [MenuItem("Scenes/Open Last Battle Scene %#&2")] // Ctrl+Shift+Alt+2
+  public static void OpenSceneBF5() {
+    EditorSceneManager.OpenScene("Assets/Scenes/Battlefield/bf5.unity");
   }
 }

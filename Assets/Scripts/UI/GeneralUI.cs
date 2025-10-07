@@ -60,6 +60,7 @@ public class GeneralUI : MonoBehaviour {
   protected virtual void OpenAlmanac() {}
 
   public void UpdateAlmanacIcon() {
+    if (almanacIcon == null) return;
     if (KnowledgeManager.articles.Any(a => a.isNew)) almanacIcon.color = highlightedColor;
     else almanacIcon.color = defaultColor;
   }

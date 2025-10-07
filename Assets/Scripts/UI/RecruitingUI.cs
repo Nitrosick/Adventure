@@ -233,6 +233,7 @@ public class RecruitingUI : MonoBehaviour {
       }
     }
 
+    player.SetReputation(mapZone.reputation);
     player.SetGold(req.gold * -1);
     player.SetResources(req.resources.Select(n => -n).ToArray());
     foreach (Equipment item in req.equipment) player.Inventory.RemoveItem(item);

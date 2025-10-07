@@ -61,6 +61,7 @@ public class Unit : MonoBehaviour {
   public bool IsDead { get; set; }
   public bool InSquad { get; set; }
   public bool IsNew { get; set; }
+  public bool PreventPhaseSkip { get; set; }
 
   protected void Awake() {
     Health = transform.GetComponent<UnitHealth>();
@@ -244,7 +245,7 @@ public class Unit : MonoBehaviour {
     Animator.Attack();
   }
 
-  public void DealDamage() {
+  public virtual void DealDamage() {
     if (Target != null) {
       if (successAttack) {
         if (!DamageBlocked()) {
@@ -275,7 +276,7 @@ public class Unit : MonoBehaviour {
     }
   }
 
-  private bool DamageBlocked() {
+  protected bool DamageBlocked() {
     List<Skill> skills = Calculate.ItemPassiveSkills(Target);
 
     foreach (Skill skill in skills) {
@@ -308,8 +309,9 @@ public class Unit : MonoBehaviour {
     return false;
   }
 
-  public void FinishAction() {
-    PhaseManager.NextPhase();
+  public virtual void FinishAction() {
+    if (!PreventPhaseSkip) PhaseManager.NextPhase();
+    PreventPhaseSkip = false;
   }
 
   // Data transfer

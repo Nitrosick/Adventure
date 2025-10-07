@@ -19,16 +19,17 @@ public class UnitHealth : MonoBehaviour {
     return unit.TotalHealth;
   }
 
-  public void TakeDamage(float damage, float modifier, bool isTickDamage = false) {
+  public void TakeDamage(float damage, float modifier, bool tickDamage = false, bool pierceDamage = false) {
+    unit.PreventPhaseSkip = pierceDamage;
     float totalDamage = damage * modifier;
 
     if (modifier > 1f) {
       unit.Ui.ShowPopup(totalDamage.ToString(), PopupType.Crit);
-      if (!isTickDamage) _ = CameraController.Shake(1.2f);
+      if (!tickDamage) _ = CameraController.Shake(1.2f);
     }
     else {
       unit.Ui.ShowPopup(totalDamage.ToString(), PopupType.Negative);
-      if (!isTickDamage) _ = CameraController.Shake(0.8f);
+      if (!tickDamage) _ = CameraController.Shake(0.8f);
     }
 
     if (unit.BehaviorType == AIBehaviorType.HoldPosition) {
@@ -45,7 +46,7 @@ public class UnitHealth : MonoBehaviour {
       unit.CurrentHealth -= totalDamage;
       unit.Ui.UpdateHealth(GetMaxHP(), unit.CurrentHealth);
 
-      if (!isTickDamage) {
+      if (!tickDamage) {
         if (unit.Effects.HasAnyEffect(new string[] { "Stun", "Root" })) unit.FinishAction();
         else unit.Animator.TakeDamage();
       }

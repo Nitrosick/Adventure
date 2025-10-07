@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: a4
   m_EditorClassIdentifier: 
   id: a4
-  itemName: Crossbowman's armor
-  description: Standard medium armor for city guard crossbowmen. Not the most comfortable
-    for movement, but provides good protection.
+  itemName: Guard's jumpsuit
+  description: Standard medium armor for city guard. Not the most comfortable for
+    movement, but provides good protection.
   requirementStats: 030000000100000000000000
   requirementLevel: 1
   type: 5
@@ -25,10 +25,11 @@ MonoBehaviour:
   effect: {fileID: 0}
   effectChance: 0
   skill: {fileID: 0}
-  icon: {fileID: 21300000, guid: 8cef2af88564dd14db89e72938a372d5, type: 3}
+  icon: {fileID: 21300000, guid: 3722fa29cb075f242bd7709fafb9fc22, type: 3}
   price: 120
   isNew: 0
-  defense: 2
+  defense: 3
+  blockMultiplier: 1
   prefab: {fileID: 0}
   resistsMap:
   - type: 1

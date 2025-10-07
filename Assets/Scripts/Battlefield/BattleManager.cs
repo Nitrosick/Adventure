@@ -127,6 +127,8 @@ public class BattleManager : MonoBehaviour {
       unit.transform.position = center;
       unit.FromData(data);
       unit.Init(tile, relation, direction);
+      if (unit.Type == UnitType.Range && tile.height > 1) unit.BehaviorType = AIBehaviorType.HoldPosition;
+      // FIXME: Проверка расположения врагов для смены поведения
       QueueManager.Queue.Add(unit);
     }
   }

@@ -183,7 +183,8 @@ public enum EquipmentType {
   Shield,
   Armor,
   TowerShield,
-  Additional
+  Additional,
+  Spear
 }
 
 public enum EquipmentWeight {

@@ -54,11 +54,11 @@ public static class Pathfinding {
     int dx = Mathf.Abs(from.Coords.x - to.Coords.x);
     int dy = Mathf.Abs(from.Coords.y - to.Coords.y);
 
-    if (attackRange != 0 && attackRange <= 2) return Mathf.Max(dx, dy);
+    if (attackRange != 0 && attackRange <= 1) return Mathf.Max(dx, dy);
 
     int diag = Mathf.Min(dx, dy);
     int straight = Mathf.Abs(dx - dy);
-    return diag * 1.4f + straight;
+    return diag * 1.4f + straight - (attackRange <= 2 ? 0.5f : 0);
   }
 
   private static float Heuristic(Tile a, Tile b) {
