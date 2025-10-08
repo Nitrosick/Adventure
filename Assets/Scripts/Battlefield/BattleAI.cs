@@ -7,13 +7,15 @@ public static class BattleAI {
   private static UnitMove enemyMove;
   private static Tile enemyTile;
   private static List<Unit> playerUnits;
-  private static int AttackRange => enemy.Equip.GetRange();
+  private static float AttackRange => enemy.Equip.GetRange();
   private static readonly float unitPointOffset = 0.75f;
 
   // Evaluation coefficients
-  private static readonly float distanceWeight = 1.5f;
-  private static readonly float coverWeight = 1.0f;
-  private static readonly float threatPenalty = 2.0f;
+  private static readonly float distanceWeight = 1.0f;
+  private static readonly float coverWeight = 0.5f;
+  private static readonly float enemyHitWeight = 5.0f;
+  private static readonly float threatPenalty = 1.5f;
+  private static readonly float allyHitPenalty = 10.0f;
 
   public static void EnemyMove(Unit unit) {
     enemy = unit;
@@ -30,6 +32,9 @@ public static class BattleAI {
         break;
       case AIBehaviorType.KeepDistance:
         KeepDistance();
+        break;
+      case AIBehaviorType.TryPierceHit:
+        MoveToBestPiercingPosition();
         break;
       case AIBehaviorType.Retreat:
         MoveAway();
@@ -122,7 +127,7 @@ public static class BattleAI {
     return true;
   }
 
-  private static float EvaluateTileScore(Tile tile, Unit target) {
+  private static float EvaluateTileScore(Tile tile, Unit target, int enemiesHit = 1, int alliesHit = 0) {
     float dist = GetDistance(tile, target.CurrentTile);
     int nearbyEnemies = playerUnits.Count(u => Vector2Int.Distance(tile.Coords, u.CurrentTile.Coords) <= 2);
     int coverBonus = tile.type == TileType.Cover ? 1 : 0;
@@ -132,6 +137,8 @@ public static class BattleAI {
     score += coverBonus * coverWeight;
     score -= nearbyEnemies * threatPenalty;
     score += target.GetPriority();
+    score += enemiesHit * enemyHitWeight;
+    score -= alliesHit * allyHitPenalty;
 
     return score;
   }
@@ -141,7 +148,8 @@ public static class BattleAI {
     float dist = Pathfinding.GetCost(from, target.CurrentTile, AttackRange);
     if (dist <= AttackRange && LineOfSightClear(from.GetPos(), target.CurrentTile.GetPos())) {
       enemy.Target = target;
-    } else {
+    }
+    else {
       enemy.Target = null;
     }
   }
@@ -262,5 +270,63 @@ public static class BattleAI {
     }
 
     PhaseManager.NextPhase();
+  }
+
+  private static void MoveToBestPiercingPosition() {
+    List<Tile> allWalkable = TileManager.GetAllWalkable(enemyTile);
+    Tile bestTile = null;
+    Unit bestTarget = null;
+    float bestScore = float.NegativeInfinity;
+
+    foreach (Tile tile in allWalkable) {
+      if (IsTrap(tile)) continue;
+      List<Tile> path = Pathfinding.FindPath(enemyTile, tile, enemy.CurrentMovePoints);
+      if (path == null) continue;
+
+      foreach (Unit target in playerUnits) {
+        float dist = Pathfinding.GetCost(tile, target.CurrentTile, AttackRange);
+        if (dist > AttackRange || dist < 1) continue;
+        Vector3 dir = (target.CurrentTile.GetPos() - tile.GetPos()).normalized;
+        float maxDist = AttackRange + 0.1f;
+
+        int obstacleLayer = LayerMask.NameToLayer("Obstacle");
+        int unitLayer = LayerMask.NameToLayer("Unit");
+        RaycastHit[] hits = Calculate.HitsOnTrajectory(tile, target.CurrentTile);
+
+        int enemiesHit = 0;
+        int alliesHit = 0;
+        bool blocked = false;
+
+        foreach (var hit in hits) {
+          var go = hit.collider.gameObject;
+          if (go.layer == obstacleLayer) {
+            blocked = true;
+            break;
+          }
+          if (go.layer == unitLayer && go.TryGetComponent<Unit>(out var u)) {
+            if (u.Relation == UnitRelation.Ally) enemiesHit++;
+            else alliesHit++;
+          }
+        }
+
+        if (blocked || enemiesHit == 0) continue;
+
+        float score = EvaluateTileScore(tile, target, enemiesHit, alliesHit);
+
+        if (score > bestScore) {
+          bestScore = score;
+          bestTile = tile;
+          bestTarget = target;
+        }
+      }
+    }
+
+    if (bestTile != null) {
+      SetAttackTarget(bestTarget, bestTile);
+      enemyMove.OnMove(bestTile);
+      return;
+    }
+
+    MoveToClosestEnemy();
   }
 }

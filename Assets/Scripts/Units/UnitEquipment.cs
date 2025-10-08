@@ -192,7 +192,7 @@ public class UnitEquipment : MonoBehaviour {
     return result;
   }
 
-  public int GetRange() {
+  public float GetRange() {
     return primary.range;
   }
 

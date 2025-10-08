@@ -50,7 +50,7 @@ public static class Pathfinding {
     return null;
   }
 
-  public static float GetCost(Tile from, Tile to, int attackRange = 0) {
+  public static float GetCost(Tile from, Tile to, float attackRange = 0f) {
     int dx = Mathf.Abs(from.Coords.x - to.Coords.x);
     int dy = Mathf.Abs(from.Coords.y - to.Coords.y);
 
@@ -58,7 +58,7 @@ public static class Pathfinding {
 
     int diag = Mathf.Min(dx, dy);
     int straight = Mathf.Abs(dx - dy);
-    return diag * 1.4f + straight - (attackRange <= 2 ? 0.5f : 0);
+    return diag * 1.4f + straight;
   }
 
   private static float Heuristic(Tile a, Tile b) {

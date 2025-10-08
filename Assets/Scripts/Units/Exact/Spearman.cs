@@ -1,8 +1,9 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class Spearman : Unit {
-  private readonly float attackPointOffset = 0.75f;
+  private readonly float delayAfterAttack = 1.2f;
 
   private Spearman() {
     Strength = 4;
@@ -21,21 +22,14 @@ public class Spearman : Unit {
     DefaultMovePoints = 5;
     Initiative = 5;
     Priority = 9;
-    BehaviorType = AIBehaviorType.Aggressive; // FIXME: Особое поведение для копейщиков
+    BehaviorType = AIBehaviorType.TryPierceHit;
   }
 
-  public override void DealDamage() {
+  public override async void DealDamage() {
     if (successAttack) {
       int obstacleLayer = LayerMask.NameToLayer("Obstacle");
       int unitLayer = LayerMask.NameToLayer("Unit");
-      int layerMask = LayerMask.GetMask("Unit", "Obstacle");
-
-      Vector3 fixedFrom = CurrentTile.GetPos() + new Vector3(0, attackPointOffset, 0);
-      Vector3 fixedTo = Target.CurrentTile.GetPos() + new Vector3(0, attackPointOffset, 0);
-      Vector3 direction = (fixedTo - fixedFrom).normalized;
-      float distance = Vector3.Distance(fixedFrom, fixedTo);
-      RaycastHit[] hits = Physics.RaycastAll(CurrentTile.GetPos(), direction, distance, layerMask);
-      System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
+      RaycastHit[] hits = Calculate.HitsOnTrajectory(CurrentTile, Target.CurrentTile);
 
       foreach (var hit in hits) {
         GameObject go = hit.collider.gameObject;
@@ -55,6 +49,8 @@ public class Spearman : Unit {
           unit.Health.TakeDamage(damage, critModifier, false, true);
         }
       }
+
+      await Task.Delay((int)(delayAfterAttack * 1000));
       PhaseManager.NextPhase();
     } else {
       Target.Ui.ShowPopup("Miss!");

@@ -121,7 +121,7 @@ public class InfoPopup : MonoBehaviour {
     unitMP.text = unit.TotalMovePoints.ToString();
     unitDamage.text = unit.Equip.primary.damage.ToString();
     unitDefense.text = unit.Equip.GetTotalDefense().ToString();
-    unitRange.text = unit.Equip.GetRange().ToString();
+    unitRange.text = Math.Floor(unit.Equip.GetRange()).ToString();
 
     if (unit.Projectiles == 0) unitProjectiles.text = "-";
     else if (unit.Projectiles == unit.CurrentProjectiles) unitProjectiles.text = unit.Projectiles.ToString();

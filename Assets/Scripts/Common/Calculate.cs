@@ -11,6 +11,7 @@ public static class Calculate {
   private static readonly float defenseFactor = 10f;
   private static readonly float noFineDistance = 6f;
   private static readonly float distanceFinePerUnit = 4f;
+  private static readonly float attackPointOffset = 0.75f;
 
   public static float HitChance(Unit attacker, Unit target) {
     if (target.Effects.HasAnyEffect(new string[] { "Block", "Wall", "Root" })) return 100f;
@@ -119,7 +120,8 @@ public static class Calculate {
       float chance = item.effectChance;
       if (item.effect.effectName == "Bleeding" && targetArmor.weight == EquipmentWeight.Heavy) {
         chance /= 2;
-      } else if (item.effect.effectName == "Stun") {
+      }
+      else if (item.effect.effectName == "Stun") {
         if (target.IsHero) chance -= AbilityController.StunResist();
         chance += attacker.Strength - target.Strength;
       }
@@ -145,5 +147,18 @@ public static class Calculate {
     }
 
     return result;
+  }
+
+  public static RaycastHit[] HitsOnTrajectory(Tile from, Tile to) {
+    int hitMask = LayerMask.GetMask("Unit", "Obstacle");
+
+    Vector3 fixedFrom = from.GetPos() + new Vector3(0, attackPointOffset, 0);
+    Vector3 fixedTo = to.GetPos() + new Vector3(0, attackPointOffset, 0);
+    Vector3 direction = (fixedTo - fixedFrom).normalized;
+    float distance = Vector3.Distance(fixedFrom, fixedTo);
+    RaycastHit[] hits = Physics.RaycastAll(from.GetPos(), direction, distance, hitMask);
+    Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
+
+    return hits;
   }
 }

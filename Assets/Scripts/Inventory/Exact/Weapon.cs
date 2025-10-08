@@ -6,7 +6,7 @@ public class Weapon : Equipment {
   public float critModifier;
   public float armorPenetration;
   public float precision = 95f;
-  public int range;
+  public float range;
   public int attackType = 1;
 
   public GameObject prefab;

@@ -85,7 +85,8 @@ public enum AIBehaviorType {
   KeepDistance,
   Retreat,
   Passive,
-  HoldPosition
+  HoldPosition,
+  TryPierceHit
 }
 
 public enum ShotTrajectory {
