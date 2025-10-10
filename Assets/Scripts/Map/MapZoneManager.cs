@@ -36,36 +36,41 @@ public class MapZoneManager : MonoBehaviour {
   }
 
   public static void UpdateAfterBattle(BattleResult? result) {
-    MapZone currentZone = FindById(StateManager.currentPlayerZoneId);
-    if (result == null || currentZone == null || result != BattleResult.Victory) return;
+    MapZone z = FindById(StateManager.currentPlayerZoneId);
+    if (result == null || z == null || result != BattleResult.Victory) return;
 
     if (
-      currentZone.events[0] == MapZoneType.Quest &&
-      currentZone.TryGetComponent<MapZoneQuest>(out var questZone) &&
-      questZone.questsList.Count > 0
+      z.events[0] == MapZoneType.Quest &&
+      z.QuestsList.Count > 0
     ) {
-      Quest quest = questZone.questsList.FirstOrDefault(q => q.objectiveType == QuestObjective.Fight);
+      Quest quest = z.QuestsList.FirstOrDefault(q => q.objectiveType == QuestObjective.Fight);
       if (quest != null) {
         QuestManager.CompleteQuest(quest);
-        questZone.questsList.Remove(quest);
-        if (questZone.questsList.Count == 0) currentZone.RemoveEvent(MapZoneType.Quest);
+        z.QuestsList.Remove(quest);
+        if (z.QuestsList.Count == 0) z.RemoveEvent(MapZoneType.Quest);
         return;
       }
     }
-    currentZone.RemoveEvent(MapZoneType.Battle);
+    z.RemoveEvent(MapZoneType.Battle);
   }
 
   public static void GetStateData() {
     Dictionary<string, MapZoneData> state = StateManager.zonesState;
     List<string> visited = new() { };
 
-    // Zone events
+    // Zone events and Home upgrades
     foreach (var kvp in state) {
       if (kvp.Value == null) continue;
       if (kvp.Value.visited) visited.Add(kvp.Key);
+
       var zone = FindById(kvp.Key);
       if (zone == null) continue;
+
       zone.events = kvp.Value.events;
+
+      if (kvp.Value.upgrades != null && zone.TryGetComponent<MapZoneHome>(out var home)) {
+        home.Upgrades = kvp.Value.upgrades.ToList();
+      }
     }
 
     // Visited zones
@@ -95,11 +100,10 @@ public class MapZoneManager : MonoBehaviour {
     foreach (MapZone zone in Zones.Where(z => activeQuestsZoneIds.Contains(z.id))) {
       if (zone.events.Count == 0) zone.events.Add(MapZoneType.Quest);
       else if (zone.events[0] != MapZoneType.Quest) zone.events.Insert(0, MapZoneType.Quest);
-      if (!zone.TryGetComponent<MapZoneQuest>(out var zoneQuests)) return;
 
       foreach (string id in activeQuestsIds) {
-        if (zoneQuests.questsList.Any(q => q.id == id)) continue;
-        zoneQuests.questsList.Add(Factory.CreateQuestById(id));
+        if (zone.QuestsList.Any(q => q.id == id)) continue;
+        zone.QuestsList.Add(Factory.CreateQuestById(id));
       }
 
       zone.SetActive();
@@ -114,7 +118,8 @@ public class MapZoneManager : MonoBehaviour {
       if (collecting.CollectedAt > 0 && StateManager.globalTicks < collecting.CollectedAt + collecting.respawn) {
         zone.SwitchIcon(false);
         zone.isEmpty = true;
-      } else {
+      }
+      else {
         zone.SwitchIcon(true);
         zone.isEmpty = false;
       }

@@ -400,6 +400,9 @@ public class PlayerMenuUIInfo : MonoBehaviour {
     else if (item is Goods) {
       type.text = "Type: Goods";
     }
+    else if (item is KeyItem) {
+      type.text = "Type: Key item";
+    }
     else if (item is LevelingItem levItem) {
       type.text = "Type: Leveling item";
       levelingItemEffectValue.text = $"+{levItem.effectValue} lvl";

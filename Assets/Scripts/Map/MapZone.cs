@@ -15,6 +15,7 @@ public class MapZone : MonoBehaviour {
   public bool secret;
 
   public GameObject[] interactiveObjects;
+  public List<Quest> QuestsList { get; set; } = new() { };
   private Renderer auraRender;
   private SpriteRenderer markerRender;
   private MeshRenderer markIcon;
@@ -197,8 +198,7 @@ public class MapZone : MonoBehaviour {
   }
 
   public void ActivateQuest(Quest quest) {
-    if (!transform.TryGetComponent<MapZoneQuest>(out var questScript)) return;
-    questScript.questsList.Insert(0, quest);
+    QuestsList.Insert(0, quest);
     events.Insert(0, MapZoneType.Quest);
     SetActive();
   }

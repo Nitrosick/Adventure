@@ -23,6 +23,7 @@ Apprentice: #618C2D
 Adept: #306DAB
 Expert: #6948A4
 Master: #CF8F0B
+Key: #A7E7E4
 
 Bronze: #C2771D
 Silver: #CDCDCE
@@ -199,7 +200,8 @@ public enum Rarity {
   Rare,
   Epic,
   Legendary,
-  Relic
+  Relic,
+  Key
 }
 
 public enum ItemBonus {

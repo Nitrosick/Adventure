@@ -8,7 +8,8 @@ public static class Utils {
     "#618C2D",
     "#306DAB",
     "#6948A4",
-    "#CF8F0B"
+    "#CF8F0B",
+    "#A7E7E4"
   };
 
   public static bool RollChance(float chance) {

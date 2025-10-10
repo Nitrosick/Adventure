@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe00ffcbb90a67b48a662f89560245b4, type: 3}
+  m_Name: q3
+  m_EditorClassIdentifier: 
+  id: q3
+  title: Stolen tools
+  description: Recently, the village armorer's new set of <b>Blacksmithing tools</b>
+    went missing. Gangs of bandits and thieves constantly operate here, so it's most
+    likely their doing. The armorer is willing to pay whoever returns his tools.
+  descriptionCompleted: You were able to return the stolen tools to the armorer.
+    Now he can make better armor for you.
+  requiredLevel: 2
+  reward:
+    experience: 70
+    fame: 75
+    reputation: 20
+    statPoints: 0
+    abilityPoints: 0
+    goldRange: 1e0000001e000000
+    resources: 00000000000000000000000000000000
+    equipment: []
+    items: []
+    projectiles: 0
+  objectiveType: 3
+  objectiveZoneId: 1
+  objectiveEquipment: []
+  objectiveItems:
+  - {fileID: 11400000, guid: 7d512f9c2121ddb4f979cc3128018624, type: 2}

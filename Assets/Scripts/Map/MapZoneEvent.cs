@@ -5,14 +5,17 @@ using UnityEngine.SceneManagement;
 
 public class MapZoneEvent : MonoBehaviour {
   private MapZone zone;
-  MapZoneQuest questZone;
   private Quest currentQuest;
 
   private void Awake() {
     zone = transform.GetComponent<MapZone>();
   }
 
-  public void CheckEvents(bool ignoreBattle = false, bool forceAmbush = false) {
+  public void CheckEvents(
+    bool ignoreBattle = false,
+    bool forceAmbush = false,
+    bool ignoreQuest = false
+  ) {
     if (zone == null || zone.events.Count < 1) return;
     MapUI.Instance.HideInteractableButton();
 
@@ -31,6 +34,8 @@ public class MapZoneEvent : MonoBehaviour {
           return;
         }
       }
+    } else if (zone.events[eventIndex] == MapZoneType.Quest && ignoreQuest) {
+      eventIndex++;
     }
 
     switch (zone.events[eventIndex]) {
@@ -40,8 +45,6 @@ public class MapZoneEvent : MonoBehaviour {
         else MapUI.Instance.ShowInteractableButton(battleZone.StartBattle);
         break;
       case MapZoneType.Quest:
-        questZone = Get<MapZoneQuest>();
-        if (questZone == null) break;
         CheckZoneQuests(battleZone);
         break;
       case MapZoneType.Home:
@@ -78,7 +81,7 @@ public class MapZoneEvent : MonoBehaviour {
   }
 
   private void CheckZoneQuests(MapZoneBattle battle) {
-    List<Quest> list = questZone.questsList;
+    List<Quest> list = zone.QuestsList;
     if (list.Count == 0) return;
 
     foreach (Quest q in list) {
@@ -111,14 +114,19 @@ public class MapZoneEvent : MonoBehaviour {
   }
 
   private void HandInItems(bool accepted) {
-    if (!accepted) return;
+    if (!accepted) {
+      CheckEvents(ignoreQuest: true);
+      return;
+    }
+
     PlayerInventory inventory = Player.Instance.Inventory;
     inventory.RemoveItems(currentQuest.objectiveEquipment);
     inventory.RemoveItems(currentQuest.objectiveItems);
     QuestManager.CompleteQuest(currentQuest);
-    questZone.questsList.Remove(currentQuest);
-    if (questZone.questsList.Count == 0) zone.RemoveEvent(MapZoneType.Quest);
+    zone.QuestsList.Remove(currentQuest);
+    if (zone.QuestsList.Count == 0) zone.RemoveEvent(MapZoneType.Quest);
     currentQuest = null;
+    CheckEvents();
   }
 
   public void StartBattle(MapZoneBattle battleZone, bool isAmbush = false) {

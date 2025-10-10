@@ -1,8 +1,10 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class MapZoneHome : MonoBehaviour {
   [Header("Features")]
   public MapZoneFeature[] features;
+  public List<MapZoneFeature> Upgrades { get; set; } = new() { };
 
   [Header("Healing")]
   public string healerName;
@@ -39,5 +41,11 @@ public class MapZoneHome : MonoBehaviour {
   public void OpenHomeMenu() {
     if (features.Length < 1) return;
     HomeMenuUI.Open(this);
+  }
+
+  public void AddUpgrade(MapZoneFeature feature) {
+    if (!Upgrades.Contains(feature)) Upgrades.Add(feature);
+    string id = transform.GetComponent<MapZone>().id;
+    StateManager.zonesState[id].upgrades = Upgrades.ToArray();
   }
 }
