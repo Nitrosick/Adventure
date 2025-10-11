@@ -10,6 +10,7 @@ public class Raider : Unit
     PrefabId = "u7";
     Type = UnitType.Melee;
     AllowedWeapon = EquipmentType.OneHandWeapon;
+    Level = 3;
     MaxLevel = 7;
     LevelingCoreStat = CoreStat.Strength;
     TotalHealth = 30f;

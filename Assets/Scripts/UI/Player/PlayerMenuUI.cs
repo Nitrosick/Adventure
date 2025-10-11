@@ -12,6 +12,7 @@ public class PlayerMenuUI : MonoBehaviour {
   public GameObject menuSlotPrefab;
   public GameObject questSlotPrefab;
   public GameObject questEmptySlot;
+  public GameObject effectIcon;
   private static Transform menu;
 
   // Navigation
@@ -356,7 +357,8 @@ public class PlayerMenuUI : MonoBehaviour {
         if (
           filter == MenuFilter.Medicine && i is not MedicineItem ||
           filter == MenuFilter.Leveling && i is not LevelingItem ||
-          filter == MenuFilter.Goods && i is not Goods
+          filter == MenuFilter.Goods && i is not Goods ||
+          filter == MenuFilter.Key && i is not KeyItem
         ) return false;
         return true;
       })

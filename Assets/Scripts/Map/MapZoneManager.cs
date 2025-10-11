@@ -29,10 +29,7 @@ public class MapZoneManager : MonoBehaviour {
   }
 
   public static MapZone FindById(string id) {
-    foreach (MapZone zone in Zones) {
-      if (zone.id == id) return zone;
-    }
-    return null;
+    return Zones.FirstOrDefault(z => z.id == id);
   }
 
   public static void UpdateAfterBattle(BattleResult? result) {
@@ -107,6 +104,21 @@ public class MapZoneManager : MonoBehaviour {
       }
 
       zone.SetActive();
+    }
+
+    // Zone upgrades
+    foreach (QuestInstance quest in QuestManager.questsList) {
+      if (!QuestManager.IsQuestCompleted(quest.data.id)) continue;
+      if (quest.data.questZoneUpgrades == null) continue;
+
+      foreach (var upgrade in quest.data.questZoneUpgrades) {
+        MapZone zone = FindById(upgrade.zoneId);
+        if (zone == null) continue;
+
+        if (zone.TryGetComponent<MapZoneHome>(out var home)) {
+          home.AddUpgrade(upgrade.feature);
+        }
+      }
     }
 
     // Collecting

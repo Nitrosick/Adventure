@@ -169,20 +169,28 @@ public class HomeMenuUI : MonoBehaviour {
         break;
       case MapZoneFeature.Weaponsmith:
         craftingSection.gameObject.SetActive(true);
+        List<CraftingRecipe> weaponRecipes = mapZone.weaponsmithRecipes.ToList();
+        if (mapZone.Upgrades.Contains(MapZoneFeature.Weaponsmith))
+          weaponRecipes.AddRange(mapZone.weaponsmithAdditionalRecipes);
+
         craftingSection.Init(
           mapZone.weaponsmithName,
           mapZone.weaponsmithLevel,
           feature,
-          mapZone.weaponsmithRecipes
+          weaponRecipes
         );
         break;
       case MapZoneFeature.Armorer:
         craftingSection.gameObject.SetActive(true);
+        List<CraftingRecipe> armorRecipes = mapZone.armorerRecipes.ToList();
+        if (mapZone.Upgrades.Contains(MapZoneFeature.Armorer))
+          armorRecipes.AddRange(mapZone.armorerAdditionalRecipes);
+
         craftingSection.Init(
           mapZone.armorerName,
           mapZone.armorerLevel,
           feature,
-          mapZone.armorerRecipes
+          armorRecipes
         );
         break;
       case MapZoneFeature.Quests:

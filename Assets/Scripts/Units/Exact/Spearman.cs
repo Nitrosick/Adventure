@@ -15,6 +15,7 @@ public class Spearman : Unit {
     PrefabId = "u10";
     Type = UnitType.Melee;
     AllowedWeapon = EquipmentType.Spear;
+    Level = 2;
     MaxLevel = 6;
     LevelingCoreStat = CoreStat.Strength;
     TotalHealth = 30f;

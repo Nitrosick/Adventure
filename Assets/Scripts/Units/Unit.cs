@@ -112,10 +112,17 @@ public class Unit : MonoBehaviour {
     float result = DefaultMovePoints;
     Equipment[] unitEquip = { Equip.primary, Equip.secondary, Equip.armor };
 
+    // Weight
     foreach (Equipment item in unitEquip) {
       if (item == null) continue;
       if (item.weight == EquipmentWeight.Heavy) result -= 2f;
       else if (item.weight == EquipmentWeight.Medium) result -= 1f;
+    }
+
+    // Passive skills
+    List<Skill> skills = Equip.GetPassiveSkills();
+    foreach (Skill skill in skills) {
+      if (skill.displayName == "Comfort") result++;
     }
 
     if (result < 1f) result = 1f;

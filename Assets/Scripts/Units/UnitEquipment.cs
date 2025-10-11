@@ -223,8 +223,9 @@ public class UnitEquipment : MonoBehaviour {
 
   private List<Skill> GetSkills(bool active) {
     return new[] { primary, secondary, armor, additional }
-      .Where(e => e != null && e.skill != null && e.skill.isActive == active)
-      .Select(e => e.skill)
+      .Where(e => e != null && e.skills != null && e.skills.Length > 0)
+      .SelectMany(e => e.skills)
+      .Where(s => s != null && s.isActive == active)
       .ToList();
   }
 

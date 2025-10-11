@@ -39,7 +39,7 @@ public class CraftingMenuUI : HomeMenuFeature {
     }.All(x => x != null);
   }
 
-  public void Init(string name, MasteryLevel lvl, MapZoneFeature type, CraftingRecipe[] recipes) {
+  public void Init(string name, MasteryLevel lvl, MapZoneFeature type, List<CraftingRecipe> recipes) {
     InitHeader(name, lvl);
 
     switch (type) {
@@ -56,7 +56,7 @@ public class CraftingMenuUI : HomeMenuFeature {
     RenderRecipes(recipes);
   }
 
-  private void RenderRecipes(CraftingRecipe[] recipes) {
+  private void RenderRecipes(List<CraftingRecipe> recipes) {
     foreach (CraftingRecipe recipe in recipes) {
       GameObject obj = Instantiate(recipePrefab, recipesPanel);
       obj.GetComponent<CraftingRecipeUI>().Init(recipe);

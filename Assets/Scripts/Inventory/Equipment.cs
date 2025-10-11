@@ -3,6 +3,13 @@ using System.Linq;
 using UnityEngine;
 
 public abstract class Equipment : ScriptableObject {
+
+  [Serializable]
+  public class EquipmentEffect {
+    public Effect data;
+    public float chance;
+  }
+
   public string id;
   public string itemName;
   [TextArea(5, 20)] public string description;
@@ -13,10 +20,8 @@ public abstract class Equipment : ScriptableObject {
   public UnitEquipSlot slot;
   public EquipmentWeight weight;
   public Rarity rarity;
-  // FIXME: Переделать на массив эффектов
-  public Effect effect;
-  public float effectChance;
-  public Skill skill;
+  public EquipmentEffect[] effects;
+  public Skill[] skills;
   public Sprite icon;
   public int price;
   public bool isNew;

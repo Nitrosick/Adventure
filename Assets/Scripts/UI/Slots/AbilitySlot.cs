@@ -74,13 +74,13 @@ public class AbilitySlot : MonoBehaviour {
 
     bool inactive = (tier == 3 && playerLevel < 20) ||
       (tier == 2 && playerLevel < 10) ||
-      points < tier ||
+      points == 0 ||
       ability.level == AbilityLevel.Gold;
 
     string warning = "";
     if (tier == 3 && playerLevel < 20) warning = "Requires hero level 20";
     else if (tier == 2 && playerLevel < 10) warning = "Requires hero level 10";
-    else if (points < tier) warning = "Not enough ability points";
+    else if (points == 0) warning = "Not enough ability points";
 
     Dialog.Instance.Learn(
       LearnAbility,

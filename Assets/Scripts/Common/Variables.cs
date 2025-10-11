@@ -261,7 +261,8 @@ public enum KnowledgeSection {
 public enum SkillName {
   Block,
   Parry,
-  Wall
+  Wall,
+  Comfort
 }
 
 public enum AbilityLevel {
@@ -306,6 +307,7 @@ public enum MenuFilter {
   AllItems,
   Medicine,
   Leveling,
-  Goods
-  // FIXME: Добавить фильтры по стрелкам и разным типам предметов
+  Goods,
+  Key
+  // FIXME: Добавить фильтры по типам юнитов
 }

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class QuestManager : MonoBehaviour {
@@ -22,18 +23,31 @@ public class QuestManager : MonoBehaviour {
     _ = Toast.Show("success", "Quest accepted");
   }
 
-  public static void CompleteQuest(Quest quest) {
+  public static async void CompleteQuest(Quest quest) {
     QuestInstance questIns = questsList.FirstOrDefault(q => q.data.id == quest.id);
     if (questIns == null || IsQuestCompleted(quest.id)) return;
     questIns.state = QuestState.Completed;
     GiveRewards(quest);
-    QuestModalUI.Instance.ShowReward(questIns);
+    await Task.Yield();
     StateManager.WriteQuestsData(questsList.ToArray());
+    QuestModalUI.Instance.ShowReward(questIns);
     _ = Toast.Show("success", "Quest completed");
   }
 
   private static void GiveRewards(Quest quest) {
     Player.Instance.CollectReward(quest.reward);
+    if (quest.questZoneUpgrades == null) return;
+    foreach (var upgrade in quest.questZoneUpgrades) {
+      UpgradeZone(upgrade.zoneId, upgrade.feature);
+    }
+  }
+
+  private static void UpgradeZone(string id, MapZoneFeature feature) {
+    MapZone zone = MapZoneManager.FindById(id);
+    if (zone == null) return;
+    if (zone.TryGetComponent<MapZoneHome>(out var home)) {
+      home.AddUpgrade(feature);
+    }
   }
 
   public static bool IsQuestInactive(string id) {

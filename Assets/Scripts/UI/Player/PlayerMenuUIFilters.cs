@@ -28,6 +28,7 @@ public class PlayerMenuUIFilters : MonoBehaviour {
   private static Button medicineItems;
   private static Button levelingItems;
   private static Button goods;
+  private static Button keyItems;
 
   public static MenuFilter value;
   private readonly Dictionary<Button, UnityAction> actions = new();
@@ -59,6 +60,7 @@ public class PlayerMenuUIFilters : MonoBehaviour {
     medicineItems = Get<Button>("Left/Blocks/Right/Header/ItemFilters/Medicine");
     levelingItems = Get<Button>("Left/Blocks/Right/Header/ItemFilters/Leveling");
     goods = Get<Button>("Left/Blocks/Right/Header/ItemFilters/Goods");
+    keyItems = Get<Button>("Left/Blocks/Right/Header/ItemFilters/Key");
 
     if (!ComponentsInitialized()) {
       Debug.LogError("Player menu UI filters initialization error");
@@ -79,6 +81,7 @@ public class PlayerMenuUIFilters : MonoBehaviour {
     actions[medicineItems] = () => SetFilter(MenuFilter.Medicine);
     actions[levelingItems] = () => SetFilter(MenuFilter.Leveling);
     actions[goods] = () => SetFilter(MenuFilter.Goods);
+    actions[keyItems] = () => SetFilter(MenuFilter.Key);
 
     foreach (var pair in actions) pair.Key.onClick.AddListener(pair.Value);
   }
@@ -88,7 +91,7 @@ public class PlayerMenuUIFilters : MonoBehaviour {
       allUnits, freeUnits, inSquadUnits, unitFilters, supportFilters,
       allSupports, freeSupports, inSquadSupports, equipFilters, allEquip,
       weaponEquip, armorEquip, additionalEquip, itemFilters, allItems,
-      medicineItems, levelingItems, goods
+      medicineItems, levelingItems, goods, keyItems
     }.All(x => x != null);
   }
 
@@ -127,6 +130,7 @@ public class PlayerMenuUIFilters : MonoBehaviour {
       case MenuFilter.Medicine:
       case MenuFilter.Leveling:
       case MenuFilter.Goods:
+      case MenuFilter.Key:
         PlayerMenuUI.SelectInventoryTab();
         break;
     }

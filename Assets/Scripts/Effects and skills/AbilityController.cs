@@ -26,8 +26,8 @@ public static class AbilityController {
   public static void Learn(string id) {
     AbilityInstance ability = allAbilities.FirstOrDefault(a => a.data.id == id);
     if (ability == null || ability.level == AbilityLevel.Gold) return;
-    ability.level = (AbilityLevel)Mathf.Min((int)ability.level + 1, System.Enum.GetValues(typeof(AbilityLevel)).Length - 1);
-    Player.Instance.SetAbilityPoints(ability.data.tier * -1);
+    ability.level = (AbilityLevel)Mathf.Min((int)ability.level + 1, Enum.GetValues(typeof(AbilityLevel)).Length - 1);
+    Player.Instance.SetAbilityPoints(-1);
     StateManager.WriteAbilitiesData(allAbilities.ToArray());
   }
 

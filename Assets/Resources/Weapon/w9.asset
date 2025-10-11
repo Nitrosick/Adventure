@@ -22,9 +22,10 @@ MonoBehaviour:
   slot: 0
   weight: 0
   rarity: 0
-  effect: {fileID: 11400000, guid: 19ac65e2e41cb3c40bff7534d5e20d42, type: 2}
-  effectChance: 7
-  skill: {fileID: 0}
+  effects:
+  - data: {fileID: 11400000, guid: 19ac65e2e41cb3c40bff7534d5e20d42, type: 2}
+    chance: 7
+  skills: []
   icon: {fileID: 21300000, guid: 235f3f0234eef414f84e3879088841df, type: 3}
   price: 50
   isNew: 0

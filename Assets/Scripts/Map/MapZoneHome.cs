@@ -27,11 +27,13 @@ public class MapZoneHome : MonoBehaviour {
   public string weaponsmithName;
   public MasteryLevel weaponsmithLevel;
   public CraftingRecipe[] weaponsmithRecipes;
+  public CraftingRecipe[] weaponsmithAdditionalRecipes;
 
   [Header("Armorer")]
   public string armorerName;
   public MasteryLevel armorerLevel;
   public CraftingRecipe[] armorerRecipes;
+  public CraftingRecipe[] armorerAdditionalRecipes;
 
   [Header("Quests")]
   public string elderName;

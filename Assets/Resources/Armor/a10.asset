@@ -10,36 +10,36 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 637e9a84f7a72294a949cb41532886b0, type: 3}
-  m_Name: a5
+  m_Name: a10
   m_EditorClassIdentifier: 
-  id: a5
-  itemName: Peasant's clothes
-  description: Simple peasant clothing made of burlap. Comfortable, light, and warm
-    enough. It's not suitable for battle, but perfect for working in the garden.
+  id: a10
+  itemName: Protected peasant`s clothes
+  description: Ordinary peasant clothing, reinforced with crude leather plates. It
+    is still very comfortable clothing, but a little closer to full armor.
   requirementStats: 000000000000000000000000
   requirementLevel: 1
   type: 5
   slot: 2
   weight: 0
-  rarity: 0
+  rarity: 1
   effects: []
   skills:
   - {fileID: 11400000, guid: 0137f76bb736b5147bf6835e017b370a, type: 2}
-  icon: {fileID: 21300000, guid: 715d3de3f196cb5428daa29c60eb694d, type: 3}
-  price: 30
+  icon: {fileID: 21300000, guid: 9cbdc2cfb5bfdc443ac604ef9a0ea9ee, type: 3}
+  price: 90
   isNew: 0
-  defense: 0
+  defense: 1
   blockMultiplier: 1
   prefab: {fileID: 0}
   resistsMap:
   - type: 1
-    value: 0
+    value: 3
   - type: 2
-    value: 0
+    value: 3
   - type: 3
-    value: 0
+    value: 3
   - type: 4
-    value: 0
+    value: 3
   - type: 5
     value: 0
   hideBeard: 0

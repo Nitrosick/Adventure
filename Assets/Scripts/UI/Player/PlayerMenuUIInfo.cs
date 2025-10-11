@@ -58,12 +58,8 @@ public class PlayerMenuUIInfo : MonoBehaviour {
   private static TextMeshProUGUI armorDefense;
   private static GameObject equipParams;
   private static TextMeshProUGUI equipWeight;
-  private static TextMeshProUGUI equipEffect;
-  private static Image equipEffectIcon;
-  private static TooltipTrigger effectTip;
-  private static TextMeshProUGUI equipSkill;
-  private static Image equipSkillIcon;
-  private static TooltipTrigger skillTip;
+  private static Transform equipEffects;
+  private static Transform equipSkills;
   private static GameObject itemParams;
   private static TextMeshProUGUI itemEffectValue;
   private static GameObject levelingItemParams;
@@ -137,12 +133,8 @@ public class PlayerMenuUIInfo : MonoBehaviour {
 
     equipParams = FindGO("EquipParameters");
     equipWeight = Find<TextMeshProUGUI>("EquipParameters/Weight/Value");
-    equipEffect = Find<TextMeshProUGUI>("EquipParameters/Effect/Value/Text");
-    equipEffectIcon = Find<Image>("EquipParameters/Effect/Value/Icon");
-    effectTip = Find<TooltipTrigger>("EquipParameters/Effect/Value");
-    equipSkill = Find<TextMeshProUGUI>("EquipParameters/Skill/Value/Text");
-    equipSkillIcon = Find<Image>("EquipParameters/Skill/Value/Icon");
-    skillTip = Find<TooltipTrigger>("EquipParameters/Skill/Value");
+    equipEffects = Find<Transform>("EquipParameters/Effects/List");
+    equipSkills = Find<Transform>("EquipParameters/Skills/List");
     itemParams = FindGO("ItemParameters");
     itemEffectValue = Find<TextMeshProUGUI>("ItemParameters/EffectValue/Value");
     levelingItemParams = FindGO("LevelingItemParameters");
@@ -175,13 +167,12 @@ public class PlayerMenuUIInfo : MonoBehaviour {
       strength, dexterity, intelligence, description, unitParams,
       unitMp, unitDamage, unitDefense, unitRange, inSquadMark,
       equippedMark, weaponParams, weaponDamage, weaponDamageType, weaponRange,
-      weaponCritMod, weaponArmorPen, equipParams, equipWeight, equipEffect,
-      equipSkill, armorParams, armorDefense, equipEffectIcon, equipSkillIcon,
-      effectTip, skillTip, equipmentPrimary, equipmentArmor, equipmentSecondary,
-      equipRequirements, equipRequiredStats, equipRequiredLevel, statPoints, strengthUp,
-      dexterityUp, intelligenceUp, statPointsRow, deathMark, itemActions,
-      useItem, itemParams, itemEffectValue, unitProjectiles, equipmentAdditional,
-      abilityPointsRow, abilityPoints, levelingItemParams, levelingItemEffectValue
+      weaponCritMod, weaponArmorPen, equipParams, equipWeight, equipEffects,
+      equipSkills, armorParams, armorDefense, equipmentPrimary, equipmentArmor,
+      equipmentSecondary, equipRequirements, equipRequiredStats, equipRequiredLevel, statPoints,
+      strengthUp, dexterityUp, intelligenceUp, statPointsRow, deathMark,
+      itemActions, useItem, itemParams, itemEffectValue, unitProjectiles,
+      equipmentAdditional, abilityPointsRow, abilityPoints, levelingItemParams, levelingItemEffectValue
     }.All(x => x != null);
   }
 
@@ -220,6 +211,8 @@ public class PlayerMenuUIInfo : MonoBehaviour {
     levelingItemParams.SetActive(false);
 
     foreach (Transform child in avatar) Destroy(child.gameObject);
+    foreach (Transform child in equipEffects) Destroy(child.gameObject);
+    foreach (Transform child in equipSkills) Destroy(child.gameObject);
   }
 
   public static void ShowInfo(Unit unit) {
@@ -341,7 +334,8 @@ public class PlayerMenuUIInfo : MonoBehaviour {
       weaponRange.text = weapon.range.ToString();
       weaponCritMod.text = "x" + weapon.critModifier;
       weaponArmorPen.text = weapon.armorPenetration + "%";
-    } else if (equip is Armor armor) {
+    }
+    else if (equip is Armor armor) {
       armorParams.SetActive(true);
       weaponParams.SetActive(false);
 
@@ -351,28 +345,30 @@ public class PlayerMenuUIInfo : MonoBehaviour {
     equipWeight.text = equip.weight.ToString();
     description.text = equip.description;
 
-    if (equip.effect != null) {
-      equipEffect.text = equip.effect.effectName;
-      equipEffectIcon.gameObject.SetActive(true);
-      equipEffectIcon.sprite = equip.effect.uiIcon;
-      equipEffectIcon.color = equip.effect.uiIconColor;
-      effectTip.message = equip.effect.description;
-    } else {
-      equipEffect.text = "";
-      equipEffectIcon.gameObject.SetActive(false);
-      effectTip.message = "";
+    if (equip.effects != null) {
+      foreach (var e in equip.effects) {
+        GameObject effectObj = Instantiate(PlayerMenuUI.Instance.effectIcon, equipEffects);
+        if (effectObj.TryGetComponent<Image>(out var img)) {
+          img.sprite = e.data.uiIcon;
+          img.color = e.data.uiIconColor;
+        }
+        if (effectObj.TryGetComponent<TooltipTrigger>(out var tip)) {
+          tip.message = $"<b>{e.data.effectName}</b>\n{e.data.description}";
+        }
+      }
     }
 
-    if (equip.skill != null) {
-      equipSkill.text = equip.skill.displayName;
-      equipSkillIcon.gameObject.SetActive(true);
-      equipSkillIcon.sprite = equip.skill.uiIcon;
-      equipSkillIcon.color = equip.skill.uiIconColor;
-      skillTip.message = equip.skill.description;
-    } else {
-      equipSkill.text = "";
-      equipSkillIcon.gameObject.SetActive(false);
-      skillTip.message = "";
+    if (equip.skills != null) {
+      foreach (Skill s in equip.skills) {
+        GameObject skillObj = Instantiate(PlayerMenuUI.Instance.effectIcon, equipSkills);
+        if (skillObj.TryGetComponent<Image>(out var img)) {
+          img.sprite = s.uiIcon;
+          img.color = s.uiIconColor;
+        }
+        if (skillObj.TryGetComponent<TooltipTrigger>(out var tip)) {
+          tip.message = $"<b>{s.displayName}</b>\n{s.description}";
+        }
+      }
     }
   }
 

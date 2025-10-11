@@ -115,17 +115,19 @@ public static class Calculate {
     Equipment[] items = { primary, secondary, attackerArmor };
 
     foreach (Equipment item in items) {
-      if (item == null || item.effect == null) continue;
+      if (item == null || item.effects == null || item.effects.Length == 0) continue;
 
-      float chance = item.effectChance;
-      if (item.effect.effectName == "Bleeding" && targetArmor.weight == EquipmentWeight.Heavy) {
-        chance /= 2;
+      foreach (var effect in item.effects) {
+        float chance = effect.chance;
+        string name = effect.data.effectName;
+
+        if (name == "Bleeding" && targetArmor.weight == EquipmentWeight.Heavy) chance /= 2;
+        else if (name == "Stun") {
+          if (target.IsHero) chance -= AbilityController.StunResist();
+          chance += attacker.Strength - target.Strength;
+        }
+        if (Utils.RollChance(chance)) result.Add(effect.data);
       }
-      else if (item.effect.effectName == "Stun") {
-        if (target.IsHero) chance -= AbilityController.StunResist();
-        chance += attacker.Strength - target.Strength;
-      }
-      if (Utils.RollChance(chance)) result.Add(item.effect);
     }
 
     return result;
@@ -133,17 +135,12 @@ public static class Calculate {
 
   public static List<Skill> ItemPassiveSkills(Unit unit) {
     List<Skill> result = new();
-    Equipment primary = unit.Equip.primary;
-    Equipment secondary = unit.Equip.secondary;
-    Equipment attackerArmor = unit.Equip.armor;
-    Equipment[] items = { primary, secondary, attackerArmor };
+    List<Skill> skills = unit.Equip.GetPassiveSkills();
 
-    foreach (Equipment item in items) {
-      if (item == null || item.skill == null || item.skill.isActive) continue;
-
-      float chance = item.skill.activateChance;
-      if (item.skill.displayName == "Parry" && unit.IsHero) chance += AbilityController.EvasionBonus();
-      if (Utils.RollChance(chance)) result.Add(item.skill);
+    foreach (Skill skill in skills) {
+      float chance = skill.activateChance;
+      if (skill.displayName == "Parry" && unit.IsHero) chance += AbilityController.EvasionBonus();
+      if (Utils.RollChance(chance)) result.Add(skill);
     }
 
     return result;

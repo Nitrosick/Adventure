@@ -14,6 +14,7 @@ public class Crossbowman : Unit
     PrefabId = "u4";
     Type = UnitType.Range;
     AllowedWeapon = EquipmentType.Crossbow;
+    Level = 2;
     MaxLevel = 6;
     LevelingCoreStat = CoreStat.Strength;
     TotalHealth = 20f;
