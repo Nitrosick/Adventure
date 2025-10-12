@@ -60,7 +60,7 @@ public class MapZone : MonoBehaviour {
 
   private void OnMouseEnter() {
     if (SceneController.Locked || EventSystem.current.IsPointerOverGameObject() || secret) return;
-    MapUI.Instance.ShowZoneInfo(zoneName, description, descriptionCleared, events, isEmpty);
+    if (!isEmpty) MapUI.Instance.ShowZoneInfo(this);
 
     MapZone playerZone = Player.Instance.GetComponent<PlayerMove>().CurrentZone;
     string[] wayIds = ways.Select(way => way.id).ToArray();
@@ -79,16 +79,13 @@ public class MapZone : MonoBehaviour {
   }
 
   private void SetCleared() {
-    if (isEmpty) return;
     SwitchIcon(false);
     events.Clear();
-    isEmpty = true;
     SwitchInteractiveObjects();
   }
 
   public void SetActive() {
     SwitchIcon(true);
-    isEmpty = false;
     SwitchInteractiveObjects();
   }
 

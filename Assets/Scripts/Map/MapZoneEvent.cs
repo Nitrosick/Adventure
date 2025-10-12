@@ -16,8 +16,8 @@ public class MapZoneEvent : MonoBehaviour {
     bool forceAmbush = false,
     bool ignoreQuest = false
   ) {
-    if (zone == null || zone.events.Count < 1) return;
     MapUI.Instance.HideInteractableButton();
+    if (zone == null || zone.events.Count < 1) return;
 
     T Get<T>() where T : Component => transform.GetComponent<T>();
     MapZoneBattle battleZone = Get<MapZoneBattle>();

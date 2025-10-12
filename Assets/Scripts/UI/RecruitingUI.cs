@@ -8,17 +8,18 @@ public class RecruitingUI : MonoBehaviour {
   public GameObject slotPrefab;
 
   private static Transform window;
+  private static TextMeshProUGUI title;
+  private static TextMeshProUGUI description;
   private static Button submit;
+  private static TextMeshProUGUI submitText;
   private static Button cancel;
   private static GameObject notEnoughRes;
   private static GameObject notEnoughSlots;
   private static MapZoneRecruitment mapZone;
-
-  // Reward
-  private static TextMeshProUGUI rewardTitle;
   private static Transform rewardSlots;
 
   // Requirements
+  private static GameObject requirementsPanel;
   private static TextMeshProUGUI reqPlayerLevel;
   private static TextMeshProUGUI reqPlayerFame;
   private static TextMeshProUGUI reqGold;
@@ -33,14 +34,16 @@ public class RecruitingUI : MonoBehaviour {
     T Get<T>(string path) where T : Component => Find(path).GetComponent<T>();
 
     window = transform.Find("Recruitment/Panel");
+    title = Get<TextMeshProUGUI>("Head/Title");
+    description = Get<TextMeshProUGUI>("Description");
     submit = Get<Button>("Control/Recruit");
+    submitText = Get<TextMeshProUGUI>("Control/Recruit/Text");
     cancel = Get<Button>("Control/Cancel");
     notEnoughRes = Find("NotEnoughRes").gameObject;
     notEnoughSlots = Find("NotEnoughSlots").gameObject;
-
-    rewardTitle = Get<TextMeshProUGUI>("Reward/Title");
     rewardSlots = Find("Reward/Slots");
 
+    requirementsPanel = Find("Requirements").gameObject;
     reqPlayerLevel = Get<TextMeshProUGUI>("Requirements/PlayerLevel/Value");
     reqPlayerFame = Get<TextMeshProUGUI>("Requirements/PlayerFame/Value");
     reqGold = Get<TextMeshProUGUI>("Requirements/Gold/Value");
@@ -48,9 +51,10 @@ public class RecruitingUI : MonoBehaviour {
 
     if (
       window == null || submit == null || cancel == null ||
-      notEnoughRes == null || notEnoughSlots == null || rewardTitle == null ||
+      notEnoughRes == null || notEnoughSlots == null || description == null ||
       rewardSlots == null || reqPlayerLevel == null || reqPlayerFame == null ||
-      reqGold == null || requirementSlots == null
+      reqGold == null || requirementSlots == null || requirementsPanel == null ||
+      title == null || submitText == null
     ) {
       Debug.LogError("Recruiting UI components initialization error");
     }
@@ -67,15 +71,25 @@ public class RecruitingUI : MonoBehaviour {
   public static void Open(MapZoneRecruitment zone) {
     if (zone == null || zone.requirements == null) return;
     mapZone = zone;
-    ShowRequirements();
+
+    title.text = zone.isRescuing ? "Rescuing" : "Recruiting";
+    description.text = zone.isRescuing
+      ? "These people are in trouble and need help. They will gladly join your squad."
+      : "The following units can join you if you have enough resources and meet the requirements.";
+    submitText.text = zone.isRescuing ? "Rescue" : "Recruit";
     RenderSlots();
 
-    if (!EnoughSlots(zone.recruitVillagers)) {
-      notEnoughSlots.SetActive(true);
-      submit.interactable = false;
-    } else if (!MeetsRequirements(zone.requirements)) {
-      notEnoughRes.SetActive(true);
-      submit.interactable = false;
+    if (!zone.isRescuing) {
+      ShowRequirements();
+
+      if (!EnoughSlots(zone.recruitVillagers)) {
+        notEnoughSlots.SetActive(true);
+        submit.interactable = false;
+      }
+      else if (!MeetsRequirements(zone.requirements)) {
+        notEnoughRes.SetActive(true);
+        submit.interactable = false;
+      }
     }
 
     window.gameObject.SetActive(true);
@@ -84,13 +98,13 @@ public class RecruitingUI : MonoBehaviour {
 
   public static void Close() {
     window.gameObject.SetActive(false);
+    requirementsPanel.SetActive(false);
 
     mapZone = null;
     notEnoughRes.SetActive(false);
     notEnoughSlots.SetActive(false);
     submit.interactable = true;
 
-    rewardTitle.text = "";
     reqPlayerLevel.text = "-";
     reqPlayerFame.text = "-";
     reqGold.text = "-";
@@ -105,7 +119,7 @@ public class RecruitingUI : MonoBehaviour {
   }
 
   private static void ShowRequirements() {
-    rewardTitle.text = mapZone.recruitVillagers > 0 ? "Villagers" : "Units";
+    requirementsPanel.SetActive(true);
     Requirements req = mapZone.requirements;
     if (req.playerLevel > 0) reqPlayerLevel.text = req.playerLevel.ToString();
     if (req.playerFame > 0) reqPlayerFame.text = req.playerFame.ToString();
@@ -128,6 +142,8 @@ public class RecruitingUI : MonoBehaviour {
         slot.GetComponent<SlotWithCount>().Init(unit);
       }
     }
+
+    if (mapZone.isRescuing) return;
 
     Requirements req = mapZone.requirements;
     int slotsCount = 0;
@@ -222,26 +238,31 @@ public class RecruitingUI : MonoBehaviour {
 
   private static void OnSubmit() {
     Player player = Player.Instance;
-    Requirements req = mapZone.requirements;
 
-    if (req.equipment.Length > 0) {
-      foreach (Equipment item in req.equipment) {
-        if (!player.Inventory.HasItem(item, true)) {
-          _ = Toast.Show("warning", "The required item is equipped on the unit");
-          return;
+    if (!mapZone.isRescuing) {
+      Requirements req = mapZone.requirements;
+
+      if (req.equipment.Length > 0) {
+        foreach (Equipment item in req.equipment) {
+          if (!player.Inventory.HasItem(item, true)) {
+            _ = Toast.Show("warning", "The required item is equipped on the unit");
+            return;
+          }
         }
       }
+
+      player.SetGold(req.gold * -1);
+      player.SetResources(req.resources.Select(n => -n).ToArray());
+      foreach (Equipment item in req.equipment) player.Inventory.RemoveItem(item);
+      foreach (Item item in req.items) player.Inventory.RemoveItem(item);
     }
 
     player.SetReputation(mapZone.reputation);
-    player.SetGold(req.gold * -1);
-    player.SetResources(req.resources.Select(n => -n).ToArray());
-    foreach (Equipment item in req.equipment) player.Inventory.RemoveItem(item);
-    foreach (Item item in req.items) player.Inventory.RemoveItem(item);
     player.SetVillagers(mapZone.recruitVillagers);
     foreach (Unit unit in mapZone.recruits) player.Army.AddUnit(unit);
 
     mapZone.GetComponent<MapZone>().RemoveEvent(MapZoneType.Recruitment);
+    mapZone.GetComponent<MapZoneEvent>().CheckEvents();
     _ = Toast.Show("success", "People have joined you");
     Close();
   }

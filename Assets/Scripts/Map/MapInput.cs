@@ -4,9 +4,21 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 public class MapInput : MonoBehaviour {
+  [SerializeField] private InputActionReference actionInput;
+
   private void Update() {
     if (!Mouse.current.leftButton.wasPressedThisFrame || SceneController.Locked) return;
     HandleClick();
+  }
+
+  private void OnEnable() {
+    actionInput.action.performed += HandleAction;
+    actionInput.action.Enable();
+  }
+
+  private void OnDisable() {
+    actionInput.action.performed -= HandleAction;
+    actionInput.action.Disable();
   }
 
   private async void HandleClick() {
@@ -40,5 +52,12 @@ public class MapInput : MonoBehaviour {
           break;
       }
     }
+  }
+
+  private void HandleAction(InputAction.CallbackContext context) {
+    if (SceneController.Locked || StateManager.openedWindows.Count > 0) return;
+    MapZone zone = Player.Instance.Move.CurrentZone;
+    if (zone.events.Count == 0 || zone.events[0] == MapZoneType.Ambush) return;
+    zone.GetComponent<MapZoneEvent>().CheckEvents();
   }
 }

@@ -129,11 +129,8 @@ public class MapZoneManager : MonoBehaviour {
 
       if (collecting.CollectedAt > 0 && StateManager.globalTicks < collecting.CollectedAt + collecting.respawn) {
         zone.SwitchIcon(false);
-        zone.isEmpty = true;
-      }
-      else {
+      } else {
         zone.SwitchIcon(true);
-        zone.isEmpty = false;
       }
     }
   }

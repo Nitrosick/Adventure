@@ -140,28 +140,35 @@ public class MapUI : GeneralUI {
     HomeMenuUI.Close();
   }
 
-  public void ShowZoneInfo(string title, string desc, string descCleared, List<MapZoneType> events, bool empty) {
+  public void ShowZoneInfo(MapZone zone) {
     if (!ComponentsInitialized()) return;
     zoneInfoPanel.SetActive(true);
-    zoneInfoTitle.text = title;
+    zoneInfoTitle.text = zone.zoneName;
 
-    if (empty) {
-      if (events.Contains(MapZoneType.Collecting)) {
-        zoneInfoDescription.text = descCleared;
-        zoneInfoRespawnMark.SetActive(true);
+    zoneInfoDescription.text = zone.events.Count == 0
+      ? zone.descriptionCleared
+      : zone.description;
+
+    if (zone.events.Count == 0) {
+      if (zone.descriptionCleared == "") {
+        zoneInfoDescription.text = zone.description;
       } else {
-        zoneInfoDescription.text = desc;
+        zoneInfoClearedMark.SetActive(true);
       }
-      return;
     }
-
-    zoneInfoDescription.text = events.Count == 0 ? descCleared : desc;
-
-    if (events.Count == 0) zoneInfoClearedMark.SetActive(true);
-    else if (events.Contains(MapZoneType.Battle)) zoneInfoBattleMark.SetActive(true);
-    else if (events.Contains(MapZoneType.Recruitment)) zoneInfoRecruitMark.SetActive(true);
-    else if (events.Contains(MapZoneType.Quest)) zoneInfoQuestMark.SetActive(true);
-    else if (events.Contains(MapZoneType.Collecting)) zoneInfoCollectMark.SetActive(true);
+    else if (zone.events.Contains(MapZoneType.Battle)) zoneInfoBattleMark.SetActive(true);
+    else if (zone.events.Contains(MapZoneType.Recruitment)) zoneInfoRecruitMark.SetActive(true);
+    else if (zone.events.Contains(MapZoneType.Quest)) zoneInfoQuestMark.SetActive(true);
+    else if (zone.events.Contains(MapZoneType.Collecting)) {
+      if (zone.TryGetComponent<MapZoneCollecting>(out var col)) {
+        if (col.CollectedAt > 0 && col.CollectedAt + col.respawn > StateManager.globalTicks) {
+          zoneInfoDescription.text = zone.descriptionCleared;
+          zoneInfoRespawnMark.SetActive(true);
+        } else {
+          zoneInfoCollectMark.SetActive(true);
+        }
+      }
+    }
   }
 
   public void HideZoneInfo() {

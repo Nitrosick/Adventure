@@ -3110,6 +3110,7 @@ MonoBehaviour:
   recruits: []
   recruitVillagers: 2
   reputation: 0
+  isRescuing: 0
   requirements:
     playerLevel: 0
     playerFame: 200
@@ -3354,6 +3355,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70442fdd1b1686a448fa4f603b3e05e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  actionInput: {fileID: -7560484915351109248, guid: d4e6bac820a202e46bf2fe966a0e4314,
+    type: 3}
 --- !u!114 &65476942
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7997,6 +8000,7 @@ MonoBehaviour:
   - {fileID: 8421502348595245192, guid: 06490e63341e86742a6d1b787038a659, type: 3}
   recruitVillagers: 2
   reputation: 10
+  isRescuing: 1
   requirements:
     playerLevel: 0
     playerFame: 0
@@ -8905,12 +8909,12 @@ PrefabInstance:
     - target: {fileID: 3769942709103539625, guid: 0eabf81c232b0fb4ea722e9138a7fd15,
         type: 3}
       propertyPath: zoneName
-      value: Field
+      value: Empty
       objectReference: {fileID: 0}
     - target: {fileID: 3769942709103539625, guid: 0eabf81c232b0fb4ea722e9138a7fd15,
         type: 3}
       propertyPath: description
-      value: It's an ordinary clearing, there's nothing interesting here.
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 3769942709103539625, guid: 0eabf81c232b0fb4ea722e9138a7fd15,
         type: 3}
@@ -13636,7 +13640,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Title
+  m_text: Units
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 26c408a5ffbc47a4f9473e317eddd33c, type: 2}
   m_sharedMaterial: {fileID: -6530524437665743353, guid: 26c408a5ffbc47a4f9473e317eddd33c,
@@ -24934,7 +24938,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &484306116
 RectTransform:
   m_ObjectHideFlags: 0
@@ -42877,12 +42881,12 @@ PrefabInstance:
     - target: {fileID: 3769942709103539625, guid: 0eabf81c232b0fb4ea722e9138a7fd15,
         type: 3}
       propertyPath: zoneName
-      value: Field
+      value: Empty
       objectReference: {fileID: 0}
     - target: {fileID: 3769942709103539625, guid: 0eabf81c232b0fb4ea722e9138a7fd15,
         type: 3}
       propertyPath: description
-      value: It's an ordinary clearing, there's nothing interesting here.
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 3769942709103539625, guid: 0eabf81c232b0fb4ea722e9138a7fd15,
         type: 3}
@@ -43696,7 +43700,7 @@ PrefabInstance:
     - target: {fileID: 3769942709103539625, guid: 0eabf81c232b0fb4ea722e9138a7fd15,
         type: 3}
       propertyPath: isEmpty
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3769942709103539625, guid: 0eabf81c232b0fb4ea722e9138a7fd15,
         type: 3}
@@ -50795,12 +50799,12 @@ PrefabInstance:
     - target: {fileID: 3769942709103539625, guid: 0eabf81c232b0fb4ea722e9138a7fd15,
         type: 3}
       propertyPath: zoneName
-      value: Field
+      value: Empty
       objectReference: {fileID: 0}
     - target: {fileID: 3769942709103539625, guid: 0eabf81c232b0fb4ea722e9138a7fd15,
         type: 3}
       propertyPath: description
-      value: It's an ordinary clearing, there's nothing interesting here.
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 3769942709103539625, guid: 0eabf81c232b0fb4ea722e9138a7fd15,
         type: 3}
@@ -57582,8 +57586,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 2
   playerPosition: {x: -2.6, y: 2.5, z: 0.7}
-  zoneName: Field
-  description: It's an ordinary clearing, there's nothing interesting here.
+  zoneName: Empty
+  description: 
   descriptionCleared: 
   events: 
   isEmpty: 1
@@ -59400,7 +59404,7 @@ PrefabInstance:
     - target: {fileID: 3769942709103539625, guid: 0eabf81c232b0fb4ea722e9138a7fd15,
         type: 3}
       propertyPath: isEmpty
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3769942709103539625, guid: 0eabf81c232b0fb4ea722e9138a7fd15,
         type: 3}
@@ -59427,9 +59431,7 @@ PrefabInstance:
     - target: {fileID: 3769942709103539625, guid: 0eabf81c232b0fb4ea722e9138a7fd15,
         type: 3}
       propertyPath: descriptionCleared
-      value: The main attraction for local workers and travelers. Alcohol always
-        flows like a river here, thousands of rumors pass through the bartender every
-        day, and not a day goes by without a good fight.
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 4230487241263318494, guid: 0eabf81c232b0fb4ea722e9138a7fd15,
         type: 3}

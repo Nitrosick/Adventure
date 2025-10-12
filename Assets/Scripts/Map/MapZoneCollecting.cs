@@ -30,7 +30,6 @@ public class MapZoneCollecting : MonoBehaviour {
     else StateManager.zonesState[zone.id].collectedAt = CollectedAt;
 
     zone.SwitchIcon(false);
-    zone.isEmpty = true;
     transform.GetComponent<MapZoneEvent>().CheckEvents();
   }
 }
