@@ -119,20 +119,20 @@ public class MapUI : GeneralUI {
   protected override void OpenPauseMenu() {
     CloseOtherWindows();
     PlayerMenuUI.Close();
-    AlmanacUI.Close();
+    AlmanacUI.Instance.Close();
     PauseMenu.Open();
   }
 
   private void SwitchPlayerMenu() {
     CloseOtherWindows();
-    AlmanacUI.Close();
+    AlmanacUI.Instance.Close();
     PlayerMenuUI.Switch();
   }
 
   protected override void OpenAlmanac() {
     CloseOtherWindows();
     PlayerMenuUI.Close();
-    AlmanacUI.Open();
+    AlmanacUI.Instance.Open();
   }
 
   private void CloseOtherWindows() {

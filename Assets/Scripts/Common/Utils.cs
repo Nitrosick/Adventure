@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using UnityEngine;
 
 public static class Utils {
@@ -57,4 +58,8 @@ public static class Utils {
       { AbilityLevel.Silver, "#CDCDCE" },
       { AbilityLevel.Gold, "#E2B63F" }
     });
+
+  public static string SplitPascalCase(string input) {
+    return Regex.Replace(input, "(?<!^)([A-Z])", " $1").Trim();
+  }
 }

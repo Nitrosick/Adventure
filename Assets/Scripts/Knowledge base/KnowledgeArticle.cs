@@ -5,6 +5,5 @@ public class KnowledgeArticle : ScriptableObject {
   public string id;
   public string title;
   [TextArea(5, 20)] public string content;
-  public Sprite icon;
   public KnowledgeSection section;
 }

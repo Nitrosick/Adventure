@@ -19,6 +19,8 @@ public class MapZoneEvent : MonoBehaviour {
     MapUI.Instance.HideInteractableButton();
     if (zone == null || zone.events.Count < 1) return;
 
+    KnowledgeManager.UnlockArticle("aa4");
+
     T Get<T>() where T : Component => transform.GetComponent<T>();
     MapZoneBattle battleZone = Get<MapZoneBattle>();
     int eventIndex = 0;

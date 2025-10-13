@@ -7,28 +7,39 @@ using UnityEngine.UI;
 public class AlmanacUI : MonoBehaviour {
   // Components
   public static AlmanacUI Instance;
-  public GameObject articleButtonPrefab;
+  private static IconDatabase IconDatabase;
+  public GameObject sectionPrefab;
+  public GameObject articlePrefab;
 
-  private static Transform menu;
-  private static Transform content;
-  private static TextMeshProUGUI title;
-  private static TextMeshProUGUI text;
+  private Transform menu;
+  private Transform content;
+  private TextMeshProUGUI title;
+  private TextMeshProUGUI text;
 
   // Navigation
-  private static Transform navigation;
-  private static Button closeButton;
-  private static readonly Dictionary<string, GameObject> buttons = new() { };
+  private Transform navigation;
+  private Button closeButton;
+  private Dictionary<KnowledgeSection, List<KnowledgeInstance>> sections = new() { };
+
+  private readonly Dictionary<KnowledgeSection, string> sectionIcons = new() {
+    { KnowledgeSection.Common, "info" },
+    { KnowledgeSection.AdventureMap, "map" },
+    { KnowledgeSection.Battlefield, "battle" },
+    { KnowledgeSection.Lore, "learn" },
+    { KnowledgeSection.Player, "player" }
+  };
 
   private void Awake() {
     Instance = this;
+    IconDatabase = Resources.Load<IconDatabase>("Databases/IconDatabase");
     menu = transform.Find("Almanac/Panel");
     content = menu.Find("Content/Viewport/Content");
 
-    static Transform Find(string path) => menu.Find(path);
-    static T Get<T>(string path) where T : Component => Find(path).GetComponent<T>();
-    static T GetInContent<T>(string path) where T : Component => content.Find(path).GetComponent<T>();
+     Transform Find(string path) => menu.Find(path);
+     T Get<T>(string path) where T : Component => Find(path).GetComponent<T>();
+     T GetInContent<T>(string path) where T : Component => content.Find(path).GetComponent<T>();
 
-    navigation = Find("Navigation/Articles");
+    navigation = Find("Navigation/Sections/Viewport/Content");
     closeButton = Get<Button>("Navigation/Control/Close");
     title = GetInContent<TextMeshProUGUI>("Title");
     text = GetInContent<TextMeshProUGUI>("Text");
@@ -41,7 +52,7 @@ public class AlmanacUI : MonoBehaviour {
     closeButton.onClick.AddListener(Close);
   }
 
-  private static bool ComponentsInitialized() {
+  private bool ComponentsInitialized() {
     return new object[] {
       menu, navigation, closeButton, title, text
     }.All(x => x != null);
@@ -51,53 +62,50 @@ public class AlmanacUI : MonoBehaviour {
     closeButton.onClick.RemoveListener(Close);
   }
 
-  public static void Open() {
+  public void Open() {
     menu.gameObject.SetActive(true);
     Clear();
     Init();
     SceneController.OpenWindow("almanac");
   }
 
-  public static void Close() {
+  public void Close() {
     menu.gameObject.SetActive(false);
     Clear();
     SceneController.CloseWindow("almanac");
   }
 
-  private static void Clear() {
+  private void Clear() {
     foreach (Transform child in navigation) Destroy(child.gameObject);
     title.text = "";
     text.text = "";
-    buttons.Clear();
   }
 
-  private static void Init() {
-    if (Instance.articleButtonPrefab == null) return;
+  private void Init() {
+    if (Instance.sectionPrefab == null || Instance.articlePrefab == null) return;
+    List<KnowledgeInstance> allArticles = KnowledgeManager.articles;
 
-    foreach (KnowledgeInstance a in KnowledgeManager.articles) {
-      GameObject btn = Instantiate(Instance.articleButtonPrefab, navigation);
-      btn.transform.Find("Icon").GetComponent<Image>().sprite = a.data.icon;
-      btn.transform.Find("Text").GetComponent<TextMeshProUGUI>().text = a.data.title;
+    sections = allArticles
+      .GroupBy(a => a.data.section)
+      .ToDictionary(g => g.Key, g => g.ToList());
 
-      GameObject newMark = btn.transform.Find("New").gameObject;
-      buttons[a.data.id] = newMark;
-      if (a.isNew) newMark.SetActive(true);
-
-      Button btnScript = btn.transform.GetComponent<Button>();
-      btnScript.onClick.RemoveAllListeners();
-      btnScript.onClick.AddListener(() => ShowContent(a));
+    foreach (var kvp in sections) {
+      GameObject sectionObj = Instantiate(Instance.sectionPrefab, navigation);
+      bool opened = kvp.Key == allArticles[0].data.section;
+      Sprite icon = IconDatabase.GetIcon(sectionIcons[kvp.Key]);
+      sectionObj.GetComponent<AlmanacSection>().Init(kvp.Key, kvp.Value, icon, opened);
     }
 
-    ShowContent(KnowledgeManager.articles[0]);
+    ShowContent(allArticles[0]);
   }
 
-  private static void ShowContent(KnowledgeInstance article) {
+  public void ShowContent(KnowledgeInstance article) {
     title.text = article.data.title;
     text.text = article.data.content;
+    LayoutRebuilder.ForceRebuildLayoutImmediate(text.GetComponent<RectTransform>());
 
     if (article.isNew) {
       article.isNew = false;
-      buttons[article.data.id].SetActive(false);
       MapUI.Instance.UpdateAlmanacIcon();
     }
   }

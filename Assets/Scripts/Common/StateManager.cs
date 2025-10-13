@@ -18,6 +18,7 @@ public static class StateManager {
   public static int saveSlot;
   public static int globalTicks;
   private readonly static string[] defaultArmyIds = { "u1", "u2", "u2" };
+  public readonly static string[] defaultKnowledge = { "aa1", "aa2", "aa3" };
   public static HashSet<string> openedWindows = new();
 
   // Moving between scenes

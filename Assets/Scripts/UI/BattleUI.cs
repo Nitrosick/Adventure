@@ -88,12 +88,12 @@ public class BattleUI : GeneralUI {
   }
 
   protected override void OpenPauseMenu() {
-    AlmanacUI.Close();
+    AlmanacUI.Instance.Close();
     PauseMenu.Open();
   }
 
   protected override void OpenAlmanac() {
-    AlmanacUI.Open();
+    AlmanacUI.Instance.Open();
   }
 
   public void UpdateQueue(List<Unit> queue, int current = 0) {

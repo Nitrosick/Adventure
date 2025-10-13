@@ -254,7 +254,8 @@ public enum KnowledgeSection {
   Common,
   AdventureMap,
   Battlefield,
-  Lore
+  Lore,
+  Player
 }
 
 // Skills and effects

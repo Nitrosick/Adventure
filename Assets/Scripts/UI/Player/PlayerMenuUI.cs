@@ -140,6 +140,7 @@ public class PlayerMenuUI : MonoBehaviour {
 
   public static void Open() {
     menu.gameObject.SetActive(true);
+    KnowledgeManager.UnlockArticle(new string[] { "aa5", "aa6" });
     SelectHeroTab();
     SceneController.OpenWindow("player");
   }
