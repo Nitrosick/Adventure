@@ -75,7 +75,7 @@ public class Unit : MonoBehaviour {
     TargetTree = null;
   }
 
-  public virtual void Init(Tile tile, UnitRelation relation, Vector3 direction) {
+  public virtual void Init(Tile tile, UnitRelation relation) {
     UnitCollider = transform.GetComponent<CapsuleCollider>();
     Move = transform.GetComponent<UnitMove>();
     Ui = transform.GetComponent<UnitUI>();
@@ -96,8 +96,6 @@ public class Unit : MonoBehaviour {
     CurrentTile = tile;
     tile.OccupiedBy = this;
     Relation = relation;
-
-    _ = Animator.RotateTowards(direction, true);
 
     if (Relation == UnitRelation.Ally) Ui.MarkAsAlly();
     if (CurrentHealth == 0) CurrentHealth = Health.GetMaxHP();

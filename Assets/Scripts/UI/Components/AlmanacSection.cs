@@ -10,6 +10,7 @@ public class AlmanacSection : MonoBehaviour {
   private Image switcherIcon;
   private GameObject switcherNew;
   private Transform articlesList;
+  private KnowledgeSection section;
   private bool opened;
 
   private void Awake() {
@@ -35,6 +36,7 @@ public class AlmanacSection : MonoBehaviour {
   }
 
   public void Init(KnowledgeSection group, List<KnowledgeInstance> list, Sprite icon, bool open = false) {
+    section = group;
     switcherTitle.text = Utils.SplitPascalCase(group.ToString());
 
     if (list.Count > 0) {
@@ -57,6 +59,10 @@ public class AlmanacSection : MonoBehaviour {
   private void SwitchSection() {
     opened = !opened;
     articlesList.gameObject.SetActive(opened);
-    switcherNew.SetActive(false);
+  }
+
+  public void CheckNewArticles() {
+    if (KnowledgeManager.articles.Any(a => a.data.section == section && a.isNew)) switcherNew.SetActive(true);
+    else switcherNew.SetActive(false);
   }
 }

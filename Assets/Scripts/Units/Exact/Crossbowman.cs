@@ -32,8 +32,8 @@ public class Crossbowman : Unit
   private Transform missleSpawner;
   private readonly float boltSpeed = 17;
 
-  public async override void Init(Tile tile, UnitRelation relation, Vector3 direction) {
-    base.Init(tile, relation, direction);
+  public async override void Init(Tile tile, UnitRelation relation) {
+    base.Init(tile, relation);
 
     await Task.Yield();
     weapon = GetComponentsInChildren<Transform>(true).FirstOrDefault(c => c.CompareTag("Weapon"));

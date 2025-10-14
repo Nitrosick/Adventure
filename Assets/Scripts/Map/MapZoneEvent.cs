@@ -44,7 +44,7 @@ public class MapZoneEvent : MonoBehaviour {
       case MapZoneType.Battle:
         if (ignoreBattle) return;
         if (battleZone.instant) StartBattle(battleZone);
-        else MapUI.Instance.ShowInteractableButton(battleZone.StartBattle);
+        else MapUI.Instance.ShowInteractableButton(battleZone.StartBattle, "battle", "Attack");
         break;
       case MapZoneType.Quest:
         CheckZoneQuests(battleZone);

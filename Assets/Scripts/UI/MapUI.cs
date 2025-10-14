@@ -17,6 +17,7 @@ public class MapUI : GeneralUI {
   private TextMeshProUGUI zoneInfoTitle;
   private TextMeshProUGUI zoneInfoDescription;
   private GameObject zoneInfoBattleMark;
+  private GameObject zoneInfoGuardMark;
   private GameObject zoneInfoClearedMark;
   private GameObject zoneInfoRecruitMark;
   private GameObject zoneInfoQuestMark;
@@ -59,6 +60,7 @@ public class MapUI : GeneralUI {
     zoneInfoDescription = Get<TextMeshProUGUI>(infoPanel, "Description");
 
     zoneInfoBattleMark = Find(markers, "Battle");
+    zoneInfoGuardMark = Find(markers, "Guard");
     zoneInfoClearedMark = Find(markers, "Clear");
     zoneInfoRecruitMark = Find(markers, "Recruitment");
     zoneInfoQuestMark = Find(markers, "Quest");
@@ -95,7 +97,7 @@ public class MapUI : GeneralUI {
       goldValue,  woodValue, stoneValue, metalValue,  villagersValue,
       leatherValue, zoneInfoBattleMark,  zoneInfoClearedMark, zoneInfoRecruitMark, interactButton,
       location, interactButtonIcon, interactButtonText,  totalPeopleValue, zoneInfoCollectMark,
-      zoneInfoRespawnMark
+      zoneInfoRespawnMark, zoneInfoGuardMark
     }.All(x => x != null);
   }
 
@@ -156,7 +158,12 @@ public class MapUI : GeneralUI {
         zoneInfoClearedMark.SetActive(true);
       }
     }
-    else if (zone.events.Contains(MapZoneType.Battle)) zoneInfoBattleMark.SetActive(true);
+    else if (zone.events.Contains(MapZoneType.Battle)) {
+      if (zone.TryGetComponent<MapZoneBattle>(out var battle)) {
+        if (battle.instant) zoneInfoBattleMark.SetActive(true);
+        else zoneInfoGuardMark.SetActive(true);
+      }
+    }
     else if (zone.events.Contains(MapZoneType.Recruitment)) zoneInfoRecruitMark.SetActive(true);
     else if (zone.events.Contains(MapZoneType.Quest)) zoneInfoQuestMark.SetActive(true);
     else if (zone.events.Contains(MapZoneType.Collecting)) {
@@ -177,6 +184,7 @@ public class MapUI : GeneralUI {
     zoneInfoTitle.text = "";
     zoneInfoDescription.text = "";
     zoneInfoBattleMark.SetActive(false);
+    zoneInfoGuardMark.SetActive(false);
     zoneInfoClearedMark.SetActive(false);
     zoneInfoRecruitMark.SetActive(false);
     zoneInfoQuestMark.SetActive(false);

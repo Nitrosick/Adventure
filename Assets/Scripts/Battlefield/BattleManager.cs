@@ -78,10 +78,6 @@ public class BattleManager : MonoBehaviour {
   }
 
   private void SpawnUnits(UnitData[] unitsData, List<Tile> spawns, UnitRelation relation) {
-    Tile focusTile = relation == UnitRelation.Ally
-      ? TileManager.allyFocusTile
-      : TileManager.enemyFocusTile;
-
     List<Tile> shooterSpawns = spawns == allySpawns
       ? allyShooterSpawns
       : enemyShooterSpawns;
@@ -116,17 +112,10 @@ public class BattleManager : MonoBehaviour {
 
       Unit unit = StateManager.PrefabDatabase.GetPrefab(data.prefabId);
       if (unit == null) return;
-      Vector3 center = tile.GetPos();
-      Vector3 direction = Vector3.zero;
 
-      if (focusTile != null) {
-        direction = (new Vector3(focusTile.GetPos().x, 0, focusTile.GetPos().y) - center).normalized;
-        direction.y = 0;
-      }
-
-      unit.transform.position = center;
+      unit.transform.position = tile.GetPos();
       unit.FromData(data);
-      unit.Init(tile, relation, direction);
+      unit.Init(tile, relation);
       if (unit.Type == UnitType.Range && tile.height > 1) unit.BehaviorType = AIBehaviorType.HoldPosition;
       // FIXME: Проверка расположения врагов для смены поведения
       QueueManager.Queue.Add(unit);

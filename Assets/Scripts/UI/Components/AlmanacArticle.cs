@@ -34,5 +34,8 @@ public class AlmanacArticle : MonoBehaviour {
   private void ShowArticleContent() {
     AlmanacUI.Instance.ShowContent(currentArticle);
     newIcon.SetActive(false);
+    AlmanacSection section = transform.GetComponentInParent<AlmanacSection>();
+    if (section == null) return;
+    section.CheckNewArticles();
   }
 }

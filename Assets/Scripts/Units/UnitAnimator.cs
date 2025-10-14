@@ -2,18 +2,24 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 public class UnitAnimator : MonoBehaviour {
+  private Unit unit;
   private Transform model;
   private Animator animator;
   public GameObject fakeMissle;
 
   private void Awake() {
+    unit = transform.GetComponent<Unit>();
     model = transform.Find("Model").transform;
     animator = model.GetComponent<Animator>();
     animator.SetFloat("Speed", transform.GetComponent<Unit>().MoveSpeed / 3.5f);
 
-    if (model == null || animator == null) {
+    if (unit == null || model == null || animator == null) {
       Debug.LogError("Unit animator components initialization error");
     }
+  }
+
+  private void Start() {
+    FocusToPoint();
   }
 
   public void SetMoving(bool active) {
@@ -78,8 +84,25 @@ public class UnitAnimator : MonoBehaviour {
     SetRooted(false);
   }
 
+  private void FocusToPoint() {
+    if (unit.CurrentTile == null) return;
+
+    Tile focusTile = unit.Relation == UnitRelation.Ally
+      ? TileManager.allyFocusTile
+      : TileManager.enemyFocusTile;
+
+    if (focusTile == null) return;
+
+    Vector3 center = unit.CurrentTile.GetPos();
+    Vector3 focusPos = focusTile.GetPos();
+    Vector3 from = new (center.x, 0, center.z);
+    Vector3 to = new (focusPos.x, 0, focusPos.z);
+    Vector3 direction = (to - from).normalized;
+
+    _ = RotateTowards(direction, true);
+  }
+
   public async Task RotateTowards(Vector3 direction, bool immediate = false, float intensity = 720f) {
-    if (direction == Vector3.zero) return;
     direction.y = 0f;
     if (direction == Vector3.zero) return;
     Quaternion targetRotation = Quaternion.LookRotation(direction, Vector3.up);
