@@ -156,6 +156,8 @@ public class MapZoneEvent : MonoBehaviour {
     StateManager.enterScene = SceneManager.GetActiveScene().name;
     StateManager.WriteUnitsData(playerUnits, "allies");
     StateManager.WriteUnitsData(battleZone.guard, "enemies");
+    if (battleZone.reinforcement.Length > 0) StateManager.WriteUnitsData(battleZone.reinforcement, "reinforcement");
+    StateManager.reinforcementRound = battleZone.reinforcementRound;
     StateManager.trapsCount = battleZone.trapsCount;
 
     MapUI.Instance.DisableUI();

@@ -24,6 +24,8 @@ public static class StateManager {
   // Moving between scenes
   public static string enterScene;
   public static UnitData[] enemies;
+  public static UnitData[] reinforcement;
+  public static int reinforcementRound;
   public static int trapsCount;
   public static BattleResult? battleResult;
   public static Reward battleReward;
@@ -58,8 +60,10 @@ public static class StateManager {
   public static void ResetTemp() {
     enterScene = "";
     enemies = null;
+    reinforcement = null;
     battleResult = null;
     battleReward = null;
+    reinforcementRound = 0;
     trapsCount = 0;
   }
 
@@ -97,15 +101,21 @@ public static class StateManager {
   public static void WriteUnitsData(Unit[] units, string to, bool rewrite = true) {
     UnitData[] newUnits = units.Select(u => u.ToData()).ToArray();
 
-    if (rewrite) {
-      if (to == "allies") playerUnits = newUnits;
-      else enemies = newUnits;
-    } else {
-      if (to == "allies") {
-        UnitData[] reserveUnits = playerUnits.Where(u => !u.inSquad).ToArray();
-        playerUnits = newUnits.Concat(reserveUnits).ToArray();
-      }
-      else enemies = newUnits;
+    switch (to) {
+      case "allies":
+        if (rewrite) {
+          playerUnits = newUnits;
+        } else {
+          UnitData[] reserveUnits = playerUnits.Where(u => !u.inSquad).ToArray();
+          playerUnits = newUnits.Concat(reserveUnits).ToArray();
+        }
+        break;
+      case "enemies":
+        enemies = newUnits;
+        break;
+      case "reinforcement":
+        reinforcement = newUnits;
+        break;
     }
   }
 

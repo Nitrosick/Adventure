@@ -17,6 +17,7 @@ public class BattleManager : MonoBehaviour {
   private static List<Tile> enemySpawns;
   private static List<Tile> enemyShooterSpawns;
   private static List<Tile> bossSpawns;
+  private static List<Tile> reinforcementSpawns;
 
   public static BattleResult? battleResult;
   public static Reward Reward { get; private set; }
@@ -75,6 +76,7 @@ public class BattleManager : MonoBehaviour {
     allyShooterSpawns = TileManager.GetSpawns(TileSpawnType.AllyShooter);
     enemyShooterSpawns = TileManager.GetSpawns(TileSpawnType.EnemyShooter);
     bossSpawns = TileManager.GetSpawns(TileSpawnType.Boss);
+    reinforcementSpawns = TileManager.GetSpawns(TileSpawnType.Reinforcement);
   }
 
   private void SpawnUnits(UnitData[] unitsData, List<Tile> spawns, UnitRelation relation) {
@@ -136,7 +138,7 @@ public class BattleManager : MonoBehaviour {
   }
 
   private static void InitSupports() {
-    List<SupportInstance> allySupports = new ();
+    List<SupportInstance> allySupports = new();
 
     foreach (SupportData data in StateManager.playerSupports) {
       Support unit = Factory.CreateSupportById(data.id);
@@ -149,6 +151,21 @@ public class BattleManager : MonoBehaviour {
     // FIXME: Саппорты противника
     SupportController.Init(allySupports);
     BattleUI.Instance.UpdateSupports(allySupports);
+  }
+
+  public void CheckReinforcement(int round) {
+    UnitData[] reinforcement = StateManager.reinforcement;
+    int reinforcementRound = StateManager.reinforcementRound;
+
+    if (
+      reinforcement == null ||
+      reinforcement.Length == 0 ||
+      reinforcementRound == 0 ||
+      reinforcementRound != round
+    ) return;
+
+    _ = Toast.Show("attack", "Reinforcements have arrived!");
+    SpawnUnits(reinforcement, reinforcementSpawns, UnitRelation.Enemy);
   }
 
   public static void Finish() {

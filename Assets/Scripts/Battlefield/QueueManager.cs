@@ -38,6 +38,7 @@ public class QueueManager : MonoBehaviour
       orderNumber = 0;
       Round++;
       SupportController.EveryTurn();
+      BattleManager.Instance.CheckReinforcement(Round);
     } else {
       orderNumber++;
     }
