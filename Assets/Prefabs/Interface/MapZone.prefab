@@ -145,7 +145,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2317399486866075536}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: Pathes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -262,7 +262,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8279243398763067432}
   - component: {fileID: 7926796511741604331}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: Way to _
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -300,6 +300,7 @@ MonoBehaviour:
   waypoints:
   - {x: -10.5, y: 2.5, z: -0.25}
   - {x: -11, y: 2.5, z: -3.5}
+  blocked: 0
 --- !u!1 &7544596540806637864
 GameObject:
   m_ObjectHideFlags: 0
@@ -781,6 +782,9 @@ MonoBehaviour:
   reward:
     experience: 0
     fame: 0
+    reputation: 0
+    statPoints: 0
+    abilityPoints: 0
     goldRange: 0000000000000000
     resources: 00000000000000000000000000000000
     equipment: []

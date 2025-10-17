@@ -229,7 +229,8 @@ public enum MapZoneFeature {
 
 public enum Building {
   Watchtower,
-  Lumbercamp
+  Lumbercamp,
+  StoneBridge
 }
 
 // Quests and achievements

@@ -26,6 +26,7 @@ public class BattleUI : GeneralUI {
   private Image phaseAttackLabel;
   private Image phaseMoveLabel;
   private TextMeshProUGUI currentRound;
+  private TextMeshProUGUI reinforcement;
 
   private Color activeColor;
   private Color inactiveColor;
@@ -42,6 +43,7 @@ public class BattleUI : GeneralUI {
 
     mainMenuButton = Get<Button>(top, "MainMenu/Main");
     currentRound = Get<TextMeshProUGUI>(top, "Round/Value");
+    reinforcement = Get<TextMeshProUGUI>(top, "Round/Reinforcement");
     phaseSkipButton = Get<Button>(actionsPanel, "SkipPhase");
     climbButton = Get<Button>(actionsPanel, "Climb");
     phaseAttackLabel = Get<Image>(actionsPanel, "PhaseAttack");
@@ -50,7 +52,8 @@ public class BattleUI : GeneralUI {
     if (
       queuePanel == null || actionsPanel == null || skillsPanel == null ||
       phaseSkipButton == null || phaseAttackLabel == null || phaseMoveLabel == null ||
-      currentRound == null || climbButton == null || supportsPanel == null
+      currentRound == null || climbButton == null || supportsPanel == null ||
+      reinforcement == null
     ) {
       Debug.LogError("Battle UI components initialization error");
       return;
@@ -61,6 +64,10 @@ public class BattleUI : GeneralUI {
 
     phaseSkipButton.onClick.AddListener(SkipPhase);
     climbButton.onClick.AddListener(Climb);
+  }
+
+  private void Start() {
+    UpdateReinforcementInfo(1);
   }
 
   protected override void OnDestroy() {
@@ -100,6 +107,7 @@ public class BattleUI : GeneralUI {
     foreach (Transform child in queuePanel) Destroy(child.gameObject);
 
     currentRound.text = $"Round {QueueManager.Round}";
+    UpdateReinforcementInfo(QueueManager.Round);
     int count = queue.Count;
 
     for (int i = 0; i < count; i++) {
@@ -179,5 +187,18 @@ public class BattleUI : GeneralUI {
     foreach (Transform child in skillsPanel) {
       child.GetComponent<Button>().interactable = false;
     }
+  }
+
+  public void UpdateReinforcementInfo(int round) {
+    int reinforcementRound = StateManager.reinforcementRound;
+
+    if (reinforcementRound == 0 || round >= reinforcementRound) {
+      reinforcement.gameObject.SetActive(false);
+      return;
+    }
+
+    reinforcement.gameObject.SetActive(true);
+    int delta = reinforcementRound - round;
+    reinforcement.text = $"Reinforcements will arrive in {delta} round{(delta == 1 ? "" : "s")}";
   }
 }

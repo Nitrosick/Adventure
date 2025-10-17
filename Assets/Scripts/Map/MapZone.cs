@@ -55,6 +55,7 @@ public class MapZone : MonoBehaviour {
       else SetCleared();
     }
 
+    InitUnlockedPathes();
     auraRender.material = MapZoneManager.Instance.defaultMaterial;
   }
 
@@ -167,6 +168,22 @@ public class MapZone : MonoBehaviour {
       color.a = 0;
       renderer.material.color = color;
     }
+  }
+
+  private void InitUnlockedPathes() {
+    foreach (Way way in ways) {
+      if (StateManager.unlockedPassages.Contains(way.id) && way.blocked) {
+        way.blocked = false;
+      }
+    }
+  }
+
+  public void UnlockPath(string wayId) {
+    if (wayId == null || ways.Length == 0) return;
+    Way wayById = ways.FirstOrDefault(w => w.id == wayId);
+    if (wayById == null) return;
+    wayById.blocked = false;
+    StateManager.unlockedPassages.Add(wayId);
   }
 
   public void ShowPathLines() {

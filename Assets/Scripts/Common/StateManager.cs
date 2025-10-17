@@ -49,6 +49,7 @@ public static class StateManager {
   public static Dictionary<string, MapZoneData> zonesState;
   public static HashSet<string> collectedZoneLoot;
   public static HashSet<string> unlockedKnowledge;
+  public static HashSet<string> unlockedPassages;
   public static UnitData[] playerUnits;
   public static SupportData[] playerSupports;
   public static QuestData[] quests;
@@ -75,6 +76,7 @@ public static class StateManager {
     currentPlayerZoneId = "6";
     collectedZoneLoot = new HashSet<string> { };
     unlockedKnowledge = new HashSet<string> { };
+    unlockedPassages = new HashSet<string> { };
     gold = 0;
     resources = new int[] { 0, 0, 0, 0 };
     villagers = 0;
@@ -192,6 +194,7 @@ public static class StateManager {
       currentPlayerZoneId = currentPlayerZoneId,
       collectedZoneLoot = collectedZoneLoot,
       unlockedKnowledge = unlockedKnowledge,
+      unlockedPassages = unlockedPassages,
       gold = gold,
       resources = resources,
       villagers = villagers,
@@ -222,6 +225,7 @@ public static class StateManager {
     currentPlayerZoneId = data.currentPlayerZoneId;
     collectedZoneLoot = data.collectedZoneLoot;
     unlockedKnowledge = data.unlockedKnowledge;
+    unlockedPassages = data.unlockedPassages;
     gold = data.gold;
     resources = data.resources;
     villagers = data.villagers;

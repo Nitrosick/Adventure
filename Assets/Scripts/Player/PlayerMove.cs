@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -54,6 +55,11 @@ public class PlayerMove : MonoBehaviour
 
     foreach (var path in pathes) {
       if (path.id == target.id) {
+        if (path.blocked) {
+          _ = Toast.Show("warning", "Passage is blocked");
+          return null;
+        }
+
         return new List<Vector3>(path.waypoints) {
           target.playerPosition
         };

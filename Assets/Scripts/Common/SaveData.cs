@@ -24,6 +24,7 @@ public class SaveData {
 
   public HashSet<string> collectedZoneLoot;
   public HashSet<string> unlockedKnowledge;
+  public HashSet<string> unlockedPassages;
   public Dictionary<string, MapZoneData> zonesState;
   public UnitData[] playerUnits;
   public SupportData[] playerSupports;

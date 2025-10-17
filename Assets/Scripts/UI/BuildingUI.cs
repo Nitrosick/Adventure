@@ -81,8 +81,6 @@ public class BuildingUI : MonoBehaviour {
 
   public static void Close() {
     window.gameObject.SetActive(false);
-
-    mapZone = null;
     notEnoughRes.SetActive(false);
     submit.interactable = true;
 
@@ -229,9 +227,11 @@ public class BuildingUI : MonoBehaviour {
     SceneController.ShowEventInfo("build", "Building");
     await SceneController.Fade(0f, 1f, true);
 
-    MapZone parentZone = mapZone.GetComponent<MapZone>();
-    if (mapZone.building == Building.Watchtower) parentZone.RemoveEvent(MapZoneType.Ambush);
-    parentZone.RemoveEvent(MapZoneType.Constructing);
+    mapZone.Remove();
+    foreach (var item in mapZone.waysUnlock) {
+      item.zone.UnlockPath(item.wayId);
+    }
+    mapZone = null;
 
     await SceneController.Fade(1f, 0f, false);
     SceneController.HideEventInfo();
