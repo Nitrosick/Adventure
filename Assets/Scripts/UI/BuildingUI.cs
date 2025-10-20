@@ -18,9 +18,12 @@ public class BuildingUI : MonoBehaviour {
   private static Image rewardImage;
 
   // Requirements
-  private static TextMeshProUGUI reqPlayerLevel;
-  private static TextMeshProUGUI reqPlayerFame;
-  private static TextMeshProUGUI reqGold;
+  private static GameObject reqPlayerLevel;
+  private static TextMeshProUGUI reqPlayerLevelValue;
+  private static GameObject reqPlayerFame;
+  private static TextMeshProUGUI reqPlayerFameValue;
+  private static GameObject reqGold;
+  private static TextMeshProUGUI reqGoldValue;
   private static Transform requirementSlots;
 
   private static readonly int slotsInRow = 5;
@@ -39,18 +42,17 @@ public class BuildingUI : MonoBehaviour {
     rewardTitle = Get<TextMeshProUGUI>("Reward/Title");
     rewardImage = Get<Image>("Reward/Image/Image");
 
-    reqPlayerLevel = Get<TextMeshProUGUI>("Requirements/PlayerLevel/Value");
-    reqPlayerFame = Get<TextMeshProUGUI>("Requirements/PlayerFame/Value");
-    reqGold = Get<TextMeshProUGUI>("Requirements/Gold/Value");
+    reqPlayerLevel = Find("Requirements/PlayerLevel").gameObject;
+    reqPlayerFame = Find("Requirements/PlayerFame").gameObject;
+    reqGold = Find("Requirements/Gold").gameObject;
+    reqPlayerLevelValue = Get<TextMeshProUGUI>("Requirements/PlayerLevel/Value");
+    reqPlayerFameValue = Get<TextMeshProUGUI>("Requirements/PlayerFame/Value");
+    reqGoldValue = Get<TextMeshProUGUI>("Requirements/Gold/Value");
     requirementSlots = Find("Requirements/Slots");
 
-    if (
-      window == null || submit == null || cancel == null ||
-      notEnoughRes == null || rewardTitle == null || rewardImage == null ||
-      reqPlayerLevel == null || reqPlayerFame == null || reqGold == null ||
-      requirementSlots == null
-    ) {
+    if (!ComponentsInitialized()) {
       Debug.LogError("Building UI components initialization error");
+      return;
     }
 
     submit.onClick.AddListener(OnSubmit);
@@ -60,6 +62,14 @@ public class BuildingUI : MonoBehaviour {
   private void OnDestroy() {
     submit.onClick.RemoveListener(OnSubmit);
     cancel.onClick.RemoveListener(Close);
+  }
+
+  private bool ComponentsInitialized() {
+    return new object[] {
+      window, submit, cancel, notEnoughRes, rewardTitle,
+      rewardImage, reqPlayerLevelValue, reqPlayerFameValue, reqGoldValue, requirementSlots,
+      reqPlayerLevel, reqPlayerFame, reqGold
+    }.All(x => x != null);
   }
 
   public static void Open(MapZoneBuilding zone) {
@@ -85,9 +95,9 @@ public class BuildingUI : MonoBehaviour {
     submit.interactable = true;
 
     rewardTitle.text = "";
-    reqPlayerLevel.text = "-";
-    reqPlayerFame.text = "-";
-    reqGold.text = "-";
+    reqPlayerLevelValue.text = "-";
+    reqPlayerFameValue.text = "-";
+    reqGoldValue.text = "-";
 
     ClearSlots();
     SceneController.CloseWindow("building");
@@ -98,11 +108,14 @@ public class BuildingUI : MonoBehaviour {
   }
 
   private static void ShowRequirements() {
-    rewardTitle.text = mapZone.building.ToString();
+    rewardTitle.text = Utils.SplitPascalCase(mapZone.building.ToString());
     Requirements req = mapZone.requirements;
-    if (req.playerLevel > 0) reqPlayerLevel.text = req.playerLevel.ToString();
-    if (req.playerFame > 0) reqPlayerFame.text = req.playerFame.ToString();
-    if (req.gold > 0) reqGold.text = req.gold.ToString();
+    reqPlayerLevel.SetActive(req.playerLevel > 0);
+    if (req.playerLevel > 0) reqPlayerLevelValue.text = req.playerLevel.ToString();
+    reqPlayerFame.SetActive(req.playerFame > 0);
+    if (req.playerFame > 0) reqPlayerFameValue.text = req.playerFame.ToString();
+    reqGold.SetActive(req.gold > 0);
+    if (req.gold > 0) reqGoldValue.text = req.gold.ToString();
   }
 
   private static void RenderSlots() {

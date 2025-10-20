@@ -170,6 +170,18 @@ public class Player : MonoBehaviour {
     _ = Toast.Show("warning", "You have too many villagers");
   }
 
+  public void WinStreakUp() {
+    StateManager.currentWinStreak++;
+    StateManager.totalWinStreak++;
+    if (StateManager.currentWinStreak >= 3) MapUI.Instance.ShowStatus("canRest");
+  }
+
+  public void ResetWinStreak() {
+    StateManager.currentWinStreak = 0;
+    StateManager.totalWinStreak = 0;
+    MapUI.Instance.HideStatus("canRest");
+  }
+
   private void GetStateData() {
     // FIXME: Перенос данных между локациями
     AbilityController.Init();
@@ -203,6 +215,7 @@ public class Player : MonoBehaviour {
 
         switch (result) {
           case BattleResult.Victory:
+            WinStreakUp();
             Reward reward = StateManager.battleReward;
             if (reward != null) {
               reward.Add(fixedReward);
@@ -212,6 +225,7 @@ public class Player : MonoBehaviour {
             break;
           case BattleResult.Defeat:
           case BattleResult.Retreat:
+            ResetWinStreak();
             Move.SetPlayerPosition(Move.startZone);
             SetFame(fixedReward.fame / 2 * -1);
             break;

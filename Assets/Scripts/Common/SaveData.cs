@@ -19,6 +19,8 @@ public class SaveData {
   public int statPoints;
   public int abilityPoints;
   public int supportSlots;
+  public int currentWinStreak;
+  public int totalWinStreak;
   public string[] inventoryEquipmentIds;
   public string[] inventoryItemIds;
 

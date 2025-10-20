@@ -45,6 +45,8 @@ public static class StateManager {
   public static int statPoints;
   public static int abilityPoints;
   public static int supportSlots;
+  public static int currentWinStreak;
+  public static int totalWinStreak;
 
   public static Dictionary<string, MapZoneData> zonesState;
   public static HashSet<string> collectedZoneLoot;
@@ -88,6 +90,8 @@ public static class StateManager {
     statPoints = 0;
     abilityPoints = 0;
     supportSlots = 1;
+    currentWinStreak = 0;
+    totalWinStreak = 0;
 
     zonesState = new Dictionary<string, MapZoneData> { };
     playerUnits = new UnitData[] { };
@@ -206,6 +210,8 @@ public static class StateManager {
       statPoints = statPoints,
       abilityPoints = abilityPoints,
       supportSlots = supportSlots,
+      currentWinStreak = currentWinStreak,
+      totalWinStreak = totalWinStreak,
       zonesState = zonesState,
       playerUnits = playerUnits,
       quests = quests,
@@ -237,6 +243,8 @@ public static class StateManager {
     statPoints = data.statPoints;
     abilityPoints = data.abilityPoints;
     supportSlots = data.supportSlots;
+    currentWinStreak = data.currentWinStreak;
+    totalWinStreak = data.totalWinStreak;
     zonesState = data.zonesState;
     playerUnits = data.playerUnits;
     playerSupports = data.playerSupports;

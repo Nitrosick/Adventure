@@ -71,15 +71,18 @@ public class UnitHealth : MonoBehaviour {
   public void Heal(float _value, bool inBattle = true) {
     if (unit.CurrentHealth == GetMaxHP()) return;
     float value = _value;
-    if (inBattle && unit.Relation == UnitRelation.Ally) value *= AbilityController.HealBonus();
-    unit.CurrentHealth += value;
-    if (unit.CurrentHealth > GetMaxHP()) unit.CurrentHealth = GetMaxHP();
+
+    if (value != -1) {
+      if (inBattle && unit.Relation == UnitRelation.Ally) value *= AbilityController.HealBonus();
+      unit.CurrentHealth += value;
+      if (unit.CurrentHealth > GetMaxHP()) unit.CurrentHealth = GetMaxHP();
+    }
+    else unit.CurrentHealth = GetMaxHP();
 
     if (!inBattle) {
       Player.Instance.Army.UpdateState();
-    }
-    else {
-      unit.Ui.ShowPopup(value.ToString(), PopupType.Positive);
+    } else {
+      if (value > 0) unit.Ui.ShowPopup(value.ToString(), PopupType.Positive);
       unit.Ui.UpdateHealth(GetMaxHP(), unit.CurrentHealth);
       if (BattleManager.Instance.healEffect != null) {
         ParticleSystem effect = Instantiate(

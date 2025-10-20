@@ -40,6 +40,9 @@ public class MapUI : GeneralUI {
   private TextMeshProUGUI totalPeopleValue;
   private TextMeshProUGUI location;
 
+  // Statuses
+  private GameObject canRest;
+
   public string[] resTooltips = { "Wood", "Stone", "Metal", "Leather" };
   public Dictionary<MasteryLevel, Color> palette = new();
 
@@ -54,6 +57,7 @@ public class MapUI : GeneralUI {
     Transform mainMenu = top.Find("MainMenu");
     Transform resources = top.Find("Resources");
     Transform actions = transform.Find("Actions");
+    Transform statuses = transform.Find("Top/Statuses");
 
     zoneInfoPanel = infoPanel.gameObject;
     zoneInfoTitle = Get<TextMeshProUGUI>(infoPanel, "Title");
@@ -81,6 +85,8 @@ public class MapUI : GeneralUI {
     totalPeopleValue = Get<TextMeshProUGUI>(resources, "TotalPeople/Value");
     location = Get<TextMeshProUGUI>(resources, "Location");
 
+    canRest = Find(statuses, "CanRest");
+
     if (!ComponentsInitialized()) {
       Debug.LogError("Map UI components initialization error");
       return;
@@ -88,6 +94,7 @@ public class MapUI : GeneralUI {
 
     palette = Utils.GetMasteryPalette();
     playerMenuButton.onClick.AddListener(SwitchPlayerMenu);
+    if (StateManager.currentWinStreak >= 3) ShowStatus("canRest");
     EnableUI();
   }
 
@@ -97,7 +104,7 @@ public class MapUI : GeneralUI {
       goldValue,  woodValue, stoneValue, metalValue,  villagersValue,
       leatherValue, zoneInfoBattleMark,  zoneInfoClearedMark, zoneInfoRecruitMark, interactButton,
       location, interactButtonIcon, interactButtonText,  totalPeopleValue, zoneInfoCollectMark,
-      zoneInfoRespawnMark, zoneInfoGuardMark
+      zoneInfoRespawnMark, zoneInfoGuardMark, canRest
     }.All(x => x != null);
   }
 
@@ -228,5 +235,26 @@ public class MapUI : GeneralUI {
 
   public void UpdateLocation(string value) {
     location.text = value;
+  }
+
+  public void ShowStatus(string status) {
+    switch (status) {
+      case "canRest":
+        canRest.SetActive(true);
+        break;
+    }
+  }
+
+  public void HideStatus(string status = "") {
+    if (status == "") {
+      canRest.SetActive(false);
+      // FIXME: Отключать все статусы
+    }
+
+    switch (status) {
+      case "canRest":
+        canRest.SetActive(false);
+        break;
+    }
   }
 }

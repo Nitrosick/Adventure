@@ -79,6 +79,13 @@ public class MapZoneEvent : MonoBehaviour {
           "Collect"
         );
         break;
+      case MapZoneType.Rest:
+        MapUI.Instance.ShowInteractableButton(
+          Get<MapZoneRest>().OpenRestDialog,
+          "rest",
+          "Rest"
+        );
+        break;
     }
   }
 
