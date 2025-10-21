@@ -144,33 +144,7 @@ public static class PlayerMenuUIActions {
   public static void UseItem() {
     Item item = PlayerMenuUI.selectedItem;
     if (item == null) return;
-
-    if (item is MedicineItem medItem) {
-      Unit[] woundedUnits = Player.Instance.Army.Units
-        .Where(u => u.CurrentHealth > 0 && u.CurrentHealth < u.Health.GetMaxHP())
-        .ToArray();
-
-      if (woundedUnits.Length == 0) {
-        _ = Toast.Show("warning", "No wounded units");
-        return;
-      }
-
-      foreach (Unit unit in woundedUnits) unit.Health.Heal(medItem.intensity);
-      _ = Toast.Show("success", "Units are cured");
-    }
-    else if (item is LevelingItem levItem) {
-      Unit[] units = Player.Instance.Army.Units
-        .Where(u => u.Type == levItem.unitType && u.Level < levItem.maxLevel && u.Level < u.MaxLevel)
-        .ToArray();
-
-      if (units.Length == 0) {
-        _ = Toast.Show("warning", "No suitable units");
-        return;
-      }
-
-      foreach (Unit unit in units) unit.LevelUp((int)levItem.effectValue);
-      _ = Toast.Show("success", "Unit levels increased");
-    }
+    item.Use();
 
     if (item.disposable) {
       Player.Instance.Inventory.RemoveItem(item);

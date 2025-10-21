@@ -15,4 +15,6 @@ public abstract class Item : ScriptableObject {
   public int GetPrice() {
     return (int)Math.Round(price * AbilityController.PriceBonus());
   }
+
+  public virtual void Use() {}
 }

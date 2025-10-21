@@ -216,7 +216,8 @@ public enum MapZoneType {
   Quest,
   Collecting,
   Task,
-  Rest
+  Rest,
+  Excavation
 }
 
 public enum MapZoneFeature {

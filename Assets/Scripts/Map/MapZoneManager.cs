@@ -127,8 +127,9 @@ public class MapZoneManager : MonoBehaviour {
       MapZoneCollecting collecting = zone.GetComponent<MapZoneCollecting>();
       collecting.CollectedAt = state[zone.id].collectedAt;
 
-      if (collecting.CollectedAt > 0 && StateManager.globalTicks < collecting.CollectedAt + collecting.respawn) {
-        zone.SwitchIcon(false);
+      if (collecting.CollectedAt > 0) {
+        zone.SwitchInteractiveObjects();
+        if (StateManager.globalTicks < collecting.CollectedAt + collecting.respawn) zone.SwitchIcon(false);
       } else {
         zone.SwitchIcon(true);
       }

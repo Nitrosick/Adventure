@@ -90,7 +90,7 @@ public class MapZone : MonoBehaviour {
     SwitchInteractiveObjects();
   }
 
-  private void SwitchInteractiveObjects() {
+  public void SwitchInteractiveObjects() {
     if (interactiveObjects != null && interactiveObjects.Length > 0) {
       foreach (GameObject obj in interactiveObjects) {
         obj.SetActive(!obj.activeSelf);
