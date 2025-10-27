@@ -15,6 +15,10 @@ public class UnitTrigger : MonoBehaviour {
     unit.DealDamage();
   }
 
+  private void TriggerChargedAttack() {
+    unit.DealDamage(true);
+  }
+
   private void TriggerShoot() {
     unit.Shoot();
   }

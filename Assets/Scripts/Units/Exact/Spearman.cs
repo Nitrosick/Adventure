@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class Spearman : Unit {
+public class Spearman : UnitCombat {
   private readonly float delayAfterAttack = 1.2f;
 
   private Spearman() {
@@ -26,7 +26,7 @@ public class Spearman : Unit {
     BehaviorType = AIBehaviorType.TryPierceHit;
   }
 
-  public override async void DealDamage() {
+  public override async void DealDamage(bool charged = false) {
     if (successAttack) {
       int obstacleLayer = LayerMask.NameToLayer("Obstacle");
       int unitLayer = LayerMask.NameToLayer("Unit");
@@ -43,8 +43,8 @@ public class Spearman : Unit {
         }
 
         if (go.layer == unitLayer && !DamageBlocked() && go.TryGetComponent<Unit>(out var unit)) {
-          float critModifier = Calculate.CritModifier(this, unit);
-          float damage = Calculate.Damage(this, unit);
+          float critModifier = Calculate.CritModifier(this, unit, charged);
+          float damage = Calculate.Damage(this, unit, charged);
           List<Effect> effects = Calculate.ItemEffects(this, unit);
           foreach (Effect effect in effects) unit.Effects.ApplyEffect(effect);
           unit.Health.TakeDamage(damage, critModifier, false, true);

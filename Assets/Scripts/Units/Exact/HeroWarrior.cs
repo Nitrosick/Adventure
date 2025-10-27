@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class HeroWarrior : Unit {
+public class HeroWarrior : UnitCombat {
   private HeroWarrior() {
     Strength = 5;
     Dexterity = 1;

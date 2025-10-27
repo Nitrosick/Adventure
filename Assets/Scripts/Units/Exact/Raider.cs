@@ -1,4 +1,4 @@
-public class Raider : Unit
+public class Raider : UnitCombat
 {
   private Raider() {
     Strength = 4;
@@ -13,6 +13,7 @@ public class Raider : Unit
     Level = 3;
     MaxLevel = 7;
     LevelingCoreStat = CoreStat.Strength;
+    ShieldIsAllow = true;
     TotalHealth = 30f;
     MoveSpeed = 3f;
     DefaultMovePoints = 5;

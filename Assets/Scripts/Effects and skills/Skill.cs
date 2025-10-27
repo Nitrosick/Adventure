@@ -15,11 +15,18 @@ public class Skill : ScriptableObject {
   public Sprite uiIcon;
   public Color uiIconColor;
 
-  public void Apply(Unit unit) {
+  public void Trigger(Unit unit, Image icon) {
+    ColorUtility.TryParseHtmlString("#4B4A47", out var defaultColor);
+    ColorUtility.TryParseHtmlString("#EFBF0D", out var activeColor);
+
     switch (skillName) {
       case SkillName.Block:
       case SkillName.Wall:
         unit.BlockStance(skillName);
+        break;
+      case SkillName.ChargedAttack:
+        unit.IsChargedAttack = !unit.IsChargedAttack;
+        icon.color = unit.IsChargedAttack ? activeColor : defaultColor;
         break;
     }
   }

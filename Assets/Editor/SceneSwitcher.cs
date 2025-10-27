@@ -19,7 +19,7 @@ public static class SceneSwitcher
   }
 
   [MenuItem("Scenes/Open Last Battle Scene %#&2")] // Ctrl+Shift+Alt+2
-  public static void OpenSceneBF6() {
-    EditorSceneManager.OpenScene("Assets/Scenes/Battlefield/bf6.unity");
+  public static void OpenSceneBF7() {
+    EditorSceneManager.OpenScene("Assets/Scenes/Battlefield/bf7.unity");
   }
 }

@@ -13,7 +13,7 @@ public static class Calculate {
   private static readonly float distanceFinePerUnit = 4f;
   private static readonly float attackPointOffset = 0.75f;
 
-  public static float HitChance(Unit attacker, Unit target) {
+  public static float HitChance(Unit attacker, Unit target, bool charged = false) {
     if (target.Effects.HasAnyEffect(new string[] { "Block", "Wall", "Root" })) return 100f;
 
     float result = attacker.Equip.primary.precision;
@@ -46,10 +46,13 @@ public static class Calculate {
     float disDelta = distance - noFineDistance;
     if (disDelta > 0) result -= disDelta * distanceFinePerUnit;
 
+    // Skills
+    if (charged) result -= attacker.Equip.primary.chargedAttackParams.hitChancePenalty;
+
     return result < minHitChance ? minHitChance : result;
   }
 
-  public static float CritModifier(Unit attacker, Unit target) {
+  public static float CritModifier(Unit attacker, Unit target, bool charged = false) {
     float multiplier = 1f;
     float chance = defaultCritChance;
 
@@ -60,13 +63,20 @@ public static class Calculate {
     // Player abilities
     if (attacker.IsHero) chance += AbilityController.CritChanceBonus();
 
+    // Skills
+    var chargeParams = attacker.Equip.primary.chargedAttackParams;
+    if (charged) chance += chargeParams.critBonus;
+
     bool success = Utils.RollChance(chance);
-    if (success) multiplier = attacker.Equip.primary.critModifier;
+    if (success) {
+      multiplier = attacker.Equip.primary.critModifier;
+      multiplier += chargeParams.critBonus / 100;
+    }
 
     return multiplier;
   }
 
-  public static float Damage(Unit attacker, Unit target) {
+  public static float Damage(Unit attacker, Unit target, bool charged = false) {
     Weapon attackerWeapon = attacker.Equip.primary;
     Armor targetArmor = target.Equip.armor;
 
@@ -102,6 +112,9 @@ public static class Calculate {
       }
     }
     total /= blockMultiplier;
+
+    // Skills
+    if (charged) total *= 1f + (attacker.Equip.primary.chargedAttackParams.damageBonus / 100);
 
     return total < minDamage ? minDamage : total;
   }

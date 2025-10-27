@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class UnitEffects : MonoBehaviour {
   private Unit unit;
+  public List<Skill> innateSkills = new();
   public List<EffectInstance> ActiveEffects { get; private set; } = new();
 
   private void Awake() {

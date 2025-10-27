@@ -2,7 +2,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class Poacher : Unit {
+public class Poacher : UnitCombat {
   private Poacher() {
     Strength = 2;
     Dexterity = 4;

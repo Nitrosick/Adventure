@@ -1,4 +1,4 @@
-public class Militia : Unit
+public class Militia : UnitCombat
 {
   private Militia() {
     Strength = 4;

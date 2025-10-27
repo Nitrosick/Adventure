@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d4c8731ffc4b514c9477d47614d825b, type: 3}
+  m_Name: Charged attack
+  m_EditorClassIdentifier: 
+  displayName: Charged attack
+  description: 'Unit performs a powerful sweeping attack instead of a regular one,
+    consuming skill charges.
+
+    The charged attack is easier to dodge, but it deals
+    significantly more damage and has a higher critical chance.'
+  isActive: 1
+  canUseInRoot: 0
+  activateChance: 100
+  skillName: 4
+  skillButton: {fileID: 7219696775182885065, guid: b9e5101fe28075e48b9c607054400469,
+    type: 3}
+  skillPhases: 01000000
+  uiIcon: {fileID: 21300000, guid: d63969bfa4b25754793fdff28e387084, type: 3}
+  uiIconColor: {r: 0.7718939, g: 0.9245283, b: 0.9108326, a: 1}

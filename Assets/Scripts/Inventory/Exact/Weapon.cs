@@ -1,4 +1,12 @@
+using System;
 using UnityEngine;
+
+[Serializable]
+public class ChargedAttackParams {
+  public float hitChancePenalty;
+  public float damageBonus;
+  public float critBonus;
+}
 
 [CreateAssetMenu(menuName = "GameObjects/Equipment/Weapon")]
 public class Weapon : Equipment {
@@ -13,4 +21,5 @@ public class Weapon : Equipment {
   public DamageType damageType;
   public ShotTrajectory trajectory;
   public CoreStat[] scalingStats;
+  public ChargedAttackParams chargedAttackParams;
 }

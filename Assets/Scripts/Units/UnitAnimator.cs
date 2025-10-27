@@ -50,6 +50,10 @@ public class UnitAnimator : MonoBehaviour {
     animator.SetTrigger("Attack");
   }
 
+  public void ChargedAttack() {
+    animator.SetTrigger("ChargedAttack");
+  }
+
   public void TakeDamage() {
     animator.SetTrigger("Damage");
   }

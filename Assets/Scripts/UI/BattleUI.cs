@@ -178,7 +178,8 @@ public class BattleUI : GeneralUI {
 
     foreach (Skill skill in filtered) {
       Button button = Instantiate(skill.skillButton, skillsPanel);
-      button.onClick.AddListener(() => skill.Apply(unit));
+      Image icon = button.transform.Find("Icon").GetComponent<Image>();
+      button.onClick.AddListener(() => skill.Trigger(unit, icon));
       if (unit.SkillCharges <= 0) button.interactable = false;
     }
   }

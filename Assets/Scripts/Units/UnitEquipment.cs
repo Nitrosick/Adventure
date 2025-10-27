@@ -223,8 +223,9 @@ public class UnitEquipment : MonoBehaviour {
 
   private List<Skill> GetSkills(bool active) {
     return new[] { primary, secondary, armor, additional }
-      .Where(e => e != null && e.skills != null && e.skills.Length > 0)
+      .Where(e => e != null && e.skills != null)
       .SelectMany(e => e.skills)
+      .Concat(unit.Effects.innateSkills)
       .Where(s => s != null && s.isActive == active)
       .ToList();
   }
@@ -232,6 +233,8 @@ public class UnitEquipment : MonoBehaviour {
   public bool HasAttackPhaseSkills() {
     if (unit.SkillCharges == 0) return false;
     foreach (Skill skill in GetActiveSkills()) {
+      // FIXME: Может сломаться проверка, если использовать не в PhaseManager
+      if (skill.skillName == SkillName.ChargedAttack) continue;
       if (unit.Effects.HasAnyEffect(new string[] { "Stun", "Root" }) && !skill.canUseInRoot) continue;
       if (skill.skillPhases.Contains(BattlePhase.Attack)) return true;
     }

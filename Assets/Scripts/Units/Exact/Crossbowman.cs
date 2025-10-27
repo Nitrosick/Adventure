@@ -2,7 +2,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class Crossbowman : Unit
+public class Crossbowman : UnitCombat
 {
   private Crossbowman() {
     Strength = 3;

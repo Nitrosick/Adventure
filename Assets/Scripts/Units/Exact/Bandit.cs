@@ -1,4 +1,4 @@
-public class Bandit : Unit
+public class Bandit : UnitCombat
 {
   private Bandit() {
     Strength = 4;

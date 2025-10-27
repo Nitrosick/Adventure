@@ -263,7 +263,8 @@ public enum SkillName {
   Block,
   Parry,
   Wall,
-  Comfort
+  Comfort,
+  ChargedAttack
 }
 
 public enum AbilityLevel {
