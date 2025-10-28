@@ -122,4 +122,15 @@ public class UnitCombat : Unit {
     CurrentProjectiles -= 1;
     if (CurrentProjectiles == 0) BehaviorType = AIBehaviorType.Retreat;
   }
+
+  public override void BlockStance(SkillName type) {
+    Effect effect = Resources.Load<Effect>("Effects/" + type.ToString());
+    if (effect == null) return;
+    Effects.ApplyEffect(effect);
+    Animator.SetBlocking(true);
+    SkillCharges -= 1;
+    if (SkillCharges <= 0) BattleUI.Instance.DisableSkills();
+    if (Equip.GetActiveSkills().Count > 0) Ui.UpdateCharges(TotalSkillCharges, SkillCharges);
+    FinishAction();
+  }
 }

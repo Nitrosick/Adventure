@@ -45,6 +45,7 @@ public class PlayerMenuUIInfo : MonoBehaviour {
   private static TextMeshProUGUI unitDefense;
   private static TextMeshProUGUI unitRange;
   private static TextMeshProUGUI unitProjectiles;
+  private static Transform unitSkills;
   private static GameObject equipRequirements;
   private static TextMeshProUGUI equipRequiredStats;
   private static TextMeshProUGUI equipRequiredLevel;
@@ -116,6 +117,7 @@ public class PlayerMenuUIInfo : MonoBehaviour {
     unitDefense = Find<TextMeshProUGUI>("UnitParameters/Defense/Value");
     unitRange = Find<TextMeshProUGUI>("UnitParameters/Range/Value");
     unitProjectiles = Find<TextMeshProUGUI>("UnitParameters/Projectiles/Value");
+    unitSkills = Find<Transform>("UnitParameters/Skills/List");
 
     equipRequirements = FindGO("EquipRequirements");
     equipRequiredStats = Find<TextMeshProUGUI>("EquipRequirements/Stats/Value");
@@ -172,7 +174,8 @@ public class PlayerMenuUIInfo : MonoBehaviour {
       equipmentSecondary, equipRequirements, equipRequiredStats, equipRequiredLevel, statPoints,
       strengthUp, dexterityUp, intelligenceUp, statPointsRow, deathMark,
       itemActions, useItem, itemParams, itemEffectValue, unitProjectiles,
-      equipmentAdditional, abilityPointsRow, abilityPoints, levelingItemParams, levelingItemEffectValue
+      equipmentAdditional, abilityPointsRow, abilityPoints, levelingItemParams, levelingItemEffectValue,
+      unitSkills
     }.All(x => x != null);
   }
 
@@ -211,6 +214,7 @@ public class PlayerMenuUIInfo : MonoBehaviour {
     levelingItemParams.SetActive(false);
 
     foreach (Transform child in avatar) Destroy(child.gameObject);
+    foreach (Transform child in unitSkills) Destroy(child.gameObject);
     foreach (Transform child in equipEffects) Destroy(child.gameObject);
     foreach (Transform child in equipSkills) Destroy(child.gameObject);
   }
@@ -269,6 +273,19 @@ public class PlayerMenuUIInfo : MonoBehaviour {
     if (unit.Projectiles == 0) unitProjectiles.text = "-";
     else if (unit.Projectiles == unit.CurrentProjectiles) unitProjectiles.text = unit.Projectiles.ToString();
     else unitProjectiles.text = $"{unit.CurrentProjectiles} / {unit.Projectiles}";
+
+    if (unit.Effects.innateSkills != null) {
+      foreach (Skill s in unit.Effects.innateSkills) {
+        GameObject skillObj = Instantiate(PlayerMenuUI.Instance.effectIcon, unitSkills);
+        if (skillObj.TryGetComponent<Image>(out var img)) {
+          img.sprite = s.uiIcon;
+          img.color = s.uiIconColor;
+        }
+        if (skillObj.TryGetComponent<TooltipTrigger>(out var tip)) {
+          tip.message = $"<b>{s.displayName}</b>\n{s.description}";
+        }
+      }
+    }
   }
 
   public static void ShowInfo(SupportInstance unit) {

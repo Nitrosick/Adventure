@@ -17,11 +17,19 @@ public static class BattleAI {
   private static readonly float threatPenalty = 1.5f;
   private static readonly float allyHitPenalty = 10.0f;
 
-  public static void EnemyMove(Unit unit) {
+  public static void Init(Unit unit) {
     enemy = unit;
     enemyMove = enemy.GetComponent<UnitMove>();
     enemyTile = enemy.CurrentTile;
     playerUnits = GetPlayerUnits();
+
+    if (enemy == null || enemyMove == null || enemyTile == null || playerUnits.Count == 0) {
+      Debug.LogError("Unit AI initialization error");
+    }
+  }
+
+  public static void EnemyMove() {
+    MovePhaseSkills();
 
     switch (enemy.BehaviorType) {
       case AIBehaviorType.Aggressive:
@@ -148,8 +156,7 @@ public static class BattleAI {
     float dist = Pathfinding.GetCost(from, target.CurrentTile, AttackRange);
     if (dist <= AttackRange && LineOfSightClear(from.GetPos(), target.CurrentTile.GetPos())) {
       enemy.Target = target;
-    }
-    else {
+    } else {
       enemy.Target = null;
     }
   }
@@ -328,5 +335,51 @@ public static class BattleAI {
     }
 
     MoveToClosestEnemy();
+  }
+
+  // Active skills
+  public static void AttackPhaseSkills() {
+    List<Skill> skills = enemy.Equip.GetActiveSkills()
+      .Where(s => s.skillPhases.Contains(BattlePhase.Attack))
+      .ToList();
+
+    Unit target = enemy.Target;
+    bool skip = true;
+
+    if (enemy.SkillCharges > 0) {
+      foreach (Skill skill in skills) {
+        switch (skill.skillName) {
+          case SkillName.ChargedAttack:
+            if (
+              target != null &&
+              (target.CurrentHealth < target.Health.GetMaxHP() ||
+              target.Effects.HasAnyEffect(new string[] { "Stun", "Root" }))
+            ) {
+              skip = false;
+              enemy.IsChargedAttack = true;
+            }
+            break;
+          case SkillName.Block:
+          case SkillName.Wall:
+            if (target == null) {
+              skip = false;
+              enemy.BlockStance(skill.skillName);
+            }
+            break;
+        }
+      }
+    }
+
+    if (target != null) enemy.OnAttack();
+    else if (skip) PhaseManager.NextPhase();
+  }
+
+  private static void MovePhaseSkills() {
+    // if (enemy.SkillCharges == 0) return;
+
+    // List<Skill> skills = enemy.Equip.GetActiveSkills()
+    //   .Where(s => s.skillPhases.Contains(BattlePhase.Movement))
+    //   .ToList();
+    // if (skills.Count == 0) return;
   }
 }

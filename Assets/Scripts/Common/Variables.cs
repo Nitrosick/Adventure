@@ -57,8 +57,7 @@ using Newtonsoft.Json.Converters;
 // Battle
 public enum BattlePhase {
   Movement,
-  Attack,
-  Ability
+  Attack
 }
 
 public enum BattleResult {

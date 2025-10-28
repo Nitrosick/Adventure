@@ -66,6 +66,7 @@ public class Unit : MonoBehaviour {
   protected void Awake() {
     Health = transform.GetComponent<UnitHealth>();
     Equip = transform.GetComponent<UnitEquipment>();
+    Effects = transform.GetComponent<UnitEffects>();
   }
 
   private void OnDestroy() {
@@ -80,7 +81,7 @@ public class Unit : MonoBehaviour {
     Move = transform.GetComponent<UnitMove>();
     Ui = transform.GetComponent<UnitUI>();
     Animator = transform.GetComponent<UnitAnimator>();
-    Effects = transform.GetComponent<UnitEffects>();
+
     SetMovePoints();
     SetProjectiles();
 

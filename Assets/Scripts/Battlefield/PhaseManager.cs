@@ -51,11 +51,16 @@ public class PhaseManager : MonoBehaviour
   private static void PhaseActions() {
     Unit unit = QueueManager.CurrentUnit;
     List<Skill> skills = unit.Equip.GetActiveSkills();
-    if (unit.Relation != UnitRelation.Enemy) BattleUI.Instance.ShowSkills(skills, CurrentPhase, unit);
+
+    if (unit.Relation != UnitRelation.Enemy) {
+      BattleUI.Instance.ShowSkills(skills, CurrentPhase, unit);
+    } else {
+      BattleAI.Init(unit);
+    }
 
     switch (CurrentPhase) {
       case BattlePhase.Movement:
-        if (unit.Relation == UnitRelation.Enemy) BattleAI.EnemyMove(unit);
+        if (unit.Relation == UnitRelation.Enemy) BattleAI.EnemyMove();
         break;
 
       case BattlePhase.Attack:
@@ -65,15 +70,14 @@ public class PhaseManager : MonoBehaviour
         }
 
         if (unit.Type == UnitType.Range && unit.CurrentProjectiles == 0) {
-          // FIXME: Проверка на возможность использовать скиллы
+          // FIXME: Проверка на возможность использовать скиллы у лучников
           if (unit.Relation == UnitRelation.Ally) _ = Toast.Show("warning", "No projectiles");
           NextPhase();
           return;
         }
 
         if (unit.Relation == UnitRelation.Enemy) {
-          if (unit.Target != null) unit.OnAttack();
-          else NextPhase();
+          BattleAI.AttackPhaseSkills();
         } else {
           int targets = TileManager.ShowAttackGrid(unit);
           // FIXME: Сделать проверку для юнитов, которые могут атаковать по площади

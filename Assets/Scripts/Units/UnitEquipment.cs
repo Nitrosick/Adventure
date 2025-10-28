@@ -41,8 +41,11 @@ public class UnitEquipment : MonoBehaviour {
         set.gameObject.SetActive(true);
         if (beard != null) beard.gameObject.SetActive(!armor.hideBeard);
         if (hair != null) hair.gameObject.SetActive(!armor.hideHair);
+        if (set.cape != null) set.cape.SetActive(true);
+      } else {
+        set.gameObject.SetActive(false);
+        if (set.cape != null) set.cape.SetActive(false);
       }
-      else set.gameObject.SetActive(false);
     }
 
     foreach (Transform item in rightHand) {

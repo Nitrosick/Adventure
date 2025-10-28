@@ -30,7 +30,10 @@ public class QueueManager : MonoBehaviour
     CurrentUnit.Ui.MarkAsActive();
     FocusOnUnit();
 
-    if (CurrentUnit.Relation == UnitRelation.Enemy) BattleAI.EnemyMove(CurrentUnit);
+    if (CurrentUnit.Relation == UnitRelation.Enemy) {
+      BattleAI.Init(CurrentUnit);
+      BattleAI.EnemyMove();
+    }
   }
 
   public static void NextUnit() {
