@@ -45,6 +45,16 @@ public static class Factory {
     return Load<Ability>(GetPath(id));
   }
 
+  public static Effect CreateEffectById(string id) {
+    return Load<Effect>(GetPath(id));
+  }
+
+  // public static Effect CreateEffectByName(string name) {
+  //   Effect asset = Resources.Load<Effect>("Effects/" + name);
+  //   if (asset == null) Debug.LogError("Failed to load resource");
+  //   return asset;
+  // }
+
   private static string GetPath(string id) {
     if (string.IsNullOrEmpty(id)) return null;
     if (id.StartsWith("aa")) return "Knowledge/" + id;
@@ -56,6 +66,7 @@ public static class Factory {
       id.StartsWith("g") || id.StartsWith("t")
     ) return "Misc/" + id;
     if (id.StartsWith("a") || id.StartsWith("s")) return "Armor/" + id;
+    if (id.StartsWith("e")) return "Effects/" + id;
     if (id.StartsWith("q")) return "Quests/" + id;
     if (id.StartsWith("w")) return "Weapon/" + id;
     Debug.LogError($"Unknown equipment id: {id}");

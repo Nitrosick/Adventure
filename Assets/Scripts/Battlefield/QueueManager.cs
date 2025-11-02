@@ -21,19 +21,24 @@ public class QueueManager : MonoBehaviour
       return;
     }
 
-    Queue.Sort((a, b) => b.GetInitiative().CompareTo(a.GetInitiative()));
+    SortQueue();
     orderNumber = 0;
     CurrentUnit = Queue[0];
-    BattleUI.Instance.UpdateQueue(Queue);
-    List<Skill> skills = CurrentUnit.Equip.GetActiveSkills();
-    if (CurrentUnit.Relation != UnitRelation.Enemy) BattleUI.Instance.ShowSkills(skills, PhaseManager.CurrentPhase, CurrentUnit);
-    CurrentUnit.Ui.MarkAsActive();
     FocusOnUnit();
+    BattleUI.Instance.UpdateQueue(Queue);
 
     if (CurrentUnit.Relation == UnitRelation.Enemy) {
       BattleAI.Init(CurrentUnit);
       BattleAI.EnemyMove();
+    } else {
+      List<Skill> skills = CurrentUnit.Equip.GetActiveSkills();
+      BattleUI.Instance.ShowSkills(skills, PhaseManager.CurrentPhase, CurrentUnit);
+      CurrentUnit.Ui.MarkAsActive();
     }
+  }
+
+  public static void SortQueue() {
+    Queue.Sort((a, b) => b.GetInitiative().CompareTo(a.GetInitiative()));
   }
 
   public static void NextUnit() {
@@ -42,6 +47,7 @@ public class QueueManager : MonoBehaviour
       Round++;
       SupportController.EveryTurn();
       BattleManager.Instance.CheckReinforcement(Round);
+      SortQueue();
     } else {
       orderNumber++;
     }

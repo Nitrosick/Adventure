@@ -2,6 +2,7 @@ using UnityEngine;
 
 [CreateAssetMenu(menuName = "GameObjects/Effect")]
 public class Effect : ScriptableObject {
+  public string id;
   public string effectName;
   public int duration;
   public float damage;

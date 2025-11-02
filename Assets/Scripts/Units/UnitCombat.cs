@@ -52,12 +52,12 @@ public class UnitCombat : Unit {
   public override void DealDamage(bool charged = false) {
     if (Target != null) {
       if (successAttack) {
-        if (!DamageBlocked()) {
+        if (!DamageBlocked(charged)) {
           float critModifier = Calculate.CritModifier(this, Target, charged);
           float damage = Calculate.Damage(this, Target, charged);
           List<Effect> effects = Calculate.ItemEffects(this, Target);
           foreach (Effect effect in effects) Target.Effects.ApplyEffect(effect);
-          Target.Health.TakeDamage(damage, critModifier);
+          Target.Health.TakeDamage(damage, critModifier, charged: charged);
         }
       } else {
         Target.Ui.ShowPopup("Miss!");
@@ -80,7 +80,7 @@ public class UnitCombat : Unit {
     }
   }
 
-  protected override bool DamageBlocked() {
+  protected override bool DamageBlocked(bool charged) {
     List<Skill> skills = Calculate.ItemPassiveSkills(Target);
 
     foreach (Skill skill in skills) {
@@ -93,14 +93,18 @@ public class UnitCombat : Unit {
       }
     }
 
-    if (Target.Effects.HasEffect("Wall")) {
+    if (Target.Effects.HasAnyEffect(new string[] { "Wall", "Block" })) {
       if (
         Equip.primary.damageType == DamageType.Chop ||
         Equip.primary.damageType == DamageType.Crash
       ) {
-        bool isBreak = Utils.RollChance(Equip.primary.armorPenetration);
+        float chance = Equip.primary.armorPenetration;
+        if (charged) chance *= 2;
+        bool isBreak = Utils.RollChance(chance);
+
         if (isBreak) {
           Target.Effects.ClearEffect("Wall");
+          Target.Effects.ClearEffect("Block");
           return false;
         }
       }
@@ -123,12 +127,14 @@ public class UnitCombat : Unit {
     if (CurrentProjectiles == 0) BehaviorType = AIBehaviorType.Retreat;
   }
 
-  public override void BlockStance(SkillName type) {
-    Effect effect = Resources.Load<Effect>("Effects/" + type.ToString());
+  public override void BlockStance(string id) {
+    Effect effect = Factory.CreateEffectById(id);
     if (effect == null) return;
+
     Effects.ApplyEffect(effect);
     Animator.SetBlocking(true);
     SkillCharges -= 1;
+
     if (SkillCharges <= 0) BattleUI.Instance.DisableSkills();
     if (Equip.GetActiveSkills().Count > 0) Ui.UpdateCharges(TotalSkillCharges, SkillCharges);
     FinishAction();

@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -134,14 +136,12 @@ public class InfoPopup : MonoBehaviour {
       return;
     }
 
-    string effectsText = "";
+    List<string> effectsEl = new();
     foreach (EffectInstance e in unit.Effects.ActiveEffects) {
-      if (e.effectData.isNegative) effectsText += $"\n<color=#F61010>{e.effectData.effectName}</color>";
-      else effectsText += $"\n<color=#81D11F>{e.effectData.effectName}</color>";
+      if (e.effectData.isNegative) effectsEl.Add($"<color=#F61010>{e.effectData.effectName}</color>");
+      else effectsEl.Add($"<color=#81D11F>{e.effectData.effectName}</color>");
     }
-    unitEffects.text = effectsText == ""
-      ? effectsText
-      : effectsText[2..];
+    unitEffects.text = string.Join("\n", effectsEl);
   }
 
   public static void Show(Equipment item, bool showPrice = false) {

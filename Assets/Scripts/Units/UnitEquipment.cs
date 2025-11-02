@@ -144,6 +144,7 @@ public class UnitEquipment : MonoBehaviour {
     Player.Instance.Inventory.UpdateState();
   }
 
+  // Getters
   public List<Equipment> GetEquipmentList(MenuFilter filter = MenuFilter.All) {
     List<Equipment> result = new() { primary, armor };
     if (secondary != null) result.Add(secondary);
@@ -216,6 +217,7 @@ public class UnitEquipment : MonoBehaviour {
     };
   }
 
+  // Skills
   public List<Skill> GetActiveSkills() {
     return GetSkills(true);
   }
@@ -244,6 +246,21 @@ public class UnitEquipment : MonoBehaviour {
     return false;
   }
 
+  public void ApplyInstantEffects() {
+    List<Skill> skills = GetPassiveSkills();
+    if (skills.Count == 0) return;
+
+    foreach (Skill skill in skills) {
+      switch (skill.skillName) {
+        case SkillName.Inspiration:
+          Effect effect = Factory.CreateEffectById("e4");
+          if (effect != null) unit.Effects.ApplyEffect(effect);
+          break;
+      }
+    }
+  }
+
+  // Capabilities
   public bool CanBreakObjects() {
     return primary.damageType == DamageType.Chop || primary.damageType == DamageType.Crash;
   }

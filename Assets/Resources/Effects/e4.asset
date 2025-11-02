@@ -10,23 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6c72ce9337e905f47bdcdf9774858d67, type: 3}
-  m_Name: Cover
+  m_Name: e4
   m_EditorClassIdentifier: 
-  effectName: Cover
-  duration: 5
+  id: e4
+  effectName: Inspiration
+  duration: 1000
   damage: 0
   cancelMove: 0
   cancelAttack: 0
-  isStackable: 1
+  isStackable: 0
   isNegative: 0
-  description: 'A unit in cover becomes a lower priority target for the enemy.
+  description: 'The unit''s initiative under this effect increases,
 
-    It
-    becomes much harder to hit this target with small arms fire,
-
-    and it also
-    becomes harder for the shooter in cover to hit targets.'
+    which increases
+    its turn priority in the overall queue.'
   damageType: 0
-  icon: {fileID: 8892759074320436052, guid: c29c04ab569c73049a8551a6927ace72, type: 3}
-  uiIcon: {fileID: 21300000, guid: 1ed14dd092c3e9346bd9ae170cad62e5, type: 3}
+  icon: {fileID: 8892759074320436052, guid: 7acb6a9d3b79655459aae04f4323f19d, type: 3}
+  uiIcon: {fileID: 21300000, guid: fe3b2d7dc9b709841ac5e5fb5f4893cc, type: 3}
   uiIconColor: {r: 0.14117648, g: 0.14117648, b: 0.14117648, a: 1}

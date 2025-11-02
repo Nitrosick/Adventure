@@ -21,8 +21,10 @@ public class Skill : ScriptableObject {
 
     switch (skillName) {
       case SkillName.Block:
+        unit.BlockStance("e2");
+        break;
       case SkillName.Wall:
-        unit.BlockStance(skillName);
+        unit.BlockStance("e7");
         break;
       case SkillName.ChargedAttack:
         unit.IsChargedAttack = !unit.IsChargedAttack;

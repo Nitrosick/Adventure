@@ -189,6 +189,10 @@ public static class BattleAI {
     return false;
   }
 
+  private static bool PlayerHasShooters() {
+    return playerUnits.Any(u => u.Type == UnitType.Range);
+  }
+
   // Unit behavior
   private static void MoveToClosestEnemy() {
     Unit closest = playerUnits
@@ -361,9 +365,10 @@ public static class BattleAI {
             break;
           case SkillName.Block:
           case SkillName.Wall:
-            if (target == null) {
+            if (target == null && PlayerHasShooters()) {
+              // FIXME: Проверка на наличие врагов в радиусе
               skip = false;
-              enemy.BlockStance(skill.skillName);
+              enemy.BlockStance(skill.skillName == SkillName.Block ? "e2" : "e7");
             }
             break;
         }

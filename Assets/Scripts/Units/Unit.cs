@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -105,6 +106,7 @@ public class Unit : MonoBehaviour {
     if (IsHero) TotalSkillCharges += (int)AbilityController.ChargesBonus();
     SkillCharges = TotalSkillCharges;
     if (Equip.GetActiveSkills().Count > 0) Ui.UpdateCharges(TotalSkillCharges, SkillCharges);
+    Equip.ApplyInstantEffects();
   }
 
   private void SetMovePoints() {
@@ -170,6 +172,13 @@ public class Unit : MonoBehaviour {
   public int GetInitiative() {
     int result = Initiative;
     if (Relation == UnitRelation.Ally) result += (int)AbilityController.MovePriorityBonus();
+
+    if (
+      QueueManager.Queue
+        .Where(u => u.Relation == Relation && u != this)
+        .Any(u => u.Effects.HasEffect("Inspiration"))
+    ) result += 2;
+
     return result;
   }
 
@@ -256,8 +265,8 @@ public class Unit : MonoBehaviour {
   public virtual void BreakObject(Breakable target) { }
   public virtual void ChopTree(TreeObject target) { }
   public virtual void DealDamage(bool charged = false) { }
-  protected virtual bool DamageBlocked() { return false; }
+  protected virtual bool DamageBlocked(bool charged) { return false; }
   public virtual void FinishAction() { }
   public virtual void Shoot() { }
-  public virtual void BlockStance(SkillName type) { }
+  public virtual void BlockStance(string id) { }
 }

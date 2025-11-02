@@ -19,15 +19,20 @@ public class UnitHealth : MonoBehaviour {
     return unit.TotalHealth;
   }
 
-  public void TakeDamage(float damage, float modifier, bool tickDamage = false, bool pierceDamage = false) {
+  public void TakeDamage(
+    float damage,
+    float modifier,
+    bool tickDamage = false,
+    bool pierceDamage = false,
+    bool charged = false
+  ) {
     unit.PreventPhaseSkip = pierceDamage;
     float totalDamage = damage * modifier;
 
-    if (modifier > 1f) {
+    if (modifier > 1f || charged) {
       unit.Ui.ShowPopup(totalDamage.ToString(), PopupType.Crit);
       if (!tickDamage) _ = CameraController.Shake(1.2f);
-    }
-    else {
+    } else {
       unit.Ui.ShowPopup(totalDamage.ToString(), PopupType.Negative);
       if (!tickDamage) _ = CameraController.Shake(0.8f);
     }

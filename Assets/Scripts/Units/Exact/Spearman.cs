@@ -42,7 +42,7 @@ public class Spearman : UnitCombat {
           return;
         }
 
-        if (go.layer == unitLayer && !DamageBlocked() && go.TryGetComponent<Unit>(out var unit)) {
+        if (go.layer == unitLayer && !DamageBlocked(charged) && go.TryGetComponent<Unit>(out var unit)) {
           float critModifier = Calculate.CritModifier(this, unit, charged);
           float damage = Calculate.Damage(this, unit, charged);
           List<Effect> effects = Calculate.ItemEffects(this, unit);

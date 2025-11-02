@@ -45,15 +45,15 @@ public class UnitEffects : MonoBehaviour {
   }
 
   public bool HasEffect(string effectName) {
-    return ActiveEffects.Any(e => e.effectData != null && e.effectData.name == effectName);
+    return ActiveEffects.Any(e => e.effectData != null && e.effectData.effectName == effectName);
   }
 
   public bool HasAnyEffect(string[] effectNames) {
-    return ActiveEffects.Any(e => e.effectData != null && effectNames.Contains(e.effectData.name));
+    return ActiveEffects.Any(e => e.effectData != null && effectNames.Contains(e.effectData.effectName));
   }
 
   public void ClearEffect(string effectName) {
-    ActiveEffects.RemoveAll(e => e.effectData != null && e.effectData.name == effectName);
+    ActiveEffects.RemoveAll(e => e.effectData != null && e.effectData.effectName == effectName);
     if (effectName == "Stun") unit.Animator.SetStunned(false);
     if (effectName == "Root") unit.Animator.SetRooted(false);
     else if (effectName == "Wall" || effectName == "Block") unit.Animator.SetBlocking(false);

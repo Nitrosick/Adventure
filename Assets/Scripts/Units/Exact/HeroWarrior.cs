@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public class HeroWarrior : UnitCombat {
   private HeroWarrior() {
     Strength = 5;
