@@ -53,6 +53,7 @@ public class UnitCombat : Unit {
     if (Target != null) {
       if (successAttack) {
         if (!DamageBlocked(charged)) {
+          BlockBreakdown(charged);
           float critModifier = Calculate.CritModifier(this, Target, charged);
           float damage = Calculate.Damage(this, Target, charged);
           List<Effect> effects = Calculate.ItemEffects(this, Target);
@@ -85,7 +86,7 @@ public class UnitCombat : Unit {
 
     foreach (Skill skill in skills) {
       switch (skill.skillName) {
-        case SkillName.Parry:
+        case "Parry":
           Target.Animator.Parry();
           Target.Ui.ShowPopup("Parry!");
           Target.Health.TakeDamage(0f, 1f);
@@ -93,28 +94,25 @@ public class UnitCombat : Unit {
       }
     }
 
-    if (Target.Effects.HasAnyEffect(new string[] { "Wall", "Block" })) {
-      if (
-        Equip.primary.damageType == DamageType.Chop ||
-        Equip.primary.damageType == DamageType.Crash
-      ) {
-        float chance = Equip.primary.armorPenetration;
-        if (charged) chance *= 2;
-        bool isBreak = Utils.RollChance(chance);
-
-        if (isBreak) {
-          Target.Effects.ClearEffect("Wall");
-          Target.Effects.ClearEffect("Block");
-          return false;
-        }
-      }
-
-      Target.Ui.ShowPopup("Block!");
-      Target.Health.TakeDamage(0f, 1f);
-      return true;
-    }
-
     return false;
+  }
+
+  protected void BlockBreakdown(bool charged) {
+    if (!Target.Effects.HasAnyEffect(new string[] { "Wall", "Block" })) return;
+
+    if (
+      Equip.primary.damageType == DamageType.Chop ||
+      Equip.primary.damageType == DamageType.Crash
+    ) {
+      float chance = Equip.primary.armorPenetration;
+      if (charged) chance *= 2;
+      bool isBreak = Utils.RollChance(chance);
+
+      if (isBreak) {
+        Target.Effects.ClearEffect("Wall");
+        Target.Effects.ClearEffect("Block");
+      }
+    }
   }
 
   public override void FinishAction() {

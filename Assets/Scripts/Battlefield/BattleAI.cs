@@ -156,7 +156,8 @@ public static class BattleAI {
     float dist = Pathfinding.GetCost(from, target.CurrentTile, AttackRange);
     if (dist <= AttackRange && LineOfSightClear(from.GetPos(), target.CurrentTile.GetPos())) {
       enemy.Target = target;
-    } else {
+    }
+    else {
       enemy.Target = null;
     }
   }
@@ -191,6 +192,12 @@ public static class BattleAI {
 
   private static bool PlayerHasShooters() {
     return playerUnits.Any(u => u.Type == UnitType.Range);
+  }
+
+  private static int CountEnemiesInRange(float range) {
+    return playerUnits.Count(unit =>
+      Vector3.Distance(enemy.transform.position, unit.transform.position) <= range
+    );
   }
 
   // Unit behavior
@@ -353,7 +360,7 @@ public static class BattleAI {
     if (enemy.SkillCharges > 0) {
       foreach (Skill skill in skills) {
         switch (skill.skillName) {
-          case SkillName.ChargedAttack:
+          case "Charged attack":
             if (
               target != null &&
               (target.CurrentHealth < target.Health.GetMaxHP() ||
@@ -363,12 +370,11 @@ public static class BattleAI {
               enemy.IsChargedAttack = true;
             }
             break;
-          case SkillName.Block:
-          case SkillName.Wall:
-            if (target == null && PlayerHasShooters()) {
-              // FIXME: Проверка на наличие врагов в радиусе
+          case "Block":
+          case "Wall":
+            if (target == null && (PlayerHasShooters() || CountEnemiesInRange(4f) > 1)) {
               skip = false;
-              enemy.BlockStance(skill.skillName == SkillName.Block ? "e2" : "e7");
+              enemy.BlockStance(skill.skillName == "Wall" ? "e2" : "e7");
             }
             break;
         }

@@ -239,7 +239,7 @@ public class UnitEquipment : MonoBehaviour {
     if (unit.SkillCharges == 0) return false;
     foreach (Skill skill in GetActiveSkills()) {
       // FIXME: Может сломаться проверка, если использовать не в PhaseManager
-      if (skill.skillName == SkillName.ChargedAttack) continue;
+      if (skill.skillName == "Charged attack") continue;
       if (unit.Effects.HasAnyEffect(new string[] { "Stun", "Root" }) && !skill.canUseInRoot) continue;
       if (skill.skillPhases.Contains(BattlePhase.Attack)) return true;
     }
@@ -252,7 +252,7 @@ public class UnitEquipment : MonoBehaviour {
 
     foreach (Skill skill in skills) {
       switch (skill.skillName) {
-        case SkillName.Inspiration:
+        case "Inspiration":
           Effect effect = Factory.CreateEffectById("e4");
           if (effect != null) unit.Effects.ApplyEffect(effect);
           break;

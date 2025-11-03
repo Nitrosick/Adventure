@@ -28,14 +28,10 @@ public class UnitHealth : MonoBehaviour {
   ) {
     unit.PreventPhaseSkip = pierceDamage;
     float totalDamage = damage * modifier;
+    bool isCrit = modifier > 1f || charged;
 
-    if (modifier > 1f || charged) {
-      unit.Ui.ShowPopup(totalDamage.ToString(), PopupType.Crit);
-      if (!tickDamage) _ = CameraController.Shake(1.2f);
-    } else {
-      unit.Ui.ShowPopup(totalDamage.ToString(), PopupType.Negative);
-      if (!tickDamage) _ = CameraController.Shake(0.8f);
-    }
+    unit.Ui.ShowPopup(totalDamage.ToString(), isCrit ? PopupType.Crit : PopupType.Negative);
+    if (!tickDamage) _ = CameraController.Shake(isCrit ? 1.2f : 0.8f);
 
     if (unit.BehaviorType == AIBehaviorType.HoldPosition) {
       unit.BehaviorType = AIBehaviorType.KeepDistance;

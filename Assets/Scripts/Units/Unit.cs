@@ -123,7 +123,7 @@ public class Unit : MonoBehaviour {
     // Passive skills
     List<Skill> skills = Equip.GetPassiveSkills();
     foreach (Skill skill in skills) {
-      if (skill.displayName == "Comfort") result++;
+      if (skill.skillName == "Comfort") result++;
     }
 
     if (result < 1f) result = 1f;

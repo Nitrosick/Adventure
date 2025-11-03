@@ -49,12 +49,6 @@ public static class Factory {
     return Load<Effect>(GetPath(id));
   }
 
-  // public static Effect CreateEffectByName(string name) {
-  //   Effect asset = Resources.Load<Effect>("Effects/" + name);
-  //   if (asset == null) Debug.LogError("Failed to load resource");
-  //   return asset;
-  // }
-
   private static string GetPath(string id) {
     if (string.IsNullOrEmpty(id)) return null;
     if (id.StartsWith("aa")) return "Knowledge/" + id;

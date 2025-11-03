@@ -152,7 +152,7 @@ public static class Calculate {
 
     foreach (Skill skill in skills) {
       float chance = skill.activateChance;
-      if (skill.displayName == "Parry" && unit.IsHero) chance += AbilityController.EvasionBonus();
+      if (skill.skillName == "Parry" && unit.IsHero) chance += AbilityController.EvasionBonus();
       if (Utils.RollChance(chance)) result.Add(skill);
     }
 

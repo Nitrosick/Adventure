@@ -123,7 +123,8 @@ public class UnitMove : MonoBehaviour {
 
     switch (type) {
       case TileType.Cover:
-        Effect coverEffect = Resources.Load<Effect>("Effects/Cover");
+        Effect coverEffect = Factory.CreateEffectById("e3");
+        if (coverEffect == null) break;
         unit.Effects.ApplyEffect(coverEffect);
         break;
       case TileType.Climb:

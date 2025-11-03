@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d4c8731ffc4b514c9477d47614d825b, type: 3}
   m_Name: Charged attack
   m_EditorClassIdentifier: 
-  displayName: Charged attack
+  skillName: Charged attack
   description: 'Unit performs a powerful sweeping attack instead of a regular one,
     consuming skill charges.
 
@@ -21,7 +21,6 @@ MonoBehaviour:
   isActive: 1
   canUseInRoot: 0
   activateChance: 100
-  skillName: 4
   skillButton: {fileID: 7219696775182885065, guid: b9e5101fe28075e48b9c607054400469,
     type: 3}
   skillPhases: 01000000

@@ -258,15 +258,6 @@ public enum KnowledgeSection {
 }
 
 // Skills and effects
-public enum SkillName {
-  Block,
-  Parry,
-  Wall,
-  Comfort,
-  ChargedAttack,
-  Inspiration
-}
-
 public enum AbilityLevel {
   No,
   Bronze,

@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d4c8731ffc4b514c9477d47614d825b, type: 3}
   m_Name: Parry
   m_EditorClassIdentifier: 
-  displayName: Parry
+  skillName: Parry
   description: With a buckler, a unit has a certain chance to parry an attack, completely
     absorbing its damage.
   isActive: 0
+  canUseInRoot: 0
   activateChance: 15
-  skillName: 1
   skillButton: {fileID: 0}
   skillPhases: 
   uiIcon: {fileID: 21300000, guid: 7317b4785be6ffb4cb1dbe470a491eec, type: 3}

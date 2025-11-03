@@ -282,7 +282,7 @@ public class PlayerMenuUIInfo : MonoBehaviour {
           img.color = s.uiIconColor;
         }
         if (skillObj.TryGetComponent<TooltipTrigger>(out var tip)) {
-          tip.message = $"<b>{s.displayName}</b>\n{s.description}";
+          tip.message = $"<b>{s.skillName}</b>\n{s.description}";
         }
       }
     }
@@ -383,7 +383,7 @@ public class PlayerMenuUIInfo : MonoBehaviour {
           img.color = s.uiIconColor;
         }
         if (skillObj.TryGetComponent<TooltipTrigger>(out var tip)) {
-          tip.message = $"<b>{s.displayName}</b>\n{s.description}";
+          tip.message = $"<b>{s.skillName}</b>\n{s.description}";
         }
       }
     }
