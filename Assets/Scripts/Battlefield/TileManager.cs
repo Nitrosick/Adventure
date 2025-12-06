@@ -109,6 +109,33 @@ public class TileManager : MonoBehaviour {
     return result;
   }
 
+  public static void HighlightChests() {
+    List<Tile> lootTiles = tiles.Values
+      .Where(tile => tile.type == TileType.Loot)
+      .ToList();
+
+    if (lootTiles.Count == 0) return;
+
+    foreach (Tile tile in lootTiles) {
+      Transform highlight = tile.transform.Find("HighlightEffect");
+      if (highlight == null) continue;
+      highlight.gameObject.SetActive(true);
+    }
+  }
+
+  public static void UncoverTraps(float chance) {
+    List<Tile> trapTiles = tiles.Values
+      .Where(tile => tile.type == TileType.Trap)
+      .ToList();
+
+    if (trapTiles.Count == 0) return;
+
+    foreach (Tile tile in trapTiles) {
+      bool success = Utils.RollChance(chance);
+      if (success) tile.UncoverTrap();
+    }
+  }
+
   public static void ShowReachableTiles(Tile startTile, float mp) {
     if (QueueManager.CurrentUnit.Relation == UnitRelation.Enemy) return;
 

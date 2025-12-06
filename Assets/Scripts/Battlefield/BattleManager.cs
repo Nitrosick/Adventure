@@ -140,7 +140,7 @@ public class BattleManager : MonoBehaviour {
   private static void InitSupports() {
     List<SupportInstance> allySupports = new();
 
-    foreach (SupportData data in StateManager.playerSupports) {
+    foreach (SupportData data in StateManager.playerSupports.Where(s => s.inSquad)) {
       Support unit = Factory.CreateSupportById(data.id);
       if (unit == null) continue;
       SupportInstance support = new(unit, data.level);

@@ -15,10 +15,22 @@ public static class SupportController {
 
   private static void BeforeBattle() {
     List<SupportInstance> supports = allSupports
-      .Where(s => s.data.phase == SupportPhase.BeforeBattle)
+      .Where(s => s.data.phase == SupportPhase.BeforeBattle || s.data.phase == SupportPhase.Global)
       .ToList();
     if (supports.Count == 0) return;
-    // FIXME: Действия саппортов до начала боя
+
+    foreach (SupportInstance sup in supports) {
+      int i = LevelIndex(sup);
+
+      switch (sup.data.id) {
+        case "su2":
+          TileManager.HighlightChests();
+          break;
+        case "su3":
+          TileManager.UncoverTraps(sup.data.effectValues[i]);
+          break;
+      }
+    }
   }
 
   public static void EveryTurn() {
@@ -45,6 +57,14 @@ public static class SupportController {
           break;
       }
     }
+  }
+
+  public static float GetBonus(string id) {
+    SupportInstance sup = Player.Instance.Army.Supports
+      .FirstOrDefault(s => s.data.id == id && s.inSquad);
+
+    if (sup == null) return 0;
+    return sup.data.effectValues[LevelIndex(sup)];
   }
 
   private static int LevelIndex(SupportInstance unit) {

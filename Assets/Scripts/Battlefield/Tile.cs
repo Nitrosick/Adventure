@@ -112,6 +112,10 @@ public class Tile : MonoBehaviour {
     if (obj == null || loot == null || TileManager.Instance.lootPickEffect == null) return;
     Instantiate(TileManager.Instance.lootPickEffect, obj.position, Quaternion.identity);
     Destroy(obj.gameObject);
+
+    Transform highlight = transform.Find("HighlightEffect");
+    if (highlight != null) highlight.gameObject.SetActive(false);
+
     BattleManager.Reward.Add(loot);
 
     if (loot.projectiles > 0) {
@@ -123,6 +127,15 @@ public class Tile : MonoBehaviour {
     type = TileType.Open;
     _ = Toast.Show("success", "Loot picked up");
     if (!transform.TryGetComponent<TooltipTrigger>(out var tooltip)) tooltip.message = "";
+  }
+
+  public void UncoverTrap() {
+    Trap hiddenTrap = transform.GetComponentInChildren<Trap>();
+    if (hiddenTrap == null || hiddenTrap.Relation == UnitRelation.Ally) return;
+    Destroy(hiddenTrap.gameObject);
+
+    GameObject trap = Instantiate(BattleManager.Instance.trapPrefab, transform);
+    trap.transform.position = GetPos();
   }
 
   public void TriggerTrap() {

@@ -1,6 +1,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public static class Calculate {
@@ -171,4 +172,7 @@ public static class Calculate {
 
     return hits;
   }
+
+  public static float GetArmyValue(List<Unit> units) => units.Sum(u => u.GetValue());
+  public static float GetBattleDifficulty(float e, float p) => 10f / (1f + Mathf.Exp(-4f * ((e / p) - 1f)));
 }

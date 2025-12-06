@@ -182,6 +182,12 @@ public class Unit : MonoBehaviour {
     return result;
   }
 
+  public float GetValue() {
+    float typeBonus = Type == UnitType.Range || Type == UnitType.Mage ? 2 : 0;
+    float bossBonus = IsBoss ? 3 : 0;
+    return (TotalHealth / 10) + Strength + Dexterity + Intelligence + (Level * 5) + (DefaultMovePoints / 2) + typeBonus + bossBonus;
+  }
+
   public void LevelUp(int value = 1) {
     if (Level >= MaxLevel) return;
     int levels = value;

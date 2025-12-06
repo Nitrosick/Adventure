@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -23,6 +24,8 @@ public class MapUI : GeneralUI {
   private GameObject zoneInfoQuestMark;
   private GameObject zoneInfoCollectMark;
   private GameObject zoneInfoRespawnMark;
+  private GameObject zoneBattleDifficulty;
+  private TextMeshProUGUI zoneBattleDifficultyValue;
 
   // Buttons
   private Button playerMenuButton;
@@ -62,7 +65,6 @@ public class MapUI : GeneralUI {
     zoneInfoPanel = infoPanel.gameObject;
     zoneInfoTitle = Get<TextMeshProUGUI>(infoPanel, "Title");
     zoneInfoDescription = Get<TextMeshProUGUI>(infoPanel, "Description");
-
     zoneInfoBattleMark = Find(markers, "Battle");
     zoneInfoGuardMark = Find(markers, "Guard");
     zoneInfoClearedMark = Find(markers, "Clear");
@@ -70,6 +72,8 @@ public class MapUI : GeneralUI {
     zoneInfoQuestMark = Find(markers, "Quest");
     zoneInfoCollectMark = Find(markers, "Collecting");
     zoneInfoRespawnMark = Find(markers, "Respawning");
+    zoneBattleDifficulty = Find(infoPanel, "BattleDifficulty");
+    zoneBattleDifficultyValue = Get<TextMeshProUGUI>(infoPanel, "BattleDifficulty/Value");
 
     playerMenuButton = Get<Button>(mainMenu, "Player");
     interactButton = Get<Button>(actions, "Interact");
@@ -104,7 +108,7 @@ public class MapUI : GeneralUI {
       goldValue,  woodValue, stoneValue, metalValue,  villagersValue,
       leatherValue, zoneInfoBattleMark,  zoneInfoClearedMark, zoneInfoRecruitMark, interactButton,
       location, interactButtonIcon, interactButtonText,  totalPeopleValue, zoneInfoCollectMark,
-      zoneInfoRespawnMark, zoneInfoGuardMark, canRest
+      zoneInfoRespawnMark, zoneInfoGuardMark, canRest, zoneBattleDifficulty, zoneBattleDifficultyValue
     }.All(x => x != null);
   }
 
@@ -169,6 +173,7 @@ public class MapUI : GeneralUI {
       if (zone.TryGetComponent<MapZoneBattle>(out var battle)) {
         if (battle.instant) zoneInfoBattleMark.SetActive(true);
         else zoneInfoGuardMark.SetActive(true);
+        ShowBattleDifficulty(battle.guard.Concat(battle.reinforcement).ToList());
       }
     }
     else if (zone.events.Contains(MapZoneType.Recruitment)) zoneInfoRecruitMark.SetActive(true);
@@ -181,6 +186,12 @@ public class MapUI : GeneralUI {
         } else {
           zoneInfoCollectMark.SetActive(true);
         }
+      }
+    }
+
+    if (zone.events.Contains(MapZoneType.Ambush)) {
+      if (zone.TryGetComponent<MapZoneBattle>(out var battle)) {
+        ShowBattleDifficulty(battle.guard.Concat(battle.reinforcement).ToList());
       }
     }
   }
@@ -197,6 +208,21 @@ public class MapUI : GeneralUI {
     zoneInfoQuestMark.SetActive(false);
     zoneInfoCollectMark.SetActive(false);
     zoneInfoRespawnMark.SetActive(false);
+    zoneBattleDifficulty.SetActive(false);
+    zoneBattleDifficultyValue.text = "";
+  }
+
+  private void ShowBattleDifficulty(List<Unit> enemies) {
+    if (!Player.Instance.Army.SupportInSquad("su2")) return;
+    float enemyArmyValue = Calculate.GetArmyValue(enemies);
+    float playerArmyValue = Calculate.GetArmyValue(Player.Instance.Army.Units.Where(u => u.InSquad).ToList());
+    double difficulty = Math.Round(Calculate.GetBattleDifficulty(enemyArmyValue, playerArmyValue));
+
+    zoneBattleDifficulty.SetActive(true);
+    string color = "#EFBF0D";
+    if (difficulty < 4) color = "#81D11F";
+    else if (difficulty > 7) color = "#F61010";
+    zoneBattleDifficultyValue.text = $"<color={color}>{difficulty}</color> / 10";
   }
 
   public void ShowInteractableButton(UnityAction callback, string icon = "settings", string text = "Interact") {

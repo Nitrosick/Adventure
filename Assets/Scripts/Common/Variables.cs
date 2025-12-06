@@ -164,12 +164,14 @@ public enum MasteryLevel {
 }
 
 public enum SupportBonusType {
-  Healing
+  Healing,
+  Scouting
 }
 
 public enum SupportPhase {
   BeforeBattle,
-  EveryTurn
+  EveryTurn,
+  Global
 }
 
 // Items

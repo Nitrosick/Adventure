@@ -88,6 +88,10 @@ public class PlayerArmy : MonoBehaviour {
     return Supports.Exists(s => s.data.id == id);
   }
 
+  public bool SupportInSquad(string id) {
+    return Supports.Exists(s => s.data.id == id && s.inSquad);
+  }
+
   public void SetSupportSlots(int value) {
     SupportSlots += value;
     if (SupportSlots > 3) SupportSlots = 3;

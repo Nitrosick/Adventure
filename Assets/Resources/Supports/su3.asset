@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42d287dd47334944c9738a5d34676db1, type: 3}
+  m_Name: su3
+  m_EditorClassIdentifier: 
+  id: su3
+  unitName: Sapper
+  description: With a certain chance, reveals enemy <b>traps</b> on the battlefield.
+    Traps remain armed but become visible to the player.
+  icon: {fileID: 21300000, guid: 99286f752dfc528478824b6bcbca5102, type: 3}
+  bonusType: 1
+  phase: 0
+  effectValues:
+  - 60
+  - 70
+  - 80
+  - 90
+  - 100
+  effectDescriptions:
+  - level: 0
+    description: With a <b>60%</b> chance, reveals each enemy trap on the battlefield
+  - level: 1
+    description: With a <b>70%</b> chance, reveals each enemy trap on the battlefield
+  - level: 2
+    description: With a <b>80%</b> chance, reveals each enemy trap on the battlefield
+  - level: 3
+    description: With a <b>90%</b> chance, reveals each enemy trap on the battlefield
+  - level: 4
+    description: Reveals all enemy traps on the battlefield
