@@ -165,7 +165,8 @@ public enum MasteryLevel {
 
 public enum SupportBonusType {
   Healing,
-  Scouting
+  Scouting,
+  Parameters
 }
 
 public enum SupportPhase {

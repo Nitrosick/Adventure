@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42d287dd47334944c9738a5d34676db1, type: 3}
+  m_Name: su4
+  m_EditorClassIdentifier: 
+  id: su4
+  unitName: Weaponsmith
+  description: Prepares and sharpens your troops' melee weapons before battle, slightly
+    increasing their <b>damage</b>.
+  icon: {fileID: 21300000, guid: f6305783640fe7d4996b5dc364beb4cf, type: 3}
+  bonusType: 2
+  phase: 2
+  effectValues:
+  - 5
+  - 10
+  - 15
+  - 20
+  - 25
+  effectDescriptions:
+  - level: 0
+    description: Melee weapon damage increased by <b>5%</b>
+  - level: 1
+    description: Melee weapon damage increased by <b>10%</b>
+  - level: 2
+    description: Melee weapon damage increased by <b>15%</b>
+  - level: 3
+    description: Melee weapon damage increased by <b>20%</b>
+  - level: 4
+    description: Melee weapon damage increased by <b>25%</b>

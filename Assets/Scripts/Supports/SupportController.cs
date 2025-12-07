@@ -59,9 +59,21 @@ public static class SupportController {
     }
   }
 
-  public static float GetBonus(string id) {
-    SupportInstance sup = Player.Instance.Army.Supports
-      .FirstOrDefault(s => s.data.id == id && s.inSquad);
+  public static float GetBonus(
+    string id,
+    bool inBattle = true,
+    UnitRelation relation = UnitRelation.Ally
+  ) {
+    SupportInstance sup = null;
+
+    if (inBattle) {
+      sup = allSupports
+        .Where(s => s.relation == relation)
+        .FirstOrDefault(s => s.data.id == id);
+    } else {
+      sup = Player.Instance.Army.Supports
+        .FirstOrDefault(s => s.data.id == id && s.inSquad);
+    }
 
     if (sup == null) return 0;
     return sup.data.effectValues[LevelIndex(sup)];

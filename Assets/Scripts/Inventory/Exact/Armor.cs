@@ -3,7 +3,7 @@ using UnityEngine;
 
 [CreateAssetMenu(menuName = "GameObjects/Equipment/Armor")]
 public class Armor : Equipment {
-  public int defense;
+  public float defense;
   public float blockMultiplier = 1f;
   public GameObject prefab;
   public List<DamageResistance> resistsMap;

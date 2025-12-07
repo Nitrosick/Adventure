@@ -163,10 +163,14 @@ public class UnitEquipment : MonoBehaviour {
 
   public float GetTotalDefense() {
     float result = 0;
+
     if (armor != null) result += armor.defense;
     if (secondary != null) {
       if (secondary is Armor secArmor) result += secArmor.defense;
     }
+    float supportBonus = SupportController.GetBonus("su5", true, unit.Relation);
+    if (supportBonus > 0) result *= 1f + (supportBonus / 100);
+
     return result;
   }
 
@@ -186,6 +190,9 @@ public class UnitEquipment : MonoBehaviour {
 
   public float GetTotalDamage() {
     float result = primary.damage;
+    float supportBonus = SupportController.GetBonus("su4", true, unit.Relation);
+    if (supportBonus > 0) result *= 1f + (supportBonus / 100);
+
     foreach (CoreStat stat in primary.scalingStats) {
       switch (stat) {
         case CoreStat.Strength: result += unit.Strength * damageScalingFactor; break;
@@ -193,6 +200,7 @@ public class UnitEquipment : MonoBehaviour {
         case CoreStat.Intelligence: result += unit.Intelligence * damageScalingFactor; break;
       }
     }
+
     return result;
   }
 
