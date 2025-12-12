@@ -126,6 +126,10 @@ public class Unit : MonoBehaviour {
       if (skill.skillName == "Comfort") result++;
     }
 
+    // Supports
+    float supportBonus = SupportController.GetBonus("su6", relation: Relation, unit: this)[0];
+    result += supportBonus;
+
     if (result < 1f) result = 1f;
     if (result < 4f) MoveSpeed *= 0.9f;
     else if (result > 7f) MoveSpeed *= 1.1f;
@@ -134,10 +138,18 @@ public class Unit : MonoBehaviour {
   }
 
   private void SetProjectiles() {
+    if (Type != UnitType.Range) return;
+
+    // Additional equipment
     AdditionalItem item = Equip.additional;
     if (item != null && item.bonusType == ItemBonus.Projectiles) {
       Projectiles += (int)item.bonusValue;
     }
+
+    // Supports
+    float supportBonus = SupportController.GetBonus("su6", relation: Relation)[1];
+    Projectiles += (int)supportBonus;
+
     CurrentProjectiles = Projectiles;
   }
 

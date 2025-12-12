@@ -51,10 +51,10 @@ public class BattleManager : MonoBehaviour {
     }
 
     InitSpawnZones();
+    InitSupports();
     SpawnUnits(allies, allySpawns, UnitRelation.Ally);
     SpawnUnits(enemies, enemySpawns, UnitRelation.Enemy);
     SpawnTraps(StateManager.trapsCount);
-    InitSupports();
   }
 
   private void Start() {

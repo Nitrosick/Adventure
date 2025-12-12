@@ -1,0 +1,52 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42d287dd47334944c9738a5d34676db1, type: 3}
+  m_Name: su6
+  m_EditorClassIdentifier: 
+  id: su6
+  unitName: Squire
+  description: Helps carry equipment, which increases the <b>movement points</b>
+    of units. He can also carry additional <b>projectiles</b> for archers.
+  icon: {fileID: 21300000, guid: 28fb9c21c1e3f304a9dacc8f625703a0, type: 3}
+  bonusType: 2
+  phase: 2
+  effectValues:
+  - values:
+    - 1
+    - 0
+  - values:
+    - 1
+    - 5
+  - values:
+    - 1
+    - 15
+  - values:
+    - 2
+    - 15
+  - values:
+    - 1
+    - 15
+  effectDescriptions:
+  - level: 0
+    description: Increases the hero's maximum movement points by <b>1</b>
+  - level: 1
+    description: Increases the hero's maximum movement points by <b>1</b>. Also increases
+      the ammunition of archers by <b>5</b>
+  - level: 2
+    description: Increases the hero's maximum movement points by <b>1</b>. Also increases
+      the ammunition of archers by <b>15</b>
+  - level: 3
+    description: Increases the hero's maximum movement points by <b>2</b>. Also increases
+      the ammunition of archers by <b>15</b>
+  - level: 4
+    description: Increases the maximum movement points of all allied units by <b>1</b>.
+      Also increases the ammunition of archers by <b>15</b>

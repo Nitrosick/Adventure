@@ -20,11 +20,16 @@ MonoBehaviour:
   bonusType: 0
   phase: 1
   effectValues:
-  - 3
-  - 6
-  - 2
-  - 5
-  - 10
+  - values:
+    - 3
+  - values:
+    - 6
+  - values:
+    - 2
+  - values:
+    - 5
+  - values:
+    - 10
   effectDescriptions:
   - level: 0
     description: Restores <b>3 HP</b> to one random unit

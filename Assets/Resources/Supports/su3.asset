@@ -20,11 +20,16 @@ MonoBehaviour:
   bonusType: 1
   phase: 0
   effectValues:
-  - 60
-  - 70
-  - 80
-  - 90
-  - 100
+  - values:
+    - 60
+  - values:
+    - 70
+  - values:
+    - 80
+  - values:
+    - 90
+  - values:
+    - 100
   effectDescriptions:
   - level: 0
     description: With a <b>60%</b> chance, reveals each enemy trap on the battlefield

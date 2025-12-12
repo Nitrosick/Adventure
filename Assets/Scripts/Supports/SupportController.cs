@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 public static class SupportController {
   private static List<SupportInstance> allSupports = new();
@@ -27,7 +28,7 @@ public static class SupportController {
           TileManager.HighlightChests();
           break;
         case "su3":
-          TileManager.UncoverTraps(sup.data.effectValues[i]);
+          TileManager.UncoverTraps(sup.data.effectValues[i].values[0]);
           break;
       }
     }
@@ -48,10 +49,10 @@ public static class SupportController {
         case "su1":
           if (i < 2) {
             Unit random = GetRandomUnit(affectedUnits);
-            if (random != null) random.Health.Heal(sup.data.effectValues[i]);
+            if (random != null) random.Health.Heal(sup.data.effectValues[i].values[0]);
           } else {
             foreach (var unit in affectedUnits) {
-              unit.Health.Heal(sup.data.effectValues[i]);
+              unit.Health.Heal(sup.data.effectValues[i].values[0]);
             }
           }
           break;
@@ -59,10 +60,11 @@ public static class SupportController {
     }
   }
 
-  public static float GetBonus(
+  public static float[] GetBonus(
     string id,
     bool inBattle = true,
-    UnitRelation relation = UnitRelation.Ally
+    UnitRelation relation = UnitRelation.Ally,
+    Unit unit = null
   ) {
     SupportInstance sup = null;
 
@@ -75,8 +77,18 @@ public static class SupportController {
         .FirstOrDefault(s => s.data.id == id && s.inSquad);
     }
 
-    if (sup == null) return 0;
-    return sup.data.effectValues[LevelIndex(sup)];
+    if (sup == null) return new float[] { 0 };
+    int level = LevelIndex(sup);
+    float[] values = sup.data.effectValues[level].values.ToArray();
+
+    if (unit != null) {
+      if (id == "su6") {
+        if (level < 4 && !unit.IsHero) return new float[] { 0, values[1] };
+        return values;
+      }
+    }
+
+    return values;
   }
 
   private static int LevelIndex(SupportInstance unit) {

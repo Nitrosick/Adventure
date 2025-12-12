@@ -20,11 +20,16 @@ MonoBehaviour:
   bonusType: 2
   phase: 2
   effectValues:
-  - 5
-  - 10
-  - 15
-  - 20
-  - 25
+  - values:
+    - 5
+  - values:
+    - 10
+  - values:
+    - 15
+  - values:
+    - 20
+  - values:
+    - 25
   effectDescriptions:
   - level: 0
     description: The armor's defense parameter increases by <b>5%</b>

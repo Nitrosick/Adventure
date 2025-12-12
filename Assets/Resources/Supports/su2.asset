@@ -21,11 +21,16 @@ MonoBehaviour:
   bonusType: 1
   phase: 2
   effectValues:
-  - 3
-  - 5
-  - 10
-  - 20
-  - 30
+  - values:
+    - 3
+  - values:
+    - 5
+  - values:
+    - 10
+  - values:
+    - 20
+  - values:
+    - 30
   effectDescriptions:
   - level: 0
     description: Reduces ambush chance by <b>3%</b>
