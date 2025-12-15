@@ -188,6 +188,10 @@ public enum EquipmentType {
   Spear
 }
 
+public enum ArmorSize {
+  S, M, L
+}
+
 public enum EquipmentWeight {
   Light,
   Medium,

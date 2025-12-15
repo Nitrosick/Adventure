@@ -4,46 +4,70 @@ using UnityEngine;
 
 public class PlayerInventory : MonoBehaviour {
   private PlayerArmy army;
+
   public Transform oneHandWeaponBracing;
   public Transform twoHandWeaponBracing;
   public Transform smallShieldBracing;
   public Transform towerShieldBracing;
-  private Transform beard;
-  private Transform hair;
+
+  private SkinnedMeshRenderer body;
+  public Transform beard;
+  public Transform hair;
 
   public List<Equipment> Equip { get; private set; } = new() { };
   public List<Item> Items { get; private set; } = new() { };
-  private ArmorSet[] armorSets;
 
   private void Awake() {
     army = transform.GetComponent<PlayerArmy>();
-    armorSets = GetComponentsInChildren<ArmorSet>(true);
-    beard = transform.Find("Model/Beard");
-    hair = transform.Find("Model/Hair");
+    body = transform.Find("Model/Body").GetComponent<SkinnedMeshRenderer>();
 
-    if (army == null || armorSets.Length == 0) {
+    if (!ComponentsInitialized()) {
       Debug.LogError("Unit inventory components initialization error");
     }
   }
 
   private void Start() {
+    if (!ComponentsInitialized()) return;
     UpdateEquipment();
+  }
+
+  private bool ComponentsInitialized() {
+    return new object[] {
+      army, body, oneHandWeaponBracing, twoHandWeaponBracing, smallShieldBracing, towerShieldBracing
+    }.All(x => x != null);
   }
 
   public void UpdateEquipment() {
     Unit hero = army.Units.FirstOrDefault(u => u.IsHero);
     if (hero == null) return;
     UnitEquipment heroEquip = hero.Equip;
-    if (beard != null) beard.gameObject.SetActive(false);
-    if (hair != null) hair.gameObject.SetActive(false);
 
-    foreach (ArmorSet set in armorSets) {
-      if (set.id == heroEquip.armor.id) {
-        set.gameObject.SetActive(true);
-        if (beard != null) beard.gameObject.SetActive(!heroEquip.armor.hideBeard);
-        if (hair != null) hair.gameObject.SetActive(!heroEquip.armor.hideHair);
+    if (heroEquip.armor != null) {
+      GameObject prefab = hero.Size == ArmorSize.L
+        ? heroEquip.armor.prefabL
+        : heroEquip.armor.prefabM;
+
+      if (prefab != null) {
+        GameObject armorObj = Instantiate(heroEquip.armor.prefabM);
+
+        if (armorObj.transform.Find("Model").TryGetComponent<SkinnedMeshRenderer>(out var armorMesh)) {
+          Dictionary<string, Transform> boneMap = new ();
+          foreach (Transform bone in body.bones) boneMap[bone.name] = bone;
+          Transform[] armorBones = new Transform[armorMesh.bones.Length];
+
+          for (int i = 0; i < armorMesh.bones.Length; i++) {
+            string boneName = armorMesh.bones[i].name;
+            armorBones[i] = boneMap[boneName];
+          }
+
+          armorMesh.bones = armorBones;
+          armorMesh.rootBone = body.rootBone;
+
+          if (hair != null) hair.gameObject.SetActive(!heroEquip.armor.bodyView.hideHair);
+          if (beard != null) beard.gameObject.SetActive(!heroEquip.armor.bodyView.hideBeard);
+          UpdateMaterials(heroEquip.armor);
+        }
       }
-      else set.gameObject.SetActive(false);
     }
 
     foreach (Transform item in oneHandWeaponBracing) { Destroy(item.gameObject); }
@@ -67,10 +91,20 @@ public class PlayerInventory : MonoBehaviour {
       bracing = loadedShield.type == EquipmentType.TowerShield
         ? towerShieldBracing
         : smallShieldBracing;
-      GameObject shieldObj = Instantiate(loadedShield.prefab, bracing);
+      GameObject shieldObj = Instantiate(loadedShield.prefabM, bracing);
       shieldObj.transform.SetParent(bracing, false);
     }
     // FIXME: Обработать все типы доп. предмета
+  }
+
+  private void UpdateMaterials(Armor armor) {
+    Material[] mats = body.sharedMaterials;
+
+    if (armor.bodyView.topMaterial != null) mats[0] = armor.bodyView.topMaterial;
+    if (armor.bodyView.underwearMaterial != null) mats[1] = armor.bodyView.underwearMaterial;
+    if (armor.bodyView.bottomMaterial != null) mats[2] = armor.bodyView.bottomMaterial;
+
+    body.sharedMaterials = mats;
   }
 
   public void UpdateInventory(Equipment[] items) { Equip = items.ToList(); }

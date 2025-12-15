@@ -23,15 +23,15 @@ MonoBehaviour:
   slot: 2
   weight: 0
   rarity: 0
-  effect: {fileID: 0}
-  effectChance: 0
-  skill: {fileID: 0}
-  icon: {fileID: 21300000, guid: 4468d422d8cd1a1439e4011677a2b78b, type: 3}
+  effects: []
+  skills: []
+  icon: {fileID: 21300000, guid: 0ac3ae6c3a7f8184398e2e288d526b9d, type: 3}
   price: 100
   isNew: 0
   defense: 1
   blockMultiplier: 1
-  prefab: {fileID: 0}
+  prefabM: {fileID: 4764476856017380038, guid: 390bd731655e38d4f9d3335473fa2662, type: 3}
+  prefabL: {fileID: 0}
   resistsMap:
   - type: 1
     value: 0
@@ -43,5 +43,9 @@ MonoBehaviour:
     value: 5
   - type: 5
     value: 5
-  hideBeard: 0
-  hideHair: 1
+  bodyView:
+    hideBeard: 0
+    hideHair: 1
+    topMaterial: {fileID: 2100000, guid: 343b52cae03af5b43ba965f56392b334, type: 2}
+    underwearMaterial: {fileID: 2100000, guid: 9e79d0312199da146b1b8671ef6ff307, type: 2}
+    bottomMaterial: {fileID: 2100000, guid: 9e79d0312199da146b1b8671ef6ff307, type: 2}

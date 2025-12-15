@@ -4,47 +4,66 @@ using UnityEngine;
 
 public class UnitEquipment : MonoBehaviour {
   private Unit unit;
+  private SkinnedMeshRenderer body;
+
   public Weapon primary;
   public Equipment secondary;
   public Armor armor;
   public AdditionalItem additional;
 
-  private ArmorSet[] armorSets;
   public Transform rightHand;
   public Transform leftHand;
-  private Transform beard;
-  private Transform hair;
+  public Transform beard;
+  public Transform hair;
 
   private readonly float damageScalingFactor = 0.75f;
 
   private void Awake() {
     unit = transform.GetComponent<Unit>();
-    armorSets = GetComponentsInChildren<ArmorSet>(true);
-    beard = transform.Find("Model/Beard");
-    hair = transform.Find("Model/Hair");
+    body = transform.Find("Model/Body").GetComponent<SkinnedMeshRenderer>();
 
-    if (unit == null || armorSets.Length == 0) {
+    if (!ComponentsInitialized()) {
       Debug.LogError("Unit equipment components initialization error");
     }
   }
 
   private void Start() {
+    if (!ComponentsInitialized()) return;
     UpdateEquipment();
   }
 
-  private void UpdateEquipment() {
-    if (beard != null) beard.gameObject.SetActive(false);
-    if (hair != null) hair.gameObject.SetActive(false);
+  private bool ComponentsInitialized() {
+    return new object[] {
+      unit, body, rightHand, leftHand
+    }.All(x => x != null);
+  }
 
-    foreach (ArmorSet set in armorSets) {
-      if (set.id == armor.id) {
-        set.gameObject.SetActive(true);
-        if (beard != null) beard.gameObject.SetActive(!armor.hideBeard);
-        if (hair != null) hair.gameObject.SetActive(!armor.hideHair);
-        if (set.cape != null) set.cape.SetActive(true);
-      } else {
-        set.gameObject.SetActive(false);
-        if (set.cape != null) set.cape.SetActive(false);
+  private void UpdateEquipment() {
+    if (armor != null) {
+      GameObject prefab = unit.Size == ArmorSize.L
+        ? armor.prefabL
+        : armor.prefabM;
+
+      if (prefab != null) {
+        GameObject armorObj = Instantiate(armor.prefabM);
+
+        if (armorObj.transform.Find("Model").TryGetComponent<SkinnedMeshRenderer>(out var armorMesh)) {
+          Dictionary<string, Transform> boneMap = new ();
+          foreach (Transform bone in body.bones) boneMap[bone.name] = bone;
+          Transform[] armorBones = new Transform[armorMesh.bones.Length];
+
+          for (int i = 0; i < armorMesh.bones.Length; i++) {
+            string boneName = armorMesh.bones[i].name;
+            armorBones[i] = boneMap[boneName];
+          }
+
+          armorMesh.bones = armorBones;
+          armorMesh.rootBone = body.rootBone;
+
+          if (hair != null) hair.gameObject.SetActive(!armor.bodyView.hideHair);
+          if (beard != null) beard.gameObject.SetActive(!armor.bodyView.hideBeard);
+          UpdateMaterials();
+        }
       }
     }
 
@@ -76,10 +95,20 @@ public class UnitEquipment : MonoBehaviour {
       else if (secondary is Armor secArmor) {
         Armor loaded = Resources.Load<Armor>("Armor/" + secondary.name);
         if (loaded == null) return;
-        GameObject obj = Instantiate(loaded.prefab, leftHand);
+        GameObject obj = Instantiate(loaded.prefabM, leftHand);
         obj.transform.SetParent(leftHand, false);
       }
     }
+  }
+
+  private void UpdateMaterials() {
+    Material[] mats = body.sharedMaterials;
+
+    if (armor.bodyView.topMaterial != null) mats[0] = armor.bodyView.topMaterial;
+    if (armor.bodyView.underwearMaterial != null) mats[1] = armor.bodyView.underwearMaterial;
+    if (armor.bodyView.bottomMaterial != null) mats[2] = armor.bodyView.bottomMaterial;
+
+    body.sharedMaterials = mats;
   }
 
   public void EquipItem(Equipment item) {
@@ -288,11 +317,7 @@ public class UnitEquipment : MonoBehaviour {
         }
         break;
       case UnitEquipSlot.Armor:
-        if (item is Armor armor1) {
-          foreach (ArmorSet set in armorSets) {
-            if (set.id == armor1.id) result = 0;
-          }
-        }
+        // FIXME: Проверить возможность носить броню
         break;
       case UnitEquipSlot.Secondary:
         if (item is Armor armor2) {

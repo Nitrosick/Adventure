@@ -30,7 +30,7 @@ MonoBehaviour:
   isNew: 0
   defense: 1
   blockMultiplier: 1
-  prefab: {fileID: 9203723984715052730, guid: 63201ea7c00759045889e05853175c3f, type: 3}
+  prefabM: {fileID: 9203723984715052730, guid: 63201ea7c00759045889e05853175c3f, type: 3}
   resistsMap:
   - type: 1
     value: 0
@@ -42,5 +42,9 @@ MonoBehaviour:
     value: 0
   - type: 5
     value: 0
-  hideBeard: 0
-  hideHair: 0
+  bodyView:
+    hideBeard: 0
+    hideHair: 0
+    topMaterial: {fileID: 0}
+    underwearMaterial: {fileID: 0}
+    bottomMaterial: {fileID: 0}

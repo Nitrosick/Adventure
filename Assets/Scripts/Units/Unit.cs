@@ -41,6 +41,7 @@ public class Unit : MonoBehaviour {
   public Reward killReward;
   public EquipmentType AllowedWeapon { get; protected set; }
   public bool ShieldIsAllow { get; protected set; } = false;
+  public ArmorSize Size { get; protected set; } = ArmorSize.M;
 
   public int Level { get; protected set; } = 1;
   public int MaxLevel { get; protected set; }

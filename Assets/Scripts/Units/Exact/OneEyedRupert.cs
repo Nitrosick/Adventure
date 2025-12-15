@@ -9,6 +9,7 @@ public class OneEyedRupert : UnitCombat {
     PrefabId = "u9";
     Type = UnitType.Melee;
     AllowedWeapon = EquipmentType.OneHandWeapon;
+    Size = ArmorSize.L;
     Level = 3;
     MaxLevel = 10;
     LevelingCoreStat = CoreStat.Strength;
