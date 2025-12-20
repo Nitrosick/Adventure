@@ -139,7 +139,8 @@ public enum UnitType {
   Melee,
   Range,
   Mage,
-  Siege
+  Siege,
+  No
 }
 
 public enum UnitRelation {

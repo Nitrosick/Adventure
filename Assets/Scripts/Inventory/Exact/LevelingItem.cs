@@ -8,6 +8,13 @@ public class LevelingItem : Item {
   public UnitType unitType;
 
   public override void Use() {
+    switch (id) {
+      case "li2":
+        // FIXME: Использование на алтаре
+        _ = Toast.Show("warning", "It can't be applied here");
+        return;
+    }
+
     Unit[] units = Player.Instance.Army.Units
       .Where(u => u.Type == unitType && u.Level < maxLevel && u.Level < u.MaxLevel)
       .ToArray();

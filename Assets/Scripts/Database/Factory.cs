@@ -49,6 +49,10 @@ public static class Factory {
     return Load<Effect>(GetPath(id));
   }
 
+  public static Buff CreateBuffById(string id) {
+    return Load<Buff>(GetPath(id));
+  }
+
   private static string GetPath(string id) {
     if (string.IsNullOrEmpty(id)) return null;
     if (id.StartsWith("aa")) return "Knowledge/" + id;
@@ -57,13 +61,18 @@ public static class Factory {
     if (id.StartsWith("su")) return "Supports/" + id;
     if (
       id.StartsWith("ki") || id.StartsWith("li") || id.StartsWith("mi") ||
-      id.StartsWith("g") || id.StartsWith("t")
+      id.StartsWith("g") || id.StartsWith("m") || id.StartsWith("t")
     ) return "Misc/" + id;
-    if (id.StartsWith("a") || id.StartsWith("s")) return "Armor/" + id;
-    if (id.StartsWith("e")) return "Effects/" + id;
+    if (
+      id.StartsWith("a") || id.StartsWith("s")
+      ) return "Armor/" + id;
+    if (
+      id.StartsWith("b") || id.StartsWith("e")
+    ) return "Effects/" + id;
     if (id.StartsWith("q")) return "Quests/" + id;
     if (id.StartsWith("w")) return "Weapon/" + id;
-    Debug.LogError($"Unknown equipment id: {id}");
+
+    Debug.LogError($"Unknown item id: {id}");
     return null;
   }
 

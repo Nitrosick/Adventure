@@ -33,4 +33,5 @@ public class SaveData {
   public QuestData[] quests;
   public AchievementData[] achievements;
   public AbilityData[] abilities;
+  public HashSet<string> playerBuffs;
 }

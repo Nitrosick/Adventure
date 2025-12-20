@@ -7,6 +7,7 @@ public class Player : MonoBehaviour {
   public PlayerMove Move { get; private set; }
   public PlayerArmy Army { get; private set; }
   public PlayerInventory Inventory { get; private set; }
+  public PlayerEffects Effects { get; private set; }
 
   public int Gold { get; private set; }
   public int[] Resources { get; private set; } = { 0, 0, 0, 0 };
@@ -32,8 +33,9 @@ public class Player : MonoBehaviour {
     Move = transform.GetComponent<PlayerMove>();
     Army = transform.GetComponent<PlayerArmy>();
     Inventory = transform.GetComponent<PlayerInventory>();
+    Effects = transform.GetComponent<PlayerEffects>();
 
-    if (Move == null || Army == null || Inventory == null) {
+    if (Move == null || Army == null || Inventory == null || Effects == null) {
       Debug.LogError("Player components initialization error");
     }
   }
@@ -231,7 +233,9 @@ public class Player : MonoBehaviour {
             break;
         }
 
+        Effects.RemoveBuff("b1");
         CheckVillagersOverwhelmed();
+
         StateManager.globalTicks++;
         StateManager.SaveGame();
       }

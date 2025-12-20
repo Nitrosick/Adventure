@@ -184,8 +184,16 @@ public class Unit : MonoBehaviour {
 
   public int GetInitiative() {
     int result = Initiative;
-    if (Relation == UnitRelation.Ally) result += (int)AbilityController.MovePriorityBonus();
 
+    // Buffs
+    if (Relation == UnitRelation.Ally && StateManager.playerBuffs.Contains("b1"))
+      result += 1;
+
+    // Abilities
+    if (Relation == UnitRelation.Ally)
+      result += (int)AbilityController.MovePriorityBonus();
+
+    // Effects
     if (
       QueueManager.Queue
         .Where(u => u.Relation == Relation && u != this)

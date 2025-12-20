@@ -25,7 +25,7 @@ public class MapZoneRest : MonoBehaviour {
       unit.Health.Heal(-1, false);
     }
     MapUI.Instance.HideStatus("canRest");
-    // FIXME: Накинуть бафф
+    Player.Instance.Effects.AddBuff("b1");
 
     await SceneController.Fade(1f, 0f, false);
     SceneController.HideEventInfo();

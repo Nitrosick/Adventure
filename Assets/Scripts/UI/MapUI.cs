@@ -10,6 +10,7 @@ public class MapUI : GeneralUI {
   public static MapUI Instance;
   private static IconDatabase IconDatabase;
   public GameObject emptySlotPrefab;
+  public GameObject buffSlotPrefab;
   public Sprite villagersSprite;
   public Sprite[] resourceSprites;
 
@@ -44,6 +45,7 @@ public class MapUI : GeneralUI {
   private TextMeshProUGUI location;
 
   // Statuses
+  private Transform buffsPanel;
   private GameObject canRest;
 
   public string[] resTooltips = { "Wood", "Stone", "Metal", "Leather" };
@@ -89,6 +91,7 @@ public class MapUI : GeneralUI {
     totalPeopleValue = Get<TextMeshProUGUI>(resources, "TotalPeople/Value");
     location = Get<TextMeshProUGUI>(resources, "Location");
 
+    buffsPanel = Find(statuses, "Buffs").transform;
     canRest = Find(statuses, "CanRest");
 
     if (!ComponentsInitialized()) {
@@ -108,7 +111,8 @@ public class MapUI : GeneralUI {
       goldValue,  woodValue, stoneValue, metalValue,  villagersValue,
       leatherValue, zoneInfoBattleMark,  zoneInfoClearedMark, zoneInfoRecruitMark, interactButton,
       location, interactButtonIcon, interactButtonText,  totalPeopleValue, zoneInfoCollectMark,
-      zoneInfoRespawnMark, zoneInfoGuardMark, canRest, zoneBattleDifficulty, zoneBattleDifficultyValue
+      zoneInfoRespawnMark, zoneInfoGuardMark, canRest, zoneBattleDifficulty, zoneBattleDifficultyValue,
+      buffsPanel
     }.All(x => x != null);
   }
 
@@ -281,6 +285,16 @@ public class MapUI : GeneralUI {
       case "canRest":
         canRest.SetActive(false);
         break;
+    }
+  }
+
+  public void UpdateBuffs(List<Buff> buffs) {
+    foreach (Transform child in buffsPanel) Destroy(child.gameObject);
+
+    foreach (Buff buff in buffs) {
+      GameObject buffSlot = Instantiate(buffSlotPrefab, buffsPanel);
+      buffSlot.transform.Find("Icon").GetComponent<Image>().sprite = buff.icon;
+      buffSlot.GetComponent<TooltipTrigger>().message = $"{ buff.title }\n{ buff.description }";
     }
   }
 }

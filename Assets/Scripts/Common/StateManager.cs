@@ -59,6 +59,7 @@ public static class StateManager {
   public static AbilityData[] abilities;
   public static Equipment[] inventoryEquipment;
   public static Item[] inventoryItems;
+  public static HashSet<string> playerBuffs;
 
   public static void ResetTemp() {
     enterScene = "";
@@ -101,6 +102,7 @@ public static class StateManager {
     abilities = new AbilityData[] { };
     inventoryEquipment = new Equipment[] { };
     inventoryItems = new Item[] { };
+    playerBuffs = new HashSet<string> { };
     ResetTemp();
   }
 
@@ -219,7 +221,8 @@ public static class StateManager {
       abilities = abilities,
       playerSupports = playerSupports,
       inventoryEquipmentIds = equipIds,
-      inventoryItemIds = itemIds
+      inventoryItemIds = itemIds,
+      playerBuffs = playerBuffs
     };
     return data;
   }
@@ -253,6 +256,7 @@ public static class StateManager {
     abilities = data.abilities;
     inventoryEquipment = Factory.CreateEquipById(data.inventoryEquipmentIds);
     inventoryItems = Factory.CreateItemById(data.inventoryItemIds);
+    playerBuffs = data.playerBuffs;
   }
 
   public static void InitPlayerArmy() {

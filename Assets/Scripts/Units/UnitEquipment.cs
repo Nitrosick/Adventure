@@ -193,10 +193,13 @@ public class UnitEquipment : MonoBehaviour {
   public float GetTotalDefense() {
     float result = 0;
 
+    // Equipment
     if (armor != null) result += armor.defense;
     if (secondary != null) {
       if (secondary is Armor secArmor) result += secArmor.defense;
     }
+
+    // Supports
     float supportBonus = SupportController.GetBonus("su5", relation: unit.Relation)[0];
     if (supportBonus > 0) result *= 1f + (supportBonus / 100);
 
@@ -206,6 +209,7 @@ public class UnitEquipment : MonoBehaviour {
   public Dictionary<DamageType, float> GetTotalResists() {
     Dictionary<DamageType, float> result = new(armor.resists);
 
+    // Equipment
     if (secondary != null) {
       if (secondary is Armor secArmor) {
         foreach (var dmg in secArmor.resists) {
@@ -219,9 +223,16 @@ public class UnitEquipment : MonoBehaviour {
 
   public float GetTotalDamage() {
     float result = primary.damage;
+
+    // Buffs
+    if (unit.Relation == UnitRelation.Ally && StateManager.playerBuffs.Contains("b1"))
+      result += 1;
+
+    // Supports
     float supportBonus = SupportController.GetBonus("su4", relation: unit.Relation)[0];
     if (supportBonus > 0) result *= 1f + (supportBonus / 100);
 
+    // Core stats
     foreach (CoreStat stat in primary.scalingStats) {
       switch (stat) {
         case CoreStat.Strength: result += unit.Strength * damageScalingFactor; break;

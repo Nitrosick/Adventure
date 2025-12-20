@@ -33503,10 +33503,12 @@ MonoBehaviour:
     reputation: 0
     statPoints: 0
     abilityPoints: 0
-    goldRange: 3200000064000000
+    goldRange: 4b00000064000000
     resources: 00000000000000000000000000000000
     equipment: []
-    items: []
+    items:
+    - {fileID: 11400000, guid: 05cca14243a1f3f4e9cd38d14766edf0, type: 2}
+    - {fileID: 11400000, guid: a2a5cb79bb6ae2a41affff11d4a86af5, type: 2}
     projectiles: 0
 --- !u!1 &549496737
 GameObject:
@@ -37110,6 +37112,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 12406760}
+  - {fileID: 1382515457}
   m_Father: {fileID: 1966962657}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
@@ -73472,7 +73475,7 @@ PrefabInstance:
     - target: {fileID: 1873506877480454718, guid: 0fca8e902ab40cc44830c8de569c9956,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -366.71765
+      value: -366.71762
       objectReference: {fileID: 0}
     - target: {fileID: 2524876846711916440, guid: 0fca8e902ab40cc44830c8de569c9956,
         type: 3}
@@ -73647,7 +73650,7 @@ PrefabInstance:
     - target: {fileID: 4829038950859787982, guid: 0fca8e902ab40cc44830c8de569c9956,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -366.71765
+      value: -366.71762
       objectReference: {fileID: 0}
     - target: {fileID: 5334508951450400536, guid: 0fca8e902ab40cc44830c8de569c9956,
         type: 3}
@@ -78656,6 +78659,83 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1381414223}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1382515456
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1382515457}
+  - component: {fileID: 1382515459}
+  - component: {fileID: 1382515458}
+  m_Layer: 5
+  m_Name: Buffs
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1382515457
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1382515456}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 613311167}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 37.5, y: -0}
+  m_SizeDelta: {x: 75, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1382515458
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1382515456}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 0
+  m_Spacing: 8
+  m_ChildForceExpandWidth: 0
+  m_ChildForceExpandHeight: 0
+  m_ChildControlWidth: 0
+  m_ChildControlHeight: 0
+  m_ChildScaleWidth: 1
+  m_ChildScaleHeight: 0
+  m_ReverseArrangement: 0
+--- !u!114 &1382515459
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1382515456}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalFit: 0
+  m_VerticalFit: 2
 --- !u!1001 &1382630237
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -80434,6 +80514,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   emptySlotPrefab: {fileID: 7621594476458183801, guid: 483debdfb519d38408888191c3e692a1,
+    type: 3}
+  buffSlotPrefab: {fileID: 8393826413305722947, guid: f05141ba1f37bdd4495fd0ca7202887e,
     type: 3}
   villagersSprite: {fileID: 21300000, guid: a9b6adb853c2297438d2ce6e6507fdf4, type: 3}
   resourceSprites:
@@ -89012,6 +89094,7 @@ GameObject:
   - component: {fileID: 1552015628}
   - component: {fileID: 1552015632}
   - component: {fileID: 1552015633}
+  - component: {fileID: 1552015634}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -89102,6 +89185,18 @@ MonoBehaviour:
   towerShieldBracing: {fileID: 1659565415}
   beard: {fileID: 0}
   hair: {fileID: 864988490}
+--- !u!114 &1552015634
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1552015627}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74c5dbdb34fb0834ab492027b8c1cd01, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1552147649
 PrefabInstance:
   m_ObjectHideFlags: 0
