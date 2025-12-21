@@ -13,6 +13,7 @@ public class MapZone : MonoBehaviour {
   public List<MapZoneType> events = new();
   public bool isEmpty;
   public bool secret;
+  public LineRenderer[] pathlines;
 
   public GameObject[] interactiveObjects;
   public List<Quest> QuestsList { get; set; } = new() { };
@@ -21,7 +22,6 @@ public class MapZone : MonoBehaviour {
   private MeshRenderer markIcon;
   private Transform markQuestIcon;
   private Way[] ways;
-  private Transform pathLines;
 
   private readonly float fadeDuration = 1f;
   private readonly float linesTransparency = 0.6f;
@@ -37,7 +37,6 @@ public class MapZone : MonoBehaviour {
     }
 
     ways = transform.GetComponentsInChildren<Way>();
-    pathLines = transform.Find("Pathes");
 
     if (auraRender == null || markerRender == null || ways == null || ways.Length < 1) {
       Debug.LogError("Map zone components initialization error");
@@ -55,7 +54,6 @@ public class MapZone : MonoBehaviour {
       else SetCleared();
     }
 
-    InitUnlockedPathes();
     auraRender.material = MapZoneManager.Instance.defaultMaterial;
   }
 
@@ -159,50 +157,32 @@ public class MapZone : MonoBehaviour {
   }
 
   private void InitPathLines() {
-    if (pathLines == null) return;
-
-    foreach (Transform path in pathLines) {
-      LineRenderer renderer = path.GetComponent<LineRenderer>();
-      renderer.material = new Material(renderer.material);
-      Color color = renderer.material.color;
+    foreach (LineRenderer path in pathlines) {
+      path.material = new Material(path.material);
+      Color color = path.material.color;
       color.a = 0;
-      renderer.material.color = color;
+      path.material.color = color;
     }
-  }
-
-  private void InitUnlockedPathes() {
-    foreach (Way way in ways) {
-      if (StateManager.unlockedPassages.Contains(way.id) && way.blocked) {
-        way.blocked = false;
-      }
-    }
-  }
-
-  public void UnlockPath(string wayId) {
-    if (wayId == null || ways.Length == 0) return;
-    Way wayById = ways.FirstOrDefault(w => w.id == wayId);
-    if (wayById == null) return;
-    wayById.blocked = false;
-    StateManager.unlockedPassages.Add(wayId);
   }
 
   public void ShowPathLines() {
-    if (pathLines == null) return;
-
-    foreach (Transform path in pathLines) {
+    foreach (LineRenderer path in pathlines) {
       _ = PathLineFade(path);
     }
   }
 
-  private async Task PathLineFade(Transform path) {
-    LineRenderer renderer = path.GetComponent<LineRenderer>();
-    Material mat = renderer.material;
+  private async Task PathLineFade(LineRenderer path) {
+    Material mat = path.material;
     Color color = mat.color;
+
+    if (Mathf.Approximately(color.a, linesTransparency)) return;
+
+    float startAlpha = color.a;
     float elapsed = 0f;
 
     while (elapsed < fadeDuration) {
       elapsed += Time.deltaTime;
-      color.a = Mathf.Lerp(0f, 1f, elapsed / fadeDuration);
+      color.a = Mathf.Lerp(startAlpha, linesTransparency, elapsed / fadeDuration);
       mat.color = color;
       await Task.Yield();
     }

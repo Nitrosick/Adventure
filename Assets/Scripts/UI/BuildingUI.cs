@@ -241,9 +241,7 @@ public class BuildingUI : MonoBehaviour {
     await SceneController.Fade(0f, 1f, true);
 
     mapZone.Remove();
-    foreach (var item in mapZone.waysUnlock) {
-      item.zone.UnlockPath(item.wayId);
-    }
+    foreach (BlockedPath path in mapZone.unlockPathes) path.Unlock();
     mapZone = null;
 
     await SceneController.Fade(1f, 0f, false);

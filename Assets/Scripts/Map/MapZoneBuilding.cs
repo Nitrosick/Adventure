@@ -1,18 +1,11 @@
-using System;
 using UnityEngine;
 
 public class MapZoneBuilding : MonoBehaviour {
-  [Serializable]
-  public class MapZoneWayUnlock {
-    public MapZone zone;
-    public string wayId;
-  }
-
   private MapZone zone;
   public Building building;
   public Requirements requirements;
   public Sprite sprite;
-  public MapZoneWayUnlock[] waysUnlock;
+  public BlockedPath[] unlockPathes = {};
 
   private void Awake() {
     zone = transform.GetComponent<MapZone>();

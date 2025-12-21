@@ -77,7 +77,7 @@ public static class SupportController {
         .FirstOrDefault(s => s.data.id == id && s.inSquad);
     }
 
-    if (sup == null) return new float[] { 0 };
+    if (sup == null) return new float[] { 0, 0 };
     int level = LevelIndex(sup);
     float[] values = sup.data.effectValues[level].values.ToArray();
 
