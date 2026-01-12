@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class Missle : MonoBehaviour {
@@ -39,6 +40,7 @@ public class Missle : MonoBehaviour {
         target.Health.TakeDamage(0f, 1f);
       } else if (success) {
         target.Health.TakeDamage(damage, critModifier);
+        LogDamage(target, damage, critModifier);
       } else {
         target.Ui.ShowPopup("Miss!");
         target.Animator.Dodge();
@@ -48,5 +50,11 @@ public class Missle : MonoBehaviour {
     }
 
     Destroy(gameObject);
+  }
+
+  private void LogDamage(Unit unit, float damage, float critModifier) {
+    string damageVal = ((float)Math.Round(damage * critModifier, 1)).ToString();
+    if (critModifier > 1) damageVal = $"<color=#EFBF0D>{damageVal}</color>";
+    LogUI.Instance.Add($"<color=#A0A0A0>The projectile deals</color> {damageVal} <color=#A0A0A0>damage to</color> {unit.Name}");
   }
 }

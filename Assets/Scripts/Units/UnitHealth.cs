@@ -42,8 +42,7 @@ public class UnitHealth : MonoBehaviour {
     if (totalDamage >= unit.CurrentHealth) {
       unit.CurrentHealth = 0;
       Die();
-    }
-    else {
+    } else {
       unit.CurrentHealth -= totalDamage;
       unit.Ui.UpdateHealth(GetMaxHP(), unit.CurrentHealth);
 
@@ -55,6 +54,7 @@ public class UnitHealth : MonoBehaviour {
   }
 
   private void Die() {
+    // FIXME: Добавить все id бандитских юнитов
     // Bandit ids
     if (new string[] { "u3", "u6", "u7" }.Contains(unit.PrefabId)) TriggerAchievement("ac1");
 

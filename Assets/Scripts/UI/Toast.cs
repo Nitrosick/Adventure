@@ -10,7 +10,6 @@ public class Toast : MonoBehaviour {
   private static Transform panel;
   private static Image image;
   private static TextMeshProUGUI message;
-  private static readonly int delay = 5;
 
   private static CancellationTokenSource cts;
 
@@ -26,7 +25,7 @@ public class Toast : MonoBehaviour {
     }
   }
 
-  public static async Task Show(string icon, string text) {
+  public static async Task Show(string icon, string text, int delay = 5) {
     cts?.Cancel();
     cts = new CancellationTokenSource();
 

@@ -59,8 +59,12 @@ public class QueueManager : MonoBehaviour
       return;
     }
 
-    if (nextUnit.Relation == UnitRelation.Enemy) BattleUI.Instance.DisableUI();
-    else BattleUI.Instance.EnableUI();
+    if (nextUnit.Relation == UnitRelation.Enemy) {
+      BattleUI.Instance.DisableUI();
+    } else {
+      BattleUI.Instance.EnableUI();
+      _ = Toast.Show("move", "Movement phase", 1);
+    }
 
     BeforeSwitch();
     CurrentUnit = nextUnit;

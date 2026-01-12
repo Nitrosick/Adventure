@@ -296,4 +296,5 @@ public class Unit : MonoBehaviour {
   public virtual void FinishAction() { }
   public virtual void Shoot() { }
   public virtual void BlockStance(string id) { }
+  protected virtual void LogDamage(float damage, float critModifier, List<Effect> effects) { }
 }

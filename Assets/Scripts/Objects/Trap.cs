@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class Trap : MonoBehaviour {
@@ -35,6 +36,22 @@ public class Trap : MonoBehaviour {
     }
 
     unit.Effects.ApplyEffect(effect);
+    LogDamage(unit, totalDamage, modifier, effect);
     if (effect.cancelMove) PhaseManager.NextPhase();
+  }
+
+  private void LogDamage(
+    Unit unit,
+    float damage,
+    float modifier,
+    Effect effect
+  ) {
+    string damageVal = ((float)Math.Round(damage * modifier, 1)).ToString();
+    LogUI.Instance.Add($"{unit.Name} <color=#A0A0A0>takes</color> {damageVal} <color=#A0A0A0>damage from the</color> Trap");
+
+    if (effect != null) {
+      string effectText = $"<color={(effect.isNegative ? "#F61010" : "#81D11F")}>{effect.effectName}</color>";
+      LogUI.Instance.Add($"{unit.Name} <color=#A0A0A0>is affected by</color> {effectText}");
+    }
   }
 }

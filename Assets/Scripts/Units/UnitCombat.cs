@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -54,11 +55,15 @@ public class UnitCombat : Unit {
       if (successAttack) {
         if (!DamageBlocked(charged)) {
           BlockBreakdown(charged);
+
           float critModifier = Calculate.CritModifier(this, Target, charged);
           float damage = Calculate.Damage(this, Target, charged);
+
           List<Effect> effects = Calculate.ItemEffects(this, Target);
           foreach (Effect effect in effects) Target.Effects.ApplyEffect(effect);
+
           Target.Health.TakeDamage(damage, critModifier, charged: charged);
+          LogDamage(damage, critModifier, effects);
         }
       } else {
         Target.Ui.ShowPopup("Miss!");
@@ -136,5 +141,16 @@ public class UnitCombat : Unit {
     if (SkillCharges <= 0) BattleUI.Instance.DisableSkills();
     if (Equip.GetActiveSkills().Count > 0) Ui.UpdateCharges(TotalSkillCharges, SkillCharges);
     FinishAction();
+  }
+
+  protected override void LogDamage(float damage, float critModifier, List<Effect> effects) {
+    string damageVal = ((float)Math.Round(damage * critModifier, 1)).ToString();
+    if (critModifier > 1) damageVal = $"<color=#EFBF0D>{damageVal}</color>";
+    LogUI.Instance.Add($"{Name} <color=#A0A0A0>deals</color> {damageVal} <color=#A0A0A0>damage to</color> {Target.Name}");
+
+    foreach (Effect e in effects) {
+      string effectText = $"<color={(e.isNegative ? "#F61010" : "#81D11F")}>{e.effectName}</color>";
+      LogUI.Instance.Add($"{Target.Name} <color=#A0A0A0>is affected by</color> {effectText}");
+    }
   }
 }

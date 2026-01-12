@@ -34,6 +34,8 @@ public class PhaseManager : MonoBehaviour
 
     switch (CurrentPhase) {
       case BattlePhase.Movement:
+        if (QueueManager.CurrentUnit.Relation == UnitRelation.Ally)
+          _ = Toast.Show("battle", "Attack phase", 1);
         CurrentPhase = BattlePhase.Attack;
         break;
 
