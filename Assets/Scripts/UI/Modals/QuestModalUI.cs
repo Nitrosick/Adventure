@@ -67,8 +67,8 @@ public class QuestModalUI : ModalRewardUI {
     if (quest.state == QuestState.Completed) title.text += " (Completed)";
 
     text.text = quest.state == QuestState.Completed
-     ? quest.data.descriptionCompleted
-     : quest.data.description;
+      ? quest.data.descriptionCompleted
+      : quest.data.description;
 
     Reward reward = quest.data.reward;
     ShowReward(reward);

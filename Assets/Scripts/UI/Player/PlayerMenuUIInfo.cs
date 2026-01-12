@@ -248,7 +248,6 @@ public class PlayerMenuUIInfo : MonoBehaviour {
     GameObject unitAvatar = Instantiate(PlayerMenuUI.Instance.menuSlotPrefab, avatar);
     unitAvatar.GetComponent<MenuSlot>().Init(unit, true);
 
-    unitInSquad.interactable = unit.CurrentHealth > 0;
     InSquadButtonLabel(unit);
     UpdateUnitEquipment(unit);
 

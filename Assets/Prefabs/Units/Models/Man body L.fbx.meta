@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 201fb61a308755a4ab2e7d1428b2fa03
+guid: 37bdc555836598542b36507a0064f896
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -7,28 +7,38 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Body bottom
+      name: Body arms
     second: {fileID: 2100000, guid: 343b52cae03af5b43ba965f56392b334, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Body top
+      name: Body foots
+    second: {fileID: 2100000, guid: 343b52cae03af5b43ba965f56392b334, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Body hands
+    second: {fileID: 2100000, guid: 343b52cae03af5b43ba965f56392b334, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Body legs
+    second: {fileID: 2100000, guid: 343b52cae03af5b43ba965f56392b334, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Body torso
     second: {fileID: 2100000, guid: 343b52cae03af5b43ba965f56392b334, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Body underwear
-    second: {fileID: 2100000, guid: 343b52cae03af5b43ba965f56392b334, type: 2}
+    second: {fileID: 2100000, guid: c709d9dfb00a0924fa29c5139f10ad8f, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Bristle
     second: {fileID: 2100000, guid: 88ce0eea0006a59448d1b44a27447d38, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Chrome
-    second: {fileID: 2100000, guid: 4e0c4efcf4c590c449ffabc7ecea6734, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule

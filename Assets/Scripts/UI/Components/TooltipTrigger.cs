@@ -3,7 +3,7 @@ using UnityEngine.EventSystems;
 
 public class TooltipTrigger : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler {
   [TextArea(5, 20)] public string message;
-  private readonly float hoverTime = 1f;
+  private readonly float hoverTime = 0.3f;
   private bool isPointerOver = false;
   private float timer = 0f;
 

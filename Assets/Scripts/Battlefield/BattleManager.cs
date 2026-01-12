@@ -29,7 +29,7 @@ public class BattleManager : MonoBehaviour {
     Reward = new Reward();
 
     allies = StateManager.playerUnits
-      .Where(u => u.inSquad)
+      .Where(u => u.inSquad && u.currentHealth > 0)
       .OrderByDescending(u => u.type == UnitType.Range)
       .ToArray();
 

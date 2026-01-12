@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: e5247bea017bbd940bec872a925f6f75
+guid: 5e07d2501d718be4d9a38b0f6de0e616
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -7,18 +7,38 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Body bottom
+      name: Body arms
     second: {fileID: 2100000, guid: 343b52cae03af5b43ba965f56392b334, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Body top
+      name: Body foots
+    second: {fileID: 2100000, guid: 343b52cae03af5b43ba965f56392b334, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Body hands
+    second: {fileID: 2100000, guid: 343b52cae03af5b43ba965f56392b334, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Body head
+    second: {fileID: 2100000, guid: 343b52cae03af5b43ba965f56392b334, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Body legs
+    second: {fileID: 2100000, guid: 343b52cae03af5b43ba965f56392b334, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Body torso
     second: {fileID: 2100000, guid: 343b52cae03af5b43ba965f56392b334, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Body underwear
-    second: {fileID: 2100000, guid: 343b52cae03af5b43ba965f56392b334, type: 2}
+    second: {fileID: 2100000, guid: c709d9dfb00a0924fa29c5139f10ad8f, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
@@ -39,11 +59,6 @@ ModelImporter:
       assembly: UnityEngine.CoreModule
       name: Lips
     second: {fileID: 2100000, guid: 3c0cabed6abc35c4499546f252c7e819, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Skin
-    second: {fileID: 2100000, guid: 343b52cae03af5b43ba965f56392b334, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

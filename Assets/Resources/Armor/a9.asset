@@ -30,8 +30,8 @@ MonoBehaviour:
   isNew: 0
   defense: 1
   blockMultiplier: 1
-  prefabM: {fileID: 2298909898344114248, guid: 2be12820196576f4e837959aff681e01, type: 3}
-  prefabL: {fileID: 8740576843249638884, guid: 45d11aaf8f41da545b4ddd64d9a40b37, type: 3}
+  prefabM: {fileID: 7045699262569923864, guid: 2be12820196576f4e837959aff681e01, type: 3}
+  prefabL: {fileID: 8255742841765946762, guid: 45d11aaf8f41da545b4ddd64d9a40b37, type: 3}
   resistsMap:
   - type: 1
     value: 0
@@ -46,6 +46,9 @@ MonoBehaviour:
   bodyView:
     hideBeard: 0
     hideHair: 1
-    topMaterial: {fileID: 2100000, guid: 343b52cae03af5b43ba965f56392b334, type: 2}
-    underwearMaterial: {fileID: 2100000, guid: 343b52cae03af5b43ba965f56392b334, type: 2}
-    bottomMaterial: {fileID: 2100000, guid: 343b52cae03af5b43ba965f56392b334, type: 2}
+    handsMaterial: {fileID: 2100000, guid: 343b52cae03af5b43ba965f56392b334, type: 2}
+    armsMaterial: {fileID: 2100000, guid: 343b52cae03af5b43ba965f56392b334, type: 2}
+    torsoMaterial: {fileID: 2100000, guid: 2ed285ca696469c4a9fc8deaec1dcb3f, type: 2}
+    underwearMaterial: {fileID: 2100000, guid: 2ed285ca696469c4a9fc8deaec1dcb3f, type: 2}
+    legsMaterial: {fileID: 2100000, guid: 2ed285ca696469c4a9fc8deaec1dcb3f, type: 2}
+    footsMaterial: {fileID: 2100000, guid: 2ed285ca696469c4a9fc8deaec1dcb3f, type: 2}

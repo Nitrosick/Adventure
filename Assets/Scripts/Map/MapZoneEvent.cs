@@ -95,6 +95,8 @@ public class MapZoneEvent : MonoBehaviour {
     if (list.Count == 0) return;
 
     foreach (Quest q in list) {
+      if (q.objectiveZoneId != zone.id) continue;
+
       switch (q.objectiveType) {
         case QuestObjective.Fight:
           if (battle.instant) StartBattle(battle);
@@ -146,7 +148,7 @@ public class MapZoneEvent : MonoBehaviour {
     }
 
     Unit[] playerUnits = Player.Instance.Army.Units.ToArray();
-    Unit[] unitsInSquad = Player.Instance.Army.Units.Where(u => u.InSquad).ToArray();
+    Unit[] unitsInSquad = Player.Instance.Army.Units.Where(u => u.InSquad && u.CurrentHealth > 0).ToArray();
 
     if (playerUnits == null || playerUnits.Length == 0) {
       Debug.LogError("Player doesn't have an army");

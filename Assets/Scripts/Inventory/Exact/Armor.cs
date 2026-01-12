@@ -6,9 +6,12 @@ using UnityEngine;
 public class BodyView {
   public bool hideBeard;
   public bool hideHair;
-  public Material topMaterial;
+  public Material handsMaterial;
+  public Material armsMaterial;
+  public Material torsoMaterial;
   public Material underwearMaterial;
-  public Material bottomMaterial;
+  public Material legsMaterial;
+  public Material footsMaterial;
 }
 
 [CreateAssetMenu(menuName = "GameObjects/Equipment/Armor")]

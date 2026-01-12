@@ -31,6 +31,7 @@ MonoBehaviour:
   defense: 2
   blockMultiplier: 1
   prefabM: {fileID: 5588071909403683875, guid: b8758e551b482134894147634e3fce3c, type: 3}
+  prefabL: {fileID: 0}
   resistsMap:
   - type: 1
     value: 3
@@ -45,6 +46,9 @@ MonoBehaviour:
   bodyView:
     hideBeard: 0
     hideHair: 1
-    topMaterial: {fileID: 2100000, guid: e85be6efa2944e4469490b2518ede726, type: 2}
+    handsMaterial: {fileID: 2100000, guid: 2ed285ca696469c4a9fc8deaec1dcb3f, type: 2}
+    armsMaterial: {fileID: 2100000, guid: e85be6efa2944e4469490b2518ede726, type: 2}
+    torsoMaterial: {fileID: 2100000, guid: 2ed285ca696469c4a9fc8deaec1dcb3f, type: 2}
     underwearMaterial: {fileID: 2100000, guid: e85be6efa2944e4469490b2518ede726, type: 2}
-    bottomMaterial: {fileID: 2100000, guid: e85be6efa2944e4469490b2518ede726, type: 2}
+    legsMaterial: {fileID: 2100000, guid: e85be6efa2944e4469490b2518ede726, type: 2}
+    footsMaterial: {fileID: 2100000, guid: 2ed285ca696469c4a9fc8deaec1dcb3f, type: 2}

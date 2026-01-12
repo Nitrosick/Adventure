@@ -99,10 +99,21 @@ public class PlayerInventory : MonoBehaviour {
 
   private void UpdateMaterials(Armor armor) {
     Material[] mats = body.sharedMaterials;
+    BodyView bv = armor.bodyView;
 
-    if (armor.bodyView.topMaterial != null) mats[0] = armor.bodyView.topMaterial;
-    if (armor.bodyView.underwearMaterial != null) mats[1] = armor.bodyView.underwearMaterial;
-    if (armor.bodyView.bottomMaterial != null) mats[2] = armor.bodyView.bottomMaterial;
+    Material[] materials = {
+      bv.torsoMaterial,
+      bv.underwearMaterial,
+      bv.legsMaterial,
+      bv.footsMaterial,
+      bv.armsMaterial,
+      bv.handsMaterial
+    };
+
+    for (int i = 0; i < materials.Length; i++) {
+      if (materials[i] == null) continue;
+      mats[i] = materials[i];
+    }
 
     body.sharedMaterials = mats;
   }

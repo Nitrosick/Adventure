@@ -147,11 +147,16 @@ public class Player : MonoBehaviour {
     SetReputation(reward.reputation);
     SetStatPoints(reward.statPoints);
     SetAbilityPoints(reward.abilityPoints);
+
     int goldValue = Utils.GetRandomInRange(reward.goldRange[0], reward.goldRange[1]);
     SetGold(goldValue);
+
     SetResources(reward.resources);
     Inventory.AddItems(reward.equipment);
     Inventory.AddItems(reward.items);
+
+    if (goldValue > 0) LogUI.Instance.Add($"+{goldValue} Gold");
+    LogUI.Instance.Add(reward);
     MapUI.Instance.UpdateResources();
   }
 

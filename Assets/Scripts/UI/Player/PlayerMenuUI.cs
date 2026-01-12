@@ -260,6 +260,8 @@ public class PlayerMenuUI : MonoBehaviour {
         ) return false;
         return true;
       })
+      .OrderByDescending(u => u.Level)
+      .ThenBy(u => u.Name)
       .ToArray();
 
     SupportInstance[] supports = player.Army.Supports
@@ -270,6 +272,8 @@ public class PlayerMenuUI : MonoBehaviour {
         ) return false;
         return true;
       })
+      .OrderByDescending(s => s.level)
+      .ThenBy(s => s.data.unitName)
       .ToArray();
 
     int unitsInSquad = player.Army.Units.Where(u => u.InSquad).ToArray().Length;

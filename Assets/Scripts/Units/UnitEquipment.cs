@@ -45,7 +45,7 @@ public class UnitEquipment : MonoBehaviour {
         : armor.prefabM;
 
       if (prefab != null) {
-        GameObject armorObj = Instantiate(armor.prefabM);
+        GameObject armorObj = Instantiate(prefab);
 
         if (armorObj.transform.Find("Model").TryGetComponent<SkinnedMeshRenderer>(out var armorMesh)) {
           Dictionary<string, Transform> boneMap = new ();
@@ -91,8 +91,7 @@ public class UnitEquipment : MonoBehaviour {
         if (loaded == null) return;
         GameObject obj = Instantiate(loaded.prefab, leftHand);
         obj.transform.SetParent(leftHand, false);
-      }
-      else if (secondary is Armor secArmor) {
+      } else if (secondary is Armor secArmor) {
         Armor loaded = Resources.Load<Armor>("Armor/" + secondary.name);
         if (loaded == null) return;
         GameObject obj = Instantiate(loaded.prefabM, leftHand);
@@ -103,10 +102,21 @@ public class UnitEquipment : MonoBehaviour {
 
   private void UpdateMaterials() {
     Material[] mats = body.sharedMaterials;
+    BodyView bv = armor.bodyView;
 
-    if (armor.bodyView.topMaterial != null) mats[0] = armor.bodyView.topMaterial;
-    if (armor.bodyView.underwearMaterial != null) mats[1] = armor.bodyView.underwearMaterial;
-    if (armor.bodyView.bottomMaterial != null) mats[2] = armor.bodyView.bottomMaterial;
+    Material[] materials = {
+      bv.torsoMaterial,
+      bv.underwearMaterial,
+      bv.legsMaterial,
+      bv.footsMaterial,
+      bv.armsMaterial,
+      bv.handsMaterial
+    };
+
+    for (int i = 0; i < materials.Length; i++) {
+      if (materials[i] == null) continue;
+      mats[i] = materials[i];
+    }
 
     body.sharedMaterials = mats;
   }

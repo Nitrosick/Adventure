@@ -17,12 +17,7 @@ public class PlayerArmy : MonoBehaviour {
       Unit unit = StateManager.PrefabDatabase.GetPrefab(data.prefabId);
       if (unit == null) return null;
       unit.FromData(data);
-
-      if (unit.CurrentHealth == 0) {
-        if (unit.IsHero) unit.CurrentHealth = 1f;
-        else unit.InSquad = false;
-      }
-
+      if (unit.CurrentHealth == 0 && unit.IsHero) unit.CurrentHealth = 1f;
       return unit;
     }).ToList();
   }
@@ -42,6 +37,7 @@ public class PlayerArmy : MonoBehaviour {
     Unit prefab = StateManager.PrefabDatabase.GetPrefab(unit.PrefabId, true);
     prefab.InSquad = false;
     prefab.IsNew = true;
+    prefab.CurrentHealth = prefab.TotalHealth;
     Units.Add(prefab);
     UpdateState();
   }

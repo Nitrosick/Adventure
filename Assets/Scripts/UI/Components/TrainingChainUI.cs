@@ -114,7 +114,7 @@ public class TrainingChainUI : MonoBehaviour {
     }
 
     foreach (Equipment item in chain.equipment) {
-      if (!player.Inventory.HasItem(item)) check = false;
+      if (!player.Inventory.HasItem(item, true)) check = false;
     }
 
     trainButton.interactable = check;
