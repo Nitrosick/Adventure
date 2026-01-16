@@ -41,6 +41,8 @@ public class MapZoneEvent : MonoBehaviour {
       eventIndex++;
     }
 
+    if (eventIndex >= zone.events.Count) return;
+
     switch (zone.events[eventIndex]) {
       case MapZoneType.Battle:
         if (ignoreBattle) return;

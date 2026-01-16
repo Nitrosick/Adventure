@@ -15,7 +15,7 @@ public static class Calculate {
   private static readonly float attackPointOffset = 0.75f;
 
   public static float HitChance(Unit attacker, Unit target, bool charged = false) {
-    if (target.Effects.HasAnyEffect(new string[] { "Block", "Wall", "Root" })) return 100f;
+    if (target.Effects.HasAnyEffect(new string[] { "Block", "Wall", "Root", "Stun" })) return 100f;
 
     float result = attacker.Equip.primary.precision;
 
