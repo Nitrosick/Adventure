@@ -17,6 +17,7 @@ public class UnitCombat : Unit {
     );
 
     float hitChance = Calculate.HitChance(this, Target, IsChargedAttack);
+    Debug.Log(hitChance); // FIXME: Убрать
     successAttack = Utils.RollChance(hitChance);
 
     if (!successAttack) Target.Animator.Dodge();

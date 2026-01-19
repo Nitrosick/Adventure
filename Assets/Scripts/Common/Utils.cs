@@ -14,6 +14,8 @@ public static class Utils {
   };
 
   public static bool RollChance(float chance) {
+    if (chance >= 100f) return true;
+    if (chance <= 0f) return false;
     return UnityEngine.Random.Range(0f, 100f) < chance;
   }
 

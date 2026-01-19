@@ -5,6 +5,7 @@ using UnityEngine;
 public class UnitEquipment : MonoBehaviour {
   private Unit unit;
   private SkinnedMeshRenderer body;
+  private CapsuleCollider[] clothColliders = {};
 
   public Weapon primary;
   public Equipment secondary;
@@ -21,6 +22,15 @@ public class UnitEquipment : MonoBehaviour {
   private void Awake() {
     unit = transform.GetComponent<Unit>();
     body = transform.Find("Model/Body").GetComponent<SkinnedMeshRenderer>();
+
+    CapsuleCollider hipsCollider = transform.Find("Model/Armature/mixamorig:Hips").GetComponent<CapsuleCollider>();
+    CapsuleCollider spineCollider = transform.Find("Model/Armature/mixamorig:Hips/mixamorig:Spine/mixamorig:Spine1/mixamorig:Spine2").GetComponent<CapsuleCollider>();
+
+    if (hipsCollider != null && spineCollider != null) {
+      clothColliders = new CapsuleCollider[] {
+        hipsCollider, spineCollider
+      };
+    }
 
     if (!ComponentsInitialized()) {
       Debug.LogError("Unit equipment components initialization error");
@@ -46,20 +56,16 @@ public class UnitEquipment : MonoBehaviour {
 
       if (prefab != null) {
         GameObject armorObj = Instantiate(prefab);
+        Transform model = armorObj.transform.Find("Model");
+        Transform cape = armorObj.transform.Find("Cape");
 
-        if (armorObj.transform.Find("Model").TryGetComponent<SkinnedMeshRenderer>(out var armorMesh)) {
-          Dictionary<string, Transform> boneMap = new ();
-          foreach (Transform bone in body.bones) boneMap[bone.name] = bone;
-          Transform[] armorBones = new Transform[armorMesh.bones.Length];
+        if (cape != null) {
+          if (cape.TryGetComponent<SkinnedMeshRenderer>(out var capeMesh)) RetargetBones(capeMesh);
+          if (cape.TryGetComponent<Cloth>(out var cloth)) cloth.capsuleColliders = clothColliders;
+        }
 
-          for (int i = 0; i < armorMesh.bones.Length; i++) {
-            string boneName = armorMesh.bones[i].name;
-            armorBones[i] = boneMap[boneName];
-          }
-
-          armorMesh.bones = armorBones;
-          armorMesh.rootBone = body.rootBone;
-
+        if (model != null && model.TryGetComponent<SkinnedMeshRenderer>(out var armorMesh)) {
+          RetargetBones(armorMesh);
           if (hair != null) hair.gameObject.SetActive(!armor.bodyView.hideHair);
           if (beard != null) beard.gameObject.SetActive(!armor.bodyView.hideBeard);
           UpdateMaterials();
@@ -98,6 +104,20 @@ public class UnitEquipment : MonoBehaviour {
         obj.transform.SetParent(leftHand, false);
       }
     }
+  }
+
+  private void RetargetBones(SkinnedMeshRenderer mesh) {
+    Dictionary<string, Transform> boneMap = new ();
+    foreach (Transform bone in body.bones) boneMap[bone.name] = bone;
+    Transform[] armorBones = new Transform[mesh.bones.Length];
+
+    for (int i = 0; i < mesh.bones.Length; i++) {
+      string boneName = mesh.bones[i].name;
+      armorBones[i] = boneMap[boneName];
+    }
+
+    mesh.bones = armorBones;
+    mesh.rootBone = body.rootBone;
   }
 
   private void UpdateMaterials() {

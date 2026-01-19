@@ -11,6 +11,7 @@ public class PlayerInventory : MonoBehaviour {
   public Transform towerShieldBracing;
 
   private SkinnedMeshRenderer body;
+  private CapsuleCollider[] clothColliders = {};
   public Transform beard;
   public Transform hair;
 
@@ -49,20 +50,25 @@ public class PlayerInventory : MonoBehaviour {
 
       if (prefab != null) {
         GameObject armorObj = Instantiate(heroEquip.armor.prefabM);
+        Transform model = armorObj.transform.Find("Model");
+        Transform cape = armorObj.transform.Find("Cape");
 
-        if (armorObj.transform.Find("Model").TryGetComponent<SkinnedMeshRenderer>(out var armorMesh)) {
-          Dictionary<string, Transform> boneMap = new ();
-          foreach (Transform bone in body.bones) boneMap[bone.name] = bone;
-          Transform[] armorBones = new Transform[armorMesh.bones.Length];
+        CapsuleCollider hipsCollider = transform.Find("Model/Armature/mixamorig:Hips").GetComponent<CapsuleCollider>();
+        CapsuleCollider spineCollider = transform.Find("Model/Armature/mixamorig:Hips/mixamorig:Spine/mixamorig:Spine1/mixamorig:Spine2").GetComponent<CapsuleCollider>();
 
-          for (int i = 0; i < armorMesh.bones.Length; i++) {
-            string boneName = armorMesh.bones[i].name;
-            armorBones[i] = boneMap[boneName];
-          }
+        if (hipsCollider != null && spineCollider != null) {
+          clothColliders = new CapsuleCollider[] {
+            hipsCollider, spineCollider
+          };
+        }
 
-          armorMesh.bones = armorBones;
-          armorMesh.rootBone = body.rootBone;
+        if (cape != null) {
+          if (cape.TryGetComponent<SkinnedMeshRenderer>(out var capeMesh)) RetargetBones(capeMesh);
+          if (cape.TryGetComponent<Cloth>(out var cloth)) cloth.capsuleColliders = clothColliders;
+        }
 
+        if (model != null && model.TryGetComponent<SkinnedMeshRenderer>(out var armorMesh)) {
+          RetargetBones(armorMesh);
           if (hair != null) hair.gameObject.SetActive(!heroEquip.armor.bodyView.hideHair);
           if (beard != null) beard.gameObject.SetActive(!heroEquip.armor.bodyView.hideBeard);
           UpdateMaterials(heroEquip.armor);
@@ -95,6 +101,20 @@ public class PlayerInventory : MonoBehaviour {
       shieldObj.transform.SetParent(bracing, false);
     }
     // FIXME: Обработать все типы доп. предмета
+  }
+
+  private void RetargetBones(SkinnedMeshRenderer mesh) {
+    Dictionary<string, Transform> boneMap = new ();
+    foreach (Transform bone in body.bones) boneMap[bone.name] = bone;
+    Transform[] armorBones = new Transform[mesh.bones.Length];
+
+    for (int i = 0; i < mesh.bones.Length; i++) {
+      string boneName = mesh.bones[i].name;
+      armorBones[i] = boneMap[boneName];
+    }
+
+    mesh.bones = armorBones;
+    mesh.rootBone = body.rootBone;
   }
 
   private void UpdateMaterials(Armor armor) {

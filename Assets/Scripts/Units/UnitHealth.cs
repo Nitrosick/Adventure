@@ -56,7 +56,7 @@ public class UnitHealth : MonoBehaviour {
   private void Die() {
     // FIXME: Добавить все id бандитских юнитов
     // Bandit ids
-    if (new string[] { "u3", "u6", "u7" }.Contains(unit.PrefabId)) TriggerAchievement("ac1");
+    if (new string[] { "u3", "u6", "u7", "u13" }.Contains(unit.PrefabId)) TriggerAchievement("ac1");
 
     unit.IsDead = true;
     unit.CurrentTile.OccupiedBy = null;

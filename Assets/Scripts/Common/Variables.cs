@@ -187,7 +187,8 @@ public enum EquipmentType {
   Armor,
   TowerShield,
   Additional,
-  Spear
+  Spear,
+  Dagger
 }
 
 public enum ArmorSize {
