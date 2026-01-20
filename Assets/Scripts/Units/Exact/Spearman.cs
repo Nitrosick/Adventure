@@ -1,10 +1,7 @@
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using UnityEngine;
 
 public class Spearman : UnitCombat {
-  private readonly float delayAfterAttack = 1.2f;
-
   private Spearman() {
     Strength = 4;
     Dexterity = 1;
@@ -26,7 +23,7 @@ public class Spearman : UnitCombat {
     BehaviorType = AIBehaviorType.TryPierceHit;
   }
 
-  public override async void DealDamage(bool charged = false) {
+  public override void DealDamage(bool charged = false) {
     if (successAttack) {
       int obstacleLayer = LayerMask.NameToLayer("Obstacle");
       int unitLayer = LayerMask.NameToLayer("Unit");
@@ -38,7 +35,7 @@ public class Spearman : UnitCombat {
         if (go.layer == obstacleLayer) {
           Target.Ui.ShowPopup("Obstacle!");
           Target = null;
-          PhaseManager.NextPhase();
+          NextPhase();
           return;
         }
 
@@ -47,15 +44,11 @@ public class Spearman : UnitCombat {
           float damage = Calculate.Damage(this, unit, charged);
           List<Effect> effects = Calculate.ItemEffects(this, unit);
           foreach (Effect effect in effects) unit.Effects.ApplyEffect(effect);
-          unit.Health.TakeDamage(damage, critModifier, false, true);
+          unit.Health.TakeDamage(damage, critModifier);
         }
       }
-
-      await Task.Delay((int)(delayAfterAttack * 1000));
-      PhaseManager.NextPhase();
     } else {
       Target.Ui.ShowPopup("Miss!");
     }
-    Target = null;
   }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class Missle : MonoBehaviour {
@@ -7,7 +8,7 @@ public class Missle : MonoBehaviour {
   private float damage;
   private float critModifier;
   private bool success;
-  private readonly int defaultDestroyTime = 5;
+  private readonly int delayAfterCollision = 750;
 
   private void Awake() {
     rb = transform.GetComponent<Rigidbody>();
@@ -26,10 +27,9 @@ public class Missle : MonoBehaviour {
     success = suc;
     rb.isKinematic = false;
     rb.velocity = velocity;
-    Destroy(gameObject, defaultDestroyTime);
   }
 
-  private void OnTriggerEnter(Collider other) {
+  private async void OnTriggerEnter(Collider other) {
     if (other == source.GetComponent<Collider>()) return;
 
     if (other.gameObject.CompareTag("Unit")) {
@@ -45,11 +45,11 @@ public class Missle : MonoBehaviour {
         target.Ui.ShowPopup("Miss!");
         target.Animator.Dodge();
       }
-    } else {
-      PhaseManager.NextPhase();
     }
 
     Destroy(gameObject);
+    await Task.Delay(delayAfterCollision);
+    PhaseManager.NextPhase();
   }
 
   private void LogDamage(Unit unit, float damage, float critModifier) {

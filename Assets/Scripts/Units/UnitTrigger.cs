@@ -16,17 +16,14 @@ public class UnitTrigger : MonoBehaviour {
   }
 
   private void TriggerChargedAttack() {
-    unit.DealDamage(true);
+    unit.DealDamage(charged: true);
   }
 
   private void TriggerShoot() {
     unit.Shoot();
   }
 
-  private void FinishAction() {
-    unit.FinishAction();
-  }
-
+  // FIXME: Убрать
   private void TriggerShowFakeMissle() {
     unit.Animator.ShowFakeMissle();
   }

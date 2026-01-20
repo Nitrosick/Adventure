@@ -62,7 +62,6 @@ public class Unit : MonoBehaviour {
   public bool IsDead { get; set; }
   public bool InSquad { get; set; }
   public bool IsNew { get; set; }
-  public bool PreventPhaseSkip { get; set; }
   public bool IsChargedAttack { get; set; }
 
   protected void Awake() {
@@ -293,7 +292,7 @@ public class Unit : MonoBehaviour {
   public virtual void ChopTree(TreeObject target) { }
   public virtual void DealDamage(bool charged = false) { }
   protected virtual bool DamageBlocked(bool charged) { return false; }
-  public virtual void FinishAction() { }
+  public virtual void NextPhase(bool instant = false) { }
   public virtual void Shoot() { }
   public virtual void BlockStance(string id) { }
   protected virtual void LogDamage(float damage, float critModifier, List<Effect> effects) { }

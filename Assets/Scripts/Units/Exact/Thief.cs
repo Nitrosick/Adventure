@@ -19,6 +19,4 @@ public class Thief : UnitCombat
     Priority = 13;
     BehaviorType = AIBehaviorType.PriorityTarget;
   }
-
-  // FIXME: Обработать двойную атаку
 }

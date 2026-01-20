@@ -38,6 +38,7 @@ public class Breakable : MonoBehaviour {
     }
 
     ParentTile.DropLoot();
+    _ = CameraController.Shake(0.8f);
     Destroy(gameObject);
   }
 }

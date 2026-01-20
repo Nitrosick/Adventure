@@ -23,10 +23,8 @@ public class UnitHealth : MonoBehaviour {
     float damage,
     float modifier,
     bool tickDamage = false,
-    bool pierceDamage = false,
     bool charged = false
   ) {
-    unit.PreventPhaseSkip = pierceDamage;
     float totalDamage = damage * modifier;
     bool isCrit = modifier > 1f || charged;
 
@@ -45,11 +43,7 @@ public class UnitHealth : MonoBehaviour {
     } else {
       unit.CurrentHealth -= totalDamage;
       unit.Ui.UpdateHealth(GetMaxHP(), unit.CurrentHealth);
-
-      if (!tickDamage) {
-        if (unit.Effects.HasAnyEffect(new string[] { "Stun", "Root" })) unit.FinishAction();
-        else unit.Animator.TakeDamage();
-      }
+      if (!tickDamage) unit.Animator.TakeDamage();
     }
   }
 

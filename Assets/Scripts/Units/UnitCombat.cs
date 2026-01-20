@@ -1,9 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 
 public class UnitCombat : Unit {
+  private CancellationTokenSource phaseCts;
+  private readonly int delayAfterAttack = 1000;
+
   public override async void OnAttack(Unit target = null) {
     BattleUI.Instance.DisableUI();
     if (target != null) Target = target;
@@ -17,7 +21,6 @@ public class UnitCombat : Unit {
     );
 
     float hitChance = Calculate.HitChance(this, Target, IsChargedAttack);
-    Debug.Log(hitChance); // FIXME: Убрать
     successAttack = Utils.RollChance(hitChance);
 
     if (!successAttack) Target.Animator.Dodge();
@@ -27,7 +30,8 @@ public class UnitCombat : Unit {
       Animator.ChargedAttack();
       SkillCharges -= 1;
       if (Equip.GetActiveSkills().Count > 0) Ui.UpdateCharges(TotalSkillCharges, SkillCharges);
-    } else {
+    }
+    else {
       Animator.Attack();
     }
     IsChargedAttack = false;
@@ -69,22 +73,11 @@ public class UnitCombat : Unit {
       } else {
         Target.Ui.ShowPopup("Miss!");
       }
-      Target = null;
     }
 
-    if (TargetObject != null) {
-      TargetObject.Break();
-      _ = CameraController.Shake(0.8f);
-      TargetObject = null;
-      FinishAction();
-    }
-
-    if (TargetTree != null) {
-      TargetTree.Chop();
-      _ = CameraController.Shake(0.8f);
-      TargetTree = null;
-      FinishAction();
-    }
+    if (TargetObject != null) TargetObject.Break();
+    if (TargetTree != null) TargetTree.Chop();
+    NextPhase();
   }
 
   protected override bool DamageBlocked(bool charged) {
@@ -121,11 +114,6 @@ public class UnitCombat : Unit {
     }
   }
 
-  public override void FinishAction() {
-    if (!PreventPhaseSkip) PhaseManager.NextPhase();
-    PreventPhaseSkip = false;
-  }
-
   public override void Shoot() {
     CurrentProjectiles -= 1;
     if (CurrentProjectiles == 0) BehaviorType = AIBehaviorType.Retreat;
@@ -141,7 +129,7 @@ public class UnitCombat : Unit {
 
     if (SkillCharges <= 0) BattleUI.Instance.DisableSkills();
     if (Equip.GetActiveSkills().Count > 0) Ui.UpdateCharges(TotalSkillCharges, SkillCharges);
-    FinishAction();
+    NextPhase(true);
   }
 
   protected override void LogDamage(float damage, float critModifier, List<Effect> effects) {
@@ -153,5 +141,20 @@ public class UnitCombat : Unit {
       string effectText = $"<color={(e.isNegative ? "#F61010" : "#81D11F")}>{e.effectName}</color>";
       LogUI.Instance.Add($"{Target.Name} <color=#A0A0A0>is affected by</color> {effectText}");
     }
+  }
+
+  public override async void NextPhase(bool instant = false) {
+    phaseCts?.Cancel();
+    phaseCts = new CancellationTokenSource();
+    CancellationToken token = phaseCts.Token;
+
+    try {
+      if (!instant) await Task.Delay(delayAfterAttack, token);
+      Target = null;
+      TargetObject = null;
+      TargetTree = null;
+
+      PhaseManager.NextPhase();
+    } catch (TaskCanceledException) { }
   }
 }

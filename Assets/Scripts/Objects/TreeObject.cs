@@ -30,6 +30,7 @@ public class TreeObject : MonoBehaviour {
 
     transform.GetComponent<BoxCollider>().enabled = false;
     ParentTile.type = TileType.Open;
+    _ = CameraController.Shake(0.8f);
     Destroy(gameObject, objectDestroyTime);
   }
 }
