@@ -22,13 +22,4 @@ public class UnitTrigger : MonoBehaviour {
   private void TriggerShoot() {
     unit.Shoot();
   }
-
-  // FIXME: Убрать
-  private void TriggerShowFakeMissle() {
-    unit.Animator.ShowFakeMissle();
-  }
-
-  private void TriggerHideFakeMissle() {
-    unit.Animator.HideFakeMissle();
-  }
 }

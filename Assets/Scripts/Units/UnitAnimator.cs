@@ -5,7 +5,6 @@ public class UnitAnimator : MonoBehaviour {
   private Unit unit;
   private Transform model;
   private Animator animator;
-  public GameObject fakeMissle;
 
   private void Awake() {
     unit = transform.GetComponent<Unit>();
@@ -68,16 +67,6 @@ public class UnitAnimator : MonoBehaviour {
 
   public void Parry() {
     animator.SetTrigger("Parry");
-  }
-
-  public void ShowFakeMissle() {
-    if (fakeMissle == null) return;
-    fakeMissle.SetActive(true);
-  }
-
-  public void HideFakeMissle() {
-    if (fakeMissle == null) return;
-    fakeMissle.SetActive(false);
   }
 
   public void Reset() {
