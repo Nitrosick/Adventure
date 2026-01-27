@@ -9,7 +9,6 @@ public class ArmedPeasant : UnitCombat
     Description = "Just yesterday, a peasant working on the farm, today already on the front line. He has no combat experience, but he can be useful in the squad.";
     PrefabId = "u5";
     Type = UnitType.Melee;
-    AllowedWeapon = EquipmentType.OneHandWeapon;
     MaxLevel = 4;
     LevelingCoreStat = CoreStat.Strength;
     TotalHealth = 20f;
@@ -18,5 +17,12 @@ public class ArmedPeasant : UnitCombat
     Initiative = 4;
     Priority = 12;
     BehaviorType = AIBehaviorType.Aggressive;
+
+    AllowedWeapon = new EquipmentType[] {
+      EquipmentType.OneHandWeapon,
+      EquipmentType.TwoHandWeapon,
+      EquipmentType.Spear,
+      EquipmentType.PoleWeapon
+    };
   }
 }

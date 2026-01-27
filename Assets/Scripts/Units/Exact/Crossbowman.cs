@@ -13,7 +13,6 @@ public class Crossbowman : UnitCombat
     Description = "Extremely immobile, well-protected shooter. Effective at medium ranges.";
     PrefabId = "u4";
     Type = UnitType.Range;
-    AllowedWeapon = EquipmentType.Crossbow;
     Level = 2;
     MaxLevel = 6;
     LevelingCoreStat = CoreStat.Strength;
@@ -24,6 +23,10 @@ public class Crossbowman : UnitCombat
     Priority = 15;
     Projectiles = 25;
     BehaviorType = AIBehaviorType.KeepDistance;
+
+    AllowedWeapon = new EquipmentType[] {
+      EquipmentType.Crossbow
+    };
   }
 
   public GameObject boltPrefab;

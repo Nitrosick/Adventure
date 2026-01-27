@@ -24,7 +24,6 @@ public class UnitCombat : Unit {
     successAttack = Utils.RollChance(hitChance);
 
     if (!successAttack) Target.Animator.Dodge();
-    Animator.SetAttackType(Equip.primary.attackType);
 
     if (IsChargedAttack) {
       Animator.ChargedAttack();
@@ -42,7 +41,6 @@ public class UnitCombat : Unit {
     TargetObject = target;
     Vector3 dirToTarget = (TargetObject.ParentTile.GetPos() - transform.position).normalized;
     await Animator.RotateTowards(dirToTarget);
-    Animator.SetAttackType(Equip.primary.attackType);
     Animator.Attack();
   }
 
@@ -51,7 +49,6 @@ public class UnitCombat : Unit {
     TargetTree = target;
     Vector3 dirToTarget = (TargetTree.ParentTile.GetPos() - transform.position).normalized;
     await Animator.RotateTowards(dirToTarget);
-    Animator.SetAttackType(Equip.primary.attackType);
     Animator.Attack();
   }
 

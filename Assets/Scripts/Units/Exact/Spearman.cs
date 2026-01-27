@@ -11,7 +11,6 @@ public class Spearman : UnitCombat {
     Description = "The lowest-ranking guard. They usually guard warehouses, storerooms, stables, and if they're lucky, private homes.";
     PrefabId = "u10";
     Type = UnitType.Melee;
-    AllowedWeapon = EquipmentType.Spear;
     Level = 2;
     MaxLevel = 6;
     LevelingCoreStat = CoreStat.Strength;
@@ -21,6 +20,10 @@ public class Spearman : UnitCombat {
     Initiative = 5;
     Priority = 9;
     BehaviorType = AIBehaviorType.TryPierceHit;
+
+    AllowedWeapon = new EquipmentType[] {
+      EquipmentType.Spear
+    };
   }
 
   public override void DealDamage(bool charged = false) {

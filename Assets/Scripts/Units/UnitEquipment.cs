@@ -73,36 +73,38 @@ public class UnitEquipment : MonoBehaviour {
       }
     }
 
-    foreach (Transform item in rightHand) {
-      if (item.gameObject.CompareTag("FakeObject")) continue;
-      Destroy(item.gameObject);
-    }
-
-    foreach (Transform item in leftHand) {
-      if (item.gameObject.CompareTag("FakeObject")) continue;
-      Destroy(item.gameObject);
-    }
+    foreach (Transform item in rightHand) Destroy(item.gameObject);
+    foreach (Transform item in leftHand) Destroy(item.gameObject);
 
     if (primary != null) {
-      Weapon loadedWeapon = Resources.Load<Weapon>("Weapon/" + primary.name);
-      if (loadedWeapon == null) return;
-      Transform hand = loadedWeapon.type == EquipmentType.Bow ? leftHand : rightHand;
-      GameObject weaponObj = Instantiate(loadedWeapon.prefab, hand);
+      Weapon loaded = Resources.Load<Weapon>("Weapon/" + primary.name);
+      if (loaded == null) return;
+
+      Transform hand = loaded.hand == Side.Left ? leftHand : rightHand;
+      GameObject weaponObj = Instantiate(loaded.prefab, hand);
       weaponObj.transform.SetParent(hand, false);
+
+      if (loaded.animationSet != null && unit.Animator != null)
+        unit.Animator.SetController(loaded.animationSet);
     }
 
     if (secondary != null) {
       if (secondary is Weapon secWeapon) {
         Weapon loaded = Resources.Load<Weapon>("Weapon/" + secondary.name);
         if (loaded == null) return;
+
         GameObject obj = Instantiate(loaded.prefab, leftHand);
         obj.transform.SetParent(leftHand, false);
       } else if (secondary is Armor secArmor) {
         Armor loaded = Resources.Load<Armor>("Armor/" + secondary.name);
         if (loaded == null) return;
+
         GameObject obj = Instantiate(loaded.prefabM, leftHand);
         obj.transform.SetParent(leftHand, false);
       }
+
+      if (secondary.animationSet != null && unit.Animator != null)
+        unit.Animator.SetController(secondary.animationSet);
     }
   }
 
@@ -354,22 +356,31 @@ public class UnitEquipment : MonoBehaviour {
     switch (slot) {
       case UnitEquipSlot.Primary:
         if (item is Weapon weapon1) {
-          if (unit.AllowedWeapon == weapon1.type) result = 0;
+          // FIXME: Запретить оружие, если надет щит
+          if (unit.AllowedWeapon.Contains(weapon1.type)) result = 0;
         }
         break;
       case UnitEquipSlot.Armor:
-        // FIXME: Проверить возможность носить броню
+        if (item is Armor armor1) {
+          if (
+            (unit.Size == ArmorSize.M && armor1.prefabM != null) ||
+            (unit.Size == ArmorSize.L && armor1.prefabL != null)
+          ) result = 0;
+        }
         break;
       case UnitEquipSlot.Secondary:
         if (item is Armor armor2) {
-          if (armor2.type == EquipmentType.Shield && unit.ShieldIsAllow) result = 0;
+          if (
+            armor2.type == EquipmentType.Shield &&
+            (primary == null || primary.type == EquipmentType.OneHandWeapon)
+          ) result = 0;
         }
         break;
       case UnitEquipSlot.Additional:
         if (item is AdditionalItem additional) {
           if (
             additional.unitTypes.Contains(unit.Type) &&
-            additional.allowedWeapons.Contains(unit.AllowedWeapon)
+            additional.allowedWeapon.Intersect(unit.AllowedWeapon).Any()
           ) result = 0;
         }
         break;

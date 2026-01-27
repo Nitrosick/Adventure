@@ -35,8 +35,13 @@ MonoBehaviour:
   armorPenetration: 0
   precision: 97
   range: 1
-  attackType: 1
   prefab: {fileID: 3431540301885659675, guid: 7c5f57224a1f39343ab7d18199a9fc50, type: 3}
+  animationSet: {fileID: 9100000, guid: 82506fd5931819649bf717bb38703d44, type: 2}
   damageType: 1
   trajectory: 0
   scalingStats: 0000000001000000
+  chargedAttackParams:
+    hitChancePenalty: 0
+    damageBonus: 0
+    critBonus: 0
+  hand: 0

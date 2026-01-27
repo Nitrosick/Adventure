@@ -12,7 +12,6 @@ public class Poacher : UnitCombat {
     Description = "They hunt animals, especially rare ones. But when money is really scarce, they won't hesitate to join a bandit group";
     PrefabId = "u6";
     Type = UnitType.Range;
-    AllowedWeapon = EquipmentType.Bow;
     MaxLevel = 6;
     LevelingCoreStat = CoreStat.Dexterity;
     TotalHealth = 20f;
@@ -22,6 +21,10 @@ public class Poacher : UnitCombat {
     Priority = 16;
     Projectiles = 25;
     BehaviorType = AIBehaviorType.KeepDistance;
+
+    AllowedWeapon = new EquipmentType[] {
+      EquipmentType.Bow
+    };
   }
 
   public GameObject arrowPrefab;

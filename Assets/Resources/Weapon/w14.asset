@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb13a142f8c484a44b9b8c61360ca04b, type: 3}
+  m_Name: w14
+  m_EditorClassIdentifier: 
+  id: w14
+  itemName: Poleaxe
+  description: An effective weapon to keep the target at a distance. However, to
+    use it, one must have a sufficiently strong physique. With a good hit, armor
+    will shatter into splinters. Some even manage to chop down trees with such an
+    axe.
+  requirementStats: 050000000100000000000000
+  requirementLevel: 2
+  type: 10
+  slot: 0
+  weight: 1
+  rarity: 0
+  effects: []
+  skills:
+  - {fileID: 11400000, guid: 38da540228ac3b942904b24d804fe810, type: 2}
+  icon: {fileID: 21300000, guid: d58c41608a7adda4c830963075b79069, type: 3}
+  price: 100
+  isNew: 0
+  damage: 9
+  critModifier: 1.3
+  armorPenetration: 30
+  precision: 83
+  range: 1
+  prefab: {fileID: 1557676199536821796, guid: 3062673373a973e4cbcf8604ab59c3ab, type: 3}
+  animationSet: {fileID: 9100000, guid: c99e975c5eaefdb4693eb51abee196ad, type: 2}
+  damageType: 3
+  trajectory: 0
+  scalingStats: 00000000
+  chargedAttackParams:
+    hitChancePenalty: 15
+    damageBonus: 50
+    critBonus: 10
+  hand: 1

@@ -15,11 +15,11 @@ public class Weapon : Equipment {
   public float armorPenetration;
   public float precision = 95f;
   public float range;
-  public int attackType = 1;
 
   public GameObject prefab;
   public DamageType damageType;
   public ShotTrajectory trajectory;
   public CoreStat[] scalingStats;
   public ChargedAttackParams chargedAttackParams;
+  public Side hand;
 }

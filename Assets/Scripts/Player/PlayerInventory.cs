@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerInventory : MonoBehaviour {
   private PlayerArmy army;
 
+  private GameObject armorObj;
   public Transform oneHandWeaponBracing;
   public Transform twoHandWeaponBracing;
   public Transform smallShieldBracing;
@@ -43,13 +44,18 @@ public class PlayerInventory : MonoBehaviour {
     if (hero == null) return;
     UnitEquipment heroEquip = hero.Equip;
 
+    if (armorObj != null) {
+      Destroy(armorObj);
+      armorObj = null;
+    }
+
     if (heroEquip.armor != null) {
       GameObject prefab = hero.Size == ArmorSize.L
         ? heroEquip.armor.prefabL
         : heroEquip.armor.prefabM;
 
       if (prefab != null) {
-        GameObject armorObj = Instantiate(heroEquip.armor.prefabM);
+        armorObj = Instantiate(heroEquip.armor.prefabM);
         Transform model = armorObj.transform.Find("Model");
         Transform cape = armorObj.transform.Find("Cape");
 

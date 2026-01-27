@@ -18,7 +18,6 @@ public class BodyView {
 public class Armor : Equipment {
   public float defense;
   public float blockMultiplier = 1f;
-  // public GameObject prefabS;
   public GameObject prefabM;
   public GameObject prefabL;
   public List<DamageResistance> resistsMap;

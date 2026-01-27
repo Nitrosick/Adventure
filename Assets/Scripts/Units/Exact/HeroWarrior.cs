@@ -9,15 +9,20 @@ public class HeroWarrior : UnitCombat {
     IsHero = true;
     PrefabId = "u1";
     Type = UnitType.Melee;
-    AllowedWeapon = EquipmentType.OneHandWeapon;
     MaxLevel = 30;
     LevelingCoreStat = CoreStat.Strength;
-    ShieldIsAllow = true;
     TotalHealth = 40f;
     MoveSpeed = 3f;
     DefaultMovePoints = 6;
     Initiative = 7;
     Priority = 6;
     BehaviorType = AIBehaviorType.Passive;
+
+    AllowedWeapon = new EquipmentType[] {
+      EquipmentType.OneHandWeapon,
+      EquipmentType.TwoHandWeapon,
+      EquipmentType.Spear,
+      EquipmentType.PoleWeapon
+    };
   }
 }

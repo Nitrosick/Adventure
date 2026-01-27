@@ -188,11 +188,17 @@ public enum EquipmentType {
   TowerShield,
   Additional,
   Spear,
-  Dagger
+  Dagger,
+  PoleWeapon
 }
 
 public enum ArmorSize {
   S, M, L
+}
+
+public enum Side {
+  Right,
+  Left
 }
 
 public enum EquipmentWeight {

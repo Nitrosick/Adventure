@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using UnityEditor.Animations;
 using UnityEngine;
 
 public class UnitAnimator : MonoBehaviour {
@@ -21,6 +22,10 @@ public class UnitAnimator : MonoBehaviour {
     FocusToPoint();
   }
 
+  public void SetController(AnimatorController controller) {
+    animator.runtimeAnimatorController = controller;
+  }
+
   public void SetMoving(bool active) {
     animator.SetBool("IsMoving", active);
   }
@@ -39,10 +44,6 @@ public class UnitAnimator : MonoBehaviour {
 
   public void SetRooted(bool active) {
     animator.SetBool("IsRooted", active);
-  }
-
-  public void SetAttackType(int number) {
-    animator.SetInteger("AttackType", number);
   }
 
   public void Attack() {

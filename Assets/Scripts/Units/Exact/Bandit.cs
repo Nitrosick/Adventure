@@ -9,7 +9,6 @@ public class Bandit : UnitCombat
     Description = "This is a fast, agile, but poorly protected fighter who uses swords and daggers. Bandits set up camps in forests and hunt passing travelers.";
     PrefabId = "u3";
     Type = UnitType.Melee;
-    AllowedWeapon = EquipmentType.OneHandWeapon;
     MaxLevel = 6;
     LevelingCoreStat = CoreStat.Strength;
     TotalHealth = 20f;
@@ -18,5 +17,12 @@ public class Bandit : UnitCombat
     Initiative = 6;
     Priority = 12;
     BehaviorType = AIBehaviorType.Aggressive;
+
+    AllowedWeapon = new EquipmentType[] {
+      EquipmentType.OneHandWeapon,
+      EquipmentType.TwoHandWeapon,
+      EquipmentType.Spear,
+      EquipmentType.PoleWeapon
+    };
   }
 }

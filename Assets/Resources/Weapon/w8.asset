@@ -22,9 +22,8 @@ MonoBehaviour:
   slot: 0
   weight: 1
   rarity: 0
-  effect: {fileID: 0}
-  effectChance: 0
-  skill: {fileID: 0}
+  effects: []
+  skills: []
   icon: {fileID: 21300000, guid: 488a28c6b43e7d644931d03215d8359a, type: 3}
   price: 90
   isNew: 0
@@ -33,8 +32,13 @@ MonoBehaviour:
   armorPenetration: 25
   precision: 85
   range: 1
-  attackType: 1
   prefab: {fileID: 8109463894766015606, guid: a24ec10aa631c104a888c0dc95485906, type: 3}
+  animationSet: {fileID: 9100000, guid: 82506fd5931819649bf717bb38703d44, type: 2}
   damageType: 3
   trajectory: 0
   scalingStats: 00000000
+  chargedAttackParams:
+    hitChancePenalty: 0
+    damageBonus: 0
+    critBonus: 0
+  hand: 0

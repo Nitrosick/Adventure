@@ -8,7 +8,6 @@ public class OneEyedRupert : UnitCombat {
     Description = "This brute keeps the whole neighborhood in fear. He gets too bored after months of sailing and starts brawls in taverns and on the street. It won't be easy to take down such a giant, because in addition to his size, he's quite skilled with a saber.";
     PrefabId = "u9";
     Type = UnitType.Melee;
-    AllowedWeapon = EquipmentType.OneHandWeapon;
     Size = ArmorSize.L;
     Level = 3;
     MaxLevel = 10;
@@ -20,5 +19,9 @@ public class OneEyedRupert : UnitCombat {
     Priority = 5;
     BehaviorType = AIBehaviorType.PriorityTarget;
     IsBoss = true;
+
+    AllowedWeapon = new EquipmentType[] {
+      EquipmentType.OneHandWeapon
+    };
   }
 }

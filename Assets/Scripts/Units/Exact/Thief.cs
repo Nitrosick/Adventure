@@ -9,7 +9,6 @@ public class Thief : UnitCombat
     Description = "An elusive and fast melee unit. Excellent with a dagger and stealth skills. A very dangerous opponent, especially at night";
     PrefabId = "u13";
     Type = UnitType.Melee;
-    AllowedWeapon = EquipmentType.Dagger;
     MaxLevel = 7;
     LevelingCoreStat = CoreStat.Dexterity;
     TotalHealth = 25f;
@@ -18,5 +17,9 @@ public class Thief : UnitCombat
     Initiative = 8;
     Priority = 13;
     BehaviorType = AIBehaviorType.PriorityTarget;
+
+    AllowedWeapon = new EquipmentType[] {
+      EquipmentType.Dagger
+    };
   }
 }
