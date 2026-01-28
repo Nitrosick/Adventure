@@ -21,10 +21,8 @@ public class MeleeUnit : UnitCombat {
 
     if (IsChargedAttack) {
       Animator.ChargedAttack();
-      SkillCharges -= 1;
       if (Equip.GetActiveSkills().Count > 0) Ui.UpdateCharges(TotalSkillCharges, SkillCharges);
-    }
-    else {
+    } else {
       Animator.Attack();
     }
     IsChargedAttack = false;
@@ -36,7 +34,6 @@ public class MeleeUnit : UnitCombat {
 
     Effects.ApplyEffect(effect);
     Animator.SetBlocking(true);
-    SkillCharges -= 1;
 
     if (SkillCharges <= 0) BattleUI.Instance.DisableSkills();
     if (Equip.GetActiveSkills().Count > 0) Ui.UpdateCharges(TotalSkillCharges, SkillCharges);

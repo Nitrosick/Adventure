@@ -317,6 +317,7 @@ public class UnitEquipment : MonoBehaviour {
 
   public bool HasAttackPhaseSkills() {
     if (unit.SkillCharges == 0) return false;
+
     foreach (Skill skill in GetActiveSkills()) {
       // FIXME: Может сломаться проверка, если использовать не в PhaseManager
       if (skill.skillName == "Charged attack") continue;

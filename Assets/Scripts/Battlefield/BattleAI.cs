@@ -384,6 +384,8 @@ public static class BattleAI {
 
     if (enemy.SkillCharges > 0) {
       foreach (Skill skill in skills) {
+        if (skill.cost > enemy.SkillCharges) continue;
+
         switch (skill.skillName) {
           case "Charged attack":
             if (

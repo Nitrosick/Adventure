@@ -94,7 +94,7 @@ public class UnitCombat : Unit {
         case "Parry":
           Target.Animator.Parry();
           Target.Ui.ShowPopup("Parry!");
-          Target.Health.TakeDamage(0f, 1f);
+          _ = CameraController.Shake(0.8f);
           return true;
       }
     }

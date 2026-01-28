@@ -103,7 +103,7 @@ public class Unit : MonoBehaviour {
     Ui.UpdateHealth(Health.GetMaxHP(), CurrentHealth);
 
     if (IsHero) TotalSkillCharges += (int)AbilityController.ChargesBonus();
-    SkillCharges = TotalSkillCharges;
+    SetSkillCharges(TotalSkillCharges);
     if (Equip.GetActiveSkills().Count > 0) Ui.UpdateCharges(TotalSkillCharges, SkillCharges);
     Equip.ApplyInstantEffects();
   }
@@ -150,6 +150,12 @@ public class Unit : MonoBehaviour {
     Projectiles += (int)supportBonus;
 
     CurrentProjectiles = Projectiles;
+  }
+
+  public void SetSkillCharges(int val) {
+    SkillCharges += val;
+    if (SkillCharges < 0) SkillCharges = 0;
+    else if (SkillCharges > TotalSkillCharges) SkillCharges = TotalSkillCharges;
   }
 
   public void ResetMovePoints() {

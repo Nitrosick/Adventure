@@ -26,11 +26,13 @@ MonoBehaviour:
   skills:
   - {fileID: 11400000, guid: 1fa1edb85cb94744eb9d9d528e43a8be, type: 2}
   icon: {fileID: 21300000, guid: b44ab4abbd3ba79479ea7f796b19d611, type: 3}
+  animationSet: {fileID: 9100000, guid: 394c6a712d5482842af0ec92b7383d68, type: 2}
   price: 45
   isNew: 0
   defense: 1
   blockMultiplier: 1
   prefabM: {fileID: 9203723984715052730, guid: 63201ea7c00759045889e05853175c3f, type: 3}
+  prefabL: {fileID: 0}
   resistsMap:
   - type: 1
     value: 0
@@ -45,6 +47,9 @@ MonoBehaviour:
   bodyView:
     hideBeard: 0
     hideHair: 0
-    topMaterial: {fileID: 0}
+    handsMaterial: {fileID: 0}
+    armsMaterial: {fileID: 0}
+    torsoMaterial: {fileID: 0}
     underwearMaterial: {fileID: 0}
-    bottomMaterial: {fileID: 0}
+    legsMaterial: {fileID: 0}
+    footsMaterial: {fileID: 0}

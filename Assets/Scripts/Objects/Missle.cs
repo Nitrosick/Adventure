@@ -37,7 +37,7 @@ public class Missle : MonoBehaviour {
 
       if (target.Effects.HasAnyEffect(new string[] { "Block", "Wall" })) {
         target.Ui.ShowPopup("Block!");
-        target.Health.TakeDamage(0f, 1f);
+        _ = CameraController.Shake(0.8f);
       } else if (success) {
         target.Health.TakeDamage(damage, critModifier);
         LogDamage(target, damage, critModifier);

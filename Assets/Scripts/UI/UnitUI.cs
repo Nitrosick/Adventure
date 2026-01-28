@@ -120,7 +120,7 @@ public class UnitUI : MonoBehaviour {
     PopupType resultType = type;
 
     if (isNumber) {
-      if (number <= 0.1f) resultType = PopupType.Inactive;
+      if (number <= 0.3f) resultType = PopupType.Inactive;
       resultValue = Math.Floor(number).ToString();
     }
 
