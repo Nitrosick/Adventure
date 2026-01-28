@@ -1,5 +1,4 @@
-public class Raider : UnitCombat
-{
+public class Raider : MeleeUnit {
   private Raider() {
     Strength = 4;
     Dexterity = 1;

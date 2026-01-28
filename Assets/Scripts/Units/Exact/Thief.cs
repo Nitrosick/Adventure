@@ -1,5 +1,4 @@
-public class Thief : UnitCombat
-{
+public class Thief : MeleeUnit {
   private Thief() {
     Strength = 1;
     Dexterity = 4;

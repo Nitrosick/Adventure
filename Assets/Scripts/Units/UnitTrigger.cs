@@ -19,7 +19,15 @@ public class UnitTrigger : MonoBehaviour {
     unit.DealDamage(charged: true);
   }
 
-  private void TriggerShoot() {
-    unit.Shoot();
+  private void TriggerPierceAttack() {
+    unit.DealPierceDamage();
+  }
+
+  private void TriggerCrossbowShoot() {
+    unit.CrossbowShoot();
+  }
+
+  private void TriggerBowShoot() {
+    unit.BowShoot();
   }
 }

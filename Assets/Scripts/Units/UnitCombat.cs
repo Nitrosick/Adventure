@@ -8,34 +8,6 @@ public class UnitCombat : Unit {
   private CancellationTokenSource phaseCts;
   private readonly int delayAfterAttack = 1000;
 
-  public override async void OnAttack(Unit target = null) {
-    BattleUI.Instance.DisableUI();
-    if (target != null) Target = target;
-
-    Vector3 dirToTarget = (Target.transform.position - transform.position).normalized;
-    Vector3 dirFromTarget = (transform.position - Target.transform.position).normalized;
-
-    await Task.WhenAll(
-      Animator.RotateTowards(dirToTarget),
-      Target.Animator.RotateTowards(dirFromTarget)
-    );
-
-    float hitChance = Calculate.HitChance(this, Target, IsChargedAttack);
-    successAttack = Utils.RollChance(hitChance);
-
-    if (!successAttack) Target.Animator.Dodge();
-
-    if (IsChargedAttack) {
-      Animator.ChargedAttack();
-      SkillCharges -= 1;
-      if (Equip.GetActiveSkills().Count > 0) Ui.UpdateCharges(TotalSkillCharges, SkillCharges);
-    }
-    else {
-      Animator.Attack();
-    }
-    IsChargedAttack = false;
-  }
-
   public override async void BreakObject(Breakable target) {
     BattleUI.Instance.DisableUI();
     TargetObject = target;
@@ -77,6 +49,43 @@ public class UnitCombat : Unit {
     NextPhase();
   }
 
+  public override void DealPierceDamage(bool charged = false) {
+    if (Target == null) {
+      NextPhase(true);
+      return;
+    }
+
+    if (successAttack) {
+      int obstacleLayer = LayerMask.NameToLayer("Obstacle");
+      int unitLayer = LayerMask.NameToLayer("Unit");
+      RaycastHit[] hits = Calculate.HitsOnTrajectory(CurrentTile, Target.CurrentTile);
+
+      foreach (var hit in hits) {
+        GameObject go = hit.collider.gameObject;
+
+        if (go.layer == obstacleLayer) {
+          Target.Ui.ShowPopup("Obstacle!");
+          Target = null;
+          NextPhase();
+          return;
+        }
+
+        if (go.layer == unitLayer && !DamageBlocked(charged) && go.TryGetComponent<Unit>(out var unit)) {
+          float critModifier = Calculate.CritModifier(this, unit, charged);
+          float damage = Calculate.Damage(this, unit, charged);
+
+          List<Effect> effects = Calculate.ItemEffects(this, unit);
+          foreach (Effect effect in effects) unit.Effects.ApplyEffect(effect);
+
+          unit.Health.TakeDamage(damage, critModifier);
+          LogDamage(damage, critModifier, effects);
+        }
+      }
+    } else {
+      Target.Ui.ShowPopup("Miss!");
+    }
+  }
+
   protected override bool DamageBlocked(bool charged) {
     List<Skill> skills = Calculate.ItemPassiveSkills(Target);
 
@@ -114,19 +123,6 @@ public class UnitCombat : Unit {
   public override void Shoot() {
     CurrentProjectiles -= 1;
     if (CurrentProjectiles == 0) BehaviorType = AIBehaviorType.Retreat;
-  }
-
-  public override void BlockStance(string id) {
-    Effect effect = Factory.CreateEffectById(id);
-    if (effect == null) return;
-
-    Effects.ApplyEffect(effect);
-    Animator.SetBlocking(true);
-    SkillCharges -= 1;
-
-    if (SkillCharges <= 0) BattleUI.Instance.DisableSkills();
-    if (Equip.GetActiveSkills().Count > 0) Ui.UpdateCharges(TotalSkillCharges, SkillCharges);
-    NextPhase(true);
   }
 
   protected override void LogDamage(float damage, float critModifier, List<Effect> effects) {

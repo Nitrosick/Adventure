@@ -1,4 +1,4 @@
-public class TownGuardSoldier : UnitCombat {
+public class TownGuardSoldier : MeleeUnit {
   private TownGuardSoldier() {
     Strength = 4;
     Dexterity = 1;

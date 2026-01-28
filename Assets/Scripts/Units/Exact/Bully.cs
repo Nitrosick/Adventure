@@ -1,4 +1,4 @@
-public class Bully : UnitCombat {
+public class Bully : MeleeUnit {
   private Bully() {
     Strength = 6;
     Dexterity = 1;

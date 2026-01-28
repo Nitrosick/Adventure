@@ -1,5 +1,4 @@
-public class Militia : UnitCombat
-{
+public class Militia : MeleeUnit {
   private Militia() {
     Strength = 4;
     Dexterity = 1;

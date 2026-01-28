@@ -1,4 +1,4 @@
-public class HeroWarrior : UnitCombat {
+public class HeroWarrior : MeleeUnit {
   private HeroWarrior() {
     Strength = 5;
     Dexterity = 1;

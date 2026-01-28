@@ -1,5 +1,4 @@
-public class TownGuardOfficer : UnitCombat
-{
+public class TownGuardOfficer : MeleeUnit {
   private TownGuardOfficer() {
     Strength = 5;
     Dexterity = 1;

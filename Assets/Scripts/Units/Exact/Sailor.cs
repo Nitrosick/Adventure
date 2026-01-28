@@ -1,4 +1,4 @@
-public class Sailor : UnitCombat {
+public class Sailor : MeleeUnit {
   private Sailor() {
     Strength = 4;
     Dexterity = 2;

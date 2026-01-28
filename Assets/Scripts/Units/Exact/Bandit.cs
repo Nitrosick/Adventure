@@ -1,5 +1,4 @@
-public class Bandit : UnitCombat
-{
+public class Bandit : MeleeUnit {
   private Bandit() {
     Strength = 4;
     Dexterity = 3;

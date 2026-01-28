@@ -1,4 +1,4 @@
-public class ArmedPeasant : UnitCombat
+public class ArmedPeasant : MeleeUnit
 {
   private ArmedPeasant() {
     Strength = 3;

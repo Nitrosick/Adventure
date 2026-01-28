@@ -287,12 +287,19 @@ public class Unit : MonoBehaviour {
 
   // Overloaded
   public virtual void OnAttack(Unit target = null) { }
+  public virtual void DealDamage(bool charged = false) { }
+  public virtual void DealPierceDamage(bool charged = false) { }
+
   public virtual void BreakObject(Breakable target) { }
   public virtual void ChopTree(TreeObject target) { }
-  public virtual void DealDamage(bool charged = false) { }
-  protected virtual bool DamageBlocked(bool charged) { return false; }
-  public virtual void NextPhase(bool instant = false) { }
+
   public virtual void Shoot() { }
+  public virtual void CrossbowShoot() { }
+  public virtual void BowShoot() { }
+
   public virtual void BlockStance(string id) { }
+  protected virtual bool DamageBlocked(bool charged) { return false; }
+
+  public virtual void NextPhase(bool instant = false) { }
   protected virtual void LogDamage(float damage, float critModifier, List<Effect> effects) { }
 }

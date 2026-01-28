@@ -1,4 +1,4 @@
-public class OneEyedRupert : UnitCombat {
+public class OneEyedRupert : MeleeUnit {
   private OneEyedRupert() {
     Strength = 6;
     Dexterity = 1;

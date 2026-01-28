@@ -15,6 +15,7 @@ public class Weapon : Equipment {
   public float armorPenetration;
   public float precision = 95f;
   public float range;
+  public float missleSpeed = 1f;
 
   public GameObject prefab;
   public DamageType damageType;
@@ -22,4 +23,5 @@ public class Weapon : Equipment {
   public CoreStat[] scalingStats;
   public ChargedAttackParams chargedAttackParams;
   public Side hand;
+  public GameObject misslePrefab;
 }
