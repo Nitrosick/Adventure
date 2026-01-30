@@ -61,7 +61,7 @@ public class Unit : MonoBehaviour {
   public bool IsDead { get; set; }
   public bool InSquad { get; set; }
   public bool IsNew { get; set; }
-  public bool IsChargedAttack { get; set; }
+  public AttackType CurrentAttackType { get; set; }
 
   protected void Awake() {
     Health = transform.GetComponent<UnitHealth>();
@@ -156,6 +156,10 @@ public class Unit : MonoBehaviour {
     SkillCharges += val;
     if (SkillCharges < 0) SkillCharges = 0;
     else if (SkillCharges > TotalSkillCharges) SkillCharges = TotalSkillCharges;
+  }
+
+  public void SetAttackType(AttackType attackType) {
+    CurrentAttackType = attackType;
   }
 
   public void ResetMovePoints() {
@@ -295,6 +299,7 @@ public class Unit : MonoBehaviour {
   public virtual void OnAttack(Unit target = null) { }
   public virtual void DealDamage(bool charged = false) { }
   public virtual void DealPierceDamage(bool charged = false) { }
+  public virtual void DealAoeDamage(AttackType attackType) { }
 
   public virtual void BreakObject(Breakable target) { }
   public virtual void ChopTree(TreeObject target) { }
@@ -304,7 +309,7 @@ public class Unit : MonoBehaviour {
   public virtual void BowShoot() { }
 
   public virtual void BlockStance(string id) { }
-  protected virtual bool DamageBlocked(bool charged) { return false; }
+  protected virtual bool DamageBlocked() { return false; }
 
   public virtual void NextPhase(bool instant = false) { }
   protected virtual void LogDamage(float damage, float critModifier, List<Effect> effects) { }

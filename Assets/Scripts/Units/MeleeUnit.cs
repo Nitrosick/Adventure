@@ -14,18 +14,18 @@ public class MeleeUnit : UnitCombat {
       Target.Animator.RotateTowards(dirFromTarget)
     );
 
-    float hitChance = Calculate.HitChance(this, Target, IsChargedAttack);
+    float hitChance = Calculate.HitChance(this, Target, CurrentAttackType == AttackType.Charged);
     successAttack = Utils.RollChance(hitChance);
 
     if (!successAttack) Target.Animator.Dodge();
 
-    if (IsChargedAttack) {
-      Animator.ChargedAttack();
-      if (Equip.GetActiveSkills().Count > 0) Ui.UpdateCharges(TotalSkillCharges, SkillCharges);
-    } else {
-      Animator.Attack();
+    switch (CurrentAttackType) {
+      case AttackType.Charged: Animator.ChargedAttack(); break;
+      case AttackType.Fan: Animator.FanAttack(); break;
+      default: Animator.Attack(); break;
     }
-    IsChargedAttack = false;
+
+    Ui.UpdateCharges(TotalSkillCharges, SkillCharges);
   }
 
   public override void BlockStance(string id) {

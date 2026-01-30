@@ -127,7 +127,7 @@ public class Tile : MonoBehaviour {
     type = TileType.Open;
     _ = Toast.Show("success", "Loot picked up");
     LogUI.Instance.Add(loot);
-    if (!transform.TryGetComponent<TooltipTrigger>(out var tooltip)) tooltip.message = "";
+    if (transform.TryGetComponent<TooltipTrigger>(out var tooltip)) tooltip.message = "";
   }
 
   public void UncoverTrap() {

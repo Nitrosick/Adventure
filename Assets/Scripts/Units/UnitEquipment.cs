@@ -315,16 +315,25 @@ public class UnitEquipment : MonoBehaviour {
       .ToList();
   }
 
-  public bool HasAttackPhaseSkills() {
-    if (unit.SkillCharges == 0) return false;
+  // FIXME: Убрать или переработать
+  // public bool HasAttackPhaseSkills() {
+  //   if (unit.SkillCharges == 0) return false;
 
-    foreach (Skill skill in GetActiveSkills()) {
-      // FIXME: Может сломаться проверка, если использовать не в PhaseManager
-      if (skill.skillName == "Charged attack") continue;
-      if (unit.Effects.HasAnyEffect(new string[] { "Stun", "Root" }) && !skill.canUseInRoot) continue;
-      if (skill.skillPhases.Contains(BattlePhase.Attack)) return true;
-    }
-    return false;
+  //   foreach (Skill skill in GetActiveSkills()) {
+  //     // FIXME: Может сломаться проверка, если использовать не в PhaseManager
+  //     if (skill.skillName == "Charged attack") continue;
+  //     if (unit.Effects.HasAnyEffect(new string[] { "Stun", "Root" }) && !skill.canUseInRoot) continue;
+  //     if (skill.skillPhases.Contains(BattlePhase.Attack)) return true;
+  //   }
+  //   return false;
+  // }
+
+  public bool HasNonTargetSkills() {
+    return GetActiveSkills().Any(s =>
+      s.isActive &&
+      !s.needTarget &&
+      s.skillPhases.Contains(BattlePhase.Attack)
+    );
   }
 
   public void ApplyInstantEffects() {

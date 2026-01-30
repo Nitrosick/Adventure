@@ -54,6 +54,10 @@ public class UnitAnimator : MonoBehaviour {
     animator.SetTrigger("ChargedAttack");
   }
 
+  public void FanAttack() {
+    animator.SetTrigger("FanAttack");
+  }
+
   public void TakeDamage() {
     animator.SetTrigger("Damage");
   }

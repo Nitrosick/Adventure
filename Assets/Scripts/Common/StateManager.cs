@@ -17,7 +17,7 @@ public static class StateManager {
   // Global
   public static int saveSlot;
   public static int globalTicks;
-  private readonly static string[] defaultArmyIds = { "u1", "u2", "u2" };
+  private readonly static string[] defaultArmyIds = { "u1", "u2", "u14" };
   public readonly static string[] defaultKnowledge = { "aa1", "aa2", "aa3" };
   public static HashSet<string> openedWindows = new();
 

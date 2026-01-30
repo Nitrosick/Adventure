@@ -72,6 +72,7 @@ public class QueueManager : MonoBehaviour
   }
 
   private static void BeforeSwitch() {
+    CurrentUnit.SetAttackType(AttackType.Standard);
     if (CurrentUnit.CurrentTile.type == TileType.Cover) {
       CurrentUnit.Animator.SetCrouching(true);
     }

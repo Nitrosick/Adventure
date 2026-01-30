@@ -76,6 +76,13 @@ public enum DamageType {
   Blood
 }
 
+public enum AttackType {
+  Standard,
+  Charged,
+  Fan,
+  Pierce
+}
+
 public enum AIBehaviorType {
   Aggressive,
   PriorityTarget,

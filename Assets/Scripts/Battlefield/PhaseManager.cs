@@ -79,11 +79,10 @@ public class PhaseManager : MonoBehaviour
         }
 
         if (unit.Relation == UnitRelation.Enemy) {
-          BattleAI.AttackPhaseSkills();
+          BattleAISkills.AttackPhaseSkills(unit);
         } else {
           int targets = TileManager.ShowAttackGrid(unit);
-          // FIXME: Сделать проверку для юнитов, которые могут атаковать по площади
-          if (targets == 0 && !unit.Equip.HasAttackPhaseSkills()) NextPhase();
+          if (targets == 0 && !unit.Equip.HasNonTargetSkills()) NextPhase();
         }
         break;
     }

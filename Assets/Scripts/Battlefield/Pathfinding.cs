@@ -30,7 +30,7 @@ public static class Pathfinding {
 
       foreach (Tile neighbor in current.Neighbors) {
         if (unit.Relation == UnitRelation.Enemy && neighbor.type == TileType.Trap) {
-          if (BattleAI.IsTrap(neighbor)) continue;
+          if (BattleAIHeplers.IsTrap(neighbor)) continue;
         }
 
         if (!TileManager.TileIsWalkable(current, neighbor) || closedSet.Contains(neighbor)) continue;

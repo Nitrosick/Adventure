@@ -12,14 +12,14 @@ public class TileManager : MonoBehaviour {
   public static Tile enemyFocusTile;
 
   public static readonly Vector2Int[] allDirections = new Vector2Int[] {
-    new (0,  1),
-    new (1,  0),
+    new (-1, 1),
+    new (0, 1),
+    new (1, 1),
+    new (1, 0),
+    new (1, -1),
     new (0, -1),
-    new (-1,  0),
-    new ( 1,  1),
-    new ( 1, -1),
     new (-1, -1),
-    new (-1,  1)
+    new (-1, 0)
   };
 
   private void Awake() {

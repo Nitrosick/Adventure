@@ -20,7 +20,9 @@ MonoBehaviour:
     weapon does not deal full damage, but only a portion.'
   isActive: 1
   canUseInRoot: 1
+  needTarget: 1
   activateChance: 100
+  cost: 1
   skillButton: {fileID: 7219696775182885065, guid: 9939d57412f4f2d439cd9a8e5f11233f,
     type: 3}
   skillPhases: 01000000

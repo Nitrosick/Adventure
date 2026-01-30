@@ -8,6 +8,19 @@ public class UnitCombat : Unit {
   private CancellationTokenSource phaseCts;
   private readonly int delayAfterAttack = 1000;
 
+  private void CalculateDamage(Unit target, float multiplier = 1f) {
+    if (target == null) return;
+
+    float critModifier = Calculate.CritModifier(this, target);
+    float damage = Calculate.Damage(this, target) * multiplier;
+
+    List<Effect> effects = Calculate.ItemEffects(this, target);
+    foreach (var effect in effects) target.Effects.ApplyEffect(effect);
+
+    target.Health.TakeDamage(damage, critModifier);
+    LogDamage(damage, critModifier, effects);
+  }
+
   public override async void BreakObject(Breakable target) {
     BattleUI.Instance.DisableUI();
     TargetObject = target;
@@ -27,19 +40,12 @@ public class UnitCombat : Unit {
   public override void DealDamage(bool charged = false) {
     if (Target != null) {
       if (successAttack) {
-        if (!DamageBlocked(charged)) {
+        if (!DamageBlocked()) {
           BlockBreakdown(charged);
-
-          float critModifier = Calculate.CritModifier(this, Target, charged);
-          float damage = Calculate.Damage(this, Target, charged);
-
-          List<Effect> effects = Calculate.ItemEffects(this, Target);
-          foreach (Effect effect in effects) Target.Effects.ApplyEffect(effect);
-
-          Target.Health.TakeDamage(damage, critModifier, charged: charged);
-          LogDamage(damage, critModifier, effects);
+          CalculateDamage(Target);
         }
-      } else {
+      }
+      else {
         Target.Ui.ShowPopup("Miss!");
       }
     }
@@ -49,44 +55,71 @@ public class UnitCombat : Unit {
     NextPhase();
   }
 
-  public override void DealPierceDamage(bool charged = false) {
+  public override void DealAoeDamage(AttackType attackType) {
     if (Target == null) {
       NextPhase(true);
       return;
     }
 
-    if (successAttack) {
-      int obstacleLayer = LayerMask.NameToLayer("Obstacle");
-      int unitLayer = LayerMask.NameToLayer("Unit");
-      RaycastHit[] hits = Calculate.HitsOnTrajectory(CurrentTile, Target.CurrentTile);
+    switch (attackType) {
+      case AttackType.Fan:
+        DealFanDamage();
+        break;
+      case AttackType.Pierce:
+        DealPierceDamage();
+        break;
+    }
 
-      foreach (var hit in hits) {
-        GameObject go = hit.collider.gameObject;
+    NextPhase();
+  }
 
-        if (go.layer == obstacleLayer) {
-          Target.Ui.ShowPopup("Obstacle!");
-          Target = null;
-          NextPhase();
-          return;
-        }
+  private void DealFanDamage() {
+    List<Tile> neighbors = CurrentTile.Neighbors;
+    Tile targetTile = Target.CurrentTile;
 
-        if (go.layer == unitLayer && !DamageBlocked(charged) && go.TryGetComponent<Unit>(out var unit)) {
-          float critModifier = Calculate.CritModifier(this, unit, charged);
-          float damage = Calculate.Damage(this, unit, charged);
+    int count = neighbors.Count;
 
-          List<Effect> effects = Calculate.ItemEffects(this, unit);
-          foreach (Effect effect in effects) unit.Effects.ApplyEffect(effect);
+    for (int i = 0; i < count; i++) {
+      if (neighbors[i] != targetTile) continue;
 
-          unit.Health.TakeDamage(damage, critModifier);
-          LogDamage(damage, critModifier, effects);
-        }
-      }
-    } else {
-      Target.Ui.ShowPopup("Miss!");
+      int left  = (i - 1 + count) % count;
+      int right = (i + 1) % count;
+
+      CalculateDamage(Target, 0.75f);
+      CalculateDamage(neighbors[left].OccupiedBy, 0.75f);
+      CalculateDamage(neighbors[right].OccupiedBy, 0.75f);
+      break;
     }
   }
 
-  protected override bool DamageBlocked(bool charged) {
+  private void DealPierceDamage() {
+    if (!successAttack) {
+      Target.Ui.ShowPopup("Miss!");
+      return;
+    }
+
+    int obstacleLayer = LayerMask.NameToLayer("Obstacle");
+    int unitLayer = LayerMask.NameToLayer("Unit");
+
+    RaycastHit[] hits = Calculate.HitsOnTrajectory(CurrentTile, Target.CurrentTile);
+
+    foreach (var hit in hits) {
+      GameObject go = hit.collider.gameObject;
+
+      if (go.layer == obstacleLayer) {
+        Target.Ui.ShowPopup("Obstacle!");
+        Target = null;
+        return;
+      }
+
+      if (go.layer == unitLayer && !DamageBlocked() && go.TryGetComponent(out Unit unit)) {
+        CalculateDamage(unit);
+      }
+    }
+  }
+
+
+  protected override bool DamageBlocked() {
     List<Skill> skills = Calculate.ItemPassiveSkills(Target);
 
     foreach (Skill skill in skills) {
@@ -148,6 +181,7 @@ public class UnitCombat : Unit {
       TargetTree = null;
 
       PhaseManager.NextPhase();
-    } catch (TaskCanceledException) { }
+    }
+    catch (TaskCanceledException) { }
   }
 }
