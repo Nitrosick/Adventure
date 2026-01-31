@@ -139,8 +139,9 @@ public class UnitCombat : Unit {
     if (!Target.Effects.HasAnyEffect(new string[] { "Wall", "Block" })) return;
 
     if (
-      Equip.primary.damageType == DamageType.Chop ||
-      Equip.primary.damageType == DamageType.Crash
+      Equip.primary != null &&
+      (Equip.primary.damageType == DamageType.Chop ||
+      Equip.primary.damageType == DamageType.Crash)
     ) {
       float chance = Equip.primary.armorPenetration;
       if (charged) chance *= 2;

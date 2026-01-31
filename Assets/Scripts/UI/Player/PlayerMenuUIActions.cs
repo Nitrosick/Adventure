@@ -6,29 +6,19 @@ using UnityEngine.UI;
 public static class PlayerMenuUIActions {
   public static void UpdateUnitEquipment(Unit unit, Transform panel) {
     UnitEquipment equip = unit.Equip;
-
     Image primarySlot = panel.Find("Primary/Image").GetComponent<Image>();
     Image armorSlot = panel.Find("Armor/Image").GetComponent<Image>();
     Image secondarySlot = panel.Find("Secondary/Image").GetComponent<Image>();
     Image additionalSlot = panel.Find("Additional/Image").GetComponent<Image>();
-    primarySlot.sprite = equip.primary.icon;
-    armorSlot.sprite = equip.armor.icon;
 
-    if (equip.secondary != null) {
-      secondarySlot.enabled = true;
-      secondarySlot.sprite = equip.secondary.icon;
-    }
-    else {
-      secondarySlot.enabled = false;
-    }
-
-    if (equip.additional != null) {
-      additionalSlot.enabled = true;
-      additionalSlot.sprite = equip.additional.icon;
-    }
-    else {
-      additionalSlot.enabled = false;
-    }
+    primarySlot.enabled = equip.primary != null;
+    if (equip.primary != null) primarySlot.sprite = equip.primary.icon;
+    secondarySlot.enabled = equip.secondary != null;
+    if (equip.secondary != null) secondarySlot.sprite = equip.secondary.icon;
+    armorSlot.enabled = equip.armor != null;
+    if (equip.armor != null) armorSlot.sprite = equip.armor.icon;
+    additionalSlot.enabled = equip.additional != null;
+    if (equip.additional != null) additionalSlot.sprite = equip.additional.icon;
   }
 
   public static void SwitchUnitInSquad(GameObject mark) {
@@ -116,7 +106,13 @@ public static class PlayerMenuUIActions {
       case UnitEquipSlot.Additional: title = "Change additional item"; break;
     }
 
-    Selector.List(ChangeEquipment, canEquip, notEnoughStats, title);
+    Selector.List(
+      ChangeEquipment,
+      slot,
+      canEquip,
+      notEnoughStats,
+      title
+    );
   }
 
   private static void ChangeEquipment(object item) {

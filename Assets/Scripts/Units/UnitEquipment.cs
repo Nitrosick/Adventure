@@ -5,7 +5,7 @@ using UnityEngine;
 public class UnitEquipment : MonoBehaviour {
   private Unit unit;
   private SkinnedMeshRenderer body;
-  private CapsuleCollider[] clothColliders = {};
+  private CapsuleCollider[] clothColliders = { };
 
   public Weapon primary;
   public Equipment secondary;
@@ -95,7 +95,8 @@ public class UnitEquipment : MonoBehaviour {
 
         GameObject obj = Instantiate(loaded.prefab, leftHand);
         obj.transform.SetParent(leftHand, false);
-      } else if (secondary is Armor secArmor) {
+      }
+      else if (secondary is Armor secArmor) {
         Armor loaded = Resources.Load<Armor>("Armor/" + secondary.name);
         if (loaded == null) return;
 
@@ -109,7 +110,7 @@ public class UnitEquipment : MonoBehaviour {
   }
 
   private void RetargetBones(SkinnedMeshRenderer mesh) {
-    Dictionary<string, Transform> boneMap = new ();
+    Dictionary<string, Transform> boneMap = new();
     foreach (Transform bone in body.bones) boneMap[bone.name] = bone;
     Transform[] armorBones = new Transform[mesh.bones.Length];
 
@@ -189,27 +190,45 @@ public class UnitEquipment : MonoBehaviour {
     Player.Instance.Inventory.UpdateState();
   }
 
-  public void UnequipAll() {
-    List<Equipment> inventory = Player.Instance.Inventory.Equip;
-    inventory.Add(primary);
-    inventory.Add(armor);
-    if (secondary != null) inventory.Add(secondary);
-    if (additional != null) inventory.Add(additional);
+  public void Unequip(UnitEquipSlot slot, bool update = false) {
+    Equipment item = slot switch {
+      UnitEquipSlot.Primary => primary,
+      UnitEquipSlot.Secondary => secondary,
+      UnitEquipSlot.Armor => armor,
+      UnitEquipSlot.Additional => additional,
+      _ => null
+    };
 
-    primary = null;
-    secondary = null;
-    armor = null;
-    additional = null;
+    if (item == null) return;
+    Player.Instance.Inventory.Equip.Add(item);
 
+    switch (slot) {
+      case UnitEquipSlot.Primary: primary = null; break;
+      case UnitEquipSlot.Secondary: secondary = null; break;
+      case UnitEquipSlot.Armor: armor = null; break;
+      case UnitEquipSlot.Additional: additional = null; break;
+    }
+
+    if (unit.IsHero && update) Player.Instance.Inventory.UpdateEquipment();
     Player.Instance.Army.UpdateState();
     Player.Instance.Inventory.UpdateState();
   }
 
+  public void UnequipAll() {
+    Unequip(UnitEquipSlot.Primary);
+    Unequip(UnitEquipSlot.Secondary);
+    Unequip(UnitEquipSlot.Armor);
+    Unequip(UnitEquipSlot.Additional, true);
+  }
+
   // Getters
   public List<Equipment> GetEquipmentList(MenuFilter filter = MenuFilter.All) {
-    List<Equipment> result = new() { primary, armor };
+    List<Equipment> result = new();
+    if (primary != null) result.Add(primary);
+    if (armor != null) result.Add(armor);
     if (secondary != null) result.Add(secondary);
     if (additional != null) result.Add(additional);
+
     return result
       .Where(e => {
         if (
@@ -254,6 +273,8 @@ public class UnitEquipment : MonoBehaviour {
   }
 
   public float GetTotalDamage() {
+    if (primary == null) return 1f;
+    // FIXME: Добавить урон кулаками
     float result = primary.damage;
 
     // Buffs
@@ -277,6 +298,7 @@ public class UnitEquipment : MonoBehaviour {
   }
 
   public float GetRange() {
+    if (primary == null) return 1f;
     return primary.range;
   }
 
@@ -352,10 +374,12 @@ public class UnitEquipment : MonoBehaviour {
 
   // Capabilities
   public bool CanBreakObjects() {
+    if (primary == null) return false;
     return primary.damageType == DamageType.Chop || primary.damageType == DamageType.Crash;
   }
 
   public bool CanChopTrees() {
+    if (primary == null) return false;
     return primary.damageType == DamageType.Chop;
   }
 
@@ -415,5 +439,15 @@ public class UnitEquipment : MonoBehaviour {
   public bool HasItem(Equipment item) {
     return new Equipment[] { primary, secondary, armor, additional }
       .Any(e => e != null && e.id == item.id);
+  }
+
+  public bool SlotEquipped(UnitEquipSlot slot) {
+    return slot switch {
+      UnitEquipSlot.Primary => primary != null,
+      UnitEquipSlot.Secondary => secondary != null,
+      UnitEquipSlot.Armor => armor != null,
+      UnitEquipSlot.Additional => additional != null,
+      _ => false,
+    };
   }
 }

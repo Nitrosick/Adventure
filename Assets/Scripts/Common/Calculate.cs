@@ -16,6 +16,8 @@ public static class Calculate {
 
   public static float HitChance(Unit attacker, Unit target, bool charged = false) {
     if (target.Effects.HasAnyEffect(new string[] { "Block", "Wall", "Root", "Stun" })) return 100f;
+    if (attacker.Equip.primary == null) return 75f;
+    // FIXME: Добавить урон кулаками
 
     float result = attacker.Equip.primary.precision;
 
@@ -48,7 +50,8 @@ public static class Calculate {
     if (disDelta > 0) result -= disDelta * distanceFinePerUnit;
 
     // Skills
-    if (charged) result -= attacker.Equip.primary.chargedAttackParams.hitChancePenalty;
+    if (charged && attacker.Equip.primary != null)
+      result -= attacker.Equip.primary.chargedAttackParams.hitChancePenalty;
 
     return result < minHitChance ? minHitChance : result;
   }
@@ -56,6 +59,7 @@ public static class Calculate {
   public static float CritModifier(Unit attacker, Unit target, bool charged = false) {
     float multiplier = 1f;
     float chance = defaultCritChance;
+    Equipment weapon = attacker.Equip.primary;
 
     // Parameters
     float dexDelta = attacker.Dexterity - target.Dexterity;
@@ -64,14 +68,16 @@ public static class Calculate {
     // Player abilities
     if (attacker.IsHero) chance += AbilityController.CritChanceBonus();
 
-    // Skills
-    var chargeParams = attacker.Equip.primary.chargedAttackParams;
-    if (charged) chance += chargeParams.critBonus;
+    if (weapon != null) {
+      // Skills
+      var chargeParams = attacker.Equip.primary.chargedAttackParams;
+      if (charged) chance += chargeParams.critBonus;
 
-    bool success = Utils.RollChance(chance);
-    if (success) {
-      multiplier = attacker.Equip.primary.critModifier;
-      multiplier += chargeParams.critBonus / 100;
+      bool success = Utils.RollChance(chance);
+      if (success) {
+        multiplier = attacker.Equip.primary.critModifier;
+        multiplier += chargeParams.critBonus / 100;
+      }
     }
 
     return multiplier;
@@ -80,6 +86,9 @@ public static class Calculate {
   public static float Damage(Unit attacker, Unit target, bool charged = false) {
     Weapon attackerWeapon = attacker.Equip.primary;
     Armor targetArmor = target.Equip.armor;
+
+    if (attackerWeapon == null) return 1f;
+    // FIXME: Добавить урон кулаками
 
     // Armor and weapon
     float resist = target.Equip.GetTotalResists()[attackerWeapon.damageType];
@@ -115,7 +124,7 @@ public static class Calculate {
     total /= blockMultiplier;
 
     // Skills
-    if (charged) total *= 1f + (attacker.Equip.primary.chargedAttackParams.damageBonus / 100);
+    if (charged) total *= 1f + (attackerWeapon.chargedAttackParams.damageBonus / 100);
 
     return total < minDamage ? minDamage : total;
   }

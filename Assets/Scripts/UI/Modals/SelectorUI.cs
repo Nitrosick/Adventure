@@ -12,8 +12,11 @@ public class Selector : MonoBehaviour {
   private static GameObject background;
   private static GameObject placeholder;
   private static GameObject list;
+  private static Button takeOff;
   private static Button cancel;
   private static TextMeshProUGUI title;
+  private static Unit selectedUnit;
+  private static UnitEquipSlot currentSlot;
 
   private void Awake() {
     Instance = this;
@@ -21,39 +24,57 @@ public class Selector : MonoBehaviour {
     background = transform.Find("Modals/Background").gameObject;
     placeholder = window.Find("Empty").gameObject;
     list = window.Find("List").gameObject;
+    takeOff = window.Find("TakeOff").GetComponent<Button>();
     cancel = window.Find("Cancel").GetComponent<Button>();
     title = window.Find("Title").GetComponent<TextMeshProUGUI>();
 
-    if (window == null || background == null || cancel == null || title == null || placeholder == null || list == null) {
+    if (
+      window == null || background == null || cancel == null ||
+      title == null || placeholder == null || list == null ||
+      takeOff == null
+    ) {
       Debug.LogError("Selector components initialization error");
       return;
     }
 
+    takeOff.onClick.AddListener(TakeOff);
     cancel.onClick.AddListener(Close);
   }
 
   private void OnDestroy() {
+    takeOff.onClick.RemoveListener(TakeOff);
     cancel.onClick.RemoveListener(Close);
   }
 
   private static void Open() {
     window.gameObject.SetActive(true);
     background.SetActive(true);
-    SceneController.OpenWindow("selector");
   }
 
   public static void Close() {
     foreach (Transform child in list.transform) Destroy(child.gameObject);
+
     window.gameObject.SetActive(false);
     background.SetActive(false);
     placeholder.SetActive(false);
     list.SetActive(false);
+    takeOff.gameObject.SetActive(false);
+
     title.text = "";
-    SceneController.CloseWindow("selector");
+    selectedUnit = null;
+  }
+
+  public static void TakeOff() {
+    Unit unit = PlayerMenuUI.selectedUnit;
+    if (unit == null) return;
+    unit.Equip.Unequip(currentSlot, true);
+    PlayerMenuUIInfo.ShowInfo(unit);
+    Close();
   }
 
   public static void List(
-    Action<object> action,
+    Action<object> change,
+    UnitEquipSlot slot,
     List<Equipment> canEquip,
     List<Equipment> cantEquip,
     string _title = ""
@@ -64,13 +85,23 @@ public class Selector : MonoBehaviour {
       list.SetActive(true);
       foreach (Equipment item in canEquip) {
         GameObject obj = Instantiate(Instance.itemPrefab, list.transform);
-        obj.GetComponent<SelectorItem>().Init(item, action, false);
+        obj.GetComponent<SelectorItem>().Init(item, change, false);
       }
       foreach (Equipment item in cantEquip) {
         GameObject obj = Instantiate(Instance.itemPrefab, list.transform);
-        obj.GetComponent<SelectorItem>().Init(item, action, true);
+        obj.GetComponent<SelectorItem>().Init(item, change, true);
       }
     }
+
+    selectedUnit = PlayerMenuUI.selectedUnit;
+
+    takeOff.gameObject.SetActive(
+      selectedUnit != null &&
+      slot != UnitEquipSlot.Armor &&
+      selectedUnit.Equip.SlotEquipped(slot)
+    );
+
+    currentSlot = slot;
     title.text = _title;
     Open();
   }

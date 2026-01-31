@@ -89,13 +89,15 @@ public class PlayerInventory : MonoBehaviour {
 
     Transform bracing;
 
-    Weapon loadedWeapon = Resources.Load<Weapon>("Weapon/" + heroEquip.primary.name);
-    if (loadedWeapon == null) return;
-    bracing = loadedWeapon.type == EquipmentType.TwoHandWeapon
-      ? twoHandWeaponBracing
-      : oneHandWeaponBracing;
-    GameObject weaponObj = Instantiate(loadedWeapon.prefab, bracing);
-    weaponObj.transform.SetParent(bracing, false);
+    if (heroEquip.primary != null) {
+      Weapon loadedWeapon = Resources.Load<Weapon>("Weapon/" + heroEquip.primary.name);
+      if (loadedWeapon == null) return;
+      bracing = loadedWeapon.type == EquipmentType.TwoHandWeapon
+        ? twoHandWeaponBracing
+        : oneHandWeaponBracing;
+      GameObject weaponObj = Instantiate(loadedWeapon.prefab, bracing);
+      weaponObj.transform.SetParent(bracing, false);
+    }
 
     if (heroEquip.secondary is Armor secArmor) {
       Armor loadedShield = Resources.Load<Armor>("Armor/" + heroEquip.secondary.name);
