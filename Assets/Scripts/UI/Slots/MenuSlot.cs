@@ -21,7 +21,7 @@ public class MenuSlot : MonoBehaviour, IPointerClickHandler {
   private TextMeshProUGUI count;
   private bool preventPointerEvents;
 
-  private void Awake() {
+  void Awake() {
     image = transform.Find("Image").GetComponent<Image>();
     background = transform.Find("Background").GetComponent<Image>();
     activeFrame = transform.Find("FrameActive").gameObject;
@@ -41,7 +41,7 @@ public class MenuSlot : MonoBehaviour, IPointerClickHandler {
     }
   }
 
-  private void OnDestroy() {
+  void OnDestroy() {
     UnitItem = null;
     EquipmentItem = null;
     InventoryItem = null;

@@ -64,9 +64,9 @@ public class TradingMenuUI : HomeMenuFeature {
 
     if (resourcesAvailable) {
       for (int i = 0; i < resourceFinalPrices.Length; i++) {
-        GameObject slot = Instantiate(slotPrefab, resourceSlots);
+        GameObject slot = Instantiate(GameManager.I.slotWithPrice, resourceSlots);
         slot.GetComponent<SlotWithPrice>().Init(
-          MapUI.Instance.resourceSprites[i],
+          GameManager.I.resourceSprites[i],
           resourceFinalPrices[i],
           i,
           MapUI.Instance.resTooltips[i]
@@ -75,12 +75,12 @@ public class TradingMenuUI : HomeMenuFeature {
     }
 
     foreach (Equipment item in equipmentGoods) {
-      GameObject slot = Instantiate(slotPrefab, equipmentSlots);
+      GameObject slot = Instantiate(GameManager.I.slotWithPrice, equipmentSlots);
       slot.GetComponent<SlotWithPrice>().Init(item);
     }
 
     foreach (Item item in itemGoods) {
-      GameObject slot = Instantiate(slotPrefab, miscSlots);
+      GameObject slot = Instantiate(GameManager.I.slotWithPrice, miscSlots);
       slot.GetComponent<SlotWithPrice>().Init(item);
     }
 

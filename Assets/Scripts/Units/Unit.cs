@@ -69,7 +69,7 @@ public class Unit : MonoBehaviour {
     Effects = transform.GetComponent<UnitEffects>();
   }
 
-  private void OnDestroy() {
+  void OnDestroy() {
     CurrentTile = null;
     Target = null;
     TargetObject = null;

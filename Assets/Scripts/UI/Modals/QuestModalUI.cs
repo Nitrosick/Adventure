@@ -11,7 +11,7 @@ public class QuestModalUI : ModalRewardUI {
   private static TextMeshProUGUI cancelText;
   private static QuestInstance quest;
 
-  private void Awake() {
+  void Awake() {
     Instance = this;
   }
 
@@ -32,7 +32,7 @@ public class QuestModalUI : ModalRewardUI {
     cancel.onClick.AddListener(OnDecline);
   }
 
-  private void OnDestroy() {
+  void OnDestroy() {
     if (accept != null) accept.onClick.RemoveListener(OnSubmit);
     if (cancel != null) cancel.onClick.RemoveListener(OnDecline);
   }
@@ -72,7 +72,7 @@ public class QuestModalUI : ModalRewardUI {
 
     Reward reward = quest.data.reward;
     ShowReward(reward);
-    RenderSlots(reward, Instance.slotPrefab);
+    RenderSlots(reward, GameManager.I.slotWithCount);
 
     bool acceptable = quest.state == QuestState.Inactive;
     accept.gameObject.SetActive(acceptable);
@@ -88,7 +88,7 @@ public class QuestModalUI : ModalRewardUI {
 
     Reward reward = quest.data.reward;
     ShowReward(reward);
-    RenderSlots(reward, Instance.slotPrefab);
+    RenderSlots(reward, GameManager.I.slotWithCount);
 
     accept.gameObject.SetActive(false);
     cancelText.text = "Get reward";

@@ -72,7 +72,7 @@ public class PlayerMenuUIInfo : MonoBehaviour {
   private T Find<T>(string path) where T : Component => panel.Find(path).GetComponent<T>();
   private GameObject FindGO(string path) => panel.Find(path).gameObject;
 
-  private void Awake() {
+  void Awake() {
     panel = transform.Find("Menu/Player/Right/Viewport/Content");
 
     displayName = Find<TextMeshProUGUI>("Head/Data/Name");
@@ -179,7 +179,7 @@ public class PlayerMenuUIInfo : MonoBehaviour {
     }.All(x => x != null);
   }
 
-  private void OnDestroy() {
+  void OnDestroy() {
     unitInSquad.onClick.RemoveListener(SwitchUnitInSquad);
     UnitDismiss.onClick.RemoveListener(DismissConfirmation);
     useItem.onClick.RemoveListener(UseItem);
@@ -245,7 +245,7 @@ public class PlayerMenuUIInfo : MonoBehaviour {
     deathMark.SetActive(unit.CurrentHealth <= 0);
     inSquadMark.SetActive(unit.InSquad);
 
-    GameObject unitAvatar = Instantiate(PlayerMenuUI.Instance.menuSlotPrefab, avatar);
+    GameObject unitAvatar = Instantiate(GameManager.I.slotMenu, avatar);
     unitAvatar.GetComponent<MenuSlot>().Init(unit, true);
 
     InSquadButtonLabel(unit);
@@ -276,7 +276,7 @@ public class PlayerMenuUIInfo : MonoBehaviour {
 
     if (unit.Effects.innateSkills != null) {
       foreach (Skill s in unit.Effects.innateSkills) {
-        GameObject skillObj = Instantiate(PlayerMenuUI.Instance.effectIcon, unitSkills);
+        GameObject skillObj = Instantiate(GameManager.I.effectIcon, unitSkills);
         if (skillObj.TryGetComponent<Image>(out var img)) {
           img.sprite = s.uiIcon;
           img.color = s.uiIconColor;
@@ -306,7 +306,7 @@ public class PlayerMenuUIInfo : MonoBehaviour {
     type.text = "Type: " + unit.data.bonusType.ToString();
     inSquadMark.SetActive(unit.inSquad);
 
-    GameObject unitAvatar = Instantiate(PlayerMenuUI.Instance.menuSlotPrefab, avatar);
+    GameObject unitAvatar = Instantiate(GameManager.I.slotMenu, avatar);
     unitAvatar.GetComponent<MenuSlot>().Init(unit, true);
     InSquadButtonLabel(unit);
 
@@ -332,7 +332,7 @@ public class PlayerMenuUIInfo : MonoBehaviour {
     type.text = "Type: " + Utils.SplitPascalCase(equip.type.ToString());
     equippedMark.SetActive(PlayerMenuUI.selectedSlot.ActiveMark.activeSelf);
 
-    GameObject icon = Instantiate(PlayerMenuUI.Instance.menuSlotPrefab, avatar);
+    GameObject icon = Instantiate(GameManager.I.slotMenu, avatar);
     icon.GetComponent<MenuSlot>().Init(equip, true);
 
     int[] reqStats = equip.GetRequirementStats();
@@ -364,7 +364,7 @@ public class PlayerMenuUIInfo : MonoBehaviour {
 
     if (equip.effects != null) {
       foreach (var e in equip.effects) {
-        GameObject effectObj = Instantiate(PlayerMenuUI.Instance.effectIcon, equipEffects);
+        GameObject effectObj = Instantiate(GameManager.I.effectIcon, equipEffects);
         if (effectObj.TryGetComponent<Image>(out var img)) {
           img.sprite = e.data.uiIcon;
           img.color = e.data.uiIconColor;
@@ -377,7 +377,7 @@ public class PlayerMenuUIInfo : MonoBehaviour {
 
     if (equip.skills != null) {
       foreach (Skill s in equip.skills) {
-        GameObject skillObj = Instantiate(PlayerMenuUI.Instance.effectIcon, equipSkills);
+        GameObject skillObj = Instantiate(GameManager.I.effectIcon, equipSkills);
         if (skillObj.TryGetComponent<Image>(out var img)) {
           img.sprite = s.uiIcon;
           img.color = s.uiIconColor;
@@ -423,7 +423,7 @@ public class PlayerMenuUIInfo : MonoBehaviour {
     }
     // FIXME: Добавить все типы предметов
 
-    GameObject icon = Instantiate(PlayerMenuUI.Instance.menuSlotPrefab, avatar);
+    GameObject icon = Instantiate(GameManager.I.slotMenu, avatar);
     icon.GetComponent<MenuSlot>().Init(item, true);
 
     useItem.interactable = item.usable;

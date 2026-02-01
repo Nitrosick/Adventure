@@ -29,7 +29,7 @@ public class AlmanacUI : MonoBehaviour {
     { KnowledgeSection.Player, "player" }
   };
 
-  private void Awake() {
+  void Awake() {
     Instance = this;
     IconDatabase = Resources.Load<IconDatabase>("Databases/IconDatabase");
     menu = transform.Find("Almanac/Panel");
@@ -58,7 +58,7 @@ public class AlmanacUI : MonoBehaviour {
     }.All(x => x != null);
   }
 
-  private void OnDestroy() {
+  void OnDestroy() {
     closeButton.onClick.RemoveListener(Close);
   }
 

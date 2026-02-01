@@ -26,7 +26,7 @@ public class MapZone : MonoBehaviour {
   private readonly float fadeDuration = 1f;
   private readonly float linesTransparency = 0.6f;
 
-  private void Awake() {
+  void Awake() {
     auraRender = transform.GetComponent<Renderer>();
     markerRender = transform.Find("Marker").GetComponent<SpriteRenderer>();
 
@@ -47,14 +47,14 @@ public class MapZone : MonoBehaviour {
     InitMarker();
   }
 
-  private void Start() {
+  void Start() {
     Dictionary<string, MapZoneData> state = StateManager.zonesState;
     if (state.Count > 0 && state.ContainsKey(id)) {
       if (state[id].events.Count > 0) events = state[id].events;
       else SetCleared();
     }
 
-    auraRender.material = MapZoneManager.Instance.defaultMaterial;
+    auraRender.material = GameManager.I.transparentMaterial;
   }
 
   private void OnMouseEnter() {
@@ -73,7 +73,7 @@ public class MapZone : MonoBehaviour {
 
   private void OnMouseExit() {
     MapUI.Instance.HideZoneInfo();
-    auraRender.material = MapZoneManager.Instance.defaultMaterial;
+    auraRender.material = GameManager.I.transparentMaterial;
     InitMarker();
   }
 
@@ -98,8 +98,8 @@ public class MapZone : MonoBehaviour {
 
   public void SwitchIcon(bool on) {
     if (markIcon == null) return;
-    Material stone = MapZoneManager.Instance.stoneMaterial;
-    Material gold = MapZoneManager.Instance.goldMaterial;
+    Material stone = GameManager.I.stoneMaterial;
+    Material gold = GameManager.I.goldMaterial;
     markIcon.material = on ? gold : stone;
   }
 

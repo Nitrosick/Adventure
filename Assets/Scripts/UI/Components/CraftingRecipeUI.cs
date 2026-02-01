@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class CraftingRecipeUI : MonoBehaviour {
-  public GameObject recipeSlotPrefab;
   public Sprite woodSprite;
   public Sprite stoneSprite;
   public Sprite metalSprite;
@@ -20,7 +19,7 @@ public class CraftingRecipeUI : MonoBehaviour {
   private Color denyColor;
   private CraftingRecipe recipe;
 
-  private void Awake() {
+  void Awake() {
     Transform panel = transform.Find("Viewport/Content").GetComponent<Transform>();
     price = panel.Find("Price/Value").GetComponent<TextMeshProUGUI>();
     componentsPanel = panel.Find("Components");
@@ -42,13 +41,13 @@ public class CraftingRecipeUI : MonoBehaviour {
     craftButton.onClick.AddListener(Craft);
   }
 
-  private void OnDestroy() {
+  void OnDestroy() {
     craftButton.onClick.RemoveListener(Craft);
   }
 
   public void Init(CraftingRecipe data) {
     recipe = data;
-    GameObject source = Instantiate(recipeSlotPrefab, componentsPanel);
+    GameObject source = Instantiate(GameManager.I.slotWithCount, componentsPanel);
     SlotWithCount slotScript = source.GetComponent<SlotWithCount>();
 
     if (data.sourceEquip != null) slotScript.Init(data.sourceEquip);
@@ -57,7 +56,7 @@ public class CraftingRecipeUI : MonoBehaviour {
 
     if (data.componentItems.Length > 0) {
       foreach (Item item in data.componentItems) {
-        GameObject obj = Instantiate(recipeSlotPrefab, componentsPanel);
+        GameObject obj = Instantiate(GameManager.I.slotWithCount, componentsPanel);
         obj.GetComponent<SlotWithCount>().Init(item);
       }
     }
@@ -65,7 +64,7 @@ public class CraftingRecipeUI : MonoBehaviour {
     int[] res = data.GetComponentResources();
     for (int i = 0; i < res.Length; i++) {
       if (res[i] == 0) continue;
-      GameObject obj = Instantiate(recipeSlotPrefab, componentsPanel);
+      GameObject obj = Instantiate(GameManager.I.slotWithCount, componentsPanel);
       obj.GetComponent<SlotWithCount>().Init(sprites[i], res[i], MapUI.Instance.resTooltips[i]);
     }
 

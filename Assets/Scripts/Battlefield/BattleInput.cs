@@ -17,7 +17,7 @@ public class BattleInput : MonoBehaviour {
   private readonly float lerpDuration = 0.25f;
   private readonly float objectsTransparency = 0.15f;
 
-  private void Awake() {
+  void Awake() {
     terrain = GameObject.FindGameObjectWithTag("Terrain").GetComponent<Transform>();
 
     if (obstacles == null || obstacles.Count == 0) {
@@ -30,7 +30,7 @@ public class BattleInput : MonoBehaviour {
     CacheOriginalColors();
   }
 
-  private void Start() {
+  void Start() {
     tiles = TileManager.GetHighTiles();
     fillers = TileManager.GetFillers();
     if (terrain == null) return;

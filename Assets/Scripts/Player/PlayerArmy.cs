@@ -7,7 +7,7 @@ public class PlayerArmy : MonoBehaviour {
   public List<SupportInstance> Supports { get; private set; } = new();
   public int SupportSlots { get; private set; } = 1;
 
-  private void OnDestroy() {
+  void OnDestroy() {
     Units.Clear();
     Supports.Clear();
   }

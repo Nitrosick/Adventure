@@ -8,7 +8,7 @@ public class CollectingModalUI : ModalRewardUI {
   private static Button collect;
   private static Button cancel;
 
-  private void Awake() {
+  void Awake() {
     Instance = this;
   }
 
@@ -28,7 +28,7 @@ public class CollectingModalUI : ModalRewardUI {
     cancel.onClick.AddListener(OnDecline);
   }
 
-  private void OnDestroy() {
+  void OnDestroy() {
     if (collect != null) collect.onClick.RemoveListener(OnSubmit);
     if (cancel != null) cancel.onClick.RemoveListener(OnDecline);
   }
@@ -59,7 +59,7 @@ public class CollectingModalUI : ModalRewardUI {
     callback = action;
     title.text = "Collecting";
     ShowReward(reward);
-    RenderSlots(reward, Instance.slotPrefab);
+    RenderSlots(reward, GameManager.I.slotWithCount);
     Open();
   }
 }

@@ -9,7 +9,6 @@ public class BattleUI : GeneralUI {
   public static BattleUI Instance;
 
   // Prefabs
-  [SerializeField] private GameObject queueSlotPrefab;
   public GameObject damagePopupPrefab;
   public GameObject skillChargePrefab;
   public GameObject skillChargeEmptyPrefab;
@@ -66,7 +65,7 @@ public class BattleUI : GeneralUI {
     climbButton.onClick.AddListener(Climb);
   }
 
-  private void Start() {
+  void Start() {
     UpdateReinforcementInfo(1);
   }
 
@@ -114,7 +113,7 @@ public class BattleUI : GeneralUI {
       int index = (current + i) % count;
       Unit unit = queue[index];
       if (unit.IsDead) continue;
-      GameObject slot = Instantiate(Instance.queueSlotPrefab, queuePanel);
+      GameObject slot = Instantiate(GameManager.I.slotQueue, queuePanel);
       QueueSlot slotScript = slot.GetComponent<QueueSlot>();
 
       slotScript.Init(unit);
@@ -130,7 +129,7 @@ public class BattleUI : GeneralUI {
 
     foreach (SupportInstance unit in supports) {
       unit.relation = UnitRelation.Ally;
-      GameObject slot = Instantiate(Instance.queueSlotPrefab, supportsPanel);
+      GameObject slot = Instantiate(GameManager.I.slotQueue, supportsPanel);
       slot.GetComponent<QueueSlot>().Init(unit);
       // FIXME: Саппорты противника
     }

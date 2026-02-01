@@ -14,14 +14,13 @@ public class SquadOverwhelmed : MonoBehaviour {
   private static Button confirm;
   private static Button cancel;
 
-  public GameObject slotPrefab;
   private static int limit;
   private static MapZoneEvent mapZoneEvent;
   private static bool isAmbush;
 
   private static readonly int slotsInRow = 5;
 
-  private void Awake() {
+  void Awake() {
     Instance = this;
     window = transform.Find("Modals/SquadOverwhelmed").GetComponent<Transform>();
     background = transform.Find("Modals/Background").gameObject;
@@ -42,7 +41,7 @@ public class SquadOverwhelmed : MonoBehaviour {
     cancel.onClick.AddListener(OnCancel);
   }
 
-  private void OnDestroy() {
+  void OnDestroy() {
     confirm.onClick.RemoveListener(OnSubmit);
     cancel.onClick.RemoveListener(OnCancel);
   }
@@ -61,7 +60,7 @@ public class SquadOverwhelmed : MonoBehaviour {
     List<Unit> units = Player.Instance.Army.Units;
 
     foreach (Unit unit in units) {
-      GameObject slot = Instantiate(Instance.slotPrefab, slots);
+      GameObject slot = Instantiate(GameManager.I.slotSquadOverwhelmed, slots);
       slot.GetComponent<SquadOverwhelmedSlot>().Init(unit);
     }
 
@@ -102,14 +101,14 @@ public class SquadOverwhelmed : MonoBehaviour {
       return;
     } else if (filled < defaultSlotsCount) {
       for (int i = filled; i < defaultSlotsCount; i++) {
-        Instantiate(MapUI.Instance.emptySlotPrefab, slots);
+        Instantiate(GameManager.I.slotEmpty, slots);
       }
     } else {
       int remainder = filled % slotsInRow;
       int placeholders = remainder == 0 ? 0 : slotsInRow - remainder;
 
       for (int i = 0; i < placeholders; i++) {
-        Instantiate(MapUI.Instance.emptySlotPrefab, slots);
+        Instantiate(GameManager.I.slotEmpty, slots);
       }
     }
   }

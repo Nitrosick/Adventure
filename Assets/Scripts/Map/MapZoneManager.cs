@@ -5,13 +5,10 @@ using UnityEngine;
 public class MapZoneManager : MonoBehaviour {
   public static MapZoneManager Instance;
 
-  public Material defaultMaterial;
   public Material highlightMaterial;
-  public Material stoneMaterial;
-  public Material goldMaterial;
   public static MapZone[] Zones { get; private set; }
 
-  private void Awake() {
+  void Awake() {
     Instance = this;
 
     Zones = GameObject.FindGameObjectsWithTag("MapZone")
@@ -20,11 +17,11 @@ public class MapZoneManager : MonoBehaviour {
       .ToArray();
   }
 
-  private void Start() {
+  void Start() {
     GetStateData();
   }
 
-  private void OnDestroy() {
+  void OnDestroy() {
     Zones = null;
   }
 

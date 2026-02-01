@@ -44,7 +44,7 @@ public class QuestsMenuUI : HomeMenuFeature {
     emptyText.SetActive(quests.Count == 0);
 
     foreach (QuestInstance quest in quests) {
-      GameObject slot = Instantiate(slotPrefab, questsList);
+      GameObject slot = Instantiate(GameManager.I.slotQuest, questsList);
       slot.GetComponent<QuestSlot>().Init(quest);
     }
   }

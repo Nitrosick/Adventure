@@ -5,7 +5,7 @@ public class LogUI : MonoBehaviour {
   private Transform container;
   [SerializeField] private LogItem logPrefab;
 
-  private void Awake() {
+  void Awake() {
     Instance = this;
     container = transform.Find("Log/Panel");
     if (container == null) Debug.LogError("Log UI components initialization error");

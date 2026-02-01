@@ -8,7 +8,7 @@ public class QueueManager : MonoBehaviour
   public static int Round { get; private set; } = 1;
   private static int orderNumber;
 
-  private void OnDestroy() {
+  void OnDestroy() {
     Queue.Clear();
     CurrentUnit = null;
     Round = 1;
@@ -83,7 +83,6 @@ public class QueueManager : MonoBehaviour
     if (CurrentUnit.Effects.PreventsTurn()) {
       CurrentUnit.Effects.ProcessTurnEffects();
       if (CurrentUnit.IsDead) return;
-      // FIXME: Проверить, что работает убийство эффектом
       NextUnit();
       return;
     }

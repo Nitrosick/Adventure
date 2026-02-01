@@ -23,7 +23,7 @@ public class BattleManager : MonoBehaviour {
   public static Reward Reward { get; private set; }
   public GameObject corpsePrefab;
 
-  private void Awake() {
+  void Awake() {
     Instance = this;
     battleResult = null;
     Reward = new Reward();
@@ -57,11 +57,11 @@ public class BattleManager : MonoBehaviour {
     SpawnTraps(StateManager.trapsCount);
   }
 
-  private void Start() {
+  void Start() {
     QueueManager.Init();
   }
 
-  private void OnDestroy() {
+  void OnDestroy() {
     allies = null;
     enemies = null;
     allySpawns.Clear();

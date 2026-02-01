@@ -43,7 +43,7 @@ public class InfoPopup : MonoBehaviour {
   Transform Find(Transform root, string path) => root.Find(path);
   T Get<T>(Transform root, string path) where T : Component => root.Find(path).GetComponent<T>();
 
-  private void Awake() {
+  void Awake() {
     panel = Get("Info/ItemInfoPanel");
 
     unitParams = Find(panel, "UnitParams");

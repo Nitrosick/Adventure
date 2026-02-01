@@ -7,7 +7,7 @@ public class MapZoneCollecting : MonoBehaviour {
   public int respawn = 1;
   public bool onetime;
 
-  private void Awake() {
+  void Awake() {
     zone = transform.GetComponent<MapZone>();
 
     if (zone == null) {

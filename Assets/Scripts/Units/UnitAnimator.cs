@@ -7,7 +7,7 @@ public class UnitAnimator : MonoBehaviour {
   private Transform model;
   private Animator animator;
 
-  private void Awake() {
+  void Awake() {
     unit = transform.GetComponent<Unit>();
     model = transform.Find("Model").transform;
     animator = model.GetComponent<Animator>();
@@ -18,7 +18,7 @@ public class UnitAnimator : MonoBehaviour {
     }
   }
 
-  private void Start() {
+  void Start() {
     FocusToPoint();
   }
 

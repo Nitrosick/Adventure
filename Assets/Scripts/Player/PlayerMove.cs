@@ -14,7 +14,7 @@ public class PlayerMove : MonoBehaviour
   private Camera mainCamera;
   private PlayerAnimator animator;
 
-  private void Awake() {
+  void Awake() {
     zoneLayer = LayerMask.GetMask("MapZone");
     mainCamera = Camera.main;
     animator = transform.GetComponent<PlayerAnimator>();
@@ -45,7 +45,7 @@ public class PlayerMove : MonoBehaviour
     }
   }
 
-  private void Start() {
+  void Start() {
     _ = CameraController.FocusOn(transform.position, true);
   }
 

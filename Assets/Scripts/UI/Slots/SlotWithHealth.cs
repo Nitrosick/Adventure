@@ -9,7 +9,7 @@ public class SlotWithHealth : MonoBehaviour {
   private RectTransform healthBar;
   private RectTransform healthBarFill;
 
-  private void Awake() {
+  void Awake() {
     image = transform.Find("Image").GetComponent<Image>();
     deathMark = transform.Find("Dead").gameObject;
     healthBar = transform.Find("HealthBar").GetComponent<RectTransform>();

@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class BuildingUI : MonoBehaviour {
   public static BuildingUI Instance;
-  public GameObject slotPrefab;
 
   private static Transform window;
   private static Button submit;
@@ -28,7 +27,7 @@ public class BuildingUI : MonoBehaviour {
 
   private static readonly int slotsInRow = 5;
 
-  private void Awake() {
+  void Awake() {
     Instance = this;
 
     Transform Find(string path) => window.Find(path);
@@ -59,7 +58,7 @@ public class BuildingUI : MonoBehaviour {
     cancel.onClick.AddListener(Close);
   }
 
-  private void OnDestroy() {
+  void OnDestroy() {
     submit.onClick.RemoveListener(OnSubmit);
     cancel.onClick.RemoveListener(Close);
   }
@@ -131,9 +130,9 @@ public class BuildingUI : MonoBehaviour {
 
     for (int i = 0; i < req.resources.Length; i++) {
       if (req.resources[i] > 0) {
-        GameObject slot = Instantiate(Instance.slotPrefab, requirementSlots);
+        GameObject slot = Instantiate(GameManager.I.slotWithCount, requirementSlots);
         slot.GetComponent<SlotWithCount>().Init(
-          MapUI.Instance.resourceSprites[i],
+          GameManager.I.resourceSprites[i],
           req.resources[i],
           MapUI.Instance.resTooltips[i]
         );
@@ -142,9 +141,9 @@ public class BuildingUI : MonoBehaviour {
     }
 
     if (req.villagers > 0) {
-      GameObject slot = Instantiate(Instance.slotPrefab, requirementSlots);
+      GameObject slot = Instantiate(GameManager.I.slotWithCount, requirementSlots);
       slot.GetComponent<SlotWithCount>().Init(
-        MapUI.Instance.villagersSprite,
+        GameManager.I.villagersSprite,
         req.villagers,
         "Villagers"
       );
@@ -153,7 +152,7 @@ public class BuildingUI : MonoBehaviour {
 
     if (req.equipment.Length > 0) {
       foreach (Equipment item in req.equipment) {
-        GameObject slot = Instantiate(Instance.slotPrefab, requirementSlots);
+        GameObject slot = Instantiate(GameManager.I.slotWithCount, requirementSlots);
         slot.GetComponent<SlotWithCount>().Init(item);
         slotsCount++;
       }
@@ -161,7 +160,7 @@ public class BuildingUI : MonoBehaviour {
 
     if (req.items.Length > 0) {
       foreach (Item item in req.items) {
-        GameObject slot = Instantiate(Instance.slotPrefab, requirementSlots);
+        GameObject slot = Instantiate(GameManager.I.slotWithCount, requirementSlots);
         slot.GetComponent<SlotWithCount>().Init(item);
         slotsCount++;
       }
@@ -175,14 +174,14 @@ public class BuildingUI : MonoBehaviour {
       return;
     } else if (filled < slotsInRow) {
       for (int i = filled; i < slotsInRow; i++) {
-        Instantiate(MapUI.Instance.emptySlotPrefab, requirementSlots);
+        Instantiate(GameManager.I.slotEmpty, requirementSlots);
       }
     } else {
       int remainder = filled % slotsInRow;
       int placeholders = remainder == 0 ? 0 : slotsInRow - remainder;
 
       for (int i = 0; i < placeholders; i++) {
-        Instantiate(MapUI.Instance.emptySlotPrefab, requirementSlots);
+        Instantiate(GameManager.I.slotEmpty, requirementSlots);
       }
     }
   }

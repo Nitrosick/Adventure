@@ -4,11 +4,11 @@ using UnityEngine;
 public class KnowledgeManager : MonoBehaviour {
   public static List<KnowledgeInstance> articles = new ();
 
-  private void Start() {
+  void Start() {
     GetStateData();
   }
 
-  private void OnDestroy() {
+  void OnDestroy() {
     articles.Clear();
   }
 

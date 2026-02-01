@@ -9,7 +9,7 @@ public class AchievementSlot : MonoBehaviour {
   private GameObject completedMark;
   private AchievementInstance currentAchievement;
 
-  private void Awake() {
+  void Awake() {
     button = transform.GetComponent<Button>();
     title = transform.Find("Title").GetComponent<TextMeshProUGUI>();
     progress = transform.Find("Progress").GetComponent<TextMeshProUGUI>();
@@ -23,7 +23,7 @@ public class AchievementSlot : MonoBehaviour {
     button.onClick.AddListener(OpenInfo);
   }
 
-  private void OnDestroy() {
+  void OnDestroy() {
     button.onClick.RemoveListener(OpenInfo);
   }
 

@@ -32,7 +32,7 @@ public class HomeMenuUI : MonoBehaviour {
 
   private static readonly int saveDelay = 3;
 
-  private void Awake() {
+  void Awake() {
     menu = transform.Find("Menu/Home");
     content = menu.Find("Content/Viewport/Scroll");
 
@@ -91,7 +91,7 @@ public class HomeMenuUI : MonoBehaviour {
     }.All(x => x != null);
   }
 
-  private void OnDestroy() {
+  void OnDestroy() {
     healingFeature.onClick.RemoveListener(() => OpenSection(MapZoneFeature.Healing));
     trainingFeature.onClick.RemoveListener(() => OpenSection(MapZoneFeature.Training));
     tradingFeature.onClick.RemoveListener(() => OpenSection(MapZoneFeature.Trading));

@@ -14,7 +14,7 @@ public class SaveSlot : MonoBehaviour {
   public int index;
   private bool hasSave;
 
-  private void Awake() {
+  void Awake() {
     button = transform.GetComponent<Button>();
     activePanel = transform.Find("Active").gameObject;
     emptyPanel = transform.Find("Empty").gameObject;

@@ -9,10 +9,6 @@ using UnityEngine.UI;
 public class MapUI : GeneralUI {
   public static MapUI Instance;
   private static IconDatabase IconDatabase;
-  public GameObject emptySlotPrefab;
-  public GameObject buffSlotPrefab;
-  public Sprite villagersSprite;
-  public Sprite[] resourceSprites;
 
   // Zone info
   private GameObject zoneInfoPanel;
@@ -292,7 +288,7 @@ public class MapUI : GeneralUI {
     foreach (Transform child in buffsPanel) Destroy(child.gameObject);
 
     foreach (Buff buff in buffs) {
-      GameObject buffSlot = Instantiate(buffSlotPrefab, buffsPanel);
+      GameObject buffSlot = Instantiate(GameManager.I.slotBuff, buffsPanel);
       buffSlot.transform.Find("Icon").GetComponent<Image>().sprite = buff.icon;
       buffSlot.GetComponent<TooltipTrigger>().message = $"{ buff.title }\n{ buff.description }";
     }

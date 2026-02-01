@@ -6,12 +6,12 @@ public class PhaseManager : MonoBehaviour
 {
   public static BattlePhase CurrentPhase { get; private set; }
 
-  private void Awake() {
+  void Awake() {
     CurrentPhase = BattlePhase.Movement;
     BattleUI.Instance.SwitchPhase(CurrentPhase);
   }
 
-  private void OnDestroy() {
+  void OnDestroy() {
     CurrentPhase = BattlePhase.Movement;
   }
 

@@ -3,8 +3,6 @@ using TMPro;
 using UnityEngine;
 
 public class ModalRewardUI : ModalUI {
-  public GameObject slotPrefab;
-
   private static GameObject rewardXPRow;
   private static TextMeshProUGUI rewardXP;
   private static GameObject rewardFameRow;
@@ -83,7 +81,7 @@ public class ModalRewardUI : ModalUI {
       if (reward.resources[i] > 0) {
         GameObject slot = Instantiate(prefab, rewardSlots);
         slot.GetComponent<SlotWithCount>().Init(
-          MapUI.Instance.resourceSprites[i],
+          GameManager.I.resourceSprites[i],
           reward.resources[i],
           MapUI.Instance.resTooltips[i]
         );
@@ -115,14 +113,14 @@ public class ModalRewardUI : ModalUI {
       return;
     } else if (filled < slotsInRow) {
       for (int i = filled; i < slotsInRow; i++) {
-        Instantiate(MapUI.Instance.emptySlotPrefab, rewardSlots);
+        Instantiate(GameManager.I.slotEmpty, rewardSlots);
       }
     } else {
       int remainder = filled % slotsInRow;
       int placeholders = remainder == 0 ? 0 : slotsInRow - remainder;
 
       for (int i = 0; i < placeholders; i++) {
-        Instantiate(MapUI.Instance.emptySlotPrefab, rewardSlots);
+        Instantiate(GameManager.I.slotEmpty, rewardSlots);
       }
     }
   }

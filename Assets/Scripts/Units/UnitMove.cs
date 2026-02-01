@@ -8,7 +8,7 @@ public class UnitMove : MonoBehaviour {
   public bool IsMoving { get; private set; } = false;
   private readonly int mpToClimb = 2;
 
-  private void Awake() {
+  void Awake() {
     unit = transform.GetComponent<Unit>();
 
     if (unit == null) {

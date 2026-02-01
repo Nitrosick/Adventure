@@ -21,7 +21,7 @@ public class SceneController : MonoBehaviour
   private static Image eventIcon;
   private static TextMeshProUGUI eventText;
 
-  private void Awake() {
+  void Awake() {
     IconDatabase = Resources.Load<IconDatabase>("Databases/IconDatabase");
 
     background = transform.Find("Background/Image").gameObject;
@@ -35,13 +35,13 @@ public class SceneController : MonoBehaviour
     }
   }
 
-  private void Start() {
+  void Start() {
     _ = FadeOut();
     StateManager.openedWindows.Clear();
     Unlock();
   }
 
-  private void OnDestroy() {
+  void OnDestroy() {
     HideEventInfo();
   }
 

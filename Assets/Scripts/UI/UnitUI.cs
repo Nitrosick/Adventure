@@ -21,7 +21,7 @@ public class UnitUI : MonoBehaviour {
     { PopupType.Inactive, "#A0A0A0" }
   };
 
-  private void Awake() {
+  void Awake() {
     unit = transform.GetComponent<Unit>();
     canvas = transform.Find("UI").GetComponent<Canvas>();
     marker = transform.Find("Marker").gameObject;
@@ -44,7 +44,7 @@ public class UnitUI : MonoBehaviour {
     ClearMarkers();
   }
 
-  private void OnDestroy() {
+  void OnDestroy() {
     ClearMarkers();
   }
 

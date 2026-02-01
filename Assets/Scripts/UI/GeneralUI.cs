@@ -37,7 +37,7 @@ public class GeneralUI : MonoBehaviour {
     ColorUtility.TryParseHtmlString("#EFBF0D", out highlightedColor);
   }
 
-  private void Start() {
+  void Start() {
     UpdateAlmanacIcon();
   }
 

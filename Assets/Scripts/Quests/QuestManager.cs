@@ -6,11 +6,11 @@ using UnityEngine;
 public class QuestManager : MonoBehaviour {
   public static List<QuestInstance> questsList = new ();
 
-  private void Start() {
+  void Start() {
     GetStateData();
   }
 
-  private void OnDestroy() {
+  void OnDestroy() {
     questsList.Clear();
   }
 

@@ -7,7 +7,7 @@ public class MapZoneBuilding : MonoBehaviour {
   public Sprite sprite;
   public BlockedPath[] unlockPathes = {};
 
-  private void Awake() {
+  void Awake() {
     zone = transform.GetComponent<MapZone>();
 
     if (zone == null) {

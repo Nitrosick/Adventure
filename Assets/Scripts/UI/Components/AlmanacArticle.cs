@@ -8,7 +8,7 @@ public class AlmanacArticle : MonoBehaviour {
   private GameObject newIcon;
   private KnowledgeInstance currentArticle;
 
-  private void Awake() {
+  void Awake() {
     button = transform.GetComponent<Button>();
     title = transform.Find("Text").GetComponent<TextMeshProUGUI>();
     newIcon = transform.Find("New").gameObject;
@@ -21,7 +21,7 @@ public class AlmanacArticle : MonoBehaviour {
     button.onClick.AddListener(ShowArticleContent);
   }
 
-  private void OnDestroy() {
+  void OnDestroy() {
     button.onClick.RemoveListener(ShowArticleContent);
   }
 

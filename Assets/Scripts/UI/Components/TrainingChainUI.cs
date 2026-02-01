@@ -4,8 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class TrainingChainUI : MonoBehaviour {
-  public GameObject chainSlotPrefab;
-
   private TextMeshProUGUI price;
   private Transform componentsPanel;
   private SlotWithCount resultSlot;
@@ -16,7 +14,7 @@ public class TrainingChainUI : MonoBehaviour {
   private TrainingChain chain;
   private readonly List<Unit> unitObjects = new() { };
 
-  private void Awake() {
+  void Awake() {
     Transform panel = transform.Find("Viewport/Content").GetComponent<Transform>();
     price = panel.Find("Price/Value").GetComponent<TextMeshProUGUI>();
     componentsPanel = panel.Find("Components");
@@ -37,7 +35,7 @@ public class TrainingChainUI : MonoBehaviour {
     trainButton.onClick.AddListener(Train);
   }
 
-  private void OnDestroy() {
+  void OnDestroy() {
     trainButton.onClick.RemoveListener(Train);
     foreach (Unit unit in unitObjects) Destroy(unit.gameObject);
     unitObjects.Clear();
@@ -45,7 +43,7 @@ public class TrainingChainUI : MonoBehaviour {
 
   public void Init(TrainingChain data) {
     chain = data;
-    GameObject source = Instantiate(chainSlotPrefab, componentsPanel);
+    GameObject source = Instantiate(GameManager.I.slotWithCount, componentsPanel);
     SlotWithCount slotScript = source.GetComponent<SlotWithCount>();
 
     if (data.sourceUnit != null) {
@@ -56,7 +54,7 @@ public class TrainingChainUI : MonoBehaviour {
       SupportInstance support = new (data.sourceSupport, data.sourceSupportLevel);
       slotScript.Init(support);
     } else if (data.sourceVillagersCount > 0) {
-      slotScript.Init(MapUI.Instance.villagersSprite, data.sourceVillagersCount, "Villagers");
+      slotScript.Init(GameManager.I.villagersSprite, data.sourceVillagersCount, "Villagers");
     }
 
     if (data.resultUnit != null) {
@@ -70,14 +68,14 @@ public class TrainingChainUI : MonoBehaviour {
 
     if (data.items.Length > 0) {
       foreach (Item item in data.items) {
-        GameObject obj = Instantiate(chainSlotPrefab, componentsPanel);
+        GameObject obj = Instantiate(GameManager.I.slotChain, componentsPanel);
         obj.GetComponent<SlotWithCount>().Init(item);
       }
     }
 
     if (data.equipment.Length > 0) {
       foreach (Equipment item in data.equipment) {
-        GameObject obj = Instantiate(chainSlotPrefab, componentsPanel);
+        GameObject obj = Instantiate(GameManager.I.slotWithCount, componentsPanel);
         obj.GetComponent<SlotWithCount>().Init(item);
       }
     }

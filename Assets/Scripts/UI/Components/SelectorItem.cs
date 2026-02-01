@@ -13,7 +13,7 @@ public class SelectorItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
   private Action<object> callback;
   private bool disabled;
 
-  private void Awake() {
+  void Awake() {
     background = transform.GetComponent<Image>();
     image = transform.Find("Icon/Image").GetComponent<Image>();
     title = transform.Find("Title").GetComponent<TextMeshProUGUI>();

@@ -10,7 +10,7 @@ public class SquadOverwhelmedSlot : MonoBehaviour, IPointerClickHandler {
   public GameObject ActiveMark { get; private set; }
   public GameObject DeathMark { get; private set; }
 
-  private void Awake() {
+  void Awake() {
     image = transform.Find("Image").GetComponent<Image>();
     ActiveMark = transform.Find("ActiveMark").gameObject;
     DeathMark = transform.Find("Dead").gameObject;
@@ -20,7 +20,7 @@ public class SquadOverwhelmedSlot : MonoBehaviour, IPointerClickHandler {
     }
   }
 
-  private void OnDestroy() {
+  void OnDestroy() {
     UnitItem = null;
   }
 

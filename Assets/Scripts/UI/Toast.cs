@@ -13,7 +13,7 @@ public class Toast : MonoBehaviour {
 
   private static CancellationTokenSource cts;
 
-  private void Awake() {
+  void Awake() {
     IconDatabase = Resources.Load<IconDatabase>("Databases/IconDatabase");
 
     panel = transform.Find("Toast/Panel").GetComponent<Transform>();

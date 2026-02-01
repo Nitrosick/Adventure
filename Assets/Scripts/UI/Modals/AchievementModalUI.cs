@@ -9,7 +9,7 @@ public class AchievementModalUI : ModalRewardUI {
   private static TextMeshProUGUI progress;
   private static AchievementInstance achievement;
 
-  private void Awake() {
+  void Awake() {
     Instance = this;
   }
 
@@ -28,7 +28,7 @@ public class AchievementModalUI : ModalRewardUI {
     close.onClick.AddListener(Close);
   }
 
-  private void OnDestroy() {
+  void OnDestroy() {
     if (close != null) close.onClick.RemoveListener(Close);
   }
 
@@ -42,7 +42,7 @@ public class AchievementModalUI : ModalRewardUI {
     Reward reward = achievement.data.reward;
 
     ShowReward(reward);
-    RenderSlots(reward, Instance.slotPrefab);
+    RenderSlots(reward, GameManager.I.slotWithCount);
 
     window.gameObject.SetActive(true);
     background.SetActive(true);

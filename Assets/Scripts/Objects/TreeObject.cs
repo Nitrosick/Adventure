@@ -5,7 +5,7 @@ public class TreeObject : MonoBehaviour {
   public Tile ParentTile { get; private set; }
   protected readonly int objectDestroyTime = 5;
 
-  private void Awake() {
+  void Awake() {
     ParentTile = transform.GetComponentInParent<Tile>();
 
     if (ParentTile == null) {

@@ -11,7 +11,7 @@ public class MainMenu : MonoBehaviour {
   public GameObject saveSlot;
   private SaveSlot[] activeSlots;
 
-  private void Awake() {
+  void Awake() {
     main = transform.Find("Menu/Panel");
     savesPanel = transform.Find("SaveSlots/Panel").GetComponent<CanvasGroup>();
     slotsContainer = transform.Find("SaveSlots/Panel/List");
@@ -33,7 +33,7 @@ public class MainMenu : MonoBehaviour {
     StateManager.ResetPlayerData();
   }
 
-  private void Start() {
+  void Start() {
     foreach (SaveSlot slot in activeSlots) {
       var data = StateManager.SaveExists(slot.index)
         ? StateManager.LoadGame(slot.index, false)
@@ -42,7 +42,7 @@ public class MainMenu : MonoBehaviour {
     }
   }
 
-  private void OnDestroy() {
+  void OnDestroy() {
     activeSlots = new SaveSlot[] { };
     startGame.onClick.RemoveListener(OpenSaveSlots);
     exitGame.onClick.RemoveListener(ExitGame);

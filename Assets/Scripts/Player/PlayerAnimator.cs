@@ -4,7 +4,7 @@ public class PlayerAnimator : MonoBehaviour
 {
   private Animator animator;
 
-  private void Awake() {
+  void Awake() {
     animator = transform.Find("Model").GetComponent<Animator>();
     if (animator == null) Debug.LogError("Player animation initialization error");
   }

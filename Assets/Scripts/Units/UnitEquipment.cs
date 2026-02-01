@@ -19,7 +19,7 @@ public class UnitEquipment : MonoBehaviour {
 
   private readonly float damageScalingFactor = 0.75f;
 
-  private void Awake() {
+  void Awake() {
     unit = transform.GetComponent<Unit>();
     body = transform.Find("Model/Body").GetComponent<SkinnedMeshRenderer>();
 
@@ -37,7 +37,7 @@ public class UnitEquipment : MonoBehaviour {
     }
   }
 
-  private void Start() {
+  void Start() {
     if (!ComponentsInitialized()) return;
     UpdateEquipment();
   }

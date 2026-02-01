@@ -15,7 +15,7 @@ public class SlotWithCount : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
   private Unit currentUnit;
   private SupportInstance currentSupport;
 
-  private void Awake() {
+  void Awake() {
     image = transform.Find("Image").GetComponent<Image>();
     background = transform.Find("Background").GetComponent<Image>();
     itemCount = transform.Find("Count").gameObject;

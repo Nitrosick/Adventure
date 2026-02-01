@@ -62,7 +62,7 @@ public class HealingMenuUI : HomeMenuFeature {
     }.All(x => x != null);
   }
 
-  private void OnDestroy() {
+  void OnDestroy() {
     healButton.onClick.RemoveListener(HealUnits);
     reanimateButton.onClick.RemoveListener(ReanimateUnits);
   }
@@ -128,7 +128,7 @@ public class HealingMenuUI : HomeMenuFeature {
       );
 
       foreach (Unit unit in wounded) {
-        GameObject slot = Instantiate(slotPrefab, woundedSlots);
+        GameObject slot = Instantiate(GameManager.I.slotWithHealth, woundedSlots);
         slot.GetComponent<SlotWithHealth>().Init(unit, true);
       }
 
@@ -146,7 +146,7 @@ public class HealingMenuUI : HomeMenuFeature {
       );
 
       foreach (Unit unit in dead) {
-        GameObject slot = Instantiate(slotPrefab, deadSlots);
+        GameObject slot = Instantiate(GameManager.I.slotWithHealth, deadSlots);
         slot.GetComponent<SlotWithHealth>().Init(unit);
       }
 

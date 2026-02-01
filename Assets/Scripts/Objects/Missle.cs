@@ -10,7 +10,7 @@ public class Missle : MonoBehaviour {
   private bool success;
   private readonly int delayAfterCollision = 750;
 
-  private void Awake() {
+  void Awake() {
     rb = transform.GetComponent<Rigidbody>();
     if (rb == null) Debug.LogError("Missle initialization error");
   }

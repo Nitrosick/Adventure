@@ -17,7 +17,7 @@ public class QueueSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
   private static Color allyColor;
   private static Color enemyColor;
 
-  private void Awake() {
+  void Awake() {
     frame = transform.Find("Frame").GetComponent<Image>();
     relationIndicator = transform.Find("RelationIndicator").GetComponent<Image>();
     crown = transform.Find("Crown").GetComponent<Image>();

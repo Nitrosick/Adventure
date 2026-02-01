@@ -10,7 +10,7 @@ public class PauseMenu : MonoBehaviour {
   private static Button exitGame;
   private static Button retreatButton;
 
-  private void Awake() {
+  void Awake() {
     panel = transform.Find("Menu/Pause");
     background = transform.Find("Menu/Background").gameObject;
     continueGame = panel.Find("Buttons/Continue").GetComponent<Button>();
@@ -41,7 +41,7 @@ public class PauseMenu : MonoBehaviour {
     // optionsButton.onClick.AddListener(() => {});
   }
 
-  private void OnDestroy() {
+  void OnDestroy() {
     if (mainMenuButton != null) mainMenuButton.onClick.RemoveListener(ToMainMenu);
     if (exitGame != null) exitGame.onClick.RemoveListener(ExitGame);
     if (retreatButton != null) retreatButton.onClick.RemoveListener(RetreatConfirmation);

@@ -8,11 +8,6 @@ using UnityEngine.UI;
 public class PlayerMenuUI : MonoBehaviour {
   // Components
   public static PlayerMenuUI Instance;
-
-  public GameObject menuSlotPrefab;
-  public GameObject questSlotPrefab;
-  public GameObject questEmptySlot;
-  public GameObject effectIcon;
   private static Transform menu;
 
   // Navigation
@@ -62,7 +57,7 @@ public class PlayerMenuUI : MonoBehaviour {
   public static SupportInstance selectedSupport;
   public static Item selectedItem;
 
-  private void Awake() {
+  void Awake() {
     Instance = this;
     menu = transform.Find("Menu/Player");
 
@@ -131,7 +126,7 @@ public class PlayerMenuUI : MonoBehaviour {
     }.All(x => x != null);
   }
 
-  private void OnDestroy() {
+  void OnDestroy() {
     navHero.onClick.RemoveListener(SelectHeroTab);
     navUnits.onClick.RemoveListener(SelectUnitsTab);
     navInventory.onClick.RemoveListener(SelectInventoryTab);
@@ -285,12 +280,12 @@ public class PlayerMenuUI : MonoBehaviour {
     PlayerMenuUIInfo.UnitDismiss.interactable = units.Length > 1;
 
     foreach (Unit unit in units) {
-      GameObject slot = Instantiate(Instance.menuSlotPrefab, leftSlots);
+      GameObject slot = Instantiate(GameManager.I.slotMenu, leftSlots);
       slot.GetComponent<MenuSlot>().Init(unit);
     }
 
     foreach (SupportInstance support in supports) {
-      GameObject slot = Instantiate(Instance.menuSlotPrefab, rightSlots);
+      GameObject slot = Instantiate(GameManager.I.slotMenu, rightSlots);
       slot.GetComponent<MenuSlot>().Init(support);
     }
 
@@ -339,7 +334,7 @@ public class PlayerMenuUI : MonoBehaviour {
       });
 
     foreach (var g in groupedUnequipped) {
-      GameObject slot = Instantiate(Instance.menuSlotPrefab, leftSlots);
+      GameObject slot = Instantiate(GameManager.I.slotMenu, leftSlots);
       slot.GetComponent<MenuSlot>().Init(g.equip, false, g.count);
     }
 
@@ -351,7 +346,7 @@ public class PlayerMenuUI : MonoBehaviour {
       });
 
     foreach (var g in groupedEquipped) {
-      GameObject slot = Instantiate(Instance.menuSlotPrefab, leftSlots);
+      GameObject slot = Instantiate(GameManager.I.slotMenu, leftSlots);
       MenuSlot slotScript = slot.GetComponent<MenuSlot>();
       slotScript.Init(g.equip, false, g.count);
       slotScript.SwitchActiveMark();
@@ -374,7 +369,7 @@ public class PlayerMenuUI : MonoBehaviour {
       });
 
     foreach (var g in groupedItems) {
-      GameObject slot = Instantiate(Instance.menuSlotPrefab, rightSlots);
+      GameObject slot = Instantiate(GameManager.I.slotMenu, rightSlots);
       var slotScript = slot.GetComponent<MenuSlot>();
       slot.GetComponent<MenuSlot>().Init(g.item, false, g.count);
     }
@@ -406,12 +401,12 @@ public class PlayerMenuUI : MonoBehaviour {
     completedQuestsEmpty.SetActive(completed.Length == 0);
 
     foreach (QuestInstance q in active) {
-      GameObject slot = Instantiate(Instance.questSlotPrefab, activeQuestsList);
+      GameObject slot = Instantiate(GameManager.I.slotQuest, activeQuestsList);
       slot.GetComponent<QuestSlot>().Init(q);
     }
 
     foreach (QuestInstance q in completed) {
-      GameObject slot = Instantiate(Instance.questSlotPrefab, completedQuestsList);
+      GameObject slot = Instantiate(GameManager.I.slotQuest, completedQuestsList);
       slot.GetComponent<QuestSlot>().Init(q);
     }
 
@@ -428,7 +423,7 @@ public class PlayerMenuUI : MonoBehaviour {
     }
     else if (filled < defaultSlotsCount) {
       for (int i = filled; i < defaultSlotsCount; i++) {
-        Instantiate(MapUI.Instance.emptySlotPrefab, panel);
+        Instantiate(GameManager.I.slotEmpty, panel);
       }
     }
     else {
@@ -436,7 +431,7 @@ public class PlayerMenuUI : MonoBehaviour {
       int placeholders = remainder == 0 ? 0 : slotColumns - remainder;
 
       for (int i = 0; i < placeholders; i++) {
-        Instantiate(MapUI.Instance.emptySlotPrefab, panel);
+        Instantiate(GameManager.I.slotEmpty, panel);
       }
     }
   }
@@ -445,7 +440,7 @@ public class PlayerMenuUI : MonoBehaviour {
     if (filled >= defaultQuestsInColumn) return;
 
     for (int i = 0; i < defaultQuestsInColumn - filled; i++) {
-      Instantiate(Instance.questEmptySlot, panel);
+      Instantiate(GameManager.I.slotQuestEmpty, panel);
     }
   }
 

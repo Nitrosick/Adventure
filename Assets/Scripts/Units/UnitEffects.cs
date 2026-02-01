@@ -7,7 +7,7 @@ public class UnitEffects : MonoBehaviour {
   public List<Skill> innateSkills = new();
   public List<EffectInstance> ActiveEffects { get; private set; } = new();
 
-  private void Awake() {
+  void Awake() {
     unit = transform.GetComponent<Unit>();
 
     if (unit == null) {

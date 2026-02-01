@@ -28,7 +28,7 @@ public class Player : MonoBehaviour {
   private readonly int fameStepSize = 500;
   private readonly int villagersLimit = 100;
 
-  private void Awake() {
+  void Awake() {
     Instance = this;
     Move = transform.GetComponent<PlayerMove>();
     Army = transform.GetComponent<PlayerArmy>();
@@ -40,7 +40,7 @@ public class Player : MonoBehaviour {
     }
   }
 
-  private void Start() {
+  void Start() {
     GetStateData();
   }
 

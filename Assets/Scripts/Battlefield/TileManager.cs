@@ -22,7 +22,7 @@ public class TileManager : MonoBehaviour {
     new (-1, 0)
   };
 
-  private void Awake() {
+  void Awake() {
     Instance = this;
     tiles.Clear();
     fillers.Clear();
@@ -47,7 +47,7 @@ public class TileManager : MonoBehaviour {
     }
   }
 
-  private void OnDestroy() {
+  void OnDestroy() {
     tiles.Clear();
     fillers.Clear();
   }

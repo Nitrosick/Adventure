@@ -24,7 +24,7 @@ public class SlotWithPrice : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     Misc
   };
 
-  private void Awake() {
+  void Awake() {
     player = Player.Instance;
     image = transform.Find("Image").GetComponent<Image>();
     itemPriceText = transform.Find("Price/Value").GetComponent<TextMeshProUGUI>();

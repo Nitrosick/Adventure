@@ -21,7 +21,7 @@ public class CameraController : MonoBehaviour {
   [SerializeField] private float[] xLimits = { -100, 100 };
   [SerializeField] private float[] zLimits = { -100, 100 };
 
-  private void Awake() {
+  void Awake() {
     Instance = this;
     cinemachine = transform.GetComponent<CinemachineVirtualCamera>();
     perlin = cinemachine.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
@@ -34,7 +34,7 @@ public class CameraController : MonoBehaviour {
     CalculateFocusDistance();
   }
 
-  private void Start() {
+  void Start() {
     float angleX = transform.eulerAngles.x;
     float angleY = transform.eulerAngles.y;
     float height = transform.position.y;

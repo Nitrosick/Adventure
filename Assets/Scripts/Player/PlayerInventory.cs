@@ -19,7 +19,7 @@ public class PlayerInventory : MonoBehaviour {
   public List<Equipment> Equip { get; private set; } = new() { };
   public List<Item> Items { get; private set; } = new() { };
 
-  private void Awake() {
+  void Awake() {
     army = transform.GetComponent<PlayerArmy>();
     body = transform.Find("Model/Body").GetComponent<SkinnedMeshRenderer>();
 
@@ -28,7 +28,7 @@ public class PlayerInventory : MonoBehaviour {
     }
   }
 
-  private void Start() {
+  void Start() {
     if (!ComponentsInitialized()) return;
     UpdateEquipment();
   }

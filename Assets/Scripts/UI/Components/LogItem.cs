@@ -6,7 +6,7 @@ public class LogItem : MonoBehaviour {
   private TextMeshProUGUI text;
   private readonly int lifetime = 7000;
 
-  private void Awake() {
+  void Awake() {
     text = transform.GetComponent<TextMeshProUGUI>();
     if (text == null) Debug.LogError("Log item UI components initialization error");
   }

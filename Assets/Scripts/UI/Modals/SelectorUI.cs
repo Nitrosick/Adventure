@@ -18,7 +18,7 @@ public class Selector : MonoBehaviour {
   private static Unit selectedUnit;
   private static UnitEquipSlot currentSlot;
 
-  private void Awake() {
+  void Awake() {
     Instance = this;
     window = transform.Find("Modals/Selector").GetComponent<Transform>();
     background = transform.Find("Modals/Background").gameObject;
@@ -41,7 +41,7 @@ public class Selector : MonoBehaviour {
     cancel.onClick.AddListener(Close);
   }
 
-  private void OnDestroy() {
+  void OnDestroy() {
     takeOff.onClick.RemoveListener(TakeOff);
     cancel.onClick.RemoveListener(Close);
   }

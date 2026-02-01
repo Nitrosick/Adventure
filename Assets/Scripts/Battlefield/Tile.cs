@@ -23,7 +23,7 @@ public class Tile : MonoBehaviour {
   public bool enemyFocusPoint;
   public float lootDropChance;
 
-  private void Awake() {
+  void Awake() {
     Coords = new(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.z));
     Neighbors = new();
     InitPosition = transform.position;
@@ -36,7 +36,7 @@ public class Tile : MonoBehaviour {
     if (highlight != null) Highlight = highlight.gameObject;
   }
 
-  private void OnDestroy() {
+  void OnDestroy() {
     Neighbors.Clear();
     OccupiedBy = null;
   }

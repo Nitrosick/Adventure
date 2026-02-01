@@ -7,7 +7,7 @@ public class MapLoot : MonoBehaviour {
   public Reward reward;
   public ParticleSystem pickEffect;
 
-  private void Awake() {
+  void Awake() {
     ParentZone = GetComponentInParent<MapZone>();
 
     if (ParentZone == null) {

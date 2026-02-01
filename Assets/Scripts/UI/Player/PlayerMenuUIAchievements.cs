@@ -21,7 +21,7 @@ public class PlayerMenuUIAchievements : MonoBehaviour {
     Locked
   }
 
-  private void Awake() {
+  void Awake() {
     Instance = this;
 
     panel = transform.Find("Achievements").GetComponent<Transform>();
@@ -42,7 +42,7 @@ public class PlayerMenuUIAchievements : MonoBehaviour {
     foreach (var pair in actions) pair.Key.onClick.AddListener(pair.Value);
   }
 
-  private void OnDestroy() {
+  void OnDestroy() {
     foreach (var pair in actions) pair.Key.onClick.RemoveListener(pair.Value);
   }
 

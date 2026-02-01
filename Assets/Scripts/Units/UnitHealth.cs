@@ -6,7 +6,7 @@ public class UnitHealth : MonoBehaviour {
   private Unit unit;
   protected readonly int objectDestroyTime = 10;
 
-  private void Awake() {
+  void Awake() {
     unit = transform.GetComponent<Unit>();
 
     if (unit == null) {

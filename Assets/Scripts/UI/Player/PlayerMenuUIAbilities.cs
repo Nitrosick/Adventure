@@ -12,7 +12,7 @@ public class PlayerMenuUIAbilities : MonoBehaviour {
   private static readonly float slotsGap = 12f;
   private static readonly float scrollWidth = 15f;
 
-  private void Awake() {
+  void Awake() {
     Instance = this;
     Transform Find(string path) => transform.Find(path);
     panel = Find("Viewport/Content").GetComponent<RectTransform>();

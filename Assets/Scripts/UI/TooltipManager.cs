@@ -7,7 +7,7 @@ public class TooltipManager : MonoBehaviour {
   [SerializeField] private GameObject tooltipPanel;
   [SerializeField] private TextMeshProUGUI tooltipText;
 
-  private void Awake() {
+  void Awake() {
     Instance = this;
     HideTooltip();
   }

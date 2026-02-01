@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerEffects : MonoBehaviour {
   private readonly List<Buff> buffs = new ();
 
-  private void Start() {
+  void Start() {
     foreach (string buffId in StateManager.playerBuffs) AddBuff(buffId, true);
   }
 

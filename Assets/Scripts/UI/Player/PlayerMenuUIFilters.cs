@@ -33,7 +33,7 @@ public class PlayerMenuUIFilters : MonoBehaviour {
   public static MenuFilter value;
   private readonly Dictionary<Button, UnityAction> actions = new();
 
-  private void Awake() {
+  void Awake() {
     Transform menu = transform.Find("Menu/Player");
 
     Transform Find(string path) => menu.Find(path);
@@ -95,7 +95,7 @@ public class PlayerMenuUIFilters : MonoBehaviour {
     }.All(x => x != null);
   }
 
-  private void OnDestroy() {
+  void OnDestroy() {
     foreach (var pair in actions) pair.Key.onClick.RemoveListener(pair.Value);
   }
 

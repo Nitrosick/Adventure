@@ -13,7 +13,7 @@ public class AbilitySlot : MonoBehaviour {
   private TooltipTrigger hint;
   private AbilityInstance ability;
 
-  private void Awake() {
+  void Awake() {
     button = transform.GetComponent<Button>();
     frame = transform.Find("Frame").GetComponent<Image>();
     frameShadow = transform.Find("Frame").GetComponent<Shadow>();
@@ -34,7 +34,7 @@ public class AbilitySlot : MonoBehaviour {
     button.onClick.AddListener(OpenAbility);
   }
 
-  private void OnDestroy() {
+  void OnDestroy() {
     button.onClick.RemoveListener(OpenAbility);
   }
 

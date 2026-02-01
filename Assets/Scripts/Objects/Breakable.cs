@@ -7,7 +7,7 @@ public class Breakable : MonoBehaviour {
   public GameObject destroyedPrefab;
   protected readonly int objectDestroyTime = 10;
 
-  private void Awake() {
+  void Awake() {
     ParentTile = transform.GetComponentInParent<Tile>();
 
     if (ParentTile == null || destroyedPrefab == null) {

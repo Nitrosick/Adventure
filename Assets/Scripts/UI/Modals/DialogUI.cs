@@ -14,7 +14,7 @@ public class Dialog : ModalUI {
   private TextMeshProUGUI effectValue;
   private TextMeshProUGUI warning;
 
-  private void Awake() {
+  void Awake() {
     Instance = this;
     window = transform.Find("Modals/Dialog").GetComponent<Transform>();
     base.Init(window);
@@ -40,7 +40,7 @@ public class Dialog : ModalUI {
     decline.onClick.AddListener(OnDecline);
   }
 
-  private void OnDestroy() {
+  void OnDestroy() {
     if (submit != null) submit.onClick.RemoveListener(OnSubmit);
     if (decline != null) decline.onClick.RemoveListener(OnDecline);
   }

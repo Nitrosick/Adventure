@@ -4,11 +4,11 @@ public class MapZoneTask : MonoBehaviour {
   public Quest quest;
   private MapZone zone;
 
-  private void Awake() {
+  void Awake() {
     zone = transform.GetComponent<MapZone>();
   }
 
-  private void Start() {
+  void Start() {
     if (!QuestManager.IsQuestInactive(quest.id)) Reset();
   }
 

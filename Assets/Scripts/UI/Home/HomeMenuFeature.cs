@@ -5,8 +5,6 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class HomeMenuFeature : MonoBehaviour {
-  public GameObject slotPrefab;
-
   private TextMeshProUGUI title;
   private TextMeshProUGUI level;
   private Image avatarBackground;
@@ -68,6 +66,6 @@ public class HomeMenuFeature : MonoBehaviour {
       ? slotColumns
       : (filled % slotColumns == 0 ? 0 : slotColumns - (filled % slotColumns));
 
-    for (int i = 0; i < placeholders; i++) Instantiate(MapUI.Instance.emptySlotPrefab, panel);
+    for (int i = 0; i < placeholders; i++) Instantiate(GameManager.I.slotEmpty, panel);
   }
 }

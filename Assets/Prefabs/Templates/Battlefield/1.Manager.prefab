@@ -9,13 +9,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3734201308228127814}
+  - component: {fileID: -2790087542187673577}
   - component: {fileID: 4432836564469367470}
-  - component: {fileID: 2564833582610806788}
   - component: {fileID: 9103256728747762837}
+  - component: {fileID: 2564833582610806788}
   - component: {fileID: 7187444188307847235}
   - component: {fileID: 4870636650323880849}
-  - component: {fileID: 6400954026695782527}
   - component: {fileID: 8391505139412005194}
+  - component: {fileID: 6400954026695782527}
   m_Layer: 0
   m_Name: 1.Manager
   m_TagString: Untagged
@@ -38,6 +39,53 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-2790087542187673577
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2215890567102402238}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9eb679fb7a6ea34da59de7db6ba1b62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  transparentMaterial: {fileID: 2100000, guid: 2ed285ca696469c4a9fc8deaec1dcb3f, type: 2}
+  stoneMaterial: {fileID: 2100000, guid: bfb2818b653746240a7d515a6ec2bc84, type: 2}
+  goldMaterial: {fileID: 2100000, guid: b0cde07bf4a92a446835506555fa2172, type: 2}
+  slotEmpty: {fileID: 7621594476458183801, guid: 483debdfb519d38408888191c3e692a1,
+    type: 3}
+  slotMenu: {fileID: 7621594476458183801, guid: 8239b26d1207526429576883071dc254,
+    type: 3}
+  slotWithCount: {fileID: 279035475939884220, guid: f697dc9604f830e479677b771e656c38,
+    type: 3}
+  slotWithHealth: {fileID: 7621594476458183801, guid: b73f07cf04a719e4caa9083bf308ec98,
+    type: 3}
+  slotWithPrice: {fileID: 4972313229319543418, guid: e8baff29b46a2f240ab3629f883439b7,
+    type: 3}
+  slotBuff: {fileID: 8393826413305722947, guid: f05141ba1f37bdd4495fd0ca7202887e,
+    type: 3}
+  slotQuest: {fileID: 2199551413414299738, guid: 4947979811623fb49984caf0d8fac27d,
+    type: 3}
+  slotQuestEmpty: {fileID: 999662811198767960, guid: c1dca02f081d2a9429bb823423cae9fa,
+    type: 3}
+  slotSquadOverwhelmed: {fileID: 7621594476458183801, guid: 55dc0b6632da3fd4a94bb4a6cb0ed43d,
+    type: 3}
+  slotQueue: {fileID: 7482175815702721502, guid: d12a79cc873029742b66f805dbb2a3b1,
+    type: 3}
+  slotRecipe: {fileID: 7765538712586819012, guid: 24d3b272c459f2947989406deb3b0120,
+    type: 3}
+  slotChain: {fileID: 7765538712586819012, guid: 2adb4abfecb4f9449b7b448cfac8c718,
+    type: 3}
+  villagersSprite: {fileID: 21300000, guid: a9b6adb853c2297438d2ce6e6507fdf4, type: 3}
+  resourceSprites:
+  - {fileID: 21300000, guid: 7c975d8da0c91c148861c8c5170261ef, type: 3}
+  - {fileID: 21300000, guid: d9c66c21926abf9479897face51bb79b, type: 3}
+  - {fileID: 21300000, guid: 65d8bf8bd37a0d94e9faae9852a44583, type: 3}
+  - {fileID: 21300000, guid: b8c1b5ac0de86bf408c171ac28385525, type: 3}
+  effectIcon: {fileID: 4631489090540058675, guid: 12b71c8ffbc7838478c4b4d693a04b68,
+    type: 3}
 --- !u!114 &4432836564469367470
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -52,6 +100,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lootPickEffect: {fileID: 7421624496474942857, guid: d963e4f57afad6f4c956e7cfb36b4ba9,
     type: 3}
+--- !u!114 &9103256728747762837
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2215890567102402238}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c8cca1d030bcb549bdb4243b8df0a26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &2564833582610806788
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -72,18 +132,6 @@ MonoBehaviour:
     type: 3}
   corpsePrefab: {fileID: 4537191243815101349, guid: 9291560310cd41b468b569fdfea665af,
     type: 3}
---- !u!114 &9103256728747762837
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2215890567102402238}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c8cca1d030bcb549bdb4243b8df0a26, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &7187444188307847235
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -110,6 +158,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tooltipPanel: {fileID: 0}
   tooltipText: {fileID: 0}
+--- !u!114 &8391505139412005194
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2215890567102402238}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 044eeab471e23cb4ea157b8792ab1219, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &6400954026695782527
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -124,16 +184,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   flattenInput: {fileID: -7560484915351109248, guid: d4e6bac820a202e46bf2fe966a0e4314,
     type: 3}
---- !u!114 &8391505139412005194
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2215890567102402238}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 044eeab471e23cb4ea157b8792ab1219, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  database: {fileID: 11400000, guid: 8b0ef6cd247e45342b5498b3cefe438c, type: 2}

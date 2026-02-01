@@ -7,7 +7,7 @@ public class MapZoneEvent : MonoBehaviour {
   private MapZone zone;
   private Quest currentQuest;
 
-  private void Awake() {
+  void Awake() {
     zone = transform.GetComponent<MapZone>();
   }
 

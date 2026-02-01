@@ -13,7 +13,7 @@ public class AlmanacSection : MonoBehaviour {
   private KnowledgeSection section;
   private bool opened;
 
-  private void Awake() {
+  void Awake() {
     switcher = transform.Find("Switcher").GetComponent<Button>();
     switcherTitle = transform.Find("Switcher/Text").GetComponent<TextMeshProUGUI>();
     switcherIcon = transform.Find("Switcher/Icon").GetComponent<Image>();
@@ -31,7 +31,7 @@ public class AlmanacSection : MonoBehaviour {
     switcher.onClick.AddListener(SwitchSection);
   }
 
-  private void OnDestroy() {
+  void OnDestroy() {
     switcher.onClick.RemoveListener(SwitchSection);
   }
 

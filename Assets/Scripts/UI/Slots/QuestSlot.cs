@@ -11,7 +11,7 @@ public class QuestSlot : MonoBehaviour {
   private GameObject completedMark;
   private QuestInstance currentQuest;
 
-  private void Awake() {
+  void Awake() {
     button = transform.GetComponent<Button>();
     title = transform.Find("Title").GetComponent<TextMeshProUGUI>();
     levelLabel = transform.Find("Text").GetComponent<TextMeshProUGUI>();
@@ -26,7 +26,7 @@ public class QuestSlot : MonoBehaviour {
     button.onClick.AddListener(OpenDialog);
   }
 
-  private void OnDestroy() {
+  void OnDestroy() {
     button.onClick.RemoveListener(OpenDialog);
   }
 

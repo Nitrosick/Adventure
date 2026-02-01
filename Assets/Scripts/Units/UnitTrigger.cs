@@ -3,7 +3,7 @@ using UnityEngine;
 public class UnitTrigger : MonoBehaviour {
   Unit unit;
 
-  private void Awake() {
+  void Awake() {
     unit = GetComponentInParent<Unit>();
 
     if (unit == null) {
