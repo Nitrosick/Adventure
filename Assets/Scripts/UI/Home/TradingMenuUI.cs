@@ -57,7 +57,7 @@ public class TradingMenuUI : HomeMenuFeature {
     UpdateGoodsData();
   }
 
-  private void UpdateGoodsData() {
+  void UpdateGoodsData() {
     ClearSlots(resourceSlots);
     ClearSlots(equipmentSlots);
     ClearSlots(miscSlots);

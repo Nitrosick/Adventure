@@ -265,8 +265,7 @@ public class PlayerMenuUIInfo : MonoBehaviour {
     );
 
     unitMp.text = unit.DefaultMovePoints.ToString();
-    unitDamage.text = unit.Equip.primary != null ? (unit.Equip.primary.damage + unit.Strength).ToString() : "1";
-    // FIXME: Добавить урон кулаками
+    unitDamage.text = unit.Equip.GetTotalDamage().ToString();
     unitDefense.text = unit.Equip.GetTotalDefense().ToString();
     unitRange.text = unit.Equip.GetRange().ToString();
 

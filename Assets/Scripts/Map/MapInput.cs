@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 public class MapInput : MonoBehaviour {
   [SerializeField] private InputActionReference actionInput;
 
-  private void Update() {
+  void Update() {
     if (!Mouse.current.leftButton.wasPressedThisFrame || SceneController.Locked) return;
     HandleClick();
   }

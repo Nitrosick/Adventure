@@ -28,11 +28,11 @@ public class PlayerEffects : MonoBehaviour {
     UpdateState();
   }
 
-  private void UpdateUI() {
+  void UpdateUI() {
     MapUI.Instance.UpdateBuffs(buffs);
   }
 
-  private void UpdateState() {
+  void UpdateState() {
     StateManager.playerBuffs = buffs
       .Select(b => b.id)
       .ToHashSet();

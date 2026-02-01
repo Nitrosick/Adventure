@@ -48,7 +48,7 @@ public class UnitEquipment : MonoBehaviour {
     }.All(x => x != null);
   }
 
-  private void UpdateEquipment() {
+  void UpdateEquipment() {
     if (armor != null) {
       GameObject prefab = unit.Size == ArmorSize.L
         ? armor.prefabL
@@ -86,6 +86,8 @@ public class UnitEquipment : MonoBehaviour {
 
       if (loaded.animationSet != null && unit.Animator != null)
         unit.Animator.SetController(loaded.animationSet);
+    } else {
+      unit.Animator.SetController(GameManager.I.fistsAnimController);
     }
 
     if (secondary != null) {
@@ -123,7 +125,7 @@ public class UnitEquipment : MonoBehaviour {
     mesh.rootBone = body.rootBone;
   }
 
-  private void UpdateMaterials() {
+  void UpdateMaterials() {
     Material[] mats = body.sharedMaterials;
     BodyView bv = armor.bodyView;
 
@@ -186,6 +188,8 @@ public class UnitEquipment : MonoBehaviour {
     inventory.Remove(item);
     if (oldItem != null) inventory.Add(oldItem);
     if (unit.IsHero) Player.Instance.Inventory.UpdateEquipment();
+    UpdateOtherEquipment();
+
     Player.Instance.Army.UpdateState();
     Player.Instance.Inventory.UpdateState();
   }
@@ -209,7 +213,10 @@ public class UnitEquipment : MonoBehaviour {
       case UnitEquipSlot.Additional: additional = null; break;
     }
 
-    if (unit.IsHero && update) Player.Instance.Inventory.UpdateEquipment();
+    if (update) {
+      if (unit.IsHero) Player.Instance.Inventory.UpdateEquipment();
+      UpdateOtherEquipment();
+    }
     Player.Instance.Army.UpdateState();
     Player.Instance.Inventory.UpdateState();
   }
@@ -219,6 +226,10 @@ public class UnitEquipment : MonoBehaviour {
     Unequip(UnitEquipSlot.Secondary);
     Unequip(UnitEquipSlot.Armor);
     Unequip(UnitEquipSlot.Additional, true);
+  }
+
+  private void UpdateOtherEquipment() {
+    // FIXME: Проверка каждого слота на соответствие требованиям
   }
 
   // Getters
@@ -273,8 +284,7 @@ public class UnitEquipment : MonoBehaviour {
   }
 
   public float GetTotalDamage() {
-    if (primary == null) return 1f;
-    // FIXME: Добавить урон кулаками
+    if (primary == null) return unit.Strength;
     float result = primary.damage;
 
     // Buffs

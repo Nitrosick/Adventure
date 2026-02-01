@@ -100,7 +100,7 @@ public class HealingMenuUI : HomeMenuFeature {
     UpdateUnitsData();
   }
 
-  private void UpdateUnitsData() {
+  void UpdateUnitsData() {
     ClearSlots(woundedSlots);
     ClearSlots(deadSlots);
 

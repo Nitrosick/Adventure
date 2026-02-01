@@ -1,3 +1,4 @@
+using UnityEditor.Animations;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour {
@@ -26,6 +27,9 @@ public class GameManager : MonoBehaviour {
   public Sprite villagersSprite;
   public Sprite[] resourceSprites;
   public GameObject effectIcon;
+
+  [Header("Animations")]
+  public AnimatorController fistsAnimController;
 
   void Awake() {
     I = this;

@@ -16,10 +16,10 @@ public static class Calculate {
 
   public static float HitChance(Unit attacker, Unit target, bool charged = false) {
     if (target.Effects.HasAnyEffect(new string[] { "Block", "Wall", "Root", "Stun" })) return 100f;
-    if (attacker.Equip.primary == null) return 75f;
-    // FIXME: Добавить урон кулаками
 
-    float result = attacker.Equip.primary.precision;
+    float result = attacker.Equip.primary != null
+      ? attacker.Equip.primary.precision
+      : 90f;
 
     // Equipment weight
     int attackerWeightCoef = attacker.Equip.GetWeightCoefficient();
@@ -87,16 +87,17 @@ public static class Calculate {
     Weapon attackerWeapon = attacker.Equip.primary;
     Armor targetArmor = target.Equip.armor;
 
-    if (attackerWeapon == null) return 1f;
-    // FIXME: Добавить урон кулаками
+    DamageType damageType = attackerWeapon != null
+      ? attackerWeapon.damageType
+      : DamageType.Fists;
 
     // Armor and weapon
-    float resist = target.Equip.GetTotalResists()[attackerWeapon.damageType];
+    float resist = target.Equip.GetTotalResists()[damageType];
     if (target.IsHero) resist += AbilityController.AllDamageResistBonus();
     float damage = attacker.Equip.GetTotalDamage();
     if (resist != 0) damage *= 1f - (resist / 100f);
     float defense = target.Equip.GetTotalDefense();
-    if (attackerWeapon.armorPenetration > 0 && (targetArmor.weight != EquipmentWeight.Light)) {
+    if (attackerWeapon != null && attackerWeapon.armorPenetration > 0 && (targetArmor.weight != EquipmentWeight.Light)) {
       defense *= 1f - (attackerWeapon.armorPenetration / 100f);
     }
 
@@ -104,7 +105,7 @@ public static class Calculate {
 
     // Player abilities
     if (attacker.IsHero) {
-      total *= AbilityController.DamageBonus(attackerWeapon.damageType);
+      total *= AbilityController.DamageBonus(damageType);
       if (target.IsBoss) total *= AbilityController.DamageVsBossesBonus();
     }
 
@@ -124,7 +125,8 @@ public static class Calculate {
     total /= blockMultiplier;
 
     // Skills
-    if (charged) total *= 1f + (attackerWeapon.chargedAttackParams.damageBonus / 100);
+    if (attackerWeapon != null &&charged)
+      total *= 1f + (attackerWeapon.chargedAttackParams.damageBonus / 100);
 
     return total < minDamage ? minDamage : total;
   }

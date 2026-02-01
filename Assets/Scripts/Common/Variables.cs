@@ -73,7 +73,8 @@ public enum DamageType {
   Pierce,
   Chop,
   Crash,
-  Blood
+  Blood,
+  Fists
 }
 
 public enum AttackType {

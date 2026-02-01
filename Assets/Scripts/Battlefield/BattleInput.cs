@@ -49,7 +49,7 @@ public class BattleInput : MonoBehaviour {
     flattenInput.action.Disable();
   }
 
-  private void Update() {
+  void Update() {
     if (
       BattleManager.battleResult != null ||
       !Mouse.current.leftButton.wasPressedThisFrame

@@ -121,8 +121,7 @@ public class InfoPopup : MonoBehaviour {
       unit.Strength, unit.Dexterity, unit.Intelligence
     );
     unitMP.text = unit.TotalMovePoints.ToString();
-    unitDamage.text = unit.Equip.primary != null ? unit.Equip.primary.damage.ToString() : "1";
-    // FIXME: Добавить урон кулаками
+    unitDamage.text = unit.Equip.GetTotalDamage().ToString();
     unitDefense.text = unit.Equip.GetTotalDefense().ToString();
     unitRange.text = Math.Floor(unit.Equip.GetRange()).ToString();
 

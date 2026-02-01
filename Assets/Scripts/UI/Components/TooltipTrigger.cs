@@ -7,7 +7,7 @@ public class TooltipTrigger : MonoBehaviour, IPointerEnterHandler, IPointerExitH
   private bool isPointerOver = false;
   private float timer = 0f;
 
-  private void Update() {
+  void Update() {
     if (!isPointerOver) return;
     timer += Time.deltaTime;
     if (timer >= hoverTime) TooltipManager.Instance.ShowTooltip(message);

@@ -38,7 +38,7 @@ public class QuestsMenuUI : HomeMenuFeature {
     UpdateQuestsData();
   }
 
-  private void UpdateQuestsData() {
+  void UpdateQuestsData() {
     ClearSlots(questsList);
 
     emptyText.SetActive(quests.Count == 0);

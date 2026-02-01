@@ -125,7 +125,7 @@ public class PlayerInventory : MonoBehaviour {
     mesh.rootBone = body.rootBone;
   }
 
-  private void UpdateMaterials(Armor armor) {
+  void UpdateMaterials(Armor armor) {
     Material[] mats = body.sharedMaterials;
     BodyView bv = armor.bodyView;
 
