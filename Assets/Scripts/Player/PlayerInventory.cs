@@ -6,10 +6,8 @@ public class PlayerInventory : MonoBehaviour {
   private PlayerArmy army;
 
   private GameObject armorObj;
-  public Transform oneHandWeaponBracing;
-  public Transform twoHandWeaponBracing;
-  public Transform smallShieldBracing;
-  public Transform towerShieldBracing;
+  public Transform spineBracing;
+  public Transform hipsBracing;
 
   private SkinnedMeshRenderer body;
   private CapsuleCollider[] clothColliders = {};
@@ -35,7 +33,7 @@ public class PlayerInventory : MonoBehaviour {
 
   private bool ComponentsInitialized() {
     return new object[] {
-      army, body, oneHandWeaponBracing, twoHandWeaponBracing, smallShieldBracing, towerShieldBracing
+      army, body, spineBracing, hipsBracing
     }.All(x => x != null);
   }
 
@@ -82,31 +80,27 @@ public class PlayerInventory : MonoBehaviour {
       }
     }
 
-    foreach (Transform item in oneHandWeaponBracing) { Destroy(item.gameObject); }
-    foreach (Transform item in twoHandWeaponBracing) { Destroy(item.gameObject); }
-    foreach (Transform item in smallShieldBracing) { Destroy(item.gameObject); }
-    foreach (Transform item in towerShieldBracing) { Destroy(item.gameObject); }
-
-    Transform bracing;
+    foreach (Transform item in spineBracing) { Destroy(item.gameObject); }
+    foreach (Transform item in hipsBracing) { Destroy(item.gameObject); }
 
     if (heroEquip.primary != null) {
       Weapon loadedWeapon = Resources.Load<Weapon>("Weapon/" + heroEquip.primary.name);
       if (loadedWeapon == null) return;
-      bracing = loadedWeapon.type == EquipmentType.TwoHandWeapon
-        ? twoHandWeaponBracing
-        : oneHandWeaponBracing;
+      Transform bracing = GetBracing(heroEquip.primary.bracingType);
       GameObject weaponObj = Instantiate(loadedWeapon.prefab, bracing);
       weaponObj.transform.SetParent(bracing, false);
+      weaponObj.transform.localPosition = heroEquip.primary.bracingLocation;
+      weaponObj.transform.localEulerAngles = heroEquip.primary.bracingRotation;
     }
 
     if (heroEquip.secondary is Armor secArmor) {
       Armor loadedShield = Resources.Load<Armor>("Armor/" + heroEquip.secondary.name);
       if (loadedShield == null) return;
-      bracing = loadedShield.type == EquipmentType.TowerShield
-        ? towerShieldBracing
-        : smallShieldBracing;
+      Transform bracing = GetBracing(heroEquip.secondary.bracingType);
       GameObject shieldObj = Instantiate(loadedShield.prefabM, bracing);
       shieldObj.transform.SetParent(bracing, false);
+      shieldObj.transform.localPosition = heroEquip.secondary.bracingLocation;
+      shieldObj.transform.localEulerAngles = heroEquip.secondary.bracingRotation;
     }
     // FIXME: Обработать все типы доп. предмета
   }
@@ -125,7 +119,7 @@ public class PlayerInventory : MonoBehaviour {
     mesh.rootBone = body.rootBone;
   }
 
-  void UpdateMaterials(Armor armor) {
+  private void UpdateMaterials(Armor armor) {
     Material[] mats = body.sharedMaterials;
     BodyView bv = armor.bodyView;
 
@@ -144,6 +138,14 @@ public class PlayerInventory : MonoBehaviour {
     }
 
     body.sharedMaterials = mats;
+  }
+
+  private Transform GetBracing(BracingType type) {
+    return type switch {
+      BracingType.Spine => spineBracing,
+      BracingType.Hips => hipsBracing,
+      _ => null,
+    };
   }
 
   public void UpdateInventory(Equipment[] items) { Equip = items.ToList(); }

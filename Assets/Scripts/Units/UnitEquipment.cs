@@ -187,8 +187,8 @@ public class UnitEquipment : MonoBehaviour {
 
     inventory.Remove(item);
     if (oldItem != null) inventory.Add(oldItem);
-    if (unit.IsHero) Player.Instance.Inventory.UpdateEquipment();
     UpdateOtherEquipment();
+    if (unit.IsHero) Player.Instance.Inventory.UpdateEquipment();
 
     Player.Instance.Army.UpdateState();
     Player.Instance.Inventory.UpdateState();
@@ -214,8 +214,8 @@ public class UnitEquipment : MonoBehaviour {
     }
 
     if (update) {
-      if (unit.IsHero) Player.Instance.Inventory.UpdateEquipment();
       UpdateOtherEquipment();
+      if (unit.IsHero) Player.Instance.Inventory.UpdateEquipment();
     }
     Player.Instance.Army.UpdateState();
     Player.Instance.Inventory.UpdateState();
@@ -229,7 +229,20 @@ public class UnitEquipment : MonoBehaviour {
   }
 
   private void UpdateOtherEquipment() {
-    // FIXME: Проверка каждого слота на соответствие требованиям
+    if (secondary != null) {
+      if (
+        secondary is Armor && primary != null &&
+        primary.type != EquipmentType.OneHandWeapon
+      ) Unequip(UnitEquipSlot.Secondary);
+    }
+
+    if (additional != null) {
+      if (
+        additional.allowedWeapon.Length > 0 &&
+        primary != null &&
+        !additional.allowedWeapon.Contains(primary.type)
+      ) Unequip(UnitEquipSlot.Additional);
+    }
   }
 
   // Getters

@@ -13725,22 +13725,14 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: -5671910290767253545, guid: 5e07d2501d718be4d9a38b0f6de0e616,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2000909964}
     - targetCorrespondingSourceObject: {fileID: -6881390770214846263, guid: 5e07d2501d718be4d9a38b0f6de0e616,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1991529142}
-    - targetCorrespondingSourceObject: {fileID: -6881390770214846263, guid: 5e07d2501d718be4d9a38b0f6de0e616,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 379565854}
-    - targetCorrespondingSourceObject: {fileID: -6881390770214846263, guid: 5e07d2501d718be4d9a38b0f6de0e616,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 349207136}
-    - targetCorrespondingSourceObject: {fileID: -6881390770214846263, guid: 5e07d2501d718be4d9a38b0f6de0e616,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1659565415}
+      addedObject: {fileID: 1162900588}
     - targetCorrespondingSourceObject: {fileID: 7208261743932278219, guid: 5e07d2501d718be4d9a38b0f6de0e616,
         type: 3}
       insertIndex: -1
@@ -21522,37 +21514,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 348993470}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &349207135
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 349207136}
-  m_Layer: 0
-  m_Name: SmallShieldBracing
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &349207136
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 349207135}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0.04277392, y: 0.021532217, z: -0.17153251, w: 0.9840139}
-  m_LocalPosition: {x: -5.8168926, y: 3.4914412, z: -12.430006}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 220540128}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -15}
 --- !u!1 &350715073
 GameObject:
   m_ObjectHideFlags: 0
@@ -23872,37 +23833,6 @@ MonoBehaviour:
     projectiles: 0
   ambushChance: 20
   instant: 1
---- !u!1 &379565853
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 379565854}
-  m_Layer: 0
-  m_Name: TwoHandWeaponBracing
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &379565854
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 379565853}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0.047042828, y: -0.008956487, z: 0.4629441, w: 0.88509303}
-  m_LocalPosition: {x: 28.105541, y: 29.895908, z: -14.360896}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 220540128}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 60}
 --- !u!1 &383194565
 GameObject:
   m_ObjectHideFlags: 0
@@ -25823,6 +25753,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 11b46819f7122294dbddc5a655236abe, type: 2}
   - {fileID: 11400000, guid: 6f922fca9d8e831499a870924f838f2f, type: 2}
   - {fileID: 11400000, guid: dad807ae60ccc5048b476b3857b73137, type: 2}
+  - {fileID: 11400000, guid: ce13c16dd24f0674c968433304e75ac2, type: 2}
+  - {fileID: 11400000, guid: 74b37db303da71749b9a9c9a10153312, type: 2}
   - {fileID: 11400000, guid: 278e8e684484d8a4ea60f0d745011d4a, type: 2}
   - {fileID: 11400000, guid: 9dd7fdaf5c465e54cb94f91e0df44f8a, type: 2}
   itemGoods:
@@ -40086,6 +40018,12 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1100668070483885219, guid: 49c78c1f88b82194ca631464e2fc8848,
     type: 3}
   m_PrefabInstance: {fileID: 628436359}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &629788089 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -5671910290767253545, guid: 5e07d2501d718be4d9a38b0f6de0e616,
+    type: 3}
+  m_PrefabInstance: {fileID: 220540126}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &633575966
 PrefabInstance:
@@ -68647,6 +68585,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1161379795}
   m_CullTransparentMesh: 1
+--- !u!1 &1162900587
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1162900588}
+  m_Layer: 0
+  m_Name: SpineBracing
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1162900588
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1162900587}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0, y: 0, z: -12.2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 220540128}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1163571034
 GameObject:
   m_ObjectHideFlags: 0
@@ -93666,10 +93635,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcb7fdfb9ad7cef41a7144d0a1fa50de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  oneHandWeaponBracing: {fileID: 1991529142}
-  twoHandWeaponBracing: {fileID: 379565854}
-  smallShieldBracing: {fileID: 349207136}
-  towerShieldBracing: {fileID: 1659565415}
+  spineBracing: {fileID: 1162900588}
+  hipsBracing: {fileID: 2000909964}
   beard: {fileID: 0}
   hair: {fileID: 864988490}
 --- !u!114 &1552015634
@@ -101043,37 +101010,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1659146628}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1659565414
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1659565415}
-  m_Layer: 0
-  m_Name: TowerShieldBracing
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1659565415
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1659565414}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0.0431218, y: -0.020826947, z: 0.676251, w: 0.7351132}
-  m_LocalPosition: {x: -5.888902, y: 3.7295303, z: -15.018111}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 220540128}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
 --- !u!1001 &1663343130
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -120176,37 +120112,6 @@ MonoBehaviour:
   - {x: -17.35, y: 2.5, z: 10.5}
   - {x: -16.35, y: 2.5, z: 10.6}
   blocked: 0
---- !u!1 &1991529141
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1991529142}
-  m_Layer: 0
-  m_Name: OneHandWeaponBracing
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1991529142
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1991529141}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0.047042828, y: -0.008956487, z: 0.4629441, w: 0.88509303}
-  m_LocalPosition: {x: 19.653221, y: 17.796883, z: -15.238563}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 220540128}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 60}
 --- !u!1001 &1996641670
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -120378,6 +120283,37 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -20, y: -20}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &2000909963
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2000909964}
+  m_Layer: 0
+  m_Name: HipsBracing
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2000909964
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2000909963}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -17.8, y: 3.9, z: -0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 629788089}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2004608578
 PrefabInstance:
   m_ObjectHideFlags: 0

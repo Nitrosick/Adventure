@@ -28,6 +28,10 @@ MonoBehaviour:
     chance: 15
   skills: []
   icon: {fileID: 21300000, guid: c1048d5e8737e7044b5d3920795e6447, type: 3}
+  animationSet: {fileID: 9100000, guid: 3d3418f4eba048147bc79c254cd324fb, type: 2}
+  bracingType: 1
+  bracingLocation: {x: 0, y: 10, z: 14}
+  bracingRotation: {x: 0, y: 90, z: -125}
   price: 90
   isNew: 0
   damage: 3
@@ -35,8 +39,8 @@ MonoBehaviour:
   armorPenetration: 0
   precision: 92
   range: 1
+  missleSpeed: 1
   prefab: {fileID: 1125040809233209439, guid: 161224478a024d5408bb6e24d09d7bbf, type: 3}
-  animationSet: {fileID: 9100000, guid: 3d3418f4eba048147bc79c254cd324fb, type: 2}
   damageType: 1
   trajectory: 0
   scalingStats: 01000000
@@ -45,3 +49,4 @@ MonoBehaviour:
     damageBonus: 0
     critBonus: 0
   hand: 0
+  misslePrefab: {fileID: 0}

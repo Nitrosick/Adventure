@@ -164,7 +164,7 @@ public class InfoPopup : MonoBehaviour {
       weaponParams.gameObject.SetActive(true);
       weaponDamage.text = weaponItem.damage.ToString();
       weaponDamageType.text = weaponItem.damageType.ToString();
-      weaponRange.text = weaponItem.range.ToString();
+      weaponRange.text = Math.Floor(weaponItem.range).ToString();
     }
     else if (item is Armor armorItem) {
       armorParams.gameObject.SetActive(true);

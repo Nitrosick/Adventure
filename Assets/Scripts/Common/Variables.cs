@@ -228,6 +228,11 @@ public enum ItemBonus {
   Projectiles
 }
 
+public enum BracingType {
+  Spine,
+  Hips
+}
+
 // Map
 [JsonConverter(typeof(StringEnumConverter))]
 public enum MapZoneType {

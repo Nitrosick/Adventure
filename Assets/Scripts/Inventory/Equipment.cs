@@ -25,6 +25,9 @@ public abstract class Equipment : ScriptableObject {
   public Skill[] skills;
   public Sprite icon;
   public AnimatorController animationSet;
+  public BracingType bracingType;
+  public Vector3 bracingLocation;
+  public Vector3 bracingRotation;
   public int price;
   public bool isNew;
 
