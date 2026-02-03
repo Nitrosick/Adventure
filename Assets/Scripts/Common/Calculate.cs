@@ -97,9 +97,13 @@ public static class Calculate {
     float damage = attacker.Equip.GetTotalDamage();
     if (resist != 0) damage *= 1f - (resist / 100f);
     float defense = target.Equip.GetTotalDefense();
-    if (attackerWeapon != null && attackerWeapon.armorPenetration > 0 && (targetArmor.weight != EquipmentWeight.Light)) {
-      defense *= 1f - (attackerWeapon.armorPenetration / 100f);
-    }
+
+    if (
+      attackerWeapon != null &&
+      targetArmor != null &&
+      attackerWeapon.armorPenetration > 0 &&
+      (targetArmor.weight != EquipmentWeight.Light)
+    ) defense *= 1f - (attackerWeapon.armorPenetration / 100f);
 
     float total = damage * Mathf.Exp(-defense / defenseFactor);
 

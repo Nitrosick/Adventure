@@ -68,7 +68,6 @@ public class UnitEquipment : MonoBehaviour {
           RetargetBones(armorMesh);
           if (hair != null) hair.gameObject.SetActive(!armor.bodyView.hideHair);
           if (beard != null) beard.gameObject.SetActive(!armor.bodyView.hideBeard);
-          UpdateMaterials();
         }
       }
     }
@@ -109,6 +108,8 @@ public class UnitEquipment : MonoBehaviour {
       if (secondary.animationSet != null && unit.Animator != null)
         unit.Animator.SetController(secondary.animationSet);
     }
+
+    UpdateMaterials();
   }
 
   private void RetargetBones(SkinnedMeshRenderer mesh) {
@@ -127,16 +128,30 @@ public class UnitEquipment : MonoBehaviour {
 
   void UpdateMaterials() {
     Material[] mats = body.sharedMaterials;
-    BodyView bv = armor.bodyView;
+    Material[] materials;
+    GameManager mng = GameManager.I;
 
-    Material[] materials = {
-      bv.torsoMaterial,
-      bv.underwearMaterial,
-      bv.legsMaterial,
-      bv.footsMaterial,
-      bv.armsMaterial,
-      bv.handsMaterial
-    };
+    if (armor != null) {
+      BodyView bv = armor.bodyView;
+
+      materials = new Material[] {
+        bv.torsoMaterial,
+        bv.underwearMaterial,
+        bv.legsMaterial,
+        bv.footsMaterial,
+        bv.armsMaterial,
+        bv.handsMaterial
+      };
+    } else {
+      materials = new Material[] {
+        mng.leatherMaterial,
+        mng.leatherMaterial,
+        mng.leatherMaterial,
+        mng.skinMaterial,
+        mng.skinMaterial,
+        mng.skinMaterial
+      };
+    }
 
     for (int i = 0; i < materials.Length; i++) {
       if (materials[i] == null) continue;
@@ -282,7 +297,8 @@ public class UnitEquipment : MonoBehaviour {
   }
 
   public Dictionary<DamageType, float> GetTotalResists() {
-    Dictionary<DamageType, float> result = new(armor.resists);
+    Dictionary<DamageType, float> result = new();
+    if (armor != null) result = new(armor.resists);
 
     // Equipment
     if (secondary != null) {

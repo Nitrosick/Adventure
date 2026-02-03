@@ -97,7 +97,6 @@ public class Selector : MonoBehaviour {
 
     takeOff.gameObject.SetActive(
       selectedUnit != null &&
-      slot != UnitEquipSlot.Armor &&
       selectedUnit.Equip.SlotEquipped(slot)
     );
 

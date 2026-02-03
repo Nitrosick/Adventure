@@ -27,7 +27,8 @@ public class Trap : MonoBehaviour {
 
     float totalDamage = damage;
     if (unit.Relation == UnitRelation.Ally) totalDamage *= AbilityController.TrapsResistBonus();
-    float modifier = unit.Equip.armor.weight == EquipmentWeight.Heavy ? 0.5f : 1f;
+    Armor armor = unit.Equip.armor;
+    float modifier = armor != null && armor.weight == EquipmentWeight.Heavy ? 0.5f : 1f;
     if (totalDamage > 0) unit.Health.TakeDamage(totalDamage, modifier, true);
 
     if (unit.IsDead) {

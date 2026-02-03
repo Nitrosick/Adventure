@@ -8,6 +8,8 @@ public class GameManager : MonoBehaviour {
   public Material transparentMaterial;
   public Material stoneMaterial;
   public Material goldMaterial;
+  public Material skinMaterial;
+  public Material leatherMaterial;
 
   [Header("Slots")]
   public GameObject slotEmpty;
