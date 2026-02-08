@@ -7,6 +7,7 @@ using UnityEngine;
 public static class Calculate {
   private static readonly float dexterityScaleUnit = 2.5f;
   private static readonly float minHitChance = 5f;
+  private static readonly float defaultPrecision = 90f;
   private static readonly float defaultCritChance = 5f;
   private static readonly float minDamage = 0.3f;
   private static readonly float defenseFactor = 10f;
@@ -19,12 +20,12 @@ public static class Calculate {
 
     float result = attacker.Equip.primary != null
       ? attacker.Equip.primary.precision
-      : 90f;
+      : defaultPrecision;
 
     // Equipment weight
     int attackerWeightCoef = attacker.Equip.GetWeightCoefficient();
     int targetWeightCoef = target.Equip.GetWeightCoefficient();
-    result -= (attackerWeightCoef - targetWeightCoef) * 5;
+    result -= (attackerWeightCoef - targetWeightCoef) * 4;
 
     // Terrain
     int atkH = attacker.CurrentTile.height;
@@ -39,24 +40,29 @@ public static class Calculate {
     if (attacker.IsHero) result += AbilityController.PrecisionBonus();
     if (target.IsHero) result -= AbilityController.EvasionBonus();
 
-    // Effects
-    if (attacker.Type == UnitType.Range) {
-      if (attacker.Effects.HasEffect("Cover") || target.Effects.HasEffect("Cover")) result /= 2;
-    }
-
     // Distance
     float distance = Vector3.Distance(attacker.transform.position, target.transform.position);
     float disDelta = distance - noFineDistance;
     if (disDelta > 0) result -= disDelta * distanceFinePerUnit;
 
     // Skills
-    if (charged && attacker.Equip.primary != null)
+    if (attacker.Equip.primary != null && charged)
       result -= attacker.Equip.primary.chargedAttackParams.hitChancePenalty;
+
+    // Effects
+    if (attacker.Type == UnitType.Range) {
+      if (attacker.Effects.HasEffect("Cover") || target.Effects.HasEffect("Cover")) result /= 2;
+    }
+
+    // Failed attack stacks
+    result += attacker.FailedAttacks * 5;
 
     return result < minHitChance ? minHitChance : result;
   }
 
   public static float CritModifier(Unit attacker, Unit target, bool charged = false) {
+    if (attacker.Effects.HasEffect("Curse")) return 1f;
+
     float multiplier = 1f;
     float chance = defaultCritChance;
     Equipment weapon = attacker.Equip.primary;
@@ -87,6 +93,9 @@ public static class Calculate {
     Weapon attackerWeapon = attacker.Equip.primary;
     Armor targetArmor = target.Equip.armor;
 
+    float damage = attacker.Equip.GetTotalDamage();
+    float defense = target.Equip.GetTotalDefense();
+
     DamageType damageType = attackerWeapon != null
       ? attackerWeapon.damageType
       : DamageType.Fists;
@@ -94,9 +103,7 @@ public static class Calculate {
     // Armor and weapon
     float resist = target.Equip.GetTotalResists()[damageType];
     if (target.IsHero) resist += AbilityController.AllDamageResistBonus();
-    float damage = attacker.Equip.GetTotalDamage();
     if (resist != 0) damage *= 1f - (resist / 100f);
-    float defense = target.Equip.GetTotalDefense();
 
     if (
       attackerWeapon != null &&
@@ -105,18 +112,22 @@ public static class Calculate {
       (targetArmor.weight != EquipmentWeight.Light)
     ) defense *= 1f - (attackerWeapon.armorPenetration / 100f);
 
-    float total = damage * Mathf.Exp(-defense / defenseFactor);
-
-    // Player abilities
-    if (attacker.IsHero) {
-      total *= AbilityController.DamageBonus(damageType);
-      if (target.IsBoss) total *= AbilityController.DamageVsBossesBonus();
-    }
+    damage *= Mathf.Exp(-defense / defenseFactor);
 
     // Terrain
     int atkH = attacker.CurrentTile.height;
     int tarH = target.CurrentTile.height;
-    total *= 1f + (atkH - tarH) * 0.1f;
+    damage *= 1f + (atkH - tarH) * 0.1f;
+
+    // Player abilities
+    if (attacker.IsHero) {
+      damage *= AbilityController.DamageBonus(damageType);
+      if (target.IsBoss) damage *= AbilityController.DamageVsBossesBonus();
+    }
+
+    // Skills
+    if (attackerWeapon != null && charged)
+      damage *= 1f + (attackerWeapon.chargedAttackParams.damageBonus / 100);
 
     // Effects
     float blockMultiplier = 1f;
@@ -126,13 +137,13 @@ public static class Calculate {
         if (target.IsHero) blockMultiplier += AbilityController.BlockBonus();
       }
     }
-    total /= blockMultiplier;
+    damage /= blockMultiplier;
 
-    // Skills
-    if (attackerWeapon != null &&charged)
-      total *= 1f + (attackerWeapon.chargedAttackParams.damageBonus / 100);
+    if (attacker.Effects.HasEffect("Curse")) {
+      if (Utils.RollChance(50)) damage /= 2;
+    }
 
-    return total < minDamage ? minDamage : total;
+    return damage < minDamage ? minDamage : damage;
   }
 
   public static List<Effect> ItemEffects(Unit attacker, Unit target) {

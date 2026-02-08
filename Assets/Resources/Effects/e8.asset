@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c72ce9337e905f47bdcdf9774858d67, type: 3}
+  m_Name: e8
+  m_EditorClassIdentifier: 
+  id: e8
+  effectName: Curse
+  duration: 3
+  damage: 0
+  cancelMove: 0
+  cancelAttack: 0
+  isStackable: 1
+  isNegative: 1
+  description: A unit under this effect has a certain chance to deal only half damage
+    to its target. In addition, unit loses the ability to deal critical damage.
+  damageType: 0
+  icon: {fileID: 8892759074320436052, guid: acb0055e4aa75c842bf806a368749b66, type: 3}
+  uiIcon: {fileID: 21300000, guid: 5abdeeae078f3d941b0e8bd2ea3e4e93, type: 3}
+  uiIconColor: {r: 0.14117648, g: 0.14117648, b: 0.14117648, a: 1}

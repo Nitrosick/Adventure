@@ -44,9 +44,21 @@ public class Player : MonoBehaviour {
     GetStateData();
   }
 
+  private Unit Hero() => Army.Units.FirstOrDefault(u => u.IsHero);
+
   public void SetGold(int value) {
     Gold += value;
+
+    // Additional equipment
+    if (value > 0 && Hero() != null) {
+      AdditionalItem item = Hero().Equip.additional;
+      if (item != null && item.bonusType == ItemBonus.AdditionalGold) {
+        Gold += (int)item.bonusValue;
+      }
+    }
+
     if (Gold < 0) Gold = 0;
+
     TriggerAchievement("ac3", value);
     StateManager.gold = Gold;
     MapUI.Instance.UpdateResources();
@@ -98,12 +110,10 @@ public class Player : MonoBehaviour {
 
   private void LevelUp() {
     Level++;
-    TriggerAchievement(new string[] { "ac4", "ac5" });
+    TriggerAchievement(new string[] { "ac4", "ac5", "ac6" });
     if (Level > 1) SetStatPoints(1);
     if (Level == 10 || Level == 20) Army.SetSupportSlots(1);
-
-    Unit hero = Army.Units.FirstOrDefault(u => u.IsHero);
-    if (hero != null) hero.LevelUp();
+    if (Hero() != null) Hero().LevelUp();
 
     _ = Toast.Show("star", "Level up!");
     // FIXME: Инфо в альманахе о повышении уровня

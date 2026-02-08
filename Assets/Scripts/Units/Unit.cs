@@ -61,6 +61,7 @@ public class Unit : MonoBehaviour {
   public bool IsDead { get; set; }
   public bool InSquad { get; set; }
   public bool IsNew { get; set; }
+  public int FailedAttacks { get; set; }
   public AttackType CurrentAttackType { get; set; }
 
   protected void Awake() {
@@ -97,6 +98,7 @@ public class Unit : MonoBehaviour {
     CurrentTile = tile;
     tile.OccupiedBy = this;
     Relation = relation;
+    FailedAttacks = 0;
 
     if (Relation == UnitRelation.Ally) Ui.MarkAsAlly();
     if (CurrentHealth == 0) CurrentHealth = Health.GetMaxHP();
@@ -141,7 +143,7 @@ public class Unit : MonoBehaviour {
 
     // Additional equipment
     AdditionalItem item = Equip.additional;
-    if (item != null && item.bonusType == ItemBonus.Projectiles) {
+    if (item != null && item.bonusType == ItemBonus.AdditionalProjectiles) {
       Projectiles += (int)item.bonusValue;
     }
 

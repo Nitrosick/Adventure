@@ -57,6 +57,9 @@ public class RangeUnit : UnitCombat {
     float damage = Calculate.Damage(this, Target);
     bool success = Utils.RollChance(hitChance);
 
+    if (success) FailedAttacks = 0;
+    else FailedAttacks++;
+
     return new RangedAttackData {
       damage = damage,
       critModifier = critModifier,

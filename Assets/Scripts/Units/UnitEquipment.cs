@@ -451,6 +451,7 @@ public class UnitEquipment : MonoBehaviour {
         break;
       case UnitEquipSlot.Additional:
         if (item is AdditionalItem additional) {
+          if (additional.onlyHero && !unit.IsHero) break;
           if (
             additional.unitTypes.Contains(unit.Type) &&
             additional.allowedWeapon.Intersect(unit.AllowedWeapon).Any()

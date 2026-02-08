@@ -13,17 +13,19 @@ MonoBehaviour:
   m_Name: ac4
   m_EditorClassIdentifier: 
   id: ac4
-  title: Seasoned fighter
-  description: Reach Level 15.
-  objectiveCount: 15
+  title: First steps
+  description: Reach Level 5.
+  objectiveCount: 5
   defaultProgress: 1
   reward:
     experience: 0
     fame: 0
-    statPoints: 1
-    abilityPoints: 1
+    reputation: 0
+    statPoints: 0
+    abilityPoints: 0
     goldRange: 0000000000000000
     resources: 00000000000000000000000000000000
-    equipment: []
+    equipment:
+    - {fileID: 11400000, guid: d146f2adcec70fb44a50adf1be807632, type: 2}
     items: []
     projectiles: 0
