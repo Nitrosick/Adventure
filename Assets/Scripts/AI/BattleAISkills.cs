@@ -3,7 +3,7 @@ using System.Linq;
 
 public static class BattleAISkills {
   public static void AttackPhaseSkills(Unit unit) {
-    List<Unit> players = BattleAIHeplers.GetPlayerUnits();
+    List<Unit> players = BattleAI.PlayerUnits();
     Unit target = unit.Target;
     bool skip = true;
 

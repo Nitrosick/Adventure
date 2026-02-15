@@ -10,13 +10,6 @@ public static class BattleAIHeplers {
   private static readonly float threatPenalty = 1.5f;
   private static readonly float allyHitPenalty = 10.0f;
 
-  public static List<Unit> GetPlayerUnits() {
-    return QueueManager.Queue
-      .Where(unit => unit.Relation == UnitRelation.Ally && !unit.IsDead)
-      .OrderByDescending(unit => unit.GetPriority())
-      .ToList();
-  }
-
   public static bool LineOfSightClear(Unit unit, Vector3 from, Vector3 to) {
     float offset = unit.Equip.primary?.trajectory == ShotTrajectory.Arc
       ? unitPointOffset * 1.75f

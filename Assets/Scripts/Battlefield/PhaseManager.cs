@@ -15,20 +15,13 @@ public class PhaseManager : MonoBehaviour
     CurrentPhase = BattlePhase.Movement;
   }
 
-  private static void PhasePreSwitch() {
-    QueueManager.CheckBattleIsOver();
+  public async static void NextPhase() {
     TileManager.HideGrid();
 
     if (QueueManager.CurrentUnit.IsDead) {
       QueueManager.NextUnit();
       return;
     }
-
-    QueueManager.CurrentUnit.ResetMovePoints();
-  }
-
-  public async static void NextPhase() {
-    PhasePreSwitch();
 
     if (BattleManager.battleResult != null) return;
 

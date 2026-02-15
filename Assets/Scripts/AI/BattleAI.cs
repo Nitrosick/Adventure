@@ -6,18 +6,23 @@ public static class BattleAI {
   private static Unit enemy;
   private static UnitMove enemyMove;
   private static Tile enemyTile;
-  private static List<Unit> playerUnits;
   private static float AttackRange => enemy.Equip.GetRange();
 
   public static void Init(Unit unit) {
     enemy = unit;
     enemyMove = enemy.GetComponent<UnitMove>();
     enemyTile = enemy.CurrentTile;
-    playerUnits = BattleAIHeplers.GetPlayerUnits();
 
-    if (enemy == null || enemyMove == null || enemyTile == null || playerUnits.Count == 0) {
+    if (enemy == null || enemyMove == null || enemyTile == null) {
       Debug.LogError("Unit AI initialization error");
     }
+  }
+
+  public static List<Unit> PlayerUnits() {
+    return QueueManager.Queue
+      .Where(unit => unit.Relation == UnitRelation.Ally && !unit.IsDead)
+      .OrderByDescending(unit => unit.GetPriority())
+      .ToList();
   }
 
   public static void EnemyMove() {
@@ -59,7 +64,7 @@ public static class BattleAI {
       List<Tile> path = Pathfinding.FindPath(enemyTile, tile, enemy.CurrentMovePoints);
       if (path == null) continue;
 
-      foreach (Unit player in playerUnits) {
+      foreach (Unit player in PlayerUnits()) {
         float dist = BattleAIHeplers.GetDistance(tile, player.CurrentTile);
 
         if (dist < bestScore) {
@@ -82,7 +87,7 @@ public static class BattleAI {
       if (BattleAIHeplers.IsTrap(tile)) continue;
       List<Tile> path = Pathfinding.FindPath(enemyTile, tile, enemy.CurrentMovePoints);
       if (path == null) continue;
-      float dist = playerUnits.Min(t => BattleAIHeplers.GetDistance(tile, t.CurrentTile));
+      float dist = PlayerUnits().Min(t => BattleAIHeplers.GetDistance(tile, t.CurrentTile));
 
       if (dist > furthest) {
         safestTile = tile;
@@ -112,7 +117,7 @@ public static class BattleAI {
   }
 
   private static void MoveToClosestEnemy() {
-    foreach (Unit target in playerUnits.OrderBy(u => BattleAIHeplers.GetDistance(enemyTile, u.CurrentTile))) {
+    foreach (Unit target in PlayerUnits().OrderBy(u => BattleAIHeplers.GetDistance(enemyTile, u.CurrentTile))) {
       Tile tile = TryMoveToNeighborOf(target);
 
       if (tile != null) {
@@ -125,7 +130,7 @@ public static class BattleAI {
   }
 
   private static void MoveToPriorityEnemy() {
-    foreach (Unit target in playerUnits) {
+    foreach (Unit target in PlayerUnits()) {
       Tile tile = TryMoveToNeighborOf(target);
 
       if (tile != null) {
@@ -150,11 +155,11 @@ public static class BattleAI {
       List<Tile> path = Pathfinding.FindPath(enemyTile, tile, enemy.CurrentMovePoints);
       if (path == null) continue;
 
-      foreach (Unit target in playerUnits) {
+      foreach (Unit target in PlayerUnits()) {
         float dist = Pathfinding.GetCost(tile, target.CurrentTile, AttackRange);
         if (dist < 2 || dist > AttackRange) continue;
         if (!BattleAIHeplers.LineOfSightClear(enemy, tile.GetPos(), target.CurrentTile.GetPos())) continue;
-        float score = BattleAIHeplers.EvaluateTileScore(playerUnits, tile, target);
+        float score = BattleAIHeplers.EvaluateTileScore(PlayerUnits(), tile, target);
 
         if (score > bestScore) {
           bestScore = score;
@@ -172,7 +177,7 @@ public static class BattleAI {
 
     Tile closest = null;
     float closestDistance = Mathf.Infinity;
-    Unit priorityTarget = playerUnits.First();
+    Unit priorityTarget = PlayerUnits().First();
 
     foreach (Tile tile in allWalkable) {
       if (BattleAIHeplers.IsTrap(tile)) continue;
@@ -194,7 +199,7 @@ public static class BattleAI {
   }
 
   private static void HoldPosition() {
-    foreach (Unit target in playerUnits) {
+    foreach (Unit target in PlayerUnits()) {
       float dist = Pathfinding.GetCost(enemyTile, target.CurrentTile, AttackRange);
       if (dist < 2 || dist > AttackRange) continue;
       if (!BattleAIHeplers.LineOfSightClear(enemy, enemyTile.GetPos(), target.CurrentTile.GetPos())) continue;
@@ -222,7 +227,7 @@ public static class BattleAI {
       List<Tile> path = Pathfinding.FindPath(enemyTile, tile, enemy.CurrentMovePoints);
       if (path == null && tile != enemyTile) continue;
 
-      foreach (Unit target in playerUnits) {
+      foreach (Unit target in PlayerUnits()) {
         float dist = Pathfinding.GetCost(tile, target.CurrentTile, AttackRange);
         if (dist > AttackRange) continue;
         Vector3 dir = (target.CurrentTile.GetPos() - tile.GetPos()).normalized;
@@ -250,7 +255,7 @@ public static class BattleAI {
 
         if (blocked || enemiesHit == 0) continue;
 
-        float score = BattleAIHeplers.EvaluateTileScore(playerUnits, tile, target, enemiesHit, alliesHit);
+        float score = BattleAIHeplers.EvaluateTileScore(PlayerUnits(), tile, target, enemiesHit, alliesHit);
 
         if (score > bestScore) {
           bestScore = score;

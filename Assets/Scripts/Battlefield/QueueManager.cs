@@ -1,9 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class QueueManager : MonoBehaviour
-{
-  public static List<Unit> Queue { get; private set; } = new ();
+public class QueueManager : MonoBehaviour {
+  public static List<Unit> Queue { get; private set; } = new();
   public static Unit CurrentUnit { get; private set; }
   public static int Round { get; private set; } = 1;
   private static int orderNumber;
@@ -30,7 +29,8 @@ public class QueueManager : MonoBehaviour
     if (CurrentUnit.Relation == UnitRelation.Enemy) {
       BattleAI.Init(CurrentUnit);
       BattleAI.EnemyMove();
-    } else {
+    }
+    else {
       List<Skill> skills = CurrentUnit.Equip.GetActiveSkills();
       BattleUI.Instance.ShowSkills(skills, PhaseManager.CurrentPhase, CurrentUnit);
       CurrentUnit.Ui.MarkAsActive();
@@ -42,30 +42,39 @@ public class QueueManager : MonoBehaviour
   }
 
   public static void NextUnit() {
-    if (orderNumber >= Queue.Count - 1) {
+    if (Queue == null || Queue.Count == 0) return;
+    AdvanceOrder();
+    Unit nextUnit = GetNextAliveUnit();
+    if (nextUnit == null) return;
+    SwitchTo(nextUnit);
+  }
+
+  private static void AdvanceOrder() {
+    orderNumber++;
+
+    if (orderNumber >= Queue.Count) {
       orderNumber = 0;
       Round++;
       SupportController.EveryTurn();
       BattleManager.Instance.CheckReinforcement(Round);
       SortQueue();
-    } else {
-      orderNumber++;
+    }
+  }
+
+  private static Unit GetNextAliveUnit() {
+    int safety = Queue.Count;
+
+    while (safety-- > 0) {
+      Unit unit = Queue[orderNumber];
+      if (!unit.IsDead) return unit;
+      AdvanceOrder();
     }
 
-    Unit nextUnit = Queue[orderNumber];
+    return null;
+  }
 
-    if (nextUnit.IsDead) {
-      NextUnit();
-      return;
-    }
-
-    if (nextUnit.Relation == UnitRelation.Enemy) {
-      BattleUI.Instance.DisableUI();
-    } else {
-      BattleUI.Instance.EnableUI();
-      _ = Toast.Show("move", "Movement phase", 1);
-    }
-
+  private static void SwitchTo(Unit nextUnit) {
+    HandleUI(nextUnit);
     BeforeSwitch();
     CurrentUnit = nextUnit;
     AfterSwitch();
@@ -80,20 +89,28 @@ public class QueueManager : MonoBehaviour
   }
 
   private static void AfterSwitch() {
-    if (CurrentUnit.Effects.PreventsTurn()) {
-      CurrentUnit.Effects.ProcessTurnEffects();
-      if (CurrentUnit.IsDead) return;
+    CurrentUnit.Effects.ProcessTurnEffects();
+
+    if (CurrentUnit.IsDead || CurrentUnit.Effects.PreventsTurn()) {
       NextUnit();
       return;
     }
 
-    CurrentUnit.Effects.ProcessTurnEffects();
-    if (CurrentUnit.IsDead) return;
-    // FIXME: Проверить, что работает убийство эффектом
+    CurrentUnit.ResetMovePoints();
     CurrentUnit.Animator.Reset();
     CurrentUnit.Ui.MarkAsActive();
     BattleUI.Instance.UpdateQueue(Queue, orderNumber);
     FocusOnUnit();
+  }
+
+  private static void HandleUI(Unit unit) {
+    if (unit.Relation == UnitRelation.Enemy) {
+      BattleUI.Instance.DisableUI();
+    }
+    else {
+      BattleUI.Instance.EnableUI();
+      _ = Toast.Show("move", "Movement phase", 1);
+    }
   }
 
   private static void FocusOnUnit() {
@@ -105,7 +122,7 @@ public class QueueManager : MonoBehaviour
     _ = CameraController.FocusOn(CurrentUnit.transform.position);
   }
 
-  public static void CheckBattleIsOver() {
+  public static bool CheckBattleIsOver() {
     int alliesCount = 0;
     int enemiesCount = 0;
 
@@ -118,6 +135,10 @@ public class QueueManager : MonoBehaviour
     if (alliesCount == 0) BattleManager.battleResult = BattleResult.Defeat;
     else if (enemiesCount == 0) BattleManager.battleResult = BattleResult.Victory;
 
-    if (BattleManager.battleResult != null) BattleManager.Finish();
+    if (BattleManager.battleResult != null) {
+      BattleManager.Finish();
+      return true;
+    }
+    return false;
   }
 }

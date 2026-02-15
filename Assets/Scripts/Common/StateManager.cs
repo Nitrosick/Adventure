@@ -106,17 +106,12 @@ public static class StateManager {
     ResetTemp();
   }
 
-  public static void WriteUnitsData(Unit[] units, string to, bool rewrite = true) {
+  public static void WriteUnitsData(Unit[] units, string to) {
     UnitData[] newUnits = units.Select(u => u.ToData()).ToArray();
 
     switch (to) {
       case "allies":
-        if (rewrite) {
-          playerUnits = newUnits;
-        } else {
-          UnitData[] reserveUnits = playerUnits.Where(u => !u.inSquad).ToArray();
-          playerUnits = newUnits.Concat(reserveUnits).ToArray();
-        }
+        playerUnits = newUnits;
         break;
       case "enemies":
         enemies = newUnits;

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class BattleManager : MonoBehaviour {
@@ -29,7 +30,6 @@ public class BattleManager : MonoBehaviour {
     Reward = new Reward();
 
     allies = StateManager.playerUnits
-      .Where(u => u.inSquad && u.currentHealth > 0)
       .OrderByDescending(u => u.type == UnitType.Range)
       .ToArray();
 
@@ -52,7 +52,7 @@ public class BattleManager : MonoBehaviour {
 
     InitSpawnZones();
     InitSupports();
-    SpawnUnits(allies, allySpawns, UnitRelation.Ally);
+    SpawnUnits(allies.Where(u => u.inSquad && u.currentHealth > 0).ToArray(), allySpawns, UnitRelation.Ally);
     SpawnUnits(enemies, enemySpawns, UnitRelation.Enemy);
     SpawnTraps(StateManager.trapsCount);
   }
@@ -164,17 +164,18 @@ public class BattleManager : MonoBehaviour {
       reinforcementRound != round
     ) return;
 
-    _ = Toast.Show("attack", "Reinforcements have arrived!");
+    _ = Toast.Show("battle", "Reinforcements have arrived!");
     SpawnUnits(reinforcement, reinforcementSpawns, UnitRelation.Enemy);
   }
 
-  public static void Finish() {
+  public static async void Finish() {
+    await Task.Delay(2000);
+
     StateManager.WriteUnitsData(
       QueueManager.Queue
         .Where(unit => unit.Relation == UnitRelation.Ally)
         .ToArray(),
-      "allies",
-      false
+      "allies"
     );
 
     if (battleResult == BattleResult.Victory) {

@@ -14,7 +14,7 @@ public class LogItem : MonoBehaviour {
   public async void Init(string message) {
     text.text = message;
     await Task.Delay(Mathf.RoundToInt(lifetime));
-    if (gameObject == null) return;
+    if (this == null) return;
     Destroy(gameObject);
   }
 }

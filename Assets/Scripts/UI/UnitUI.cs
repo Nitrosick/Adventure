@@ -123,7 +123,7 @@ public class UnitUI : MonoBehaviour {
 
     if (isNumber) {
       if (number <= 0.3f) resultType = PopupType.Inactive;
-      resultValue = Math.Floor(number).ToString();
+      resultValue = Math.Round(number).ToString();
     }
 
     if (ColorUtility.TryParseHtmlString(PopupColors[resultType], out Color color)) text.color = color;

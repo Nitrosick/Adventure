@@ -21,7 +21,8 @@ public class UnitEffects : MonoBehaviour {
     if (existing != null) {
       if (effect.isStackable) existing.remainingTurns += effect.duration;
       else existing.remainingTurns = effect.duration;
-    } else {
+    }
+    else {
       ActiveEffects.Add(new EffectInstance(effect, duration, damage));
     }
 
@@ -32,13 +33,28 @@ public class UnitEffects : MonoBehaviour {
   }
 
   public void ProcessTurnEffects() {
+    if (unit == null || ActiveEffects == null || ActiveEffects.Count == 0) return;
+
     for (int i = ActiveEffects.Count - 1; i >= 0; i--) {
+      if (i >= ActiveEffects.Count) continue;
+
       EffectInstance instance = ActiveEffects[i];
+
+      if (instance == null) {
+        ActiveEffects.RemoveAt(i);
+        continue;
+      }
+
       instance.Tick(unit);
-      if (instance != null && instance.IsExpired) ActiveEffects.RemoveAt(i);
-      unit.Ui.UpdateEffects();
+
+      if (instance == null || instance.IsExpired) {
+        if (i < ActiveEffects.Count) ActiveEffects.RemoveAt(i);
+      }
     }
+
+    if (unit != null && unit.Ui != null) unit.Ui.UpdateEffects();
   }
+
 
   public bool PreventsTurn() {
     return ActiveEffects.Any(e => e.effectData.cancelAttack || e.effectData.cancelMove);

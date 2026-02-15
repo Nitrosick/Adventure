@@ -60,7 +60,8 @@ public class UnitHealth : MonoBehaviour {
     unit.Ui.HideChargesBar();
     unit.Effects.ClearEffects();
     unit.Animator.Die();
-    _ = MakeCorpse();
+
+    if (!QueueManager.CheckBattleIsOver()) _ = MakeCorpse();
   }
 
   public void Heal(float _value, bool inBattle = true) {
