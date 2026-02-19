@@ -8,7 +8,8 @@ public class Missle : MonoBehaviour {
   private float damage;
   private float critModifier;
   private bool success;
-  private readonly int delayAfterCollision = 750;
+  private readonly int delayAfterCollision = 1000;
+  private bool triggerHandled;
 
   void Awake() {
     rb = transform.GetComponent<Rigidbody>();
@@ -31,6 +32,8 @@ public class Missle : MonoBehaviour {
 
   private async void OnTriggerEnter(Collider other) {
     if (other == source.GetComponent<Collider>()) return;
+    if (triggerHandled) return;
+    triggerHandled = true;
 
     if (other.gameObject.CompareTag("Unit")) {
       Unit target = other.GetComponent<Unit>();

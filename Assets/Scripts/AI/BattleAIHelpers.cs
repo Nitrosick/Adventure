@@ -62,6 +62,12 @@ public static class BattleAIHeplers {
     return score;
   }
 
+  public static bool CanAttackFromHeight(Unit unit, Tile fromTile, Unit target) {
+    if (target == null || fromTile == null) return false;
+    if (unit.Type == UnitType.Range) return true;
+    return fromTile.height == target.CurrentTile.height;
+  }
+
   public static void SetAttackTarget(
     Unit unit,
     Unit target,
@@ -69,6 +75,10 @@ public static class BattleAIHeplers {
     float range
   ) {
     if (target == null || from == null) return;
+    if (!CanAttackFromHeight(unit, from, target)) {
+      unit.Target = null;
+      return;
+    }
     float dist = Pathfinding.GetCost(from, target.CurrentTile, range);
 
     if (dist <= range && LineOfSightClear(unit, from.GetPos(), target.CurrentTile.GetPos())) {
@@ -106,5 +116,10 @@ public static class BattleAIHeplers {
       t.OccupiedBy != null &&
       t.OccupiedBy.Relation == UnitRelation.Ally
     );
+  }
+
+  public static bool CanShootFromCurrentTile(Unit unit, Tile tile) {
+    if (unit.Type != UnitType.Range) return true;
+    return !HasEnemyTooClose(tile);
   }
 }

@@ -1,0 +1,15 @@
+This is a Unity 2022.3.60f1 project.
+
+Architecture:
+- Turn-based strategy
+- Global map with interactive objects and zones
+- Tile-based 3D isometric battlefield
+- Custom A* pathfinding
+- GameManager.cs is a global storage for materials, slots, sprites and icons and prefabs
+- StateManager.cs is a global storage for game state, including player data, enemy data, battle data, etc.
+
+Important constraints:
+- Do not modify serialized field names
+- Do not change public fields used in Inspector
+- Do not edit .meta files
+- Do not refactor project-wide without explicit instruction

@@ -13161,12 +13161,16 @@ PrefabInstance:
     - target: {fileID: 4170329199640617858, guid: 9012334cdd56669409f1349453fe19d8,
         type: 3}
       propertyPath: m_Name
-      value: Cliff x3 Grass 4
+      value: Ladder 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4170329199640617858, guid: 9012334cdd56669409f1349453fe19d8,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 538978530}
   m_SourcePrefab: {fileID: 100100000, guid: 9012334cdd56669409f1349453fe19d8, type: 3}
 --- !u!4 &538978527 stripped
 Transform:
@@ -13180,12 +13184,33 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 538978526}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 538978529}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2aea152104fb75542b25704735de8ec6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &538978529 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4170329199640617858, guid: 9012334cdd56669409f1349453fe19d8,
+    type: 3}
+  m_PrefabInstance: {fileID: 538978526}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &538978530
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 538978529}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85ae1c4c3e52d3e4fb35cc8072e38c05, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  message: '<b>Ladder</b>
+
+    You can go down here'
 --- !u!1001 &550364936
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13736,7 +13761,7 @@ PrefabInstance:
     - target: {fileID: 886811423102121179, guid: 5dad1d6a08808014b9e17b3920f25496,
         type: 3}
       propertyPath: m_Name
-      value: Grass 1
+      value: Ladder 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -13745,7 +13770,11 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 6212358402688090397}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 886811423102121179, guid: 5dad1d6a08808014b9e17b3920f25496,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 587647129}
   m_SourcePrefab: {fileID: 100100000, guid: 5dad1d6a08808014b9e17b3920f25496, type: 3}
 --- !u!4 &587647126 stripped
 Transform:
@@ -13759,12 +13788,33 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 587647125}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 587647128}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2aea152104fb75542b25704735de8ec6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &587647128 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 886811423102121179, guid: 5dad1d6a08808014b9e17b3920f25496,
+    type: 3}
+  m_PrefabInstance: {fileID: 587647125}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &587647129
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 587647128}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85ae1c4c3e52d3e4fb35cc8072e38c05, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  message: '<b>Ladder</b>
+
+    You can go up here'
 --- !u!1001 &592181479
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -29577,7 +29627,7 @@ PrefabInstance:
     - target: {fileID: 886811423102121179, guid: 5dad1d6a08808014b9e17b3920f25496,
         type: 3}
       propertyPath: m_Name
-      value: Grass 1
+      value: Ladder 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -29586,7 +29636,11 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1802749765}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 886811423102121179, guid: 5dad1d6a08808014b9e17b3920f25496,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1246306112}
   m_SourcePrefab: {fileID: 100100000, guid: 5dad1d6a08808014b9e17b3920f25496, type: 3}
 --- !u!4 &1246306109 stripped
 Transform:
@@ -29600,12 +29654,33 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 1246306108}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1246306111}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2aea152104fb75542b25704735de8ec6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1246306111 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 886811423102121179, guid: 5dad1d6a08808014b9e17b3920f25496,
+    type: 3}
+  m_PrefabInstance: {fileID: 1246306108}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1246306112
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1246306111}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85ae1c4c3e52d3e4fb35cc8072e38c05, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  message: '<b>Ladder</b>
+
+    You can go up here'
 --- !u!1001 &1257741907
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -31226,19 +31301,19 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3992672020133324909, guid: 7862ae8f862883d4daad7ffb1b4735e5,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1246306109}
-    - targetCorrespondingSourceObject: {fileID: 3992672020133324909, guid: 7862ae8f862883d4daad7ffb1b4735e5,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 538978527}
-    - targetCorrespondingSourceObject: {fileID: 3992672020133324909, guid: 7862ae8f862883d4daad7ffb1b4735e5,
-        type: 3}
-      insertIndex: -1
       addedObject: {fileID: 587647126}
     - targetCorrespondingSourceObject: {fileID: 3992672020133324909, guid: 7862ae8f862883d4daad7ffb1b4735e5,
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1470667571}
+    - targetCorrespondingSourceObject: {fileID: 3992672020133324909, guid: 7862ae8f862883d4daad7ffb1b4735e5,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1246306109}
+    - targetCorrespondingSourceObject: {fileID: 3992672020133324909, guid: 7862ae8f862883d4daad7ffb1b4735e5,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 538978527}
     - targetCorrespondingSourceObject: {fileID: 3992672020133324909, guid: 7862ae8f862883d4daad7ffb1b4735e5,
         type: 3}
       insertIndex: -1
@@ -37058,12 +37133,16 @@ PrefabInstance:
     - target: {fileID: 4170329199640617858, guid: 9012334cdd56669409f1349453fe19d8,
         type: 3}
       propertyPath: m_Name
-      value: Cliff x3 Grass 4
+      value: Ladder 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4170329199640617858, guid: 9012334cdd56669409f1349453fe19d8,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1470667574}
   m_SourcePrefab: {fileID: 100100000, guid: 9012334cdd56669409f1349453fe19d8, type: 3}
 --- !u!4 &1470667571 stripped
 Transform:
@@ -37077,12 +37156,33 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 1470667570}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1470667573}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2aea152104fb75542b25704735de8ec6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1470667573 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4170329199640617858, guid: 9012334cdd56669409f1349453fe19d8,
+    type: 3}
+  m_PrefabInstance: {fileID: 1470667570}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1470667574
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1470667573}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85ae1c4c3e52d3e4fb35cc8072e38c05, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  message: '<b>Ladder</b>
+
+    You can go down here'
 --- !u!1001 &1479305123
 PrefabInstance:
   m_ObjectHideFlags: 0
