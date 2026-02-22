@@ -58,7 +58,7 @@ public class MapInput : MonoBehaviour {
     if (SceneController.Locked || StateManager.openedWindows.Count > 0) return;
     MapZone zone = Player.Instance.Move.CurrentZone;
     _ = CameraController.FocusOn(zone.playerPosition);
-    // if (zone.events.Count == 0 || zone.events[0] == MapZoneType.Ambush) return;
+    if (zone.events.Count == 0 || zone.events[0] == MapZoneType.Ambush) return;
     zone.GetComponent<MapZoneEvent>().CheckEvents();
   }
 }

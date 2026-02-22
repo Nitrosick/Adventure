@@ -39,7 +39,6 @@ public class Missle : MonoBehaviour {
       Unit target = other.GetComponent<Unit>();
 
       if (target.Effects.HasAnyEffect(new string[] { "Block", "Wall" })) {
-        // FIXME: Почему-то не срабатывает
         _ = CameraController.Shake(0.8f);
         target.Ui.ShowPopup("Block!");
       } else if (success) {

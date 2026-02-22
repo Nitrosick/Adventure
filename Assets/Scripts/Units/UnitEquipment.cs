@@ -390,10 +390,14 @@ public class UnitEquipment : MonoBehaviour {
   // }
 
   public bool HasNonTargetSkills() {
+    if (unit.Effects.HasEffect("Stun")) return false;
+    bool isRooted = unit.Effects.HasEffect("Root");
+
     return GetActiveSkills().Any(s =>
       s.isActive &&
       !s.needTarget &&
-      s.skillPhases.Contains(BattlePhase.Attack)
+      s.skillPhases.Contains(BattlePhase.Attack) &&
+      (!isRooted || s.canUseInRoot)
     );
   }
 

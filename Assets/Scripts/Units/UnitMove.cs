@@ -111,9 +111,7 @@ public class UnitMove : MonoBehaviour {
         if (unit.Relation == UnitRelation.Ally) tile.TakeLoot();
         return true;
       case TileType.Trap:
-        tile.TriggerTrap();
-        // FIXME: Проверка на тип ловушки
-        return false;
+        return tile.TriggerTrap();
     }
     return true;
   }

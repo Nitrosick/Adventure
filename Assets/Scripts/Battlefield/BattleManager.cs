@@ -5,8 +5,7 @@ using UnityEngine;
 
 public class BattleManager : MonoBehaviour {
   public static BattleManager Instance;
-  // FIXME: Будут разные префабы ловушек
-  public GameObject trapPrefab;
+  public TrapRegistry trapRegistry;
   public GameObject hiddenTrapPrefab;
   public ParticleSystem healEffect;
 
@@ -125,16 +124,17 @@ public class BattleManager : MonoBehaviour {
   }
 
   private static void SpawnTraps(int enemyTraps) {
+    // FIXME: Союзные ловушки
+
     for (int i = 0; i < enemyTraps; i++) {
       Tile tile = TileManager.GetRandomFreeTile();
-      if (tile == null) break;
+      if (tile == null) continue;
+
       GameObject trapObj = Instantiate(Instance.hiddenTrapPrefab, tile.transform);
       trapObj.transform.position = tile.GetPos();
-      // FIXME: Разные типы ловушек
-      trapObj.GetComponent<Trap>().Init(UnitRelation.Enemy, TrapType.BearTrap);
+      trapObj.GetComponent<Trap>().Init(UnitRelation.Enemy, StateManager.trapType);
       tile.type = TileType.Trap;
     }
-    // FIXME: Союзные ловушки
   }
 
   private static void InitSupports() {

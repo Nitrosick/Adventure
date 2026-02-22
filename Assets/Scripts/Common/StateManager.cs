@@ -27,6 +27,7 @@ public static class StateManager {
   public static UnitData[] reinforcement;
   public static int reinforcementRound;
   public static int trapsCount;
+  public static TrapType trapType;
   public static BattleResult? battleResult;
   public static Reward battleReward;
 

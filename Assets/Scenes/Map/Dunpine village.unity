@@ -24815,6 +24815,7 @@ MonoBehaviour:
   battlefieldName: Scenes/Battlefield/bf2
   armySlots: 4
   trapsCount: 4
+  trapType: 0
   fixedReward:
     experience: 0
     fame: 0
@@ -33823,6 +33824,7 @@ MonoBehaviour:
   battlefieldName: Scenes/Battlefield/bf1
   armySlots: 5
   trapsCount: 0
+  trapType: 0
   fixedReward:
     experience: 0
     fame: 100
@@ -47963,6 +47965,95 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2452609420203153838, guid: ba9ce54a692c1e24b9c0f5525dd12dc7,
     type: 3}
   m_PrefabInstance: {fileID: 751930408}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &756024256
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 2034400441}
+    m_Modifications:
+    - target: {fileID: 2458549688816069026, guid: 8a3350b5e014ecf4d81253fbcfcbfba8,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.20201199
+      objectReference: {fileID: 0}
+    - target: {fileID: 2458549688816069026, guid: 8a3350b5e014ecf4d81253fbcfcbfba8,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.20201199
+      objectReference: {fileID: 0}
+    - target: {fileID: 2458549688816069026, guid: 8a3350b5e014ecf4d81253fbcfcbfba8,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.20201199
+      objectReference: {fileID: 0}
+    - target: {fileID: 2458549688816069026, guid: 8a3350b5e014ecf4d81253fbcfcbfba8,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 3.32
+      objectReference: {fileID: 0}
+    - target: {fileID: 2458549688816069026, guid: 8a3350b5e014ecf4d81253fbcfcbfba8,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 5.334
+      objectReference: {fileID: 0}
+    - target: {fileID: 2458549688816069026, guid: 8a3350b5e014ecf4d81253fbcfcbfba8,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 16.431
+      objectReference: {fileID: 0}
+    - target: {fileID: 2458549688816069026, guid: 8a3350b5e014ecf4d81253fbcfcbfba8,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.42624962
+      objectReference: {fileID: 0}
+    - target: {fileID: 2458549688816069026, guid: 8a3350b5e014ecf4d81253fbcfcbfba8,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2458549688816069026, guid: 8a3350b5e014ecf4d81253fbcfcbfba8,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.9046056
+      objectReference: {fileID: 0}
+    - target: {fileID: 2458549688816069026, guid: 8a3350b5e014ecf4d81253fbcfcbfba8,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2458549688816069026, guid: 8a3350b5e014ecf4d81253fbcfcbfba8,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2458549688816069026, guid: 8a3350b5e014ecf4d81253fbcfcbfba8,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 129.54
+      objectReference: {fileID: 0}
+    - target: {fileID: 2458549688816069026, guid: 8a3350b5e014ecf4d81253fbcfcbfba8,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2978380488151347992, guid: 8a3350b5e014ecf4d81253fbcfcbfba8,
+        type: 3}
+      propertyPath: m_Name
+      value: Stump
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 8a3350b5e014ecf4d81253fbcfcbfba8, type: 3}
+--- !u!4 &756024257 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2458549688816069026, guid: 8a3350b5e014ecf4d81253fbcfcbfba8,
+    type: 3}
+  m_PrefabInstance: {fileID: 756024256}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &760901063
 PrefabInstance:
@@ -78807,6 +78898,7 @@ MonoBehaviour:
   battlefieldName: Scenes/Battlefield/bf3
   armySlots: 4
   trapsCount: 0
+  trapType: 0
   fixedReward:
     experience: 0
     fame: 75
@@ -92607,16 +92699,18 @@ MonoBehaviour:
   reinforcementRound: 7
   battlefieldName: Scenes/Battlefield/bf8
   armySlots: 6
-  trapsCount: 7
+  trapsCount: 5
+  trapType: 1
   fixedReward:
     experience: 0
-    fame: 0
-    reputation: 0
+    fame: 100
+    reputation: 20
     statPoints: 0
     abilityPoints: 0
     goldRange: 0000000000000000
     resources: 00000000000000000000000000000000
-    equipment: []
+    equipment:
+    - {fileID: 11400000, guid: 25bc36b5e6c9d8c4f82e91313aa9afa7, type: 2}
     items: []
     projectiles: 0
   ambushChance: 0
@@ -93887,6 +93981,7 @@ MonoBehaviour:
   battlefieldName: Scenes/Battlefield/bf6
   armySlots: 3
   trapsCount: 0
+  trapType: 0
   fixedReward:
     experience: 0
     fame: 0
@@ -111885,6 +111980,7 @@ MonoBehaviour:
   battlefieldName: Scenes/Battlefield/bf7
   armySlots: 5
   trapsCount: 0
+  trapType: 0
   fixedReward:
     experience: 0
     fame: 120
@@ -112309,6 +112405,7 @@ MonoBehaviour:
   battlefieldName: Scenes/Battlefield/bf5
   armySlots: 5
   trapsCount: 0
+  trapType: 0
   fixedReward:
     experience: 0
     fame: 120
@@ -114350,6 +114447,7 @@ MonoBehaviour:
   battlefieldName: Scenes/Battlefield/bf4
   armySlots: 4
   trapsCount: 5
+  trapType: 0
   fixedReward:
     experience: 0
     fame: 0
@@ -126744,6 +126842,7 @@ Transform:
   - {fileID: 326536406}
   - {fileID: 578777584}
   - {fileID: 371245639}
+  - {fileID: 756024257}
   - {fileID: 325445540}
   - {fileID: 600757402}
   - {fileID: 286012413}

@@ -12,7 +12,7 @@ public class CameraController : MonoBehaviour {
   private static readonly float moveSpeed = 8f;
   private static readonly float edgeScrollSpeed = 9f;
   private static readonly float edgeSize = 5f;
-  private static readonly float focusDuration = 0.7f;
+  private static readonly float focusDuration = 0.5f;
   private static bool isFocusing = false;
   private static bool isShaking = false;
   private static float focusDistance;

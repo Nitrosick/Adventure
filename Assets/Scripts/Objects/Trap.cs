@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class Trap : MonoBehaviour {
   public Effect effect;
+  public int effectDuration = 1;
   public float damage;
 
   public UnitRelation Relation { get; private set; }
@@ -30,13 +31,14 @@ public class Trap : MonoBehaviour {
     Armor armor = unit.Equip.armor;
     float modifier = armor != null && armor.weight == EquipmentWeight.Heavy ? 0.5f : 1f;
     if (totalDamage > 0) unit.Health.TakeDamage(totalDamage, modifier, true);
+    _ = CameraController.Shake(0.8f);
 
     if (unit.IsDead) {
       QueueManager.NextUnit();
       return;
     }
 
-    unit.Effects.ApplyEffect(effect);
+    unit.Effects.ApplyEffect(effect, effectDuration);
     LogDamage(unit, totalDamage, modifier, effect);
     if (effect.cancelMove) PhaseManager.NextPhase();
   }

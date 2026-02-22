@@ -52,7 +52,7 @@ public class UnitEffects : MonoBehaviour {
       }
     }
 
-    if (unit != null && unit.Ui != null) unit.Ui.UpdateEffects();
+    if (unit.Ui != null) unit.Ui.UpdateEffects();
   }
 
 

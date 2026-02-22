@@ -7,6 +7,7 @@ public class MapZoneBattle : MonoBehaviour {
   public string battlefieldName;
   public int armySlots;
   public int trapsCount;
+  public TrapType trapType;
   public Reward fixedReward;
   public float ambushChance;
   public bool instant = true;

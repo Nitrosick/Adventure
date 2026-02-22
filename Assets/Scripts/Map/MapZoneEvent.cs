@@ -171,6 +171,7 @@ public class MapZoneEvent : MonoBehaviour {
     if (battleZone.reinforcement.Length > 0) StateManager.WriteUnitsData(battleZone.reinforcement, "reinforcement");
     StateManager.reinforcementRound = battleZone.reinforcementRound;
     StateManager.trapsCount = battleZone.trapsCount;
+    StateManager.trapType = battleZone.trapType;
 
     MapUI.Instance.DisableUI();
     MapUI.Instance.HideZoneInfo();

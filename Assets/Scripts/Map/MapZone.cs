@@ -25,6 +25,7 @@ public class MapZone : MonoBehaviour {
 
   private readonly float fadeDuration = 1f;
   private readonly float linesTransparency = 0.6f;
+  private readonly float maxDistance = 10f;
 
   void Awake() {
     auraRender = transform.GetComponent<Renderer>();
@@ -59,7 +60,15 @@ public class MapZone : MonoBehaviour {
 
   private void OnMouseEnter() {
     if (SceneController.Locked || EventSystem.current.IsPointerOverGameObject() || secret) return;
-    if (!isEmpty) MapUI.Instance.ShowZoneInfo(this);
+
+    float distance = Vector3.Distance(Player.Instance.transform.position, transform.position);
+
+    if (distance > maxDistance && !StateManager.zonesState.Keys.Contains(id)) {
+      MapUI.Instance.ShowZoneTooFar();
+      return;
+    } else if (!isEmpty) {
+      MapUI.Instance.ShowZoneInfo(this);
+    }
 
     MapZone playerZone = Player.Instance.GetComponent<PlayerMove>().CurrentZone;
     string[] wayIds = ways.Select(way => way.id).ToArray();

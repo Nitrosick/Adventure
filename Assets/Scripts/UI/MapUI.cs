@@ -153,6 +153,13 @@ public class MapUI : GeneralUI {
     HomeMenuUI.Close();
   }
 
+  public void ShowZoneTooFar() {
+    if (!ComponentsInitialized()) return;
+    zoneInfoPanel.SetActive(true);
+    zoneInfoTitle.text = "Unexplored area";
+    zoneInfoDescription.text = "This zone is too far";
+  }
+
   public void ShowZoneInfo(MapZone zone) {
     if (!ComponentsInitialized()) return;
     zoneInfoPanel.SetActive(true);
