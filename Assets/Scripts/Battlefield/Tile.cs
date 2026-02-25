@@ -21,6 +21,7 @@ public class Tile : MonoBehaviour {
   public int height;
   public bool allyFocusPoint;
   public bool enemyFocusPoint;
+  public bool reinforcementFocusPoint;
   public float lootDropChance;
 
   void Awake() {
@@ -92,7 +93,7 @@ public class Tile : MonoBehaviour {
   }
 
   public void DropLoot() {
-    bool success = Utils.RollChance(lootDropChance);
+    bool success = Randomiser.RollChance(lootDropChance);
     if (success) {
       GameObject obj = transform.Find("Loot").gameObject;
       if (obj == null || loot == null || TileManager.Instance.lootPickEffect == null) {
@@ -119,7 +120,7 @@ public class Tile : MonoBehaviour {
     BattleManager.Reward.Add(loot);
 
     if (loot.projectiles > 0) {
-      foreach (Unit unit in QueueManager.Queue.Where(u => u.Relation == UnitRelation.Ally)) {
+      foreach (Unit unit in QueueManager.Instance.Queue.Where(u => u.Relation == UnitRelation.Ally)) {
         unit.AddProjectiles(loot.projectiles);
       }
     }
@@ -152,9 +153,9 @@ public class Tile : MonoBehaviour {
     Trap hiddenTrap = transform.GetComponentInChildren<Trap>();
     GameObject trap = UncoverTrap();
     if (trap == null) return true;
-    trap.GetComponent<Trap>().Trigger(QueueManager.CurrentUnit);
+    trap.GetComponent<Trap>().Trigger(QueueManager.Instance.CurrentUnit);
     type = TileType.Open;
-    // Can move after trigger
+    // Can move after trigger or not
     return hiddenTrap.Type == TrapType.Spikes;
   }
 }

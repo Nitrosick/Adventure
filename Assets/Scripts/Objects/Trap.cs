@@ -21,7 +21,7 @@ public class Trap : MonoBehaviour {
 
     float avoidChance = 0f;
     if (unit.IsHero) avoidChance += AbilityController.AmbushProtectBonus();
-    if (Utils.RollChance(avoidChance)) {
+    if (Randomiser.RollChance(avoidChance)) {
       unit.Ui.ShowPopup("Avoid!");
       return;
     }
@@ -34,7 +34,7 @@ public class Trap : MonoBehaviour {
     _ = CameraController.Shake(0.8f);
 
     if (unit.IsDead) {
-      QueueManager.NextUnit();
+      QueueManager.Instance.NextUnit();
       return;
     }
 

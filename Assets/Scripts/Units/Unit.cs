@@ -183,7 +183,7 @@ public class Unit : MonoBehaviour {
   public float GetPriority() {
     float result = Priority;
     if (IsHero) result += AbilityController.AttackPriorityBonus();
-    // FIXME: Проверка на разные защитные эффекты и условия окружения
+    // TODO: Проверка на разные защитные эффекты и условия окружения
     if (Type == UnitType.Range && CurrentProjectiles == 0) return 0;
     if (Effects.HasEffect("Cover")) result -= 2;
     if (CurrentHealth < Health.GetMaxHP() / 3) result *= 2;
@@ -205,7 +205,7 @@ public class Unit : MonoBehaviour {
 
     // Effects
     if (
-      QueueManager.Queue
+      QueueManager.Instance.Queue
         .Where(u => u.Relation == Relation && u != this)
         .Any(u => u.Effects.HasEffect("Inspiration"))
     ) result += 2;

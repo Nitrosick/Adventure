@@ -22,7 +22,7 @@ public class Armor : Equipment {
   public GameObject prefabL;
   public List<DamageResistance> resistsMap;
   public Dictionary<DamageType, float> resists;
-  // FIXME: Добавить все типы резистов
+  // TODO: Добавить все типы резистов
   public BodyView bodyView;
 
   private void OnEnable() {

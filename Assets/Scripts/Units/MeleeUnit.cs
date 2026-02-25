@@ -15,7 +15,7 @@ public class MeleeUnit : UnitCombat {
     );
 
     float hitChance = Calculate.HitChance(this, Target, CurrentAttackType == AttackType.Charged);
-    successAttack = Utils.RollChance(hitChance);
+    successAttack = Randomiser.RollChance(hitChance);
 
     if (!successAttack) {
       Target.Animator.Dodge();

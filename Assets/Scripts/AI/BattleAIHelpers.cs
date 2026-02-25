@@ -51,7 +51,7 @@ public static class BattleAIHeplers {
     int coverBonus = tile.type == TileType.Cover ? 1 : 0;
 
     float score = 0;
-    // FIXME: Добавить все условия оценки
+    // TODO: Добавить все условия оценки
     score += dist * distanceWeight;
     score += coverBonus * coverWeight;
     score -= nearbyEnemies * threatPenalty;

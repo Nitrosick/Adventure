@@ -10,7 +10,7 @@ public class LevelingItem : Item {
   public override void Use() {
     switch (id) {
       case "li2":
-        // FIXME: Использование на алтаре
+        // TODO: Использование на алтаре
         _ = Toast.Show("warning", "It can't be applied here");
         return;
     }

@@ -31,7 +31,7 @@ public class MapZoneEvent : MonoBehaviour {
         float chance = battleZone.ambushChance;
         chance -= AbilityController.AmbushProtectBonus();
         chance -= SupportController.GetBonus("su2", false)[0];
-        bool check = Utils.RollChance(chance);
+        bool check = Randomiser.RollChance(chance);
         if (check || forceAmbush) {
           StartBattle(battleZone, true);
           return;

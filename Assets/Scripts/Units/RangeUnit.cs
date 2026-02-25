@@ -55,7 +55,7 @@ public class RangeUnit : UnitCombat {
     float hitChance = Calculate.HitChance(this, Target);
     float critModifier = Calculate.CritModifier(this, Target);
     float damage = Calculate.Damage(this, Target);
-    bool success = Utils.RollChance(hitChance);
+    bool success = Randomiser.RollChance(hitChance);
 
     if (success) FailedAttacks = 0;
     else FailedAttacks++;

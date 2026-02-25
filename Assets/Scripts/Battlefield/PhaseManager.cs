@@ -18,8 +18,8 @@ public class PhaseManager : MonoBehaviour
   public async static void NextPhase() {
     TileManager.HideGrid();
 
-    if (QueueManager.CurrentUnit.IsDead) {
-      QueueManager.NextUnit();
+    if (QueueManager.Instance.CurrentUnit.IsDead) {
+      QueueManager.Instance.NextUnit();
       return;
     }
 
@@ -27,14 +27,14 @@ public class PhaseManager : MonoBehaviour
 
     switch (CurrentPhase) {
       case BattlePhase.Movement:
-        if (QueueManager.CurrentUnit.Relation == UnitRelation.Ally)
+        if (QueueManager.Instance.CurrentUnit.Relation == UnitRelation.Ally)
           _ = Toast.Show("battle", "Attack phase", 1);
         CurrentPhase = BattlePhase.Attack;
         break;
 
       case BattlePhase.Attack:
         CurrentPhase = BattlePhase.Movement;
-        QueueManager.NextUnit();
+        QueueManager.Instance.NextUnit();
         break;
     }
 
@@ -44,7 +44,7 @@ public class PhaseManager : MonoBehaviour
   }
 
   private static void PhaseActions() {
-    Unit unit = QueueManager.CurrentUnit;
+    Unit unit = QueueManager.Instance.CurrentUnit;
     List<Skill> skills = unit.Equip.GetActiveSkills();
 
     if (unit.Relation != UnitRelation.Enemy) {
@@ -65,7 +65,7 @@ public class PhaseManager : MonoBehaviour
         }
 
         if (unit.Type == UnitType.Range && unit.CurrentProjectiles == 0) {
-          // FIXME: Проверка на возможность использовать скиллы у лучников
+          // TODO: Проверка на возможность использовать скиллы у лучников
           if (unit.Relation == UnitRelation.Ally) _ = Toast.Show("warning", "No projectiles");
           NextPhase();
           return;

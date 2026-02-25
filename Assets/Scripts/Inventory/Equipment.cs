@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using UnityEditor.Animations;
 using UnityEngine;
 
 public abstract class Equipment : ScriptableObject {
@@ -24,7 +23,7 @@ public abstract class Equipment : ScriptableObject {
   public EquipmentEffect[] effects;
   public Skill[] skills;
   public Sprite icon;
-  public AnimatorController animationSet;
+  public RuntimeAnimatorController animationSet;
   public BracingType bracingType;
   public Vector3 bracingLocation;
   public Vector3 bracingRotation;

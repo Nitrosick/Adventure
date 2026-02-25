@@ -332,5 +332,5 @@ public enum MenuFilter {
   Leveling,
   Goods,
   Key
-  // FIXME: Добавить фильтры по типам юнитов
+  // TODO: Добавить фильтры по типам юнитов
 }

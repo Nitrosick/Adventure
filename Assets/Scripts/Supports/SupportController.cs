@@ -1,6 +1,8 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public static class SupportController {
@@ -34,7 +36,7 @@ public static class SupportController {
     }
   }
 
-  public static void EveryTurn() {
+  public static async Task EveryTurn() {
     if (!enabled) return;
     List<SupportInstance> supports = allSupports
       .Where(s => s.data.phase == SupportPhase.EveryTurn)
@@ -48,16 +50,22 @@ public static class SupportController {
       switch (sup.data.id) {
         case "su1":
           if (i < 2) {
-            Unit random = GetRandomUnit(affectedUnits);
-            if (random != null) random.Health.Heal(sup.data.effectValues[i].values[0]);
+            Unit random = Randomiser.GetRandomUnit(affectedUnits);
+            if (random == null) return;
+            _ = CameraController.FocusOn(random.transform.position);
+            random.Health.Heal(sup.data.effectValues[i].values[0]);
           } else {
-            foreach (var unit in affectedUnits) {
+            foreach (Unit unit in affectedUnits) {
               unit.Health.Heal(sup.data.effectValues[i].values[0]);
             }
           }
           break;
       }
     }
+
+    // TODO: Фокус на палатку для саппортов
+    _ = Toast.Show("heal", "Supports phase", 1);
+    await Task.Delay(1500);
   }
 
   public static float[] GetBonus(
@@ -72,7 +80,8 @@ public static class SupportController {
       sup = allSupports
         .Where(s => s.relation == relation)
         .FirstOrDefault(s => s.data.id == id);
-    } else {
+    }
+    else {
       sup = Player.Instance.Army.Supports
         .FirstOrDefault(s => s.data.id == id && s.inSquad);
     }
@@ -97,17 +106,11 @@ public static class SupportController {
   }
 
   private static Unit[] GetUnits(UnitRelation relation, bool onlyWounded = false) {
-    return QueueManager.Queue
+    return QueueManager.Instance.Queue
       .Where(u => {
         if (u.IsDead || (onlyWounded && u.Health.GetMaxHP() == u.CurrentHealth)) return false;
         return u.Relation == relation;
       })
       .ToArray();
-  }
-
-  private static Unit GetRandomUnit(Unit[] units) {
-    if (units.Length == 0) return null;
-    int i = UnityEngine.Random.Range(0, units.Length);
-    return units[i];
   }
 }

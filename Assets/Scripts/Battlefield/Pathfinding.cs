@@ -8,7 +8,7 @@ public static class Pathfinding {
       return null;
     }
 
-    Unit unit = QueueManager.CurrentUnit;
+    Unit unit = QueueManager.Instance.CurrentUnit;
     List<Tile> openSet = new() { start };
     HashSet<Tile> closedSet = new();
 

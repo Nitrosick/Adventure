@@ -183,7 +183,7 @@ public class HealingMenuUI : HomeMenuFeature {
   private void HealUnits() {
     foreach (Unit unit in wounded) {
       int[] intensity = healValues[masteryLevel];
-      int value = Utils.GetRandomInRange(intensity[0], intensity[1]);
+      int value = Randomiser.GetRandomInRange(intensity[0], intensity[1]);
       unit.Health.Heal(value, false);
     }
     Player.Instance.SetGold(woundedTotal * -1);
@@ -193,7 +193,7 @@ public class HealingMenuUI : HomeMenuFeature {
 
   private void ReanimateUnits() {
     foreach (Unit unit in dead) {
-      bool success = Utils.RollChance(reanimationChances[masteryLevel]);
+      bool success = Randomiser.RollChance(reanimationChances[masteryLevel]);
       if (!success) _ = Toast.Show("warning", "Unit couldn't be reanimated");
       else unit.Health.Heal(5, false);
     }

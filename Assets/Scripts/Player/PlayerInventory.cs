@@ -101,7 +101,7 @@ public class PlayerInventory : MonoBehaviour {
       shieldObj.transform.localPosition = heroEquip.secondary.bracingLocation;
       shieldObj.transform.localEulerAngles = heroEquip.secondary.bracingRotation;
     }
-    // FIXME: Обработать все типы доп. предмета
+    // TODO: Обработать все типы доп. предмета
 
     UpdateMaterials(heroEquip.armor);
   }

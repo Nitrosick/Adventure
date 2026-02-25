@@ -281,7 +281,7 @@ public class MapUI : GeneralUI {
   public void HideStatus(string status = "") {
     if (status == "") {
       canRest.SetActive(false);
-      // FIXME: Отключать все статусы
+      // TODO: Отключать все статусы
     }
 
     switch (status) {

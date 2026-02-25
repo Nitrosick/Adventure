@@ -91,7 +91,7 @@ public class SlotWithPrice : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     switch (type) {
       case ItemType.Resource:
         int[] temp = { 0, 0, 0, 0 };
-        // FIXME: Покупка стаками
+        // TODO: Покупка стаками
         temp[resourceIndex] += 1;
         player.SetResources(temp);
         break;

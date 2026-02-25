@@ -57,7 +57,7 @@ public class BattleManager : MonoBehaviour {
   }
 
   void Start() {
-    QueueManager.Init();
+    QueueManager.Instance.Init();
   }
 
   void OnDestroy() {
@@ -95,7 +95,8 @@ public class BattleManager : MonoBehaviour {
           tile = TileManager.GetRandomFreeTile(spawns);
           spawns.Remove(tile);
         }
-      } else if (data.type == UnitType.Range) {
+      }
+      else if (data.type == UnitType.Range) {
         if (shooterSpawns.Count > 0) {
           tile = TileManager.GetRandomFreeTile(shooterSpawns);
           shooterSpawns.Remove(tile);
@@ -104,7 +105,8 @@ public class BattleManager : MonoBehaviour {
           tile = TileManager.GetRandomFreeTile(spawns);
           spawns.Remove(tile);
         }
-      } else {
+      }
+      else {
         if (spawns.Count > 0) {
           tile = TileManager.GetRandomFreeTile(spawns);
           spawns.Remove(tile);
@@ -118,13 +120,13 @@ public class BattleManager : MonoBehaviour {
       unit.FromData(data);
       unit.Init(tile, relation);
       if (unit.Type == UnitType.Range && tile.height > 1) unit.BehaviorType = AIBehaviorType.HoldPosition;
-      // FIXME: Проверка расположения врагов для смены поведения
-      QueueManager.Queue.Add(unit);
+      // TODO: Проверка расположения врагов для смены поведения
+      QueueManager.Instance.Queue.Add(unit);
     }
   }
 
   private static void SpawnTraps(int enemyTraps) {
-    // FIXME: Союзные ловушки
+    // TODO: Союзные ловушки
 
     for (int i = 0; i < enemyTraps; i++) {
       Tile tile = TileManager.GetRandomFreeTile();
@@ -148,12 +150,12 @@ public class BattleManager : MonoBehaviour {
       allySupports.Add(support);
     }
 
-    // FIXME: Саппорты противника
+    // TODO: Саппорты противника
     SupportController.Init(allySupports);
     BattleUI.Instance.UpdateSupports(allySupports);
   }
 
-  public void CheckReinforcement(int round) {
+  public async Task CheckReinforcement(int round) {
     UnitData[] reinforcement = StateManager.reinforcement;
     int reinforcementRound = StateManager.reinforcementRound;
 
@@ -166,20 +168,25 @@ public class BattleManager : MonoBehaviour {
 
     _ = Toast.Show("battle", "Reinforcements have arrived!");
     SpawnUnits(reinforcement, reinforcementSpawns, UnitRelation.Enemy);
+
+    Tile focusTile = TileManager.reinforcementFocusTile;
+    if (focusTile == null) return;
+    _ = CameraController.FocusOn(focusTile.GetPos());
+    await Task.Delay(1500);
   }
 
   public static async void Finish() {
     await Task.Delay(2000);
 
     StateManager.WriteUnitsData(
-      QueueManager.Queue
+      QueueManager.Instance.Queue
         .Where(unit => unit.Relation == UnitRelation.Ally)
         .ToArray(),
       "allies"
     );
 
     if (battleResult == BattleResult.Victory) {
-      foreach (Unit unit in QueueManager.Queue) {
+      foreach (Unit unit in QueueManager.Instance.Queue) {
         if (unit.Relation == UnitRelation.Enemy) Reward.Add(unit.killReward);
       }
     }

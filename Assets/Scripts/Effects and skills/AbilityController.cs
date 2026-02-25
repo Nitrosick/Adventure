@@ -77,9 +77,9 @@ public static class AbilityController {
   public static float HealthBonus() => CalculateBonus(AbilityBonusType.Health, "ab18", 0f, (r, v) => v, false);
   public static float DamageVsBossesBonus() => CalculateBonus(AbilityBonusType.Damage, "ab19", 1f, (r, v) => r + v);
   public static float TrapsResistBonus() => CalculateBonus(AbilityBonusType.Resist, "ab20", 1f, (r, v) => r - v);
-  // FIXME: Пока нет атакующих скиллов
+  // TODO: Пока нет атакующих скиллов
   public static float SkillDamageBonus() => CalculateBonus(AbilityBonusType.Skills, "ab21", 1f, (r, v) => r + v);
-  // FIXME: Пока нет сбития с ног
+  // TODO: Пока нет сбития с ног
   public static float KnockdownResistBonus() => CalculateBonus(AbilityBonusType.Resist, "ab22", 0f, (r, v) => v, false);
   public static float CraftPricesBonus() => CalculateBonus(AbilityBonusType.Prices, "ab23", 0f, (r, v) => v, false);
   public static float FameBonus() => CalculateBonus(AbilityBonusType.Fame, "ab24", 1f, (r, v) => r + v);

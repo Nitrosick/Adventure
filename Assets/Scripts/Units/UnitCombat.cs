@@ -145,7 +145,7 @@ public class UnitCombat : Unit {
     ) {
       float chance = Equip.primary.armorPenetration;
       if (charged) chance *= 2;
-      bool isBreak = Utils.RollChance(chance);
+      bool isBreak = Randomiser.RollChance(chance);
 
       if (isBreak) {
         Target.Effects.ClearEffect("Wall");

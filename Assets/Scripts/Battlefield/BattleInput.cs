@@ -6,19 +6,26 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 public class BattleInput : MonoBehaviour {
+  public static BattleInput Instance;
   [SerializeField] private InputActionReference flattenInput;
-  private List<Tile> tiles;
-  private List<TileFiller> fillers;
-  private Transform terrain;
-  private Vector3 terrainInitPos;
+
+  private List<Tile> tiles = new();
+  private List<TileFiller> fillers = new();
+  private List<GameObject> traps = new();
   private readonly List<Renderer> obstacles = new();
   private readonly Dictionary<Renderer, Color[]> originalColors = new();
+
+  private Transform terrain;
+  private Vector3 terrainInitPos;
+
   private bool isTransparent = false;
   private readonly float lerpDuration = 0.25f;
   private readonly float objectsTransparency = 0.15f;
 
   void Awake() {
+    Instance = this;
     terrain = GameObject.FindGameObjectWithTag("Terrain").GetComponent<Transform>();
+    traps = GameObject.FindGameObjectsWithTag("Trap").ToList();
 
     if (obstacles == null || obstacles.Count == 0) {
       GameObject[] objs = GameObject.FindGameObjectsWithTag("BattlefieldLargeObject");
@@ -57,7 +64,7 @@ public class BattleInput : MonoBehaviour {
 
     switch (PhaseManager.CurrentPhase) {
       case BattlePhase.Movement:
-        if (!QueueManager.CurrentUnit.GetComponent<UnitMove>().IsMoving) HandleClick();
+        if (!QueueManager.Instance.CurrentUnit.GetComponent<UnitMove>().IsMoving) HandleClick();
         break;
       case BattlePhase.Attack:
         HandleClick();
@@ -79,7 +86,7 @@ public class BattleInput : MonoBehaviour {
   private void HandleClick() {
     if (EventSystem.current.IsPointerOverGameObject()) return;
     Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
-    Unit currentUnit = QueueManager.CurrentUnit;
+    Unit currentUnit = QueueManager.Instance.CurrentUnit;
     if (currentUnit == null) return;
 
     if (Physics.Raycast(ray, out RaycastHit hit)) {
@@ -151,6 +158,11 @@ public class BattleInput : MonoBehaviour {
       AnimateMove(filler.transform, targetPos);
     }
 
+    foreach (GameObject trap in traps) {
+      Vector3 targetPos = trap.transform.position - new Vector3(0, 1, 0);
+      AnimateMove(trap.transform, targetPos);
+    }
+
     Vector3 terrainTargetPos = terrain.transform.position - new Vector3(0, tiles[0].height - 1, 0);
     AnimateMove(terrain, terrainTargetPos);
   }
@@ -164,6 +176,11 @@ public class BattleInput : MonoBehaviour {
 
     foreach (TileFiller filler in fillers) {
       AnimateMove(filler.transform, filler.InitPosition);
+    }
+
+    foreach (GameObject trap in traps) {
+      Vector3 targetPos = trap.transform.position + new Vector3(0, 1, 0);
+      AnimateMove(trap.transform, targetPos);
     }
 
     AnimateMove(terrain, terrainInitPos);

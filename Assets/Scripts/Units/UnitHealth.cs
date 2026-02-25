@@ -48,7 +48,7 @@ public class UnitHealth : MonoBehaviour {
   }
 
   private void Die() {
-    // FIXME: Добавить все id бандитских юнитов
+    // TODO: Добавить все id бандитских юнитов
     // Bandit ids
     if (new string[] { "u3", "u6", "u7", "u13" }.Contains(unit.PrefabId)) TriggerAchievement("ac1");
 
@@ -61,7 +61,7 @@ public class UnitHealth : MonoBehaviour {
     unit.Effects.ClearEffects();
     unit.Animator.Die();
 
-    if (!QueueManager.CheckBattleIsOver()) _ = MakeCorpse();
+    if (!QueueManager.Instance.CheckBattleIsOver()) _ = MakeCorpse();
   }
 
   public void Heal(float _value, bool inBattle = true) {

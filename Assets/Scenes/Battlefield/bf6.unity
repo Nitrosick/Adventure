@@ -13389,6 +13389,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1312849583}
     m_Modifications:
+    - target: {fileID: -1324321242819876401, guid: 5dad1d6a08808014b9e17b3920f25496,
+        type: 3}
+      propertyPath: reinforcementFocusPoint
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 505888490738871905, guid: 5dad1d6a08808014b9e17b3920f25496,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -26562,6 +26567,16 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 330585545}
+    - target: {fileID: 1641607703771025536, guid: fc54eac17d75ef949b1c744f31c3613b,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1641607703771025536, guid: fc54eac17d75ef949b1c744f31c3613b,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1662389288937247077, guid: fc54eac17d75ef949b1c744f31c3613b,
         type: 3}
       propertyPath: m_AnchoredPosition.y

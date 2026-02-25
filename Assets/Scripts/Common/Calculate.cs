@@ -79,7 +79,7 @@ public static class Calculate {
       var chargeParams = attacker.Equip.primary.chargedAttackParams;
       if (charged) chance += chargeParams.critBonus;
 
-      bool success = Utils.RollChance(chance);
+      bool success = Randomiser.RollChance(chance);
       if (success) {
         multiplier = attacker.Equip.primary.critModifier;
         multiplier += chargeParams.critBonus / 100;
@@ -140,7 +140,7 @@ public static class Calculate {
     damage /= blockMultiplier;
 
     if (attacker.Effects.HasEffect("Curse")) {
-      if (Utils.RollChance(50)) damage /= 2;
+      if (Randomiser.RollChance(50)) damage /= 2;
     }
 
     return damage < minDamage ? minDamage : damage;
@@ -166,7 +166,7 @@ public static class Calculate {
           if (target.IsHero) chance -= AbilityController.StunResist();
           chance += attacker.Strength - target.Strength;
         }
-        if (Utils.RollChance(chance)) result.Add(effect.data);
+        if (Randomiser.RollChance(chance)) result.Add(effect.data);
       }
     }
 
@@ -180,7 +180,7 @@ public static class Calculate {
     foreach (Skill skill in skills) {
       float chance = skill.activateChance;
       if (skill.skillName == "Parry" && unit.IsHero) chance += AbilityController.EvasionBonus();
-      if (Utils.RollChance(chance)) result.Add(skill);
+      if (Randomiser.RollChance(chance)) result.Add(skill);
     }
 
     return result;

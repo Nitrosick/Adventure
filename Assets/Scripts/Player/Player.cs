@@ -158,7 +158,7 @@ public class Player : MonoBehaviour {
     SetStatPoints(reward.statPoints);
     SetAbilityPoints(reward.abilityPoints);
 
-    int goldValue = Utils.GetRandomInRange(reward.goldRange[0], reward.goldRange[1]);
+    int goldValue = Randomiser.GetRandomInRange(reward.goldRange[0], reward.goldRange[1]);
     SetGold(goldValue);
 
     SetResources(reward.resources);

@@ -1,4 +1,3 @@
-using UnityEditor.Animations;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour {
@@ -31,7 +30,7 @@ public class GameManager : MonoBehaviour {
   public GameObject effectIcon;
 
   [Header("Animations")]
-  public AnimatorController fistsAnimController;
+  public RuntimeAnimatorController fistsAnimController;
 
   void Awake() {
     I = this;

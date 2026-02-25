@@ -105,8 +105,8 @@ public class BattleUI : GeneralUI {
   public void UpdateQueue(List<Unit> queue, int current = 0) {
     foreach (Transform child in queuePanel) Destroy(child.gameObject);
 
-    currentRound.text = $"Round {QueueManager.Round}";
-    UpdateReinforcementInfo(QueueManager.Round);
+    currentRound.text = $"Round {QueueManager.Instance.Round}";
+    UpdateReinforcementInfo(QueueManager.Instance.Round);
     int count = queue.Count;
 
     for (int i = 0; i < count; i++) {
@@ -131,7 +131,7 @@ public class BattleUI : GeneralUI {
       unit.relation = UnitRelation.Ally;
       GameObject slot = Instantiate(GameManager.I.slotQueue, supportsPanel);
       slot.GetComponent<QueueSlot>().Init(unit);
-      // FIXME: Саппорты противника
+      // TODO: Саппорты противника
     }
   }
 
@@ -157,7 +157,7 @@ public class BattleUI : GeneralUI {
   }
 
   public void Climb() {
-    QueueManager.CurrentUnit.Move.Climb();
+    QueueManager.Instance.CurrentUnit.Move.Climb();
   }
 
   public void ShowSkills(List<Skill> skills, BattlePhase phase, Unit unit) {

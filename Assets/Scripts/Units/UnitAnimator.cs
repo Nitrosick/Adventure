@@ -1,5 +1,4 @@
 using System.Threading.Tasks;
-using UnityEditor.Animations;
 using UnityEngine;
 
 public class UnitAnimator : MonoBehaviour {
@@ -22,7 +21,7 @@ public class UnitAnimator : MonoBehaviour {
     FocusToPoint();
   }
 
-  public void SetController(AnimatorController controller) {
+  public void SetController(RuntimeAnimatorController controller) {
     animator.runtimeAnimatorController = controller;
   }
 

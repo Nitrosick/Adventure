@@ -6,7 +6,7 @@ public class CraftingRecipe {
   public Equipment sourceEquip;
 
   public Item[] componentItems;
-  // FIXME: Стакать, если несколько одинаковых
+  // TODO: Стакать, если несколько одинаковых
   public int[] componentResources = { 0, 0, 0, 0 };
   public int cost;
 

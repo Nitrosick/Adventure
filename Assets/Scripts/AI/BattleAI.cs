@@ -24,7 +24,7 @@ public static class BattleAI {
   }
 
   public static List<Unit> PlayerUnits() {
-    return QueueManager.Queue
+    return QueueManager.Instance.Queue
       .Where(unit => unit.Relation == UnitRelation.Ally && !unit.IsDead)
       .OrderByDescending(unit => unit.GetPriority())
       .ToList();

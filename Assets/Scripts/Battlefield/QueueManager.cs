@@ -2,10 +2,16 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class QueueManager : MonoBehaviour {
-  public static List<Unit> Queue { get; private set; } = new();
-  public static Unit CurrentUnit { get; private set; }
-  public static int Round { get; private set; } = 1;
-  private static int orderNumber;
+  public static QueueManager Instance;
+
+  public List<Unit> Queue { get; private set; } = new();
+  public Unit CurrentUnit { get; private set; }
+  public int Round { get; private set; } = 1;
+  private int orderNumber;
+
+  void Awake() {
+    Instance = this;
+  }
 
   void OnDestroy() {
     Queue.Clear();
@@ -14,7 +20,7 @@ public class QueueManager : MonoBehaviour {
     orderNumber = 0;
   }
 
-  public static void Init() {
+  public void Init() {
     if (Queue.Count < 1) {
       Debug.LogError("No units have been added to the queue");
       return;
@@ -37,11 +43,11 @@ public class QueueManager : MonoBehaviour {
     }
   }
 
-  public static void SortQueue() {
+  public void SortQueue() {
     Queue.Sort((a, b) => b.GetInitiative().CompareTo(a.GetInitiative()));
   }
 
-  public static void NextUnit() {
+  public void NextUnit() {
     if (Queue == null || Queue.Count == 0) return;
     AdvanceOrder();
     Unit nextUnit = GetNextAliveUnit();
@@ -49,19 +55,7 @@ public class QueueManager : MonoBehaviour {
     SwitchTo(nextUnit);
   }
 
-  private static void AdvanceOrder() {
-    orderNumber++;
-
-    if (orderNumber >= Queue.Count) {
-      orderNumber = 0;
-      Round++;
-      SupportController.EveryTurn();
-      BattleManager.Instance.CheckReinforcement(Round);
-      SortQueue();
-    }
-  }
-
-  private static Unit GetNextAliveUnit() {
+  private Unit GetNextAliveUnit() {
     int safety = Queue.Count;
 
     while (safety-- > 0) {
@@ -73,14 +67,27 @@ public class QueueManager : MonoBehaviour {
     return null;
   }
 
-  private static void SwitchTo(Unit nextUnit) {
+  private async void AdvanceOrder() {
+    orderNumber++;
+
+    if (orderNumber >= Queue.Count) {
+      orderNumber = 0;
+      Round++;
+      // FIXME: Не работает асинхронность
+      await SupportController.EveryTurn();
+      await BattleManager.Instance.CheckReinforcement(Round);
+      SortQueue();
+    }
+  }
+
+  private void SwitchTo(Unit nextUnit) {
     HandleUI(nextUnit);
     BeforeSwitch();
     CurrentUnit = nextUnit;
     AfterSwitch();
   }
 
-  private static void BeforeSwitch() {
+  private void BeforeSwitch() {
     CurrentUnit.SetAttackType(AttackType.Standard);
     if (CurrentUnit.CurrentTile.type == TileType.Cover) {
       CurrentUnit.Animator.SetCrouching(true);
@@ -88,7 +95,7 @@ public class QueueManager : MonoBehaviour {
     CurrentUnit.Ui.MarkAsInactive();
   }
 
-  private static void AfterSwitch() {
+  private void AfterSwitch() {
     CurrentUnit.Effects.ProcessTurnEffects();
 
     if (CurrentUnit.IsDead || CurrentUnit.Effects.PreventsTurn()) {
@@ -109,7 +116,7 @@ public class QueueManager : MonoBehaviour {
     FocusOnUnit();
   }
 
-  private static void HandleUI(Unit unit) {
+  private void HandleUI(Unit unit) {
     if (unit.Relation == UnitRelation.Enemy) {
       BattleUI.Instance.DisableUI();
     }
@@ -119,7 +126,7 @@ public class QueueManager : MonoBehaviour {
     }
   }
 
-  private static void FocusOnUnit() {
+  private void FocusOnUnit() {
     TileManager.ShowReachableTiles(
       CurrentUnit.CurrentTile,
       CurrentUnit.CurrentMovePoints
@@ -128,7 +135,7 @@ public class QueueManager : MonoBehaviour {
     _ = CameraController.FocusOn(CurrentUnit.transform.position);
   }
 
-  public static bool CheckBattleIsOver() {
+  public bool CheckBattleIsOver() {
     int alliesCount = 0;
     int enemiesCount = 0;
 

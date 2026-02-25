@@ -13,16 +13,6 @@ public static class Utils {
     "#A7E7E4"
   };
 
-  public static bool RollChance(float chance) {
-    if (chance >= 100f) return true;
-    if (chance <= 0f) return false;
-    return UnityEngine.Random.Range(0f, 100f) < chance;
-  }
-
-  public static int GetRandomInRange(int min, int max) {
-    return UnityEngine.Random.Range(min, max + 1);
-  }
-
   private static Dictionary<TEnum, Color> CreatePalette<TEnum>(Dictionary<TEnum, string> hexMap) where TEnum : Enum {
     var palette = new Dictionary<TEnum, Color>();
     foreach (var kvp in hexMap)

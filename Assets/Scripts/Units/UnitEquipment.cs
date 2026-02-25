@@ -173,7 +173,7 @@ public class UnitEquipment : MonoBehaviour {
             oldItem = primary;
             primary = newWeapon;
             break;
-          // FIXME: Может быть не только оружие
+          // TODO: Может быть не только оружие
           case UnitEquipSlot.Secondary:
             oldItem = secondary;
             secondary = newWeapon;
@@ -376,7 +376,6 @@ public class UnitEquipment : MonoBehaviour {
       .ToList();
   }
 
-  // FIXME: Убрать или переработать
   // public bool HasAttackPhaseSkills() {
   //   if (unit.SkillCharges == 0) return false;
 
@@ -433,7 +432,7 @@ public class UnitEquipment : MonoBehaviour {
     switch (slot) {
       case UnitEquipSlot.Primary:
         if (item is Weapon weapon1) {
-          // FIXME: Запретить оружие, если надет щит
+          // TODO: Запретить оружие, если надет щит
           if (unit.AllowedWeapon.Contains(weapon1.type)) result = 0;
         }
         break;

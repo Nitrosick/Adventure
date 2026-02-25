@@ -8,8 +8,10 @@ public class TileManager : MonoBehaviour {
 
   public static Dictionary<Vector2Int, Tile> tiles = new();
   public static List<TileFiller> fillers = new();
+
   public static Tile allyFocusTile;
   public static Tile enemyFocusTile;
+  public static Tile reinforcementFocusTile;
 
   public static readonly Vector2Int[] allDirections = new Vector2Int[] {
     new (-1, 1),
@@ -43,6 +45,7 @@ public class TileManager : MonoBehaviour {
     foreach (Tile tile in tiles.Values) {
       if (tile.allyFocusPoint) allyFocusTile = tile;
       else if (tile.enemyFocusPoint) enemyFocusTile = tile;
+      else if (tile.reinforcementFocusPoint) reinforcementFocusTile = tile;
       tile.InitNeighbours();
     }
   }
@@ -131,13 +134,13 @@ public class TileManager : MonoBehaviour {
     if (trapTiles.Count == 0) return;
 
     foreach (Tile tile in trapTiles) {
-      bool success = Utils.RollChance(chance);
+      bool success = Randomiser.RollChance(chance);
       if (success) tile.UncoverTrap();
     }
   }
 
   public static void ShowReachableTiles(Tile startTile, float mp) {
-    if (QueueManager.CurrentUnit.Relation == UnitRelation.Enemy) return;
+    if (QueueManager.Instance.CurrentUnit.Relation == UnitRelation.Enemy) return;
 
     HideGrid();
 

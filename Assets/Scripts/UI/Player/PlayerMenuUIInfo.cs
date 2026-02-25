@@ -420,7 +420,7 @@ public class PlayerMenuUIInfo : MonoBehaviour {
       levelingItemEffectValue.text = $"+{levItem.effectValue} lvl";
       levelingMax.text = levItem.maxLevel.ToString();
     }
-    // FIXME: Добавить все типы предметов
+    // TODO: Добавить все типы предметов
 
     GameObject icon = Instantiate(GameManager.I.slotMenu, avatar);
     icon.GetComponent<MenuSlot>().Init(item, true);
