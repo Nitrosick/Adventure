@@ -6,7 +6,9 @@ using UnityEngine;
 
 public class UnitCombat : Unit {
   private CancellationTokenSource phaseCts;
-  private readonly int delayAfterAttack = 1000;
+  private readonly int delayAfterAttack = 1500;
+
+  private string G(string text) => Utils.GreyText(text);
 
   private void CalculateDamage(Unit target, float multiplier = 1f) {
     if (target == null) return;
@@ -162,11 +164,11 @@ public class UnitCombat : Unit {
   protected override void LogDamage(float damage, float critModifier, List<Effect> effects) {
     string damageVal = ((float)Math.Round(damage * critModifier, 1)).ToString();
     if (critModifier > 1) damageVal = $"<color=#EFBF0D>{damageVal}</color>";
-    LogUI.Instance.Add($"{Name} <color=#A0A0A0>deals</color> {damageVal} <color=#A0A0A0>damage to</color> {Target.Name}");
+    LogUI.Instance.Add($"{Name} {G("deals")} {damageVal} {G("damage to")} {Target.Name}");
 
     foreach (Effect e in effects) {
       string effectText = $"<color={(e.isNegative ? "#F61010" : "#81D11F")}>{e.effectName}</color>";
-      LogUI.Instance.Add($"{Target.Name} <color=#A0A0A0>is affected by</color> {effectText}");
+      LogUI.Instance.Add($"{Target.Name} {G("is affected by")} {effectText}");
     }
   }
 

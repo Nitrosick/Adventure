@@ -8,7 +8,7 @@ public class Missle : MonoBehaviour {
   private float damage;
   private float critModifier;
   private bool success;
-  private readonly int delayAfterCollision = 1000;
+  private readonly int delayAfterCollision = 1300;
   private bool triggerHandled;
 
   void Awake() {
@@ -20,6 +20,8 @@ public class Missle : MonoBehaviour {
     Vector3 v = rb.velocity;
     if (v.sqrMagnitude > 1e-6f) transform.rotation = Quaternion.LookRotation(v);
   }
+
+  private string G(string text) => Utils.GreyText(text);
 
   public void Launch(Unit src, Vector3 velocity, float dmg, float crit, bool suc) {
     source = src;
@@ -58,6 +60,6 @@ public class Missle : MonoBehaviour {
   private void LogDamage(Unit unit, float damage, float critModifier) {
     string damageVal = ((float)Math.Round(damage * critModifier, 1)).ToString();
     if (critModifier > 1) damageVal = $"<color=#EFBF0D>{damageVal}</color>";
-    LogUI.Instance.Add($"<color=#A0A0A0>The projectile deals</color> {damageVal} <color=#A0A0A0>damage to</color> {unit.Name}");
+    LogUI.Instance.Add($"{G("The projectile deals")} {damageVal} {G("damage to")} {unit.Name}");
   }
 }

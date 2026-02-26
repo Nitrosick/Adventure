@@ -1,9 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using UnityEngine;
 
 public static class SupportController {
   private static List<SupportInstance> allSupports = new();
@@ -15,6 +12,8 @@ public static class SupportController {
     allSupports = list;
     BeforeBattle();
   }
+
+  private static string G(string text) => Utils.GreyText(text);
 
   private static void BeforeBattle() {
     List<SupportInstance> supports = allSupports
@@ -36,7 +35,7 @@ public static class SupportController {
     }
   }
 
-  public static async Task EveryTurn() {
+  public static void EveryTurn() {
     if (!enabled) return;
     List<SupportInstance> supports = allSupports
       .Where(s => s.data.phase == SupportPhase.EveryTurn)
@@ -52,20 +51,20 @@ public static class SupportController {
           if (i < 2) {
             Unit random = Randomiser.GetRandomUnit(affectedUnits);
             if (random == null) return;
-            _ = CameraController.FocusOn(random.transform.position);
-            random.Health.Heal(sup.data.effectValues[i].values[0]);
+
+            float value = sup.data.effectValues[i].values[0];
+            random.Health.Heal(value);
+            LogUI.Instance.Add($"{sup.data.unitName} {G("heals")} {random.Name} {G("by")} {value} {G("points")}");
           } else {
-            foreach (Unit unit in affectedUnits) {
-              unit.Health.Heal(sup.data.effectValues[i].values[0]);
-            }
+            if (affectedUnits.Count() == 0) return;
+
+            float value = sup.data.effectValues[i].values[0];
+            foreach (Unit unit in affectedUnits) unit.Health.Heal(value);
+            LogUI.Instance.Add($"{sup.data.unitName} {G("heals")} {affectedUnits.Count()} {G("units by")} {value} {G("points")}");
           }
           break;
       }
     }
-
-    // TODO: Фокус на палатку для саппортов
-    _ = Toast.Show("heal", "Supports phase", 1);
-    await Task.Delay(1500);
   }
 
   public static float[] GetBonus(

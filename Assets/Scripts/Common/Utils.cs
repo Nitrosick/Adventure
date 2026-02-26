@@ -13,6 +13,10 @@ public static class Utils {
     "#A7E7E4"
   };
 
+  public static string GreyText(string text) {
+    return $"<color={c[0]}>{text}</color>";
+  }
+
   private static Dictionary<TEnum, Color> CreatePalette<TEnum>(Dictionary<TEnum, string> hexMap) where TEnum : Enum {
     var palette = new Dictionary<TEnum, Color>();
     foreach (var kvp in hexMap)

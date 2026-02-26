@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class QueueManager : MonoBehaviour {
@@ -47,44 +48,43 @@ public class QueueManager : MonoBehaviour {
     Queue.Sort((a, b) => b.GetInitiative().CompareTo(a.GetInitiative()));
   }
 
-  public void NextUnit() {
+  public async Task NextUnit() {
     if (Queue == null || Queue.Count == 0) return;
-    AdvanceOrder();
-    Unit nextUnit = GetNextAliveUnit();
+    await AdvanceOrder();
+    Unit nextUnit = await GetNextAliveUnit();
     if (nextUnit == null) return;
-    SwitchTo(nextUnit);
+    await SwitchTo(nextUnit);
   }
 
-  private Unit GetNextAliveUnit() {
+  private async Task<Unit> GetNextAliveUnit() {
     int safety = Queue.Count;
 
     while (safety-- > 0) {
       Unit unit = Queue[orderNumber];
       if (!unit.IsDead) return unit;
-      AdvanceOrder();
+      await AdvanceOrder();
     }
 
     return null;
   }
 
-  private async void AdvanceOrder() {
+  private async Task AdvanceOrder() {
     orderNumber++;
 
     if (orderNumber >= Queue.Count) {
       orderNumber = 0;
       Round++;
-      // FIXME: Не работает асинхронность
-      await SupportController.EveryTurn();
+      SupportController.EveryTurn();
       await BattleManager.Instance.CheckReinforcement(Round);
       SortQueue();
     }
   }
 
-  private void SwitchTo(Unit nextUnit) {
+  private async Task SwitchTo(Unit nextUnit) {
     HandleUI(nextUnit);
     BeforeSwitch();
     CurrentUnit = nextUnit;
-    AfterSwitch();
+    await AfterSwitch();
   }
 
   private void BeforeSwitch() {
@@ -95,11 +95,11 @@ public class QueueManager : MonoBehaviour {
     CurrentUnit.Ui.MarkAsInactive();
   }
 
-  private void AfterSwitch() {
+  private async Task AfterSwitch() {
     CurrentUnit.Effects.ProcessTurnEffects();
 
     if (CurrentUnit.IsDead || CurrentUnit.Effects.PreventsTurn()) {
-      NextUnit();
+      await NextUnit();
       return;
     }
 

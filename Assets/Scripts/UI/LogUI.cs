@@ -34,12 +34,12 @@ public class LogUI : MonoBehaviour {
     }
 
     foreach (Equipment item in reward.equipment) {
-      // TODO: Кол-во предметов в награде
+      // FIXME: Кол-во предметов в награде
       Add($"{item.itemName} x1");
     }
 
     foreach (Item item in reward.items) {
-      // TODO: Кол-во предметов в награде
+      // FIXME: Кол-во предметов в награде
       Add($"{item.itemName} x1");
     }
   }

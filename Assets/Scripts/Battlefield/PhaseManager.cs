@@ -19,7 +19,7 @@ public class PhaseManager : MonoBehaviour
     TileManager.HideGrid();
 
     if (QueueManager.Instance.CurrentUnit.IsDead) {
-      QueueManager.Instance.NextUnit();
+      await QueueManager.Instance.NextUnit();
       return;
     }
 
@@ -34,7 +34,7 @@ public class PhaseManager : MonoBehaviour
 
       case BattlePhase.Attack:
         CurrentPhase = BattlePhase.Movement;
-        QueueManager.Instance.NextUnit();
+        await QueueManager.Instance.NextUnit();
         break;
     }
 

@@ -12,7 +12,7 @@ public static class BattleAIHeplers {
 
   public static bool LineOfSightClear(Unit unit, Vector3 from, Vector3 to) {
     float offset = unit.Equip.primary?.trajectory == ShotTrajectory.Arc
-      ? unitPointOffset * 1.75f
+      ? unitPointOffset * 1.5f
       : unitPointOffset;
 
     Vector3 fixedFrom = from + new Vector3(0, offset, 0);

@@ -23,6 +23,8 @@ public class BattleManager : MonoBehaviour {
   public static Reward Reward { get; private set; }
   public GameObject corpsePrefab;
 
+  private static readonly int delayTime = 2000;
+
   void Awake() {
     Instance = this;
     battleResult = null;
@@ -172,11 +174,11 @@ public class BattleManager : MonoBehaviour {
     Tile focusTile = TileManager.reinforcementFocusTile;
     if (focusTile == null) return;
     _ = CameraController.FocusOn(focusTile.GetPos());
-    await Task.Delay(1500);
+    await Task.Delay(delayTime);
   }
 
   public static async void Finish() {
-    await Task.Delay(2000);
+    await Task.Delay(delayTime);
 
     StateManager.WriteUnitsData(
       QueueManager.Instance.Queue

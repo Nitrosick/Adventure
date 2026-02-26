@@ -15,7 +15,9 @@ public class Trap : MonoBehaviour {
     Type = type;
   }
 
-  public void Trigger(Unit unit) {
+  private string G(string text) => Utils.GreyText(text);
+
+  public async void Trigger(Unit unit) {
     transform.GetComponent<Animator>().SetTrigger("Trigger");
     if (effect == null || unit == null) return;
 
@@ -34,7 +36,7 @@ public class Trap : MonoBehaviour {
     _ = CameraController.Shake(0.8f);
 
     if (unit.IsDead) {
-      QueueManager.Instance.NextUnit();
+      await QueueManager.Instance.NextUnit();
       return;
     }
 
@@ -50,11 +52,11 @@ public class Trap : MonoBehaviour {
     Effect effect
   ) {
     string damageVal = ((float)Math.Round(damage * modifier, 1)).ToString();
-    LogUI.Instance.Add($"{unit.Name} <color=#A0A0A0>takes</color> {damageVal} <color=#A0A0A0>damage from the</color> Trap");
+    LogUI.Instance.Add($"{unit.Name} {G("takes")} {damageVal} {G("damage from the")} Trap");
 
     if (effect != null) {
       string effectText = $"<color={(effect.isNegative ? "#F61010" : "#81D11F")}>{effect.effectName}</color>";
-      LogUI.Instance.Add($"{unit.Name} <color=#A0A0A0>is affected by</color> {effectText}");
+      LogUI.Instance.Add($"{unit.Name} {G("is affected by")} {effectText}");
     }
   }
 }
