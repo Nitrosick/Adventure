@@ -20,6 +20,8 @@ public class PhaseManager : MonoBehaviour
 
     if (QueueManager.Instance.CurrentUnit.IsDead) {
       await QueueManager.Instance.NextUnit();
+      await Task.Yield();
+      PhaseActions();
       return;
     }
 

@@ -108,12 +108,12 @@ public class QueueManager : MonoBehaviour {
     CurrentUnit.Ui.MarkAsActive();
     BattleUI.Instance.UpdateQueue(Queue, orderNumber);
 
+    FocusOnUnit();
+
     if (
       CurrentUnit.Relation != UnitRelation.Enemy &&
       CurrentUnit.CurrentTile.type == TileType.Climb
     ) BattleUI.Instance.ShowClimbButton();
-
-    FocusOnUnit();
   }
 
   private void HandleUI(Unit unit) {

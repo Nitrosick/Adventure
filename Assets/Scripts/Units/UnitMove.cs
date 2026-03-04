@@ -69,14 +69,17 @@ public class UnitMove : MonoBehaviour {
         CheckTileTypeOnStop();
         IsMoving = false;
         unit.Animator.SetMoving(false);
-        BattleUI.Instance.EnableUI();
-        if (canMove) AfterMove();
+        if (!unit.IsDead) BattleUI.Instance.EnableUI();
+        AfterMove();
       }
     }
   }
 
-  private void AfterMove() {
-    if (unit.CurrentMovePoints < 1 || unit.Relation == UnitRelation.Enemy) {
+  private async void AfterMove() {
+    if (unit.IsDead) {
+      await Task.Delay(1500);
+      PhaseManager.NextPhase();
+    } else if (unit.CurrentMovePoints < 1 || unit.Relation == UnitRelation.Enemy) {
       PhaseManager.NextPhase();
     } else {
       TileManager.ShowReachableTiles(
@@ -111,7 +114,8 @@ public class UnitMove : MonoBehaviour {
         if (unit.Relation == UnitRelation.Ally) tile.TakeLoot();
         return true;
       case TileType.Trap:
-        return tile.TriggerTrap();
+        tile.TriggerTrap();
+        return false;
     }
     return true;
   }

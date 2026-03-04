@@ -149,13 +149,10 @@ public class Tile : MonoBehaviour {
     return SetTrap(hiddenTrap);
   }
 
-  public bool TriggerTrap() {
-    Trap hiddenTrap = transform.GetComponentInChildren<Trap>();
+  public void TriggerTrap() {
     GameObject trap = UncoverTrap();
-    if (trap == null) return true;
+    if (trap == null) return;
     trap.GetComponent<Trap>().Trigger(QueueManager.Instance.CurrentUnit);
     type = TileType.Open;
-    // Can move after trigger or not
-    return hiddenTrap.Type == TrapType.Spikes;
   }
 }

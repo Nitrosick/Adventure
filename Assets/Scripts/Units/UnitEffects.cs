@@ -16,6 +16,7 @@ public class UnitEffects : MonoBehaviour {
   }
 
   public void ApplyEffect(Effect effect, int duration = 0, float damage = 0) {
+    if (unit.IsDead) return;
     EffectInstance existing = ActiveEffects.Find(e => e.effectData == effect);
 
     if (existing != null) {

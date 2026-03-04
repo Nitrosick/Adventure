@@ -17,7 +17,7 @@ public class Trap : MonoBehaviour {
 
   private string G(string text) => Utils.GreyText(text);
 
-  public async void Trigger(Unit unit) {
+  public void Trigger(Unit unit) {
     transform.GetComponent<Animator>().SetTrigger("Trigger");
     if (effect == null || unit == null) return;
 
@@ -35,14 +35,15 @@ public class Trap : MonoBehaviour {
     if (totalDamage > 0) unit.Health.TakeDamage(totalDamage, modifier, true);
     _ = CameraController.Shake(0.8f);
 
-    if (unit.IsDead) {
-      await QueueManager.Instance.NextUnit();
-      return;
-    }
-
     unit.Effects.ApplyEffect(effect, effectDuration);
     LogDamage(unit, totalDamage, modifier, effect);
-    if (effect.cancelMove) PhaseManager.NextPhase();
+
+    if (unit.IsDead) return;
+
+    if (effect.cancelMove) {
+      unit.CurrentMovePoints = 0;
+      PhaseManager.NextPhase();
+    }
   }
 
   private void LogDamage(

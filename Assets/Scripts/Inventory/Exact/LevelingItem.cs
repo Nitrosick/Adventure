@@ -5,7 +5,8 @@ using UnityEngine;
 public class LevelingItem : Item {
   public float effectValue;
   public int maxLevel;
-  public UnitType unitType;
+  public UnitType[] allowedUnitTypes;
+  public EquipmentType[] allowedEquipment;
 
   public override void Use() {
     switch (id) {
@@ -16,7 +17,14 @@ public class LevelingItem : Item {
     }
 
     Unit[] units = Player.Instance.Army.Units
-      .Where(u => u.Type == unitType && u.Level < maxLevel && u.Level < u.MaxLevel)
+      .Where(u =>
+        !u.IsHero &&
+        (allowedUnitTypes.Length == 0 || allowedUnitTypes.Contains(u.Type)) &&
+        u.Equip.primary != null &&
+        (allowedEquipment.Length == 0 || allowedEquipment.Contains(u.Equip.primary.type)) &&
+        u.Level < maxLevel &&
+        u.Level < u.MaxLevel
+      )
       .ToArray();
 
     if (units.Length == 0) {
