@@ -227,7 +227,7 @@ MeshCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 5
-  m_Convex: 1
+  m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 6591337233697349893, guid: fc36e9f49fcb5774fbbbc055f3d1748c, type: 3}
 --- !u!1001 &3557097407309507887
@@ -401,4 +401,5 @@ MonoBehaviour:
   height: 1
   allyFocusPoint: 0
   enemyFocusPoint: 0
+  reinforcementFocusPoint: 0
   lootDropChance: 0

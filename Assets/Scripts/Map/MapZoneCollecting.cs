@@ -6,6 +6,7 @@ public class MapZoneCollecting : MonoBehaviour {
   public int CollectedAt { get; set; }
   public int respawn = 1;
   public bool onetime;
+  public Item tool;
 
   void Awake() {
     zone = transform.GetComponent<MapZone>();
@@ -16,6 +17,14 @@ public class MapZoneCollecting : MonoBehaviour {
   }
 
   public void OpenCollectingPanel() {
+    if (tool != null) {
+      PlayerInventory inventory = Player.Instance.Inventory;
+      if (!inventory.HasItem(tool)) {
+        _ = Toast.Show("warning", "You don't have the necessary tools");
+        return;
+      }
+    }
+
     CollectingModalUI.Instance.Confirmation(CollectItems, reward);
   }
 

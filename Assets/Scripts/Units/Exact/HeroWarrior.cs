@@ -13,7 +13,7 @@ public class HeroWarrior : MeleeUnit {
     LevelingCoreStat = CoreStat.Strength;
     TotalHealth = 40f;
     MoveSpeed = 3f;
-    DefaultMovePoints = 6;
+    DefaultMovePoints = 7;
     Initiative = 7;
     Priority = 6;
     BehaviorType = AIBehaviorType.Passive;

@@ -50,6 +50,12 @@ Default: #5C523F
 Highlighted / Pressed / Selected: #938569
 Disabled: #5C523F o-128
 Sensitivity: 50
+
+Resources
+0 - Wood
+1 - Stone
+2 - Metal
+3 - Leather
 */
 
 using Newtonsoft.Json;

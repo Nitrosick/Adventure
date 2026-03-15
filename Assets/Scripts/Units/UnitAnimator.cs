@@ -58,6 +58,7 @@ public class UnitAnimator : MonoBehaviour {
   }
 
   public void TakeDamage() {
+    animator.Play("Idle", 0, 0f);
     animator.SetTrigger("Damage");
   }
 
@@ -92,8 +93,8 @@ public class UnitAnimator : MonoBehaviour {
 
     Vector3 center = unit.CurrentTile.GetPos();
     Vector3 focusPos = focusTile.GetPos();
-    Vector3 from = new (center.x, 0, center.z);
-    Vector3 to = new (focusPos.x, 0, focusPos.z);
+    Vector3 from = new(center.x, 0, center.z);
+    Vector3 to = new(focusPos.x, 0, focusPos.z);
     Vector3 direction = (to - from).normalized;
 
     _ = RotateTowards(direction, true);
@@ -102,7 +103,10 @@ public class UnitAnimator : MonoBehaviour {
   public async Task RotateTowards(Vector3 direction, bool immediate = false, float intensity = 720f) {
     direction.y = 0f;
     if (direction == Vector3.zero) return;
-    Quaternion targetRotation = Quaternion.LookRotation(direction, Vector3.up);
+
+    Quaternion rawTargetRotation = Quaternion.LookRotation(direction, Vector3.up);
+    float targetY = rawTargetRotation.eulerAngles.y;
+    Quaternion targetRotation = Quaternion.Euler(0f, targetY, 0f);
 
     if (immediate) {
       model.rotation = targetRotation;
@@ -115,6 +119,9 @@ public class UnitAnimator : MonoBehaviour {
         targetRotation,
         intensity * Time.deltaTime
       );
+
+      Vector3 euler = model.eulerAngles;
+      model.rotation = Quaternion.Euler(0f, euler.y, 0f);
       await Task.Yield();
     }
 

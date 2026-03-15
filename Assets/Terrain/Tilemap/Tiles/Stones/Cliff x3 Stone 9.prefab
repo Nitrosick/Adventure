@@ -125,6 +125,7 @@ MonoBehaviour:
   height: 3
   allyFocusPoint: 0
   enemyFocusPoint: 0
+  reinforcementFocusPoint: 0
   lootDropChance: 0
 --- !u!65 &-8166163568725504459
 BoxCollider:
@@ -276,6 +277,6 @@ MeshCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 5
-  m_Convex: 1
+  m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4381843137848094387, guid: 92e1ce1bb132a5e4da80aa8cf03acf98, type: 3}

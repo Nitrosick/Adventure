@@ -159,6 +159,7 @@ public class BattleInput : MonoBehaviour {
     }
 
     foreach (GameObject trap in traps) {
+      if (trap == null) continue;
       Vector3 targetPos = trap.transform.position - new Vector3(0, 1, 0);
       AnimateMove(trap.transform, targetPos);
     }
@@ -179,6 +180,7 @@ public class BattleInput : MonoBehaviour {
     }
 
     foreach (GameObject trap in traps) {
+      if (trap == null) continue;
       Vector3 targetPos = trap.transform.position + new Vector3(0, 1, 0);
       AnimateMove(trap.transform, targetPos);
     }

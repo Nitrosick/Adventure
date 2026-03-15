@@ -1,7 +1,6 @@
 using UnityEngine;
 
-public class PlayerAnimator : MonoBehaviour
-{
+public class PlayerAnimator : MonoBehaviour {
   private Animator animator;
 
   void Awake() {
@@ -14,14 +13,19 @@ public class PlayerAnimator : MonoBehaviour
   }
 
   public void RotateTowards(Vector3 direction) {
+    direction.y = 0f;
     if (direction == Vector3.zero) return;
 
-    Quaternion targetRotation = Quaternion.LookRotation(direction, Vector3.up);
+    float targetY = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
+    Quaternion targetRotation = Quaternion.Euler(0f, targetY, 0f);
 
     transform.rotation = Quaternion.RotateTowards(
       transform.rotation,
       targetRotation,
       720f * Time.deltaTime
     );
+
+    Vector3 euler = transform.eulerAngles;
+    transform.rotation = Quaternion.Euler(0f, euler.y, 0f);
   }
 }
