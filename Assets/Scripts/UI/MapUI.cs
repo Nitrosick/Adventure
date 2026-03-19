@@ -150,7 +150,7 @@ public class MapUI : GeneralUI {
 
   private void CloseOtherWindows() {
     RecruitingUI.Close();
-    HomeMenuUI.Close();
+    HubMenuUI.Close();
   }
 
   public void ShowZoneTooFar() {

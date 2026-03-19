@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HealingMenuUI : HomeMenuFeature {
+public class HealingMenuUI : HubMenuFeature {
   private TextMeshProUGUI intensity;
   private TextMeshProUGUI reanimationChance;
   private TextMeshProUGUI healCost;

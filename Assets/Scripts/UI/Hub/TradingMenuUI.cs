@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using UnityEngine;
 
-public class TradingMenuUI : HomeMenuFeature {
+public class TradingMenuUI : HubMenuFeature {
   public static TradingMenuUI Instance;
 
   private RectTransform resourceSlots;

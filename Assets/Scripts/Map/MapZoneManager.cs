@@ -52,7 +52,7 @@ public class MapZoneManager : MonoBehaviour {
     Dictionary<string, MapZoneData> state = StateManager.zonesState;
     List<string> visited = new() { };
 
-    // Zone events and Home upgrades
+    // Zone events and Hub upgrades
     foreach (var kvp in state) {
       if (kvp.Value == null) continue;
       if (kvp.Value.visited) visited.Add(kvp.Key);
@@ -62,8 +62,8 @@ public class MapZoneManager : MonoBehaviour {
 
       zone.events = kvp.Value.events;
 
-      if (kvp.Value.upgrades != null && zone.TryGetComponent<MapZoneHome>(out var home)) {
-        home.Upgrades = kvp.Value.upgrades.ToList();
+      if (kvp.Value.upgrades != null && zone.TryGetComponent<MapZoneHub>(out var hub)) {
+        hub.Upgrades = kvp.Value.upgrades.ToList();
       }
     }
 
@@ -118,8 +118,8 @@ public class MapZoneManager : MonoBehaviour {
         MapZone zone = FindById(upgrade.zoneId);
         if (zone == null) continue;
 
-        if (zone.TryGetComponent<MapZoneHome>(out var home)) {
-          home.AddUpgrade(upgrade.feature);
+        if (zone.TryGetComponent<MapZoneHub>(out var hub)) {
+          hub.AddUpgrade(upgrade.feature);
         }
       }
     }

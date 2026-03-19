@@ -7,83 +7,18 @@ using System.Collections.Generic;
 public class TileBrush : GridBrushBase {
   public enum TileRotation { Random, Left, Top, Right, Bottom }
 
-  [HideInInspector] public int selectedSetIndex = 0;
   [HideInInspector] public TileRotation tileRotation;
   [HideInInspector, Range(-2, 2)] public int tileOffset = 0;
+  [HideInInspector] public int selectedCategoryIndex = 0;
+  [HideInInspector] public int selectedSetIndex = 0;
 
   public readonly List<TileBrushSet> availableSets = new();
+  public readonly List<string> categories = new();
+  public readonly Dictionary<string, List<TileBrushSet>> setsByCategory = new();
+
   private List<GameObject> currentPrefabs = new();
 
-#if UNITY_EDITOR
-  [CustomEditor(typeof(TileBrush))]
-  public class TileBrushInspector : Editor {
-    private void OnEnable() {
-      SceneView.duringSceneGui += DuringSceneGUI;
-    }
-
-    private void OnDisable() {
-      SceneView.duringSceneGui -= DuringSceneGUI;
-    }
-
-    private void DuringSceneGUI(SceneView sceneView) {
-      Event e = Event.current;
-      TileBrush brush = (TileBrush)target;
-
-      if (e.type == EventType.KeyDown && e.keyCode == KeyCode.R) {
-        brush.tileRotation =
-          (TileRotation)(((int)brush.tileRotation + 1) %
-          System.Enum.GetValues(typeof(TileRotation)).Length);
-
-        e.Use();
-        EditorUtility.SetDirty(brush);
-      }
-    }
-
-    public override void OnInspectorGUI() {
-      TileBrush brush = (TileBrush)target;
-
-      brush.LoadAvailableSets();
-
-      string[] names = new string[brush.availableSets.Count];
-      for (int i = 0; i < names.Length; i++) {
-        names[i] = brush.availableSets[i] == null ? $"Set {i}" : brush.availableSets[i].brushSetName;
-      }
-
-      brush.selectedSetIndex = EditorGUILayout.Popup("Brush Set", brush.selectedSetIndex, names);
-      brush.tileRotation = (TileRotation)EditorGUILayout.EnumPopup("Rotation", brush.tileRotation);
-      brush.tileOffset = EditorGUILayout.IntSlider("Offset", brush.tileOffset, -2, 2);
-
-      if (GUI.changed) {
-        brush.ApplySelectedSet();
-        EditorUtility.SetDirty(brush);
-      }
-    }
-  }
-
-  public void LoadAvailableSets() {
-    availableSets.Clear();
-    string[] guids = AssetDatabase.FindAssets("t:TileBrushSet", new[] { "Assets/Editor/Brushes" });
-
-    foreach (string guid in guids) {
-      string path = AssetDatabase.GUIDToAssetPath(guid);
-      TileBrushSet set = AssetDatabase.LoadAssetAtPath<TileBrushSet>(path);
-      if (set != null) availableSets.Add(set);
-    }
-
-    ApplySelectedSet();
-  }
-
-  public void ApplySelectedSet() {
-    currentPrefabs = (selectedSetIndex >= 0 && selectedSetIndex < availableSets.Count)
-        ? availableSets[selectedSetIndex].prefabs
-        : new List<GameObject>();
-  }
-#endif
-
   public override void Paint(GridLayout grid, GameObject brushTarget, Vector3Int position) {
-#if UNITY_EDITOR
-    if (currentPrefabs == null || currentPrefabs.Count == 0) LoadAvailableSets();
-#endif
     if (currentPrefabs == null || currentPrefabs.Count == 0) return;
 
     GameObject prefab = currentPrefabs[Random.Range(0, currentPrefabs.Count)];
@@ -129,5 +64,126 @@ public class TileBrush : GridBrushBase {
         break;
       }
     }
+  }
+
+#if UNITY_EDITOR
+  [CustomEditor(typeof(TileBrush))]
+  public class TileBrushInspector : Editor {
+    private void OnEnable() {
+      SceneView.duringSceneGui += DuringSceneGUI;
+    }
+
+    private void OnDisable() {
+      SceneView.duringSceneGui -= DuringSceneGUI;
+    }
+
+    private void DuringSceneGUI(SceneView sceneView) {
+      Event e = Event.current;
+      TileBrush brush = (TileBrush)target;
+
+      if (e.type == EventType.KeyDown && e.keyCode == KeyCode.R) {
+        brush.tileRotation =
+          (TileRotation)(((int)brush.tileRotation + 1) %
+          System.Enum.GetValues(typeof(TileRotation)).Length);
+
+        e.Use();
+        EditorUtility.SetDirty(brush);
+      }
+    }
+
+    public override void OnInspectorGUI() {
+      TileBrush brush = (TileBrush)target;
+
+      LoadAvailableSets();
+
+      if (brush.categories.Count > 0) {
+        brush.selectedCategoryIndex = EditorGUILayout.Popup(
+          "Category",
+          brush.selectedCategoryIndex,
+          brush.categories.ToArray()
+        );
+
+        string category = brush.categories[brush.selectedCategoryIndex];
+        var sets = brush.setsByCategory[category];
+        string[] setNames = new string[sets.Count];
+
+        for (int i = 0; i < sets.Count; i++) setNames[i] = sets[i].brushSetName;
+
+        brush.selectedSetIndex = EditorGUILayout.Popup(
+          "Brush Set",
+          brush.selectedSetIndex,
+          setNames
+        );
+      } else {
+        EditorGUILayout.LabelField("No Brush Sets found");
+      }
+
+      brush.tileRotation = (TileRotation)EditorGUILayout.EnumPopup("Rotation", brush.tileRotation);
+      brush.tileOffset = EditorGUILayout.IntSlider("Offset", brush.tileOffset, -2, 2);
+
+      if (GUI.changed) {
+        UpdateCurrentSet();
+        EditorUtility.SetDirty(brush);
+      }
+    }
+
+    public void LoadAvailableSets() {
+      TileBrush brush = (TileBrush)target;
+
+      brush.categories.Clear();
+      brush.setsByCategory.Clear();
+
+      string root = "Assets/Editor/Brushes";
+      string[] guids = AssetDatabase.FindAssets("t:TileBrushSet", new[] { root });
+
+      foreach (string guid in guids) {
+        string path = AssetDatabase.GUIDToAssetPath(guid);
+        TileBrushSet set = AssetDatabase.LoadAssetAtPath<TileBrushSet>(path);
+        if (set == null) continue;
+
+        string folderPath = System.IO.Path.GetDirectoryName(path);
+        string folder = System.IO.Path.GetFileName(folderPath);
+
+        if (string.IsNullOrEmpty(folder)) folder = "Default";
+
+        if (!brush.setsByCategory.ContainsKey(folder))
+          brush.setsByCategory[folder] = new List<TileBrushSet>();
+
+        brush.setsByCategory[folder].Add(set);
+      }
+
+      brush.categories.AddRange(brush.setsByCategory.Keys);
+      brush.categories.Sort();
+
+      if (brush.selectedCategoryIndex >= brush.categories.Count)
+        brush.selectedCategoryIndex = 0;
+
+      UpdateCurrentSet();
+    }
+
+    public void UpdateCurrentSet() {
+      TileBrush brush = (TileBrush)target;
+
+      if (brush.categories.Count == 0) return;
+
+      string category = brush.categories[brush.selectedCategoryIndex];
+      var sets = brush.setsByCategory[category];
+
+      if (brush.selectedSetIndex >= sets.Count)
+        brush.selectedSetIndex = 0;
+
+      brush.currentPrefabs = sets.Count > 0
+        ? sets[brush.selectedSetIndex].prefabs
+        : new List<GameObject>();
+    }
+
+    public void ApplySelectedSet() {
+      TileBrush brush = (TileBrush)target;
+
+      brush.currentPrefabs = (brush.selectedSetIndex >= 0 && brush.selectedSetIndex < brush.availableSets.Count)
+        ? brush.availableSets[brush.selectedSetIndex].prefabs
+        : new List<GameObject>();
+    }
+#endif
   }
 }

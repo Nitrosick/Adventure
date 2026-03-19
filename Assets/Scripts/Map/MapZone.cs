@@ -144,7 +144,7 @@ public class MapZone : MonoBehaviour {
       state[id].visited = true;
     }
 
-    if (events.Count > 0 && events[0] == MapZoneType.Home) {
+    if (events.Count > 0 && events[0] == MapZoneType.Hub) {
       StateManager.startPlayerZoneId = id;
       Player.Instance.Move.startZone = this;
     }

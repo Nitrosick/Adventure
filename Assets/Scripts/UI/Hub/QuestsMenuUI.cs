@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class QuestsMenuUI : HomeMenuFeature {
+public class QuestsMenuUI : HubMenuFeature {
   private Transform questsList;
   private GameObject emptyText;
   private List<QuestInstance> quests;

@@ -4,11 +4,11 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HomeMenuUI : MonoBehaviour {
+public class HubMenuUI : MonoBehaviour {
   // Components
   private static Transform menu;
   private static Transform content;
-  private static MapZoneHome mapZone;
+  private static MapZoneHub mapZone;
 
   // Navigation
   private static Transform navigation;
@@ -33,7 +33,7 @@ public class HomeMenuUI : MonoBehaviour {
   private static readonly int saveDelay = 3;
 
   void Awake() {
-    menu = transform.Find("Menu/Home");
+    menu = transform.Find("Menu/Hub");
     content = menu.Find("Content/Viewport/Scroll");
 
     static Transform Find(string path) => menu.Find(path);
@@ -59,7 +59,7 @@ public class HomeMenuUI : MonoBehaviour {
     questsSection = GetInContent<QuestsMenuUI>("Quests");
 
     if (!ComponentsInitialized()) {
-      Debug.LogError("Home menu UI components initialization error");
+      Debug.LogError("Hub menu UI components initialization error");
       return;
     }
 
@@ -102,11 +102,12 @@ public class HomeMenuUI : MonoBehaviour {
     closeButton.onClick.RemoveListener(Close);
   }
 
-  public static void Open(MapZoneHome zone) {
+  public static void Open(MapZoneHub zone) {
     mapZone = zone;
     EnableButtons(zone.features);
+    saveButton.gameObject.SetActive(zone.isHome);
     menu.gameObject.SetActive(true);
-    SceneController.OpenWindow("home");
+    SceneController.OpenWindow("hub");
   }
 
   public static void Close() {
@@ -115,7 +116,7 @@ public class HomeMenuUI : MonoBehaviour {
     DisableButtons();
     HideSections();
     welcomeSection.gameObject.SetActive(true);
-    SceneController.CloseWindow("home");
+    SceneController.CloseWindow("hub");
   }
 
   private static void EnableButtons(MapZoneFeature[] features) {

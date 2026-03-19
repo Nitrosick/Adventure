@@ -52,9 +52,9 @@ public class MapZoneEvent : MonoBehaviour {
       case MapZoneType.Quest:
         CheckZoneQuests(battleZone);
         break;
-      case MapZoneType.Home:
+      case MapZoneType.Hub:
         MapUI.Instance.ShowInteractableButton(
-          Get<MapZoneHome>().OpenHomeMenu
+          Get<MapZoneHub>().OpenHubMenu
         );
         break;
       case MapZoneType.Recruitment:

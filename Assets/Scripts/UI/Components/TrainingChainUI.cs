@@ -144,6 +144,6 @@ public class TrainingChainUI : MonoBehaviour {
 
     _ = Toast.Show("success", "Unit is ready");
     MapUI.Instance.UpdateResources();
-    HomeMenuUI.RecalculateRecipes();
+    HubMenuUI.RecalculateRecipes();
   }
 }

@@ -1,8 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MapZoneHome : MonoBehaviour {
+public class MapZoneHub : MonoBehaviour {
   [Header("Features")]
+  public bool isHome;
   public MapZoneFeature[] features;
   public List<MapZoneFeature> Upgrades { get; set; } = new() { };
 
@@ -40,9 +41,9 @@ public class MapZoneHome : MonoBehaviour {
   public MasteryLevel elderLevel;
   public Quest[] quests;
 
-  public void OpenHomeMenu() {
+  public void OpenHubMenu() {
     if (features.Length < 1) return;
-    HomeMenuUI.Open(this);
+    HubMenuUI.Open(this);
   }
 
   public void AddUpgrade(MapZoneFeature feature) {

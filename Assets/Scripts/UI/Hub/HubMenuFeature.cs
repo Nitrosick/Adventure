@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HomeMenuFeature : MonoBehaviour {
+public class HubMenuFeature : MonoBehaviour {
   private TextMeshProUGUI title;
   private TextMeshProUGUI level;
   private Image avatarBackground;

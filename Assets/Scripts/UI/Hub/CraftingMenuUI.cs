@@ -3,7 +3,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CraftingMenuUI : HomeMenuFeature {
+public class CraftingMenuUI : HubMenuFeature {
   public Sprite weaponsmithAvatar;
   public Sprite armorerAvatar;
   public GameObject recipePrefab;

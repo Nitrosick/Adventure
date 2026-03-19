@@ -45,8 +45,8 @@ public class QuestManager : MonoBehaviour {
   private static void UpgradeZone(string id, MapZoneFeature feature) {
     MapZone zone = MapZoneManager.FindById(id);
     if (zone == null) return;
-    if (zone.TryGetComponent<MapZoneHome>(out var home)) {
-      home.AddUpgrade(feature);
+    if (zone.TryGetComponent<MapZoneHub>(out var hub)) {
+      hub.AddUpgrade(feature);
     }
   }
 

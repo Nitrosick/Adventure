@@ -243,7 +243,7 @@ public enum BracingType {
 // Map
 [JsonConverter(typeof(StringEnumConverter))]
 public enum MapZoneType {
-  Home,
+  Hub,
   Battle,
   Constructing,
   Recruitment,
