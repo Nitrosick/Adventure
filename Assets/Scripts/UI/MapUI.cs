@@ -56,7 +56,7 @@ public class MapUI : GeneralUI {
     Transform markers = infoPanel.Find("Markers");
     Transform top = transform.Find("Top");
     Transform mainMenu = top.Find("MainMenu");
-    Transform resources = top.Find("Resources");
+    Transform resources = top.Find("Panel/Resources");
     Transform actions = transform.Find("Actions");
     Transform statuses = transform.Find("Top/Statuses");
 

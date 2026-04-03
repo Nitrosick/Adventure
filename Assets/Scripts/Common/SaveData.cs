@@ -4,6 +4,7 @@ using System.Collections.Generic;
 [Serializable]
 public class SaveData {
   public string saveTime;
+  public float dayTime;
   public int globalTicks;
   public string currentScene;
   public string startPlayerZoneId;

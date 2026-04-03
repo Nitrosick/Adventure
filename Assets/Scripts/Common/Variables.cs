@@ -80,7 +80,8 @@ public enum DamageType {
   Chop,
   Crash,
   Blood,
-  Fists
+  Fists,
+  Poison
 }
 
 public enum AttackType {

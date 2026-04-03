@@ -14,11 +14,14 @@ public static class StateManager {
     PrefabDatabase = Resources.Load<PrefabDatabase>("Databases/PrefabDatabase");
   }
 
-  // Global
-  public static int saveSlot;
-  public static int globalTicks;
+  // Static
   private readonly static string[] defaultArmyIds = { "u1", "u2", "u2" };
   public readonly static string[] defaultKnowledge = { "aa1", "aa2", "aa3" };
+
+  // Global
+  public static int saveSlot;
+  public static float dayTime;
+  public static int globalTicks;
   public static HashSet<string> openedWindows = new();
 
   // Moving between scenes
@@ -74,6 +77,7 @@ public static class StateManager {
 
   public static void ResetPlayerData() {
     saveSlot = 0;
+    dayTime = 720f;
     globalTicks = 1;
     currentScene = "";
     startPlayerZoneId = "6";
@@ -190,6 +194,7 @@ public static class StateManager {
 
     SaveData data = new() {
       saveTime = DateTime.Now.ToString(),
+      dayTime = dayTime,
       globalTicks = globalTicks,
       currentScene = scene == "Menu" ? "Dunpine village" : scene,
       startPlayerZoneId = startPlayerZoneId,
@@ -224,6 +229,7 @@ public static class StateManager {
   }
 
   private static void SetLoadedData(SaveData data) {
+    dayTime = data.dayTime;
     globalTicks = data.globalTicks;
     currentScene = data.currentScene;
     startPlayerZoneId = data.startPlayerZoneId;

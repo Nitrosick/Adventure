@@ -10,18 +10,20 @@ public class ChargedAttackParams {
 
 [CreateAssetMenu(menuName = "GameObjects/Equipment/Weapon")]
 public class Weapon : Equipment {
-  public float damage;
-  public float critModifier;
-  public float armorPenetration;
-  public float precision = 95f;
-  public float range;
-  public float missleSpeed = 1f;
-
+  public Side hand;
   public GameObject prefab;
   public DamageType damageType;
-  public ShotTrajectory trajectory;
   public CoreStat[] scalingStats;
+
+  public float damage;
+  public float critModifier;
+  public float range;
+  public float armorPenetration;
+  public float precision = 95f;
+
   public ChargedAttackParams chargedAttackParams;
-  public Side hand;
+
+  public float missleSpeed = 1f;
+  public ShotTrajectory trajectory;
   public GameObject misslePrefab;
 }

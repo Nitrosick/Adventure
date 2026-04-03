@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb13a142f8c484a44b9b8c61360ca04b, type: 3}
+  m_Name: w16
+  m_EditorClassIdentifier: 
+  id: w16
+  itemName: Poisoned steel dagger
+  description: An excellent weapon for an assassin. Light, compact, and also treated
+    with a potent poison that renders the victim completely helpless.
+  requirementStats: 010000000400000000000000
+  requirementLevel: 3
+  type: 0
+  slot: 0
+  weight: 0
+  rarity: 2
+  effects:
+  - data: {fileID: 11400000, guid: 4b55ce02c2151914da348013b5e40b9d, type: 2}
+    chance: 100
+  skills: []
+  icon: {fileID: 21300000, guid: 93b4781147e0b2640af62a49d30a8b6e, type: 3}
+  animationSet: {fileID: 9100000, guid: 3d3418f4eba048147bc79c254cd324fb, type: 2}
+  bracingType: 1
+  bracingLocation: {x: 0, y: 10, z: 14}
+  bracingRotation: {x: 0, y: 90, z: -125}
+  price: 175
+  isNew: 0
+  damage: 5
+  critModifier: 2
+  armorPenetration: 0
+  precision: 92
+  range: 1
+  missleSpeed: 1
+  prefab: {fileID: 8276143482488188433, guid: df6f20d42a59ed647a7a05b8f1f735b2, type: 3}
+  damageType: 1
+  trajectory: 0
+  scalingStats: 01000000
+  chargedAttackParams:
+    hitChancePenalty: 0
+    damageBonus: 0
+    critBonus: 0
+  hand: 0
+  misslePrefab: {fileID: 0}

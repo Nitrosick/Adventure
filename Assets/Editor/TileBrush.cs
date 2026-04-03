@@ -17,6 +17,7 @@ public class TileBrush : GridBrushBase {
   public readonly Dictionary<string, List<TileBrushSet>> setsByCategory = new();
 
   private List<GameObject> currentPrefabs = new();
+  private bool isLoaded = false;
 
   public override void Paint(GridLayout grid, GameObject brushTarget, Vector3Int position) {
     if (currentPrefabs == null || currentPrefabs.Count == 0) return;
@@ -94,7 +95,7 @@ public class TileBrush : GridBrushBase {
     public override void OnInspectorGUI() {
       TileBrush brush = (TileBrush)target;
 
-      LoadAvailableSets();
+      if (!brush.isLoaded) LoadAvailableSets(brush);
 
       if (brush.categories.Count > 0) {
         brush.selectedCategoryIndex = EditorGUILayout.Popup(
@@ -121,15 +122,15 @@ public class TileBrush : GridBrushBase {
       brush.tileRotation = (TileRotation)EditorGUILayout.EnumPopup("Rotation", brush.tileRotation);
       brush.tileOffset = EditorGUILayout.IntSlider("Offset", brush.tileOffset, -2, 2);
 
-      if (GUI.changed) {
-        UpdateCurrentSet();
+      EditorGUI.BeginChangeCheck();
+      if (EditorGUI.EndChangeCheck()) {
+        UpdateCurrentSet(brush);
         EditorUtility.SetDirty(brush);
       }
     }
 
-    public void LoadAvailableSets() {
-      TileBrush brush = (TileBrush)target;
-
+    public void LoadAvailableSets(TileBrush brush) {
+      brush.isLoaded = true;
       brush.categories.Clear();
       brush.setsByCategory.Clear();
 
@@ -158,12 +159,11 @@ public class TileBrush : GridBrushBase {
       if (brush.selectedCategoryIndex >= brush.categories.Count)
         brush.selectedCategoryIndex = 0;
 
-      UpdateCurrentSet();
+      UpdateCurrentSet(brush);
+      brush.isLoaded = false;
     }
 
-    public void UpdateCurrentSet() {
-      TileBrush brush = (TileBrush)target;
-
+    public void UpdateCurrentSet(TileBrush brush) {
       if (brush.categories.Count == 0) return;
 
       string category = brush.categories[brush.selectedCategoryIndex];

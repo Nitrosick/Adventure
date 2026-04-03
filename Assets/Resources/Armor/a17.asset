@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 637e9a84f7a72294a949cb41532886b0, type: 3}
+  m_Name: a17
+  m_EditorClassIdentifier: 
+  id: a17
+  itemName: Strengthened thief's attire
+  description: In such gear, a thief will not only be elusive at night, but will
+    also be able to fully participate in direct combat, thanks to the sewn-in protective
+    metal plates. Thanks to skilled craftsmen, this armor still remains very comfortable
+    and agile.
+  requirementStats: 020000000300000000000000
+  requirementLevel: 3
+  type: 5
+  slot: 2
+  weight: 0
+  rarity: 1
+  effects: []
+  skills: []
+  icon: {fileID: 21300000, guid: 50d32d9321cc9a547904cad2008aeb07, type: 3}
+  animationSet: {fileID: 0}
+  bracingType: 0
+  bracingLocation: {x: 0, y: 0, z: 0}
+  bracingRotation: {x: 0, y: 0, z: 0}
+  price: 260
+  isNew: 0
+  defense: 4
+  blockMultiplier: 1
+  prefabM: {fileID: 3169587338698787733, guid: 7ab38544275519a4ca046a5306548c5e, type: 3}
+  prefabL: {fileID: 0}
+  resistsMap:
+  - type: 1
+    value: 3
+  - type: 2
+    value: 3
+  - type: 3
+    value: 12
+  - type: 4
+    value: 12
+  - type: 5
+    value: 0
+  - type: 6
+    value: 20
+  - type: 7
+    value: 12
+  bodyView:
+    hideBeard: 1
+    hideHair: 1
+    handsMaterial: {fileID: 2100000, guid: 2ed285ca696469c4a9fc8deaec1dcb3f, type: 2}
+    armsMaterial: {fileID: 2100000, guid: 2ed285ca696469c4a9fc8deaec1dcb3f, type: 2}
+    torsoMaterial: {fileID: 2100000, guid: 2ed285ca696469c4a9fc8deaec1dcb3f, type: 2}
+    underwearMaterial: {fileID: 2100000, guid: 2ed285ca696469c4a9fc8deaec1dcb3f, type: 2}
+    legsMaterial: {fileID: 2100000, guid: 2ed285ca696469c4a9fc8deaec1dcb3f, type: 2}
+    footsMaterial: {fileID: 2100000, guid: 2ed285ca696469c4a9fc8deaec1dcb3f, type: 2}

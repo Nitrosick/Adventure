@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c72ce9337e905f47bdcdf9774858d67, type: 3}
+  m_Name: e9
+  m_EditorClassIdentifier: 
+  id: e9
+  effectName: Poison
+  duration: 3
+  damage: 1
+  cancelMove: 0
+  cancelAttack: 0
+  isStackable: 0
+  isNegative: 1
+  description: Poisoned target takes periodic damage, and its movement speed and
+    damage are reduced.
+  damageType: 7
+  icon: {fileID: 8892759074320436052, guid: 4635dca8d2f3f424eac1382915b4bc19, type: 3}
+  uiIcon: {fileID: 21300000, guid: 089073e99b30f404aa1e0bc38f2f0341, type: 3}
+  uiIconColor: {r: 0.37254903, g: 0.6784314, b: 0, a: 1}
