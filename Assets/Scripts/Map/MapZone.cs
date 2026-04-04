@@ -6,32 +6,35 @@ using UnityEngine.EventSystems;
 
 public class MapZone : MonoBehaviour {
   public string id;
-  public Vector3 playerPosition;
   public string zoneName;
   [TextArea(5, 20)] public string description;
   [TextArea(5, 20)] public string descriptionCleared;
-  public List<MapZoneType> events = new();
   public bool isEmpty;
   public bool secret;
-  public LineRenderer[] pathlines;
+  public Vector3 playerPosition;
 
+  public List<MapZoneType> events = new();
+  public LineRenderer[] pathlines;
   public GameObject[] interactiveObjects;
   public List<Quest> QuestsList { get; set; } = new() { };
-  private Renderer auraRender;
-  private SpriteRenderer markerRender;
+
   private MeshRenderer markIcon;
   private Transform markQuestIcon;
   private Way[] ways;
+  private Transform marker;
+  private SpriteRenderer markerRender;
+  private Vector3 originalScale;
+  private Vector3 originalPosition;
 
-  private readonly float fadeDuration = 1f;
+  private int animId = 0;
   private readonly float linesTransparency = 0.6f;
   private readonly float maxDistance = 10f;
 
   void Awake() {
-    auraRender = transform.GetComponent<Renderer>();
-    markerRender = transform.Find("Marker").GetComponent<SpriteRenderer>();
-
+    marker = transform.Find("Marker");
+    markerRender = marker.GetComponent<SpriteRenderer>();
     Transform markIconObj = transform.Find("Mark");
+
     if (markIconObj != null) {
       markIcon = markIconObj.Find("Icon").GetComponent<MeshRenderer>();
       markQuestIcon = markIconObj.Find("QuestIcon");
@@ -39,29 +42,33 @@ public class MapZone : MonoBehaviour {
 
     ways = transform.GetComponentsInChildren<Way>();
 
-    if (auraRender == null || markerRender == null || ways == null || ways.Length < 1) {
+    if (marker == null || markerRender == null || ways == null || ways.Length < 1) {
       Debug.LogError("Map zone components initialization error");
       return;
     }
 
     InitPathLines();
-    InitMarker();
+    originalScale = marker.localScale;
+    originalPosition = marker.position;
+    ResetMarker();
   }
 
   void Start() {
     Dictionary<string, MapZoneData> state = StateManager.zonesState;
+
     if (state.Count > 0 && state.ContainsKey(id)) {
       if (state[id].events.Count > 0) events = state[id].events;
       else SetCleared();
     }
-
-    auraRender.material = GameManager.I.transparentMaterial;
   }
 
-  private void OnMouseEnter() {
+  void OnMouseEnter() {
     if (SceneController.Locked || EventSystem.current.IsPointerOverGameObject() || secret) return;
 
-    float distance = Vector3.Distance(Player.Instance.transform.position, transform.position);
+    Player player = Player.Instance;
+    if (player.Move.IsMoving) return;
+
+    float distance = Vector3.Distance(player.transform.position, transform.position);
 
     if (distance > maxDistance && !StateManager.zonesState.Keys.Contains(id)) {
       MapUI.Instance.ShowZoneTooFar();
@@ -70,20 +77,38 @@ public class MapZone : MonoBehaviour {
       MapUI.Instance.ShowZoneInfo(this);
     }
 
-    MapZone playerZone = Player.Instance.GetComponent<PlayerMove>().CurrentZone;
+    MapZone playerZone = player.Move.CurrentZone;
     string[] wayIds = ways.Select(way => way.id).ToArray();
     if (playerZone == this || !wayIds.Contains(playerZone.id)) return;
 
-    auraRender.material = MapZoneManager.Instance.highlightMaterial;
+    HoverMarker();
+  }
+
+  void OnMouseExit() {
+    MapUI.Instance.HideZoneInfo();
+    UnhoverMarker();
+  }
+
+  public void ResetMarker() {
+    Color color = markerRender.color;
+    color.a = secret ? 0f : linesTransparency;
+    markerRender.color = color;
+  }
+
+  private void HoverMarker() {
+    Vector3 targetScale = originalScale * 1.08f;
+    Vector3 targetPosition = originalPosition + Vector3.up * 0.05f;
+
+    _ = AnimateMarker(targetScale, targetPosition);
+
     Color color = markerRender.color;
     color.a = linesTransparency + 0.3f;
     markerRender.color = color;
   }
 
-  private void OnMouseExit() {
-    MapUI.Instance.HideZoneInfo();
-    auraRender.material = GameManager.I.transparentMaterial;
-    InitMarker();
+  private void UnhoverMarker() {
+    _ = AnimateMarker(originalScale, originalPosition);
+    ResetMarker();
   }
 
   private void SetCleared() {
@@ -118,7 +143,8 @@ public class MapZone : MonoBehaviour {
     if (markQuestIcon.gameObject.activeSelf) {
       markQuestIcon.gameObject.SetActive(false);
       markIcon.gameObject.SetActive(true);
-    } else {
+    }
+    else {
       markQuestIcon.gameObject.SetActive(true);
       markIcon.gameObject.SetActive(false);
     }
@@ -129,7 +155,7 @@ public class MapZone : MonoBehaviour {
       TriggerAchievement("ac6");
       _ = Toast.Show("star", "Secret zone found");
       secret = false;
-      InitMarker();
+      UnhoverMarker();
     }
 
     Dictionary<string, MapZoneData> state = StateManager.zonesState;
@@ -159,10 +185,21 @@ public class MapZone : MonoBehaviour {
     StateManager.zonesState[id].events = events;
   }
 
-  public void InitMarker() {
-    Color color = markerRender.color;
-    color.a = secret ? 0f : linesTransparency;
-    markerRender.color = color;
+  private async Task AnimateMarker(Vector3 targetScale, Vector3 targetPosition) {
+    int id = ++animId;
+    float duration = 0.15f;
+    Vector3 startScale = marker.localScale;
+    Vector3 startPos = marker.position;
+    float elapsed = 0f;
+
+    while (elapsed < duration) {
+      if (id != animId) return;
+      elapsed += Time.deltaTime;
+      float t = elapsed / duration;
+      marker.localScale = Vector3.Lerp(startScale, targetScale, t);
+      marker.position = Vector3.Lerp(startPos, targetPosition, t);
+      await Task.Yield();
+    }
   }
 
   private void InitPathLines() {
@@ -189,9 +226,9 @@ public class MapZone : MonoBehaviour {
     float startAlpha = color.a;
     float elapsed = 0f;
 
-    while (elapsed < fadeDuration) {
+    while (elapsed < 1f) {
       elapsed += Time.deltaTime;
-      color.a = Mathf.Lerp(startAlpha, linesTransparency, elapsed / fadeDuration);
+      color.a = Mathf.Lerp(startAlpha, linesTransparency, elapsed / 1f);
       mat.color = color;
       await Task.Yield();
     }

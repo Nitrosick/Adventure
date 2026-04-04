@@ -3924,7 +3924,7 @@ PrefabInstance:
       addedObject: {fileID: 62106039}
     - targetCorrespondingSourceObject: {fileID: 8068916504509319228, guid: 0eabf81c232b0fb4ea722e9138a7fd15,
         type: 3}
-      insertIndex: 6
+      insertIndex: -1
       addedObject: {fileID: 62106038}
   m_SourcePrefab: {fileID: 100100000, guid: 0eabf81c232b0fb4ea722e9138a7fd15, type: 3}
 --- !u!4 &62106036 stripped
@@ -4096,8 +4096,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 63413414}
-  - component: {fileID: 63413419}
-  - component: {fileID: 63413418}
   - component: {fileID: 63413415}
   - component: {fileID: 63413421}
   - component: {fileID: 63413420}
@@ -4162,56 +4160,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bb8d89dedb279341b7d4a3da52fbc42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!23 &63413418
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 63413413}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: 2ed285ca696469c4a9fc8deaec1dcb3f, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
---- !u!33 &63413419
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 63413413}
-  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!114 &63413420
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4249,15 +4197,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 4
-  playerPosition: {x: 4.7, y: 2.5, z: 5}
   zoneName: Residential houses
   description: Ordinary village workers and their families live here. Some of them
     are just waiting for the moment to go on some adventure.
   descriptionCleared: You won't find anyone here anymore who could be useful in your
     squad.
-  events: 03000000
   isEmpty: 0
   secret: 0
+  playerPosition: {x: 4.7, y: 2.5, z: 5}
+  events: 03000000
   pathlines:
   - {fileID: 797277894}
   - {fileID: 733961140}
@@ -8323,7 +8271,7 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 8068916504509319228, guid: 0eabf81c232b0fb4ea722e9138a7fd15,
         type: 3}
-      insertIndex: 5
+      insertIndex: -1
       addedObject: {fileID: 109226752}
   m_SourcePrefab: {fileID: 100100000, guid: 0eabf81c232b0fb4ea722e9138a7fd15, type: 3}
 --- !u!4 &109226749 stripped
@@ -11624,7 +11572,7 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 8068916504509319228, guid: 0eabf81c232b0fb4ea722e9138a7fd15,
         type: 3}
-      insertIndex: 5
+      insertIndex: -1
       addedObject: {fileID: 162191715}
   m_SourcePrefab: {fileID: 100100000, guid: 0eabf81c232b0fb4ea722e9138a7fd15, type: 3}
 --- !u!4 &162191712 stripped
@@ -30007,7 +29955,7 @@ PrefabInstance:
       addedObject: {fileID: 379483472}
     - targetCorrespondingSourceObject: {fileID: 8068916504509319228, guid: 0eabf81c232b0fb4ea722e9138a7fd15,
         type: 3}
-      insertIndex: 6
+      insertIndex: -1
       addedObject: {fileID: 379483473}
   m_SourcePrefab: {fileID: 100100000, guid: 0eabf81c232b0fb4ea722e9138a7fd15, type: 3}
 --- !u!4 &379483469 stripped
@@ -32078,8 +32026,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 403171345}
-  - component: {fileID: 403171349}
-  - component: {fileID: 403171348}
   - component: {fileID: 403171350}
   - component: {fileID: 403171352}
   - component: {fileID: 403171351}
@@ -32122,56 +32068,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bb8d89dedb279341b7d4a3da52fbc42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!23 &403171348
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 403171344}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: 2ed285ca696469c4a9fc8deaec1dcb3f, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
---- !u!33 &403171349
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 403171344}
-  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!135 &403171350
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -32329,14 +32225,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 1
-  playerPosition: {x: -6.8, y: 2.5, z: -0.4}
   zoneName: Village center
   description: Village center. Here you can rest, regain strength, restore soldiers'
     health, buy necessary equipment, or train new units.
   descriptionCleared: 
-  events: 00000000
   isEmpty: 0
   secret: 0
+  playerPosition: {x: -6.8, y: 2.5, z: -0.4}
+  events: 00000000
   pathlines:
   - {fileID: 1930481601}
   - {fileID: 609223704}
@@ -40297,8 +40193,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 519053783}
-  - component: {fileID: 519053787}
-  - component: {fileID: 519053786}
   - component: {fileID: 519053788}
   - component: {fileID: 519053791}
   - component: {fileID: 519053789}
@@ -40330,56 +40224,6 @@ Transform:
   - {fileID: 327644252}
   m_Father: {fileID: 2099801289}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!23 &519053786
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 519053782}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: 2ed285ca696469c4a9fc8deaec1dcb3f, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
---- !u!33 &519053787
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 519053782}
-  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!135 &519053788
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -40462,14 +40306,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 3
-  playerPosition: {x: -0.1, y: 2.5, z: 3.5}
   zoneName: Bandit Camp
   description: Several bandits have settled in the camp, robbing everyone who passes
     by
   descriptionCleared: This used to be a bandit camp, but now this place is safe
-  events: 01000000
   isEmpty: 0
   secret: 0
+  playerPosition: {x: -0.1, y: 2.5, z: 3.5}
+  events: 01000000
   pathlines:
   - {fileID: 31631128}
   - {fileID: 797277894}
@@ -43209,7 +43053,7 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 8068916504509319228, guid: 0eabf81c232b0fb4ea722e9138a7fd15,
         type: 3}
-      insertIndex: 5
+      insertIndex: -1
       addedObject: {fileID: 548214849}
   m_SourcePrefab: {fileID: 100100000, guid: 0eabf81c232b0fb4ea722e9138a7fd15, type: 3}
 --- !u!4 &548214847 stripped
@@ -46159,7 +46003,7 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 8068916504509319228, guid: 0eabf81c232b0fb4ea722e9138a7fd15,
         type: 3}
-      insertIndex: 5
+      insertIndex: -1
       addedObject: {fileID: 587659975}
   m_SourcePrefab: {fileID: 100100000, guid: 0eabf81c232b0fb4ea722e9138a7fd15, type: 3}
 --- !u!4 &587659972 stripped
@@ -88828,7 +88672,7 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 8068916504509319228, guid: 0eabf81c232b0fb4ea722e9138a7fd15,
         type: 3}
-      insertIndex: 5
+      insertIndex: -1
       addedObject: {fileID: 1222340665}
   m_SourcePrefab: {fileID: 100100000, guid: 0eabf81c232b0fb4ea722e9138a7fd15, type: 3}
 --- !u!4 &1222340661 stripped
@@ -88945,8 +88789,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1224521482}
-  - component: {fileID: 1224521486}
-  - component: {fileID: 1224521485}
   - component: {fileID: 1224521487}
   - component: {fileID: 1224521484}
   - component: {fileID: 1224521483}
@@ -89002,68 +88844,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 2
-  playerPosition: {x: -2.6, y: 2.5, z: 0.7}
   zoneName: Empty
   description: 
   descriptionCleared: 
-  events: 
   isEmpty: 1
   secret: 0
+  playerPosition: {x: -2.6, y: 2.5, z: 0.7}
+  events: 
   pathlines:
   - {fileID: 1930481601}
   - {fileID: 31631128}
   - {fileID: 1565474354}
   interactiveObjects: []
---- !u!23 &1224521485
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1224521481}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: 2ed285ca696469c4a9fc8deaec1dcb3f, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
---- !u!33 &1224521486
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1224521481}
-  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!135 &1224521487
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -92033,7 +91825,7 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 8068916504509319228, guid: 0eabf81c232b0fb4ea722e9138a7fd15,
         type: 3}
-      insertIndex: 5
+      insertIndex: -1
       addedObject: {fileID: 1282232757}
   m_SourcePrefab: {fileID: 100100000, guid: 0eabf81c232b0fb4ea722e9138a7fd15, type: 3}
 --- !u!4 &1282232753 stripped
@@ -107248,7 +107040,7 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 8068916504509319228, guid: 0eabf81c232b0fb4ea722e9138a7fd15,
         type: 3}
-      insertIndex: 5
+      insertIndex: -1
       addedObject: {fileID: 1497336112}
   m_SourcePrefab: {fileID: 100100000, guid: 0eabf81c232b0fb4ea722e9138a7fd15, type: 3}
 --- !u!4 &1497336109 stripped
@@ -108531,7 +108323,7 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 8068916504509319228, guid: 0eabf81c232b0fb4ea722e9138a7fd15,
         type: 3}
-      insertIndex: 5
+      insertIndex: -1
       addedObject: {fileID: 1518734954}
   m_SourcePrefab: {fileID: 100100000, guid: 0eabf81c232b0fb4ea722e9138a7fd15, type: 3}
 --- !u!4 &1518734951 stripped
@@ -128460,7 +128252,7 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 8068916504509319228, guid: 0eabf81c232b0fb4ea722e9138a7fd15,
         type: 3}
-      insertIndex: 5
+      insertIndex: -1
       addedObject: {fileID: 1789248656}
   m_SourcePrefab: {fileID: 100100000, guid: 0eabf81c232b0fb4ea722e9138a7fd15, type: 3}
 --- !u!4 &1789248653 stripped
@@ -128885,7 +128677,7 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 8068916504509319228, guid: 0eabf81c232b0fb4ea722e9138a7fd15,
         type: 3}
-      insertIndex: 5
+      insertIndex: -1
       addedObject: {fileID: 1791822044}
   m_SourcePrefab: {fileID: 100100000, guid: 0eabf81c232b0fb4ea722e9138a7fd15, type: 3}
 --- !u!4 &1791822041 stripped
@@ -131122,7 +130914,7 @@ PrefabInstance:
       addedObject: {fileID: 1818460697}
     - targetCorrespondingSourceObject: {fileID: 8068916504509319228, guid: 0eabf81c232b0fb4ea722e9138a7fd15,
         type: 3}
-      insertIndex: 6
+      insertIndex: -1
       addedObject: {fileID: 1818460696}
   m_SourcePrefab: {fileID: 100100000, guid: 0eabf81c232b0fb4ea722e9138a7fd15, type: 3}
 --- !u!4 &1818460694 stripped
@@ -132899,7 +132691,7 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 8068916504509319228, guid: 0eabf81c232b0fb4ea722e9138a7fd15,
         type: 3}
-      insertIndex: 5
+      insertIndex: -1
       addedObject: {fileID: 1845850297}
   m_SourcePrefab: {fileID: 100100000, guid: 0eabf81c232b0fb4ea722e9138a7fd15, type: 3}
 --- !u!4 &1845850295 stripped
@@ -133829,7 +133621,7 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 8068916504509319228, guid: 0eabf81c232b0fb4ea722e9138a7fd15,
         type: 3}
-      insertIndex: 5
+      insertIndex: -1
       addedObject: {fileID: 1856130857}
   m_SourcePrefab: {fileID: 100100000, guid: 0eabf81c232b0fb4ea722e9138a7fd15, type: 3}
 --- !u!4 &1856130854 stripped
@@ -150030,7 +149822,7 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 8068916504509319228, guid: 0eabf81c232b0fb4ea722e9138a7fd15,
         type: 3}
-      insertIndex: 5
+      insertIndex: -1
       addedObject: {fileID: 2096315125}
   m_SourcePrefab: {fileID: 100100000, guid: 0eabf81c232b0fb4ea722e9138a7fd15, type: 3}
 --- !u!4 &2096315122 stripped

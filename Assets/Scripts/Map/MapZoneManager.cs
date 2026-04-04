@@ -71,7 +71,7 @@ public class MapZoneManager : MonoBehaviour {
     foreach (MapZone zone in Zones.Where(z => visited.Contains(z.id))) {
       zone.ShowPathLines();
       zone.secret = false;
-      zone.InitMarker();
+      zone.ResetMarker();
     }
 
     // Blocked pathes
