@@ -1,11 +1,12 @@
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class TimeController : MonoBehaviour {
   private readonly float dayLength = 1440f; // 24 hours
-  private readonly float dayStart = 240f; // 4:00
-  private readonly float nightStart = 1200f; // 20:00
+  private readonly float dayStart = 300f; // 5:00
+  private readonly float nightStart = 1050f; // 17:30
   public float timeMultiplier = 1f; // 1sec. = 1min.
   public float currentTime = 720f; // 12:00
   private float timer = 0f;
@@ -18,6 +19,9 @@ public class TimeController : MonoBehaviour {
   public Gradient lightColor;
   public Sprite sunIcon;
   public Sprite moonIcon;
+
+  private Light[] lightSpots;
+  private GameObject[] lightPanels;
 
   void Awake() {
     GameObject timerPanel = GameObject.FindWithTag("DayTime");
@@ -41,6 +45,17 @@ public class TimeController : MonoBehaviour {
     else iconImage.sprite = moonIcon;
   }
 
+  void Start() {
+    lightSpots = GameObject.FindGameObjectsWithTag("LightSpot")
+      .Select(o => o.GetComponent<Light>())
+      .ToArray();
+
+    lightPanels = GameObject.FindGameObjectsWithTag("LightPanel");
+
+    if (IsDay()) LightSwitchOff();
+    else LightSwitchOn();
+  }
+
   void Update() {
     timer += Time.deltaTime;
 
@@ -52,7 +67,7 @@ public class TimeController : MonoBehaviour {
 
     visualTime = Mathf.Lerp(visualTime, currentTime, Time.deltaTime * 5f);
     UpdateSun(visualTime);
-    UpdateIcon();
+    UpdateEnviroment();
     if (uiTime != null) uiTime.text = GetTimeString();
     StateManager.dayTime = currentTime;
   }
@@ -66,9 +81,26 @@ public class TimeController : MonoBehaviour {
     sun.color = lightColor.Evaluate(normalizedTime);
   }
 
-  private void UpdateIcon() {
-    if (currentTime == dayStart) iconImage.sprite = sunIcon;
-    else if (currentTime == nightStart) iconImage.sprite = moonIcon;
+  private void UpdateEnviroment() {
+    if (currentTime == dayStart) {
+      LightSwitchOff();
+      _ = Toast.Show("sun", "The day has come");
+    } else if (currentTime == nightStart) {
+      LightSwitchOn();
+      _ = Toast.Show("moon", "Night had fallen");
+    }
+  }
+
+  private void LightSwitchOn() {
+    iconImage.sprite = moonIcon;
+    foreach (var l in lightSpots) l.enabled = true;
+    foreach (var l in lightPanels) l.SetActive(true);
+  }
+
+  private void LightSwitchOff() {
+    iconImage.sprite = sunIcon;
+    foreach (var l in lightSpots) l.enabled = false;
+    foreach (var l in lightPanels) l.SetActive(false);
   }
 
   private string GetTimeString() {
