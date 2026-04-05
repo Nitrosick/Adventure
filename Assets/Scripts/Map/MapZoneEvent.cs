@@ -166,15 +166,19 @@ public class MapZoneEvent : MonoBehaviour {
 
     StateManager.ResetTemp();
     StateManager.enterScene = SceneManager.GetActiveScene().name;
+
     StateManager.WriteUnitsData(playerUnits, "allies");
     StateManager.WriteUnitsData(battleZone.guard, "enemies");
+
     if (battleZone.reinforcement.Length > 0) StateManager.WriteUnitsData(battleZone.reinforcement, "reinforcement");
     StateManager.reinforcementRound = battleZone.reinforcementRound;
+
     StateManager.trapsCount = battleZone.trapsCount;
     StateManager.trapType = battleZone.trapType;
 
     MapUI.Instance.DisableUI();
     MapUI.Instance.HideZoneInfo();
+
     SceneController.ShowEventInfo("battle", isAmbush ? "Ambush!" : "Battle is starting");
     SceneController.SwitchScene(battleZone.battlefieldName);
   }

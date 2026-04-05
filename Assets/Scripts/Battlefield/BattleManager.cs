@@ -11,19 +11,20 @@ public class BattleManager : MonoBehaviour {
 
   private UnitData[] allies;
   private UnitData[] enemies;
+  private readonly List<UnitData> reserve = new();
 
-  private static List<Tile> allySpawns;
-  private static List<Tile> allyShooterSpawns;
-  private static List<Tile> enemySpawns;
-  private static List<Tile> enemyShooterSpawns;
-  private static List<Tile> bossSpawns;
-  private static List<Tile> reinforcementSpawns;
+  private List<Tile> allySpawns;
+  private List<Tile> allyShooterSpawns;
+  private List<Tile> enemySpawns;
+  private List<Tile> enemyShooterSpawns;
+  private List<Tile> bossSpawns;
+  private List<Tile> reinforcementSpawns;
 
-  public static BattleResult? battleResult;
-  public static Reward Reward { get; private set; }
+  public BattleResult? battleResult;
+  public Reward Reward { get; private set; }
   public GameObject corpsePrefab;
 
-  private static readonly int delayTime = 2000;
+  private readonly int delayTime = 2000;
 
   void Awake() {
     Instance = this;
@@ -53,7 +54,7 @@ public class BattleManager : MonoBehaviour {
 
     InitSpawnZones();
     InitSupports();
-    SpawnUnits(allies.Where(u => u.inSquad && u.currentHealth > 0).ToArray(), allySpawns, UnitRelation.Ally);
+    SpawnUnits(allies, allySpawns, UnitRelation.Ally);
     SpawnUnits(enemies, enemySpawns, UnitRelation.Enemy);
     SpawnTraps(StateManager.trapsCount);
   }
@@ -86,6 +87,11 @@ public class BattleManager : MonoBehaviour {
       : enemyShooterSpawns;
 
     foreach (UnitData data in unitsData) {
+      if (relation == UnitRelation.Ally && (data.currentHealth <= 0 || !data.inSquad)) {
+        reserve.Add(data);
+        continue;
+      }
+
       Tile tile = null;
 
       if (data.isBoss) {
@@ -127,7 +133,7 @@ public class BattleManager : MonoBehaviour {
     }
   }
 
-  private static void SpawnTraps(int enemyTraps) {
+  private void SpawnTraps(int enemyTraps) {
     // TODO: Союзные ловушки
 
     for (int i = 0; i < enemyTraps; i++) {
@@ -141,7 +147,7 @@ public class BattleManager : MonoBehaviour {
     }
   }
 
-  private static void InitSupports() {
+  private void InitSupports() {
     List<SupportInstance> allySupports = new();
 
     foreach (SupportData data in StateManager.playerSupports.Where(s => s.inSquad)) {
@@ -177,14 +183,15 @@ public class BattleManager : MonoBehaviour {
     await Task.Delay(delayTime);
   }
 
-  public static async void Finish() {
-    await Task.Delay(delayTime);
+  public async void Finish() {
+    await Task.Delay(delayTime / 2);
 
     StateManager.WriteUnitsData(
       QueueManager.Instance.Queue
         .Where(unit => unit.Relation == UnitRelation.Ally)
         .ToArray(),
-      "allies"
+      "allies",
+      reserve.ToArray()
     );
 
     if (battleResult == BattleResult.Victory) {

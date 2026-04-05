@@ -81,7 +81,7 @@ public class PauseMenu : MonoBehaviour {
   private static void Retreat(bool accepted) {
     if (!accepted) return;
     Close();
-    BattleManager.battleResult = BattleResult.Retreat;
-    BattleManager.Finish();
+    BattleManager.Instance.battleResult = BattleResult.Retreat;
+    BattleManager.Instance.Finish();
   }
 }

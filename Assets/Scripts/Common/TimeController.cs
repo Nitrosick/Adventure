@@ -6,21 +6,33 @@ public class TimeController : MonoBehaviour {
   private readonly float dayLength = 1440f; // 24 hours
   private readonly float dayStart = 240f; // 4:00
   private readonly float nightStart = 1200f; // 20:00
+  public float timeMultiplier = 1f; // 1sec. = 1min.
   public float currentTime = 720f; // 12:00
   private float timer = 0f;
   private float visualTime;
 
-  public Light sun;
+  private Light sun;
+  private TextMeshProUGUI uiTime;
+  private Image iconImage;
   public AnimationCurve lightIntensity;
   public Gradient lightColor;
-  public TextMeshProUGUI uiTime;
-  public Image iconImage;
   public Sprite sunIcon;
   public Sprite moonIcon;
 
   void Awake() {
-    if (sun == null || uiTime == null || iconImage == null || sunIcon == null || moonIcon == null) {
+    GameObject timerPanel = GameObject.FindWithTag("DayTime");
+    GameObject sunObj = GameObject.FindWithTag("Sun");
+
+    if (timerPanel == null || sunObj == null) {
       Debug.LogError("Time controller components initialization error");
+      return;
+    }
+
+    sun = sunObj.GetComponent<Light>();
+    uiTime = timerPanel.transform.Find("Value").GetComponent<TextMeshProUGUI>();
+    iconImage = timerPanel.transform.Find("Icon").GetComponent<Image>();
+
+    if (sun == null || uiTime == null || iconImage == null || sunIcon == null || moonIcon == null) {
       return;
     }
 
@@ -34,7 +46,7 @@ public class TimeController : MonoBehaviour {
 
     if (timer >= 1f) {
       timer -= 1f;
-      currentTime += 1f;
+      currentTime += timeMultiplier;
       if (currentTime >= dayLength) currentTime = 0f;
     }
 
@@ -65,4 +77,7 @@ public class TimeController : MonoBehaviour {
     int minutes = totalMinutes % 60;
     return $"{hours:00}:{minutes:00}";
   }
+
+  public bool IsDay() => currentTime >= dayStart && currentTime < nightStart;
+  public bool IsNight() => currentTime < dayStart || currentTime >= nightStart;
 }

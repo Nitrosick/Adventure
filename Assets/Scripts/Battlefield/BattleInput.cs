@@ -58,7 +58,7 @@ public class BattleInput : MonoBehaviour {
 
   void Update() {
     if (
-      BattleManager.battleResult != null ||
+      BattleManager.Instance.battleResult != null ||
       !Mouse.current.leftButton.wasPressedThisFrame
     ) return;
 

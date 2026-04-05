@@ -25,7 +25,7 @@ public class PhaseManager : MonoBehaviour
       return;
     }
 
-    if (BattleManager.battleResult != null) return;
+    if (BattleManager.Instance.battleResult != null) return;
 
     switch (CurrentPhase) {
       case BattlePhase.Movement:

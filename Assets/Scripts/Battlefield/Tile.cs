@@ -117,7 +117,7 @@ public class Tile : MonoBehaviour {
     Transform highlight = transform.Find("HighlightEffect");
     if (highlight != null) highlight.gameObject.SetActive(false);
 
-    BattleManager.Reward.Add(loot);
+    BattleManager.Instance.Reward.Add(loot);
 
     if (loot.projectiles > 0) {
       foreach (Unit unit in QueueManager.Instance.Queue.Where(u => u.Relation == UnitRelation.Ally)) {

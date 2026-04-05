@@ -145,11 +145,11 @@ public class QueueManager : MonoBehaviour {
       else if (unit.Relation == UnitRelation.Enemy) enemiesCount++;
     }
 
-    if (alliesCount == 0) BattleManager.battleResult = BattleResult.Defeat;
-    else if (enemiesCount == 0) BattleManager.battleResult = BattleResult.Victory;
+    if (alliesCount == 0) BattleManager.Instance.battleResult = BattleResult.Defeat;
+    else if (enemiesCount == 0) BattleManager.Instance.battleResult = BattleResult.Victory;
 
-    if (BattleManager.battleResult != null) {
-      BattleManager.Finish();
+    if (BattleManager.Instance.battleResult != null) {
+      BattleManager.Instance.Finish();
       return true;
     }
     return false;

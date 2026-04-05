@@ -25,6 +25,7 @@ public class UnitHealth : MonoBehaviour {
     bool tickDamage = false,
     bool charged = false
   ) {
+    if (unit.IsDead) return;
     float totalDamage = damage * modifier;
     bool isCrit = modifier > 1f || charged;
 

@@ -111,8 +111,9 @@ public static class StateManager {
     ResetTemp();
   }
 
-  public static void WriteUnitsData(Unit[] units, string to) {
-    UnitData[] newUnits = units.Select(u => u.ToData()).ToArray();
+  public static void WriteUnitsData(Unit[] units, string to, UnitData[] reserve = null) {
+    reserve ??= new UnitData[0];
+    UnitData[] newUnits = units.Select(u => u.ToData()).Concat(reserve).ToArray();
 
     switch (to) {
       case "allies":

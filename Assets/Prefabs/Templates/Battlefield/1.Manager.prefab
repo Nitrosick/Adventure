@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 4870636650323880849}
   - component: {fileID: 8391505139412005194}
   - component: {fileID: 6400954026695782527}
+  - component: {fileID: 421666543232758203}
   m_Layer: 0
   m_Name: 1.Manager
   m_TagString: Untagged
@@ -186,3 +187,91 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   flattenInput: {fileID: -7560484915351109248, guid: d4e6bac820a202e46bf2fe966a0e4314,
     type: 3}
+--- !u!114 &421666543232758203
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2215890567102402238}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c56b39b7e34baa47a4a8e6f4ba12cd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timeMultiplier: 0.016
+  currentTime: 720
+  lightIntensity:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0.06375379
+      outSlope: 0.06375379
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.09574024
+    - serializedVersion: 3
+      time: 0.39999998
+      value: 2.0000012
+      inSlope: -0.04419624
+      outSlope: -0.04419624
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.446733
+    - serializedVersion: 3
+      time: 0.59999996
+      value: 1.9980599
+      inSlope: -0.11810496
+      outSlope: -0.11810496
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.2261904
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -0.060765896
+      outSlope: -0.060765896
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.15067174
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 1
+    m_RotationOrder: 4
+  lightColor:
+    serializedVersion: 2
+    key0: {r: 0.16553932, g: 0.22330819, b: 0.3773585, a: 1}
+    key1: {r: 0.8207547, g: 0.5500302, b: 0.30584726, a: 1}
+    key2: {r: 1, g: 1, b: 1, a: 0}
+    key3: {r: 1, g: 1, b: 1, a: 0}
+    key4: {r: 0.745283, g: 0.2214756, b: 0.22665985, a: 0}
+    key5: {r: 0.16470589, g: 0.22352943, b: 0.37647063, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 0
+    ctime1: 13107
+    ctime2: 26214
+    ctime3: 39321
+    ctime4: 52428
+    ctime5: 65535
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 65535
+    atime2: 0
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_ColorSpace: -1
+    m_NumColorKeys: 6
+    m_NumAlphaKeys: 2
+  sunIcon: {fileID: 21300000, guid: 119f354bba9cb4f4f9118c1618a1c72a, type: 3}
+  moonIcon: {fileID: 21300000, guid: 6cbaffb9af82e6f4caeeaf7510fcc40a, type: 3}

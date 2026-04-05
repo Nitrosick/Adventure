@@ -40,7 +40,7 @@ public static class AchievementManager {
       ach.timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 
       if (inBattle) {
-        BattleManager.Reward.Add(ach.data.reward);
+        BattleManager.Instance.Reward.Add(ach.data.reward);
       }
       else {
         Player.Instance.CollectReward(ach.data.reward);

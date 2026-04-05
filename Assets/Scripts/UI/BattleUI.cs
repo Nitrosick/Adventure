@@ -41,8 +41,8 @@ public class BattleUI : GeneralUI {
     supportsPanel = transform.Find("Supports/Panel");
 
     mainMenuButton = Get<Button>(top, "MainMenu/Main");
-    currentRound = Get<TextMeshProUGUI>(top, "Round/Value");
-    reinforcement = Get<TextMeshProUGUI>(top, "Round/Reinforcement");
+    currentRound = Get<TextMeshProUGUI>(top, "Panel/Round/Value");
+    reinforcement = Get<TextMeshProUGUI>(top, "Panel/Round/Reinforcement");
     phaseSkipButton = Get<Button>(actionsPanel, "SkipPhase");
     climbButton = Get<Button>(actionsPanel, "Climb");
     phaseAttackLabel = Get<Image>(actionsPanel, "PhaseAttack");

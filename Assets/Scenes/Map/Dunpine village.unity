@@ -4511,8 +4511,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c56b39b7e34baa47a4a8e6f4ba12cd5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  timeMultiplier: 1
   currentTime: 720
-  sun: {fileID: 410087040}
   lightIntensity:
     serializedVersion: 2
     m_Curve:
@@ -4585,8 +4585,6 @@ MonoBehaviour:
     m_ColorSpace: -1
     m_NumColorKeys: 6
     m_NumAlphaKeys: 2
-  uiTime: {fileID: 1851567537}
-  iconImage: {fileID: 1967851985}
   sunIcon: {fileID: 21300000, guid: 119f354bba9cb4f4f9118c1618a1c72a, type: 3}
   moonIcon: {fileID: 21300000, guid: 6cbaffb9af82e6f4caeeaf7510fcc40a, type: 3}
 --- !u!1 &66535411
@@ -32928,7 +32926,7 @@ GameObject:
   - component: {fileID: 410087042}
   m_Layer: 0
   m_Name: Global
-  m_TagString: Untagged
+  m_TagString: Sun
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -42920,7 +42918,7 @@ PrefabInstance:
     - target: {fileID: 3769942709103539625, guid: 0eabf81c232b0fb4ea722e9138a7fd15,
         type: 3}
       propertyPath: pathlines.Array.size
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 3769942709103539625, guid: 0eabf81c232b0fb4ea722e9138a7fd15,
         type: 3}
@@ -42932,6 +42930,11 @@ PrefabInstance:
       propertyPath: pathlines.Array.data[1]
       value: 
       objectReference: {fileID: 317023338}
+    - target: {fileID: 3769942709103539625, guid: 0eabf81c232b0fb4ea722e9138a7fd15,
+        type: 3}
+      propertyPath: pathlines.Array.data[2]
+      value: 
+      objectReference: {fileID: 419498107}
     - target: {fileID: 3769942709103539625, guid: 0eabf81c232b0fb4ea722e9138a7fd15,
         type: 3}
       propertyPath: interactiveObjects.Array.size
@@ -100475,7 +100478,7 @@ GameObject:
   - component: {fileID: 1398947612}
   m_Layer: 5
   m_Name: Time
-  m_TagString: Untagged
+  m_TagString: DayTime
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
