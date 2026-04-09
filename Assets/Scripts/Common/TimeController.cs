@@ -21,7 +21,8 @@ public class TimeController : MonoBehaviour {
   public Sprite moonIcon;
 
   private Light[] lightSpots;
-  private GameObject[] lightPanels;
+  private GameObject[] lightObjects;
+  private PlayerInventory player;
 
   void Awake() {
     GameObject timerPanel = GameObject.FindWithTag("DayTime");
@@ -41,16 +42,22 @@ public class TimeController : MonoBehaviour {
     }
 
     currentTime = StateManager.dayTime;
-    if (currentTime >= dayStart && currentTime < nightStart) iconImage.sprite = sunIcon;
-    else iconImage.sprite = moonIcon;
+
+    if (currentTime >= dayStart && currentTime < nightStart) {
+      iconImage.sprite = sunIcon;
+    } else {
+      iconImage.sprite = moonIcon;
+    }
   }
 
   void Start() {
+    player = Player.Instance.Inventory;
+
     lightSpots = GameObject.FindGameObjectsWithTag("LightSpot")
       .Select(o => o.GetComponent<Light>())
       .ToArray();
 
-    lightPanels = GameObject.FindGameObjectsWithTag("LightPanel");
+    lightObjects = GameObject.FindGameObjectsWithTag("LightObject");
 
     if (IsDay()) LightSwitchOff();
     else LightSwitchOn();
@@ -94,13 +101,15 @@ public class TimeController : MonoBehaviour {
   private void LightSwitchOn() {
     iconImage.sprite = moonIcon;
     foreach (var l in lightSpots) l.enabled = true;
-    foreach (var l in lightPanels) l.SetActive(true);
+    foreach (var l in lightObjects) l.SetActive(true);
+    player.EquipTorch();
   }
 
   private void LightSwitchOff() {
     iconImage.sprite = sunIcon;
     foreach (var l in lightSpots) l.enabled = false;
-    foreach (var l in lightPanels) l.SetActive(false);
+    foreach (var l in lightObjects) l.SetActive(false);
+    player.UnequipTorch();
   }
 
   private string GetTimeString() {

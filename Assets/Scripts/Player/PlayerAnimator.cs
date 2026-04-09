@@ -12,6 +12,10 @@ public class PlayerAnimator : MonoBehaviour {
     animator.SetBool("IsMoving", isMoving);
   }
 
+  public void SetTorch(bool withTorch) {
+    animator.SetBool("Torch", withTorch);
+  }
+
   public void RotateTowards(Vector3 direction) {
     direction.y = 0f;
     if (direction == Vector3.zero) return;

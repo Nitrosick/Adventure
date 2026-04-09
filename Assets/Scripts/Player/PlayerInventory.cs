@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class PlayerInventory : MonoBehaviour {
   private PlayerArmy army;
+  private PlayerAnimator animator;
 
   private GameObject armorObj;
   public Transform spineBracing;
   public Transform hipsBracing;
+  public GameObject torch;
 
   private SkinnedMeshRenderer body;
   private CapsuleCollider[] clothColliders = {};
@@ -19,6 +21,7 @@ public class PlayerInventory : MonoBehaviour {
 
   void Awake() {
     army = transform.GetComponent<PlayerArmy>();
+    animator = transform.GetComponent<PlayerAnimator>();
     body = transform.Find("Model/Body").GetComponent<SkinnedMeshRenderer>();
 
     if (!ComponentsInitialized()) {
@@ -33,7 +36,7 @@ public class PlayerInventory : MonoBehaviour {
 
   private bool ComponentsInitialized() {
     return new object[] {
-      army, body, spineBracing, hipsBracing
+      army, animator, body, spineBracing, hipsBracing, torch
     }.All(x => x != null);
   }
 
@@ -271,5 +274,15 @@ public class PlayerInventory : MonoBehaviour {
   public void UpdateState() {
     StateManager.inventoryEquipment = Equip.ToArray();
     StateManager.inventoryItems = Items.ToArray();
+  }
+
+  public void EquipTorch() {
+    animator.SetTorch(true);
+    torch.SetActive(true);
+  }
+
+  public void UnequipTorch() {
+    animator.SetTorch(false);
+    torch.SetActive(false);
   }
 }
