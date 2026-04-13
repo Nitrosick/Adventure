@@ -17,7 +17,7 @@ public class UnitCombat : Unit {
     float damage = Calculate.Damage(this, target) * multiplier;
 
     List<Effect> effects = Calculate.ItemEffects(this, target);
-    foreach (var effect in effects) target.Effects.ApplyEffect(effect);
+    foreach (Effect effect in effects) target.Effects.ApplyEffect(effect);
 
     target.Health.TakeDamage(damage, critModifier);
     LogDamage(damage, critModifier, effects);

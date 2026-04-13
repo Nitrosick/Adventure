@@ -58,7 +58,8 @@ public class UnitAnimator : MonoBehaviour {
   }
 
   public void TakeDamage() {
-    animator.Play("Idle", 0, 0f);
+    // TODO: Указать все состояния, в которых не сбрасывается анимация
+    if (!animator.GetBool("IsBlocking")) animator.Play("Idle", 0, 0f);
     animator.SetTrigger("Damage");
   }
 

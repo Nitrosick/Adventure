@@ -10,6 +10,7 @@ public class Effect : ScriptableObject {
   public bool cancelAttack;
   public bool isStackable;
   public bool isNegative;
+  public bool ignoreBlock = true;
   [TextArea(5, 20)] public string description;
 
   public DamageType damageType;

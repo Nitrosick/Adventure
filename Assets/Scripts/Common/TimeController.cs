@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class TimeController : MonoBehaviour {
+  public static TimeController Instance;
+
   private readonly float dayLength = 1440f; // 24 hours
   private readonly float dayStart = 300f; // 5:00
   private readonly float nightStart = 1050f; // 17:30
@@ -25,6 +27,7 @@ public class TimeController : MonoBehaviour {
   private PlayerInventory player;
 
   void Awake() {
+    Instance = this;
     GameObject timerPanel = GameObject.FindWithTag("DayTime");
     GameObject sunObj = GameObject.FindWithTag("Sun");
 

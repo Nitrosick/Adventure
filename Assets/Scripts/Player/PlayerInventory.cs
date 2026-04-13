@@ -277,11 +277,13 @@ public class PlayerInventory : MonoBehaviour {
   }
 
   public void EquipTorch() {
+    if (animator == null) return;
     animator.SetTorch(true);
     torch.SetActive(true);
   }
 
   public void UnequipTorch() {
+    if (animator == null) return;
     animator.SetTorch(false);
     torch.SetActive(false);
   }

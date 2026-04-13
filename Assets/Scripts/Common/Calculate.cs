@@ -49,9 +49,13 @@ public static class Calculate {
     if (attacker.Equip.primary != null && charged)
       result -= attacker.Equip.primary.chargedAttackParams.hitChancePenalty;
 
-    // Effects
     if (attacker.Type == UnitType.Range) {
-      if (attacker.Effects.HasEffect("Cover") || target.Effects.HasEffect("Cover")) result /= 2;
+      // Effects
+      if (target.Effects.HasEffect("Cover")) result /= 2;
+      // Night
+      if (TimeController.Instance.IsNight()) result -= 0.15f;
+    } else {
+      if (TimeController.Instance.IsNight()) result -= 0.05f;
     }
 
     // Failed attack stacks
@@ -154,10 +158,13 @@ public static class Calculate {
     Equipment targetArmor = target.Equip.armor;
     Equipment[] items = { primary, secondary, attackerArmor };
 
+    bool targetBlock = target.Effects.HasAnyEffect(new string[] { "Block", "Wall" });
+
     foreach (Equipment item in items) {
       if (item == null || item.effects == null || item.effects.Length == 0) continue;
 
       foreach (var effect in item.effects) {
+        if (targetBlock && !effect.data.ignoreBlock) continue;
         float chance = effect.chance;
         string name = effect.data.effectName;
 
