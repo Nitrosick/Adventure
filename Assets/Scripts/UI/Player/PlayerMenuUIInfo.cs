@@ -250,10 +250,8 @@ public class PlayerMenuUIInfo : MonoBehaviour {
 
     InSquadButtonLabel(unit);
     UpdateUnitEquipment(unit);
+    SetUnitStats(unit);
 
-    strength.text = "<color=#F61010>" + unit.Strength.ToString() + "</color>";
-    dexterity.text = "<color=#81D11F>" + unit.Dexterity.ToString() + "</color>";
-    intelligence.text = "<color=#2B8EF3>" + unit.Intelligence.ToString() + "</color>";
     description.text = unit.Description;
 
     float totalHp = unit.Health.GetMaxHP();
@@ -265,8 +263,8 @@ public class PlayerMenuUIInfo : MonoBehaviour {
     );
 
     unitMp.text = unit.DefaultMovePoints.ToString();
-    unitDamage.text = unit.Equip.GetTotalDamage().ToString();
-    unitDefense.text = unit.Equip.GetTotalDefense().ToString();
+    unitDamage.text = Math.Round(unit.Equip.GetTotalDamage()).ToString();
+    unitDefense.text = Math.Round(unit.Equip.GetTotalDefense()).ToString();
     unitRange.text = Math.Floor(unit.Equip.GetRange()).ToString();
 
     if (unit.Projectiles == 0) unitProjectiles.text = "-";
@@ -443,19 +441,27 @@ public class PlayerMenuUIInfo : MonoBehaviour {
 
   public static void RecalculatePoints() {
     Player player = Player.Instance;
+    Unit hero = player.Army.Units.FirstOrDefault(u => u.IsHero);
+    if (hero == null) return;
 
-    if (player.StatPoints > 0) {
-      statPointsRow.SetActive(true);
-      strengthUp.gameObject.SetActive(true);
-      dexterityUp.gameObject.SetActive(true);
-      intelligenceUp.gameObject.SetActive(true);
-    }
-    if (player.AbilityPoints > 0) {
-      abilityPointsRow.SetActive(true);
-    }
+    bool statOn = player.StatPoints > 0;
+    statPointsRow.SetActive(statOn);
+    strengthUp.gameObject.SetActive(statOn);
+    dexterityUp.gameObject.SetActive(statOn);
+    intelligenceUp.gameObject.SetActive(statOn);
 
+    bool abilOn = player.AbilityPoints > 0;
+    abilityPointsRow.SetActive(abilOn);
+
+    SetUnitStats(hero);
     statPoints.text = player.StatPoints.ToString();
     abilityPoints.text = player.AbilityPoints.ToString();
+  }
+
+  private static void SetUnitStats(Unit unit) {
+    strength.text = "<color=#F61010>" + unit.Strength.ToString() + "</color>";
+    dexterity.text = "<color=#81D11F>" + unit.Dexterity.ToString() + "</color>";
+    intelligence.text = "<color=#2B8EF3>" + unit.Intelligence.ToString() + "</color>";
   }
 
   // Outer actions

@@ -248,6 +248,7 @@ public class Unit : MonoBehaviour {
     Strength += stats[0];
     Dexterity += stats[1];
     Intelligence += stats[2];
+    Player.Instance.Army.UpdateState();
   }
 
   public void AddProjectiles(int value) {
