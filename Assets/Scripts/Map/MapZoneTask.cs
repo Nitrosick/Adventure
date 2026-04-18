@@ -30,6 +30,6 @@ public class MapZoneTask : MonoBehaviour {
 
   private void Reset() {
     zone.RemoveEvent(MapZoneType.Task);
-    zone.SwitchQuestIcon();
+    zone.HideQuestionIcon();
   }
 }

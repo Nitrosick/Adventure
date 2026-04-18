@@ -1,11 +1,9 @@
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class MapZoneEvent : MonoBehaviour {
   private MapZone zone;
-  private Quest currentQuest;
 
   void Awake() {
     zone = transform.GetComponent<MapZone>();
@@ -16,6 +14,7 @@ public class MapZoneEvent : MonoBehaviour {
     bool forceAmbush = false,
     bool ignoreQuest = false
   ) {
+    if (!ignoreQuest) QuestManager.CheckQuestsInZone(zone);
     MapUI.Instance.HideInteractableButton();
     if (zone == null || zone.events.Count < 1) return;
 
@@ -37,8 +36,6 @@ public class MapZoneEvent : MonoBehaviour {
           return;
         }
       }
-    } else if (zone.events[eventIndex] == MapZoneType.Quest && ignoreQuest) {
-      eventIndex++;
     }
 
     if (eventIndex >= zone.events.Count) return;
@@ -48,9 +45,6 @@ public class MapZoneEvent : MonoBehaviour {
         if (ignoreBattle) return;
         if (battleZone.instant) StartBattle(battleZone);
         else MapUI.Instance.ShowInteractableButton(battleZone.StartBattle, "battle", "Attack");
-        break;
-      case MapZoneType.Quest:
-        CheckZoneQuests(battleZone);
         break;
       case MapZoneType.Hub:
         MapUI.Instance.ShowInteractableButton(
@@ -90,57 +84,6 @@ public class MapZoneEvent : MonoBehaviour {
         );
         break;
     }
-  }
-
-  private void CheckZoneQuests(MapZoneBattle battle) {
-    List<Quest> list = zone.QuestsList;
-    if (list.Count == 0) return;
-
-    foreach (Quest q in list) {
-      if (q.objectiveZoneId != zone.id) continue;
-
-      switch (q.objectiveType) {
-        case QuestObjective.Fight:
-          if (battle.instant) StartBattle(battle);
-          else MapUI.Instance.ShowInteractableButton(battle.StartBattle, "battle", "Attack");
-          return;
-        case QuestObjective.VisitZone:
-          QuestManager.CompleteQuest(q);
-          list.Remove(q);
-          if (list.Count == 0) zone.RemoveEvent(MapZoneType.Quest);
-          return;
-        case QuestObjective.BringItem:
-          bool check = true;
-          PlayerInventory inventory = Player.Instance.Inventory;
-          if (q.objectiveEquipment.Length > 0 && !inventory.HasItems(q.objectiveEquipment, true)) check = false;
-          if (q.objectiveItems.Length > 0 && !inventory.HasItems(q.objectiveItems)) check = false;
-          if (!check) return;
-          currentQuest = q;
-
-          Dialog.Instance.Confirmation(
-            HandInItems,
-            "Quest items",
-            $"Hand in {QuestManager.GetObjectiveItemsDescription(q)}?"
-          );
-          return;
-      }
-    }
-  }
-
-  private void HandInItems(bool accepted) {
-    if (!accepted) {
-      CheckEvents(ignoreQuest: true);
-      return;
-    }
-
-    PlayerInventory inventory = Player.Instance.Inventory;
-    inventory.RemoveItems(currentQuest.objectiveEquipment);
-    inventory.RemoveItems(currentQuest.objectiveItems);
-    QuestManager.CompleteQuest(currentQuest);
-    zone.QuestsList.Remove(currentQuest);
-    if (zone.QuestsList.Count == 0) zone.RemoveEvent(MapZoneType.Quest);
-    currentQuest = null;
-    CheckEvents();
   }
 
   public void StartBattle(MapZoneBattle battleZone, bool isAmbush = false) {

@@ -184,7 +184,6 @@ public class MapUI : GeneralUI {
       }
     }
     else if (zone.events.Contains(MapZoneType.Recruitment)) zoneInfoRecruitMark.SetActive(true);
-    else if (zone.events.Contains(MapZoneType.Quest)) zoneInfoQuestMark.SetActive(true);
     else if (zone.events.Contains(MapZoneType.Collecting)) {
       if (zone.TryGetComponent<MapZoneCollecting>(out var col)) {
         if (col.CollectedAt > 0 && col.CollectedAt + col.respawn > StateManager.globalTicks) {
@@ -201,6 +200,10 @@ public class MapUI : GeneralUI {
         ShowBattleDifficulty(battle.guard.Concat(battle.reinforcement).ToList());
       }
     }
+
+    QuestInstance quest = QuestManager.GetActiveQuests()
+      .FirstOrDefault(q => q.data.objectiveZoneId == zone.id);
+    if (quest != null) zoneInfoQuestMark.SetActive(true);
   }
 
   public void HideZoneInfo() {

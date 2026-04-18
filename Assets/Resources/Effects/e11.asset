@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c72ce9337e905f47bdcdf9774858d67, type: 3}
+  m_Name: e11
+  m_EditorClassIdentifier: 
+  id: e11
+  effectName: Stealth
+  duration: 1000
+  damage: 0
+  cancelMove: 0
+  cancelAttack: 0
+  isStackable: 0
+  isNegative: 0
+  ignoreBlock: 1
+  description: It becomes harder to hit a unit with such an effect, especially at
+    night.
+  damageType: 0
+  icon: {fileID: 8892759074320436052, guid: 02b7b935a299b2d4e8a11fab3dd50ab6, type: 3}
+  uiIcon: {fileID: 21300000, guid: 1f39cb8341ceea848b21e517880dc4b3, type: 3}
+  uiIconColor: {r: 0.14117648, g: 0.14117648, b: 0.14117648, a: 1}

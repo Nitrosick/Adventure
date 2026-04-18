@@ -30,22 +30,18 @@ public class MapZoneManager : MonoBehaviour {
   }
 
   public static void UpdateAfterBattle(BattleResult? result) {
-    MapZone z = FindById(StateManager.currentPlayerZoneId);
-    if (result == null || z == null || result != BattleResult.Victory) return;
+    MapZone zone = FindById(StateManager.currentPlayerZoneId);
+    if (result == null || zone == null || result != BattleResult.Victory) return;
 
-    if (
-      z.events[0] == MapZoneType.Quest &&
-      z.QuestsList.Count > 0
-    ) {
-      Quest quest = z.QuestsList.FirstOrDefault(q => q.objectiveType == QuestObjective.Fight);
-      if (quest != null) {
-        QuestManager.CompleteQuest(quest);
-        z.QuestsList.Remove(quest);
-        if (z.QuestsList.Count == 0) z.RemoveEvent(MapZoneType.Quest);
-        return;
-      }
+    List<QuestInstance> quests = QuestManager.GetActiveQuests()
+      .Where(q => q.data.objectiveZoneId == zone.id && q.data.objectiveType == QuestObjective.Fight)
+      .ToList();
+
+    foreach (QuestInstance quest in quests) {
+      QuestManager.CompleteQuest(quest.data);
     }
-    z.RemoveEvent(MapZoneType.Battle);
+
+    zone.RemoveEvent(MapZoneType.Battle);
   }
 
   public static void GetStateData() {
@@ -86,29 +82,6 @@ public class MapZoneManager : MonoBehaviour {
       Destroy(loot.gameObject);
     }
 
-    // Zone quests
-    var activeQuestsZoneIds = QuestManager.questsList
-      .Where(q => q.state == QuestState.Accepted)
-      .Select(q => q.data.objectiveZoneId)
-      .ToHashSet();
-
-    var activeQuestsIds = QuestManager.questsList
-      .Where(q => activeQuestsZoneIds.Contains(q.data.objectiveZoneId))
-      .Select(q => q.data.id)
-      .ToHashSet();
-
-    foreach (MapZone zone in Zones.Where(z => activeQuestsZoneIds.Contains(z.id))) {
-      if (zone.events.Count == 0) zone.events.Add(MapZoneType.Quest);
-      else if (zone.events[0] != MapZoneType.Quest) zone.events.Insert(0, MapZoneType.Quest);
-
-      foreach (string id in activeQuestsIds) {
-        if (zone.QuestsList.Any(q => q.id == id)) continue;
-        zone.QuestsList.Add(Factory.CreateQuestById(id));
-      }
-
-      zone.SetActive();
-    }
-
     // Zone upgrades
     foreach (QuestInstance quest in QuestManager.questsList) {
       if (!QuestManager.IsQuestCompleted(quest.data.id)) continue;
@@ -132,9 +105,9 @@ public class MapZoneManager : MonoBehaviour {
 
       if (collecting.CollectedAt > 0) {
         zone.SwitchInteractiveObjects();
-        if (StateManager.globalTicks < collecting.CollectedAt + collecting.respawn) zone.SwitchIcon(false);
+        if (StateManager.globalTicks < collecting.CollectedAt + collecting.respawn) zone.SwitchIconMaterial(false);
       } else {
-        zone.SwitchIcon(true);
+        zone.SwitchIconMaterial(true);
       }
     }
   }

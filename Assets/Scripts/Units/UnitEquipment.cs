@@ -359,13 +359,8 @@ public class UnitEquipment : MonoBehaviour {
   }
 
   // Skills
-  public List<Skill> GetActiveSkills() {
-    return GetSkills(true);
-  }
-
-  public List<Skill> GetPassiveSkills() {
-    return GetSkills(false);
-  }
+  public List<Skill> GetActiveSkills() => GetSkills(true);
+  public List<Skill> GetPassiveSkills() => GetSkills(false);
 
   private List<Skill> GetSkills(bool active) {
     return new[] { primary, secondary, armor, additional }
@@ -403,14 +398,18 @@ public class UnitEquipment : MonoBehaviour {
   public void ApplyInstantEffects() {
     List<Skill> skills = GetPassiveSkills();
     if (skills.Count == 0) return;
+    string id = "";
 
     foreach (Skill skill in skills) {
       switch (skill.skillName) {
-        case "Inspiration":
-          Effect effect = Factory.CreateEffectById("e4");
-          if (effect != null) unit.Effects.ApplyEffect(effect);
-          break;
+        case "Inspiration": id = "e4"; break;
+        case "Night life": if (TimeController.Instance.IsNight()) id = "e10"; break;
+        case "Stealth": if (TimeController.Instance.IsNight()) id = "e11"; break;
       }
+
+      if (id == "") continue;
+      Effect effect = Factory.CreateEffectById(id);
+      if (effect != null) unit.Effects.ApplyEffect(effect);
     }
   }
 

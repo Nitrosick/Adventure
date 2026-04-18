@@ -38,7 +38,7 @@ public class MapZoneCollecting : MonoBehaviour {
     if (onetime) zone.RemoveEvent(MapZoneType.Collecting);
     else StateManager.zonesState[zone.id].collectedAt = CollectedAt;
 
-    zone.SwitchIcon(false);
+    zone.SwitchIconMaterial(false);
     zone.SwitchInteractiveObjects();
     transform.GetComponent<MapZoneEvent>().CheckEvents();
   }

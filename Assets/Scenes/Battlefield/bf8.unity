@@ -8370,6 +8370,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 6431064606005263924, guid: 81d51a4c88e5cd740b9ec5253fada8af, type: 3}
+    - {fileID: 8595190253182011039, guid: 81d51a4c88e5cd740b9ec5253fada8af, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 81d51a4c88e5cd740b9ec5253fada8af, type: 3}
@@ -15135,6 +15136,16 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1312849583}
     m_Modifications:
+    - target: {fileID: 2111259089462388811, guid: 86acd616019ae0e47af4537890858be4,
+        type: 3}
+      propertyPath: m_Range
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2111259089462388811, guid: 86acd616019ae0e47af4537890858be4,
+        type: 3}
+      propertyPath: m_Intensity
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 4858686448484079909, guid: 86acd616019ae0e47af4537890858be4,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -29576,6 +29587,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Torch 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7517750217533793189, guid: 01caf008c8d18f649a99117dc733d6f1,
+        type: 3}
+      propertyPath: m_Range
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7517750217533793189, guid: 01caf008c8d18f649a99117dc733d6f1,
+        type: 3}
+      propertyPath: m_Intensity
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8368173233444314805, guid: 01caf008c8d18f649a99117dc733d6f1,
         type: 3}
@@ -48143,6 +48164,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Torch 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7517750217533793189, guid: 01caf008c8d18f649a99117dc733d6f1,
+        type: 3}
+      propertyPath: m_Range
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7517750217533793189, guid: 01caf008c8d18f649a99117dc733d6f1,
+        type: 3}
+      propertyPath: m_Intensity
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

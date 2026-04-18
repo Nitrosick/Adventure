@@ -5,20 +5,48 @@ using UnityEngine;
 
 public class QuestManager : MonoBehaviour {
   public static List<QuestInstance> questsList = new ();
+  private static Quest currentQuest;
+  private static Player player;
 
   void Start() {
+    player = Player.Instance;
     GetStateData();
+    InitZoneMarks();
   }
 
   void OnDestroy() {
     questsList.Clear();
   }
 
+  private static async void InitZoneMarks() {
+    await Task.Yield();
+
+    foreach (QuestInstance q in GetActiveQuests()) {
+      MapZone zone = MapZoneManager.FindById(q.data.objectiveZoneId);
+      if (zone == null) continue;
+      // FIXME: Сделать проверку, что зона с восклицательным знаком
+      zone.SwitchIconMaterial(true);
+    }
+  }
+
   public static void AcceptQuest(Quest quest) {
     if (IsQuestActive(quest.id)) return;
     questsList.Add(new QuestInstance(quest, QuestState.Accepted));
-    MapZone zone = MapZoneManager.FindById(quest.objectiveZoneId);
-    if (zone != null) zone.ActivateQuest(quest);
+
+    MapZone zone = player.Move.CurrentZone;
+    zone.HideQuestionIcon();
+
+    MapZone objectiveZone = MapZoneManager.FindById(quest.objectiveZoneId);
+    // FIXME: Сделать проверку, что зона с восклицательным знаком
+    if (objectiveZone != null) objectiveZone.SwitchIconMaterial(true);
+
+    if (
+      quest.objectiveType == QuestObjective.Fight &&
+      !objectiveZone.events.Contains(MapZoneType.Battle)
+    ) {
+      objectiveZone.events.Add(MapZoneType.Battle);
+    }
+
     StateManager.WriteQuestsData(questsList.ToArray());
     _ = Toast.Show("success", "Quest accepted");
   }
@@ -28,15 +56,23 @@ public class QuestManager : MonoBehaviour {
     if (questIns == null || IsQuestCompleted(quest.id)) return;
     questIns.state = QuestState.Completed;
     GiveRewards(quest);
+
+    MapZone objectiveZone = MapZoneManager.FindById(quest.objectiveZoneId);
+    // FIXME: Сделать проверку, что зона с восклицательным знаком
+    if (objectiveZone != null) objectiveZone.SwitchIconMaterial(false);
+
     await Task.Yield();
     StateManager.WriteQuestsData(questsList.ToArray());
+    StateManager.SaveGame();
+
     QuestModalUI.Instance.ShowReward(questIns);
     _ = Toast.Show("success", "Quest completed");
   }
 
   private static void GiveRewards(Quest quest) {
-    Player.Instance.CollectReward(quest.reward);
+    player.CollectReward(quest.reward);
     if (quest.questZoneUpgrades == null) return;
+
     foreach (var upgrade in quest.questZoneUpgrades) {
       UpgradeZone(upgrade.zoneId, upgrade.feature);
     }
@@ -67,6 +103,10 @@ public class QuestManager : MonoBehaviour {
     return quest.state == QuestState.Completed;
   }
 
+  public static List<QuestInstance> GetActiveQuests() {
+    return questsList.Where(q => IsQuestActive(q.data.id)).ToList();
+  }
+
   public static string GetObjectiveItemsDescription(Quest quest) {
     List<string> strings = new() { };
     if (quest.objectiveEquipment.Length > 0) strings.Add(GetQuestItemsDescription(quest.objectiveEquipment));
@@ -88,6 +128,57 @@ public class QuestManager : MonoBehaviour {
       .GroupBy(i => i.id)
       .Select(g => new { Item = g.First(), Count = g.Count() });
     return string.Join(", ", grouped.Select(g => $"<b>{g.Item.itemName} x{g.Count}</b>"));
+  }
+
+  public static void CheckQuestsInZone(MapZone zone) {
+    List<QuestInstance> active = GetActiveQuests();
+    if (active.Count == 0) return;
+
+    foreach (QuestInstance q in active) {
+      if (q.data.objectiveZoneId != zone.id) continue;
+
+      switch (q.data.objectiveType) {
+        case QuestObjective.VisitZone:
+          CompleteQuest(q.data);
+          return;
+        case QuestObjective.BringItem:
+          bool check = true;
+          PlayerInventory inventory = player.Inventory;
+          Equipment[] equip = q.data.objectiveEquipment;
+          Item[] items = q.data.objectiveItems;
+
+          if (equip.Length > 0 && !inventory.HasItems(equip, true)) check = false;
+          if (items.Length > 0 && !inventory.HasItems(items)) check = false;
+          if (!check) return;
+          currentQuest = q.data;
+
+          Dialog.Instance.Confirmation(
+            HandInItems,
+            "Quest items",
+            $"Hand in {GetObjectiveItemsDescription(q.data)}?"
+          );
+          return;
+      }
+    }
+  }
+
+  private static void HandInItems(bool accepted) {
+    MapZone zone = player.Move.CurrentZone;
+    MapZoneEvent evt = zone.GetComponent<MapZoneEvent>();
+
+    if (!accepted) {
+      evt.CheckEvents(ignoreQuest: true);
+      currentQuest = null;
+      return;
+    }
+
+    PlayerInventory inventory = player.Inventory;
+    inventory.RemoveItems(currentQuest.objectiveEquipment);
+    inventory.RemoveItems(currentQuest.objectiveItems);
+
+    CompleteQuest(currentQuest);
+    currentQuest = null;
+    evt.CheckEvents();
   }
 
   private static void GetStateData() {

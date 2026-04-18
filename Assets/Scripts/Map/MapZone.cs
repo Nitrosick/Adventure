@@ -16,7 +16,6 @@ public class MapZone : MonoBehaviour {
   public List<MapZoneType> events = new();
   public LineRenderer[] pathlines;
   public GameObject[] interactiveObjects;
-  public List<Quest> QuestsList { get; set; } = new() { };
 
   private MeshRenderer markIcon;
   private Transform markQuestIcon;
@@ -112,13 +111,13 @@ public class MapZone : MonoBehaviour {
   }
 
   private void SetCleared() {
-    SwitchIcon(false);
+    SwitchIconMaterial(false);
     events.Clear();
     SwitchInteractiveObjects();
   }
 
   public void SetActive() {
-    SwitchIcon(true);
+    SwitchIconMaterial(true);
     SwitchInteractiveObjects();
   }
 
@@ -130,24 +129,21 @@ public class MapZone : MonoBehaviour {
     }
   }
 
-  public void SwitchIcon(bool on) {
+  public void SwitchIconMaterial(bool on) {
     if (markIcon == null) return;
     Material stone = GameManager.I.stoneMaterial;
     Material gold = GameManager.I.goldMaterial;
     markIcon.material = on ? gold : stone;
   }
 
-  public void SwitchQuestIcon() {
-    if (markIcon == null || markQuestIcon == null) return;
+  public void ShowQuestionIcon() {
+    if (markQuestIcon != null) markQuestIcon.gameObject.SetActive(true);
+    if (markIcon != null) markIcon.gameObject.SetActive(false);
+  }
 
-    if (markQuestIcon.gameObject.activeSelf) {
-      markQuestIcon.gameObject.SetActive(false);
-      markIcon.gameObject.SetActive(true);
-    }
-    else {
-      markQuestIcon.gameObject.SetActive(true);
-      markIcon.gameObject.SetActive(false);
-    }
+  public void HideQuestionIcon() {
+    if (markQuestIcon != null) markQuestIcon.gameObject.SetActive(false);
+    if (markIcon != null) markIcon.gameObject.SetActive(true);
   }
 
   public void Visit() {
@@ -235,12 +231,6 @@ public class MapZone : MonoBehaviour {
 
     color.a = linesTransparency;
     mat.color = color;
-  }
-
-  public void ActivateQuest(Quest quest) {
-    QuestsList.Insert(0, quest);
-    events.Insert(0, MapZoneType.Quest);
-    SetActive();
   }
 
   private void TriggerAchievement(string id, float value = 1f) {

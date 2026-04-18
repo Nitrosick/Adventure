@@ -249,11 +249,11 @@ public enum MapZoneType {
   Constructing,
   Recruitment,
   Ambush,
-  Quest,
+  Quest, // TODO: Удалить или заменить
   Collecting,
-  Task,
   Rest,
-  Excavation
+  Excavation,
+  Task
 }
 
 public enum MapZoneFeature {

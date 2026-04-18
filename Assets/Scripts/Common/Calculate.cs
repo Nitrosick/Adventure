@@ -18,6 +18,8 @@ public static class Calculate {
   public static float HitChance(Unit attacker, Unit target, bool charged = false) {
     if (target.Effects.HasAnyEffect(new string[] { "Block", "Wall", "Root", "Stun" })) return 100f;
 
+    bool night = TimeController.Instance.IsNight();
+
     float result = attacker.Equip.primary != null
       ? attacker.Equip.primary.precision
       : defaultPrecision;
@@ -49,13 +51,17 @@ public static class Calculate {
     if (attacker.Equip.primary != null && charged)
       result -= attacker.Equip.primary.chargedAttackParams.hitChancePenalty;
 
+    // Effects
     if (attacker.Type == UnitType.Range) {
-      // Effects
       if (target.Effects.HasEffect("Cover")) result /= 2;
-      // Night
-      if (TimeController.Instance.IsNight()) result -= 0.15f;
+      if (night) result -= 0.15f;
     } else {
-      if (TimeController.Instance.IsNight()) result -= 0.05f;
+      if (night) result -= 0.05f;
+    }
+
+    if (target.Effects.HasEffect("Stealth")) {
+      if (night) result -= 0.1f;
+      else result -= 0.05f;
     }
 
     // Failed attack stacks
@@ -77,6 +83,9 @@ public static class Calculate {
 
     // Player abilities
     if (attacker.IsHero) chance += AbilityController.CritChanceBonus();
+
+    // Effects
+    if (attacker.Effects.HasEffect("Night life")) chance += 10f;
 
     if (weapon != null) {
       // Skills
@@ -146,6 +155,7 @@ public static class Calculate {
     if (attacker.Effects.HasEffect("Curse")) {
       if (Randomiser.RollChance(50)) damage /= 2;
     }
+    if (attacker.Effects.HasEffect("Night life")) damage *= 1.1f;
 
     return damage < minDamage ? minDamage : damage;
   }
