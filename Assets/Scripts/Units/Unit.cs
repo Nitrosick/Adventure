@@ -128,7 +128,7 @@ public class Unit : MonoBehaviour {
     }
 
     // Supports
-    float supportBonus = SupportController.GetBonus("su6", relation: Relation, unit: this)[0];
+    float supportBonus = SupportController.GetBonus("su6", relation: Relation, targetUnit: this)[0];
     result += supportBonus;
 
     if (result < 1f) result = 1f;

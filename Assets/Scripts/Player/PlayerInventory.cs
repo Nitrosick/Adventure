@@ -211,6 +211,14 @@ public class PlayerInventory : MonoBehaviour {
     }
   }
 
+  public void RemoveItem(string id) {
+    Item itemToRemove = Items.FirstOrDefault(i => i.id == id);
+    if (itemToRemove != null) {
+      Items.Remove(itemToRemove);
+      UpdateState();
+    }
+  }
+
   public void RemoveItems(Equipment[] items) {
     foreach (Equipment item in items) RemoveItem(item);
   }
@@ -231,6 +239,10 @@ public class PlayerInventory : MonoBehaviour {
 
   public bool HasItem(Item item) {
     return Items.Any(i => i.id == item.id);
+  }
+
+  public bool HasItem(string id) {
+    return Items.Any(i => i.id == id);
   }
 
   public bool HasItems(Equipment[] items, bool onlyUnequipped = false) {

@@ -1,10 +1,10 @@
-public class Thief : MeleeUnit {
-  private Thief() {
+public class Robber : MeleeUnit {
+  private Robber() {
     Strength = 1;
     Dexterity = 4;
     Intelligence = 1;
 
-    Name = "Thief";
+    Name = "Robber";
     Description = "An elusive and fast melee unit. Excellent with a dagger and stealth skills. A very dangerous opponent, especially at night";
     PrefabId = "u13";
     Type = UnitType.Melee;

@@ -50,6 +50,13 @@ public class MapInput : MonoBehaviour {
             _ = loot.TakeLoot();
           }
           break;
+
+        case "LockedObject":
+          if (hit.collider.TryGetComponent<LockedObject>(out var locked)) {
+            if (locked.parentZone.id != player.Move.CurrentZone.id) return;
+            locked.Open();
+          }
+          break;
       }
     }
   }

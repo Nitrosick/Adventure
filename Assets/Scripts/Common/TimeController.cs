@@ -92,10 +92,10 @@ public class TimeController : MonoBehaviour {
   }
 
   private void UpdateEnviroment() {
-    if (currentTime == dayStart) {
+    if ((int)currentTime == dayStart) {
       LightSwitchOff();
       _ = Toast.Show("sun", "The day has come");
-    } else if (currentTime == nightStart) {
+    } else if ((int)currentTime == nightStart) {
       LightSwitchOn();
       _ = Toast.Show("moon", "Night had fallen");
     }

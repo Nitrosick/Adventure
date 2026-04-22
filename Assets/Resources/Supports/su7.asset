@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42d287dd47334944c9738a5d34676db1, type: 3}
+  m_Name: su7
+  m_EditorClassIdentifier: 
+  id: su7
+  unitName: Burglar
+  description: This unit is capable of picking various <b>locks</b> that secure houses,
+    cellars, and other objects. However, it will need <b>lock picks</b> for this.
+    The more complex the lock, the less chance there is of picking it without breaking
+    the pick.
+  icon: {fileID: 21300000, guid: 230d2c4042f94ab4e9f8ab7b98ef6f16, type: 3}
+  bonusType: 3
+  phase: 2
+  effectValues:
+  - values:
+    - 35
+  - values:
+    - 45
+  - values:
+    - 55
+  - values:
+    - 65
+  - values:
+    - 75
+  effectDescriptions:
+  - level: 0
+    description: Base lockpicking chance <b>35%</b>
+  - level: 1
+    description: Base lockpicking chance <b>45%</b>
+  - level: 2
+    description: Base lockpicking chance <b>55%</b>
+  - level: 3
+    description: Base lockpicking chance <b>65%</b>
+  - level: 4
+    description: Base lockpicking chance <b>75%</b>

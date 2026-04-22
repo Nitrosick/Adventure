@@ -59636,6 +59636,12 @@ MonoBehaviour:
   ways:
   - {fileID: 744252475}
   - {fileID: 1885679156}
+--- !u!1 &784836709 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7005262817379076202, guid: 4d3ea5a7387888f4ab8bdbddc4d7c314,
+    type: 3}
+  m_PrefabInstance: {fileID: 924446003}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &786840439
 GameObject:
   m_ObjectHideFlags: 0
@@ -68630,7 +68636,12 @@ PrefabInstance:
     - target: {fileID: 7005262817379076202, guid: 4d3ea5a7387888f4ab8bdbddc4d7c314,
         type: 3}
       propertyPath: m_Name
-      value: House
+      value: House (lock 1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7005262817379076202, guid: 4d3ea5a7387888f4ab8bdbddc4d7c314,
+        type: 3}
+      propertyPath: m_TagString
+      value: LockedObject
       objectReference: {fileID: 0}
     - target: {fileID: 7673115368810975952, guid: 4d3ea5a7387888f4ab8bdbddc4d7c314,
         type: 3}
@@ -68695,7 +68706,15 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7005262817379076202, guid: 4d3ea5a7387888f4ab8bdbddc4d7c314,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 924446009}
+    - targetCorrespondingSourceObject: {fileID: 7005262817379076202, guid: 4d3ea5a7387888f4ab8bdbddc4d7c314,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 924446008}
   m_SourcePrefab: {fileID: 100100000, guid: 4d3ea5a7387888f4ab8bdbddc4d7c314, type: 3}
 --- !u!4 &924446004 stripped
 Transform:
@@ -68703,6 +68722,49 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 924446003}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &924446008
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 784836709}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85ae1c4c3e52d3e4fb35cc8072e38c05, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  message: 
+--- !u!114 &924446009
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 784836709}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2502c9dea6dee8a45a5f8c1330981a62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: lo6/2
+  title: House
+  parentZone: {fileID: 936757340}
+  difficulty: 1
+  key: {fileID: 0}
+  catchChance: 5
+  reward:
+    experience: 0
+    fame: 0
+    reputation: 0
+    statPoints: 0
+    abilityPoints: 0
+    goldRange: 0000000000000000
+    resources: 00000000000000000000000000000000
+    equipment:
+    - {fileID: 11400000, guid: e47eee2911244504ba45c1ba92f949a2, type: 2}
+    items: []
+    projectiles: 0
 --- !u!1001 &926559932
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -122958,7 +123020,12 @@ PrefabInstance:
     - target: {fileID: 5994215143414172218, guid: 52907f2f15c5e8541a22511295bee1c8,
         type: 3}
       propertyPath: m_Name
-      value: House
+      value: House (lock 1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5994215143414172218, guid: 52907f2f15c5e8541a22511295bee1c8,
+        type: 3}
+      propertyPath: m_TagString
+      value: LockedObject
       objectReference: {fileID: 0}
     - target: {fileID: 6369332624318025856, guid: 52907f2f15c5e8541a22511295bee1c8,
         type: 3}
@@ -123023,7 +123090,15 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5994215143414172218, guid: 52907f2f15c5e8541a22511295bee1c8,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1650876845}
+    - targetCorrespondingSourceObject: {fileID: 5994215143414172218, guid: 52907f2f15c5e8541a22511295bee1c8,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1650876849}
   m_SourcePrefab: {fileID: 100100000, guid: 52907f2f15c5e8541a22511295bee1c8, type: 3}
 --- !u!4 &1650876843 stripped
 Transform:
@@ -123031,6 +123106,54 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1650876842}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1650876844 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5994215143414172218, guid: 52907f2f15c5e8541a22511295bee1c8,
+    type: 3}
+  m_PrefabInstance: {fileID: 1650876842}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1650876845
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1650876844}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2502c9dea6dee8a45a5f8c1330981a62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: lo6/1
+  title: House
+  parentZone: {fileID: 936757340}
+  difficulty: 1
+  key: {fileID: 0}
+  catchChance: 5
+  reward:
+    experience: 0
+    fame: 0
+    reputation: 0
+    statPoints: 0
+    abilityPoints: 0
+    goldRange: 0500000007000000
+    resources: 02000000000000000000000000000000
+    equipment: []
+    items: []
+    projectiles: 0
+--- !u!114 &1650876849
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1650876844}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85ae1c4c3e52d3e4fb35cc8072e38c05, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  message: 
 --- !u!1001 &1651649670
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -124402,7 +124525,7 @@ PrefabInstance:
     - target: {fileID: 7094559306257441450, guid: f140f632ef4528049be2a67789979001,
         type: 3}
       propertyPath: m_Name
-      value: House
+      value: Your house
       objectReference: {fileID: 0}
     - target: {fileID: 7583816260045699088, guid: f140f632ef4528049be2a67789979001,
         type: 3}
@@ -124468,7 +124591,11 @@ PrefabInstance:
     m_RemovedGameObjects:
     - {fileID: 2758586701799684395, guid: f140f632ef4528049be2a67789979001, type: 3}
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7094559306257441450, guid: f140f632ef4528049be2a67789979001,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1681274091}
   m_SourcePrefab: {fileID: 100100000, guid: f140f632ef4528049be2a67789979001, type: 3}
 --- !u!4 &1681274089 stripped
 Transform:
@@ -124476,6 +124603,25 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1681274088}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1681274090 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7094559306257441450, guid: f140f632ef4528049be2a67789979001,
+    type: 3}
+  m_PrefabInstance: {fileID: 1681274088}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1681274091
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1681274090}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85ae1c4c3e52d3e4fb35cc8072e38c05, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  message: Your home
 --- !u!1001 &1684497577
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -150289,14 +150435,14 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1681274089}
+  - {fileID: 1650876843}
+  - {fileID: 924446004}
   - {fileID: 1497224457}
   - {fileID: 1636964498}
   - {fileID: 816337952}
   - {fileID: 1210079326}
   - {fileID: 493137518}
-  - {fileID: 1650876843}
-  - {fileID: 924446004}
-  - {fileID: 1681274089}
   - {fileID: 994612918}
   - {fileID: 917270747}
   - {fileID: 1261636085}

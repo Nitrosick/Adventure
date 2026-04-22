@@ -68,6 +68,7 @@ public class PlayerArmy : MonoBehaviour {
         return;
       }
     }
+    // FIXME: Не обновляется состояние стейта
     UpdateState();
   }
 

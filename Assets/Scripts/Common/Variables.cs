@@ -183,7 +183,8 @@ public enum MasteryLevel {
 public enum SupportBonusType {
   Healing,
   Scouting,
-  Parameters
+  Parameters,
+  Unlocking
 }
 
 public enum SupportPhase {
@@ -269,6 +270,15 @@ public enum Building {
   Watchtower,
   Lumbercamp,
   StoneBridge
+}
+
+public enum LockDifficulty {
+  No,
+  Easy,
+  Medium,
+  Hard,
+  Professional,
+  Unlockable
 }
 
 // Quests and achievements

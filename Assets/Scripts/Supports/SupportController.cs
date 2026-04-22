@@ -71,7 +71,7 @@ public static class SupportController {
     string id,
     bool inBattle = true,
     UnitRelation relation = UnitRelation.Ally,
-    Unit unit = null
+    Unit targetUnit = null
   ) {
     SupportInstance sup = null;
 
@@ -89,9 +89,9 @@ public static class SupportController {
     int level = LevelIndex(sup);
     float[] values = sup.data.effectValues[level].values.ToArray();
 
-    if (unit != null) {
+    if (targetUnit != null) {
       if (id == "su6") {
-        if (level < 4 && !unit.IsHero) return new float[] { 0, values[1] };
+        if (level < 4 && !targetUnit.IsHero) return new float[] { 0, values[1] };
         return values;
       }
     }
@@ -99,7 +99,7 @@ public static class SupportController {
     return values;
   }
 
-  private static int LevelIndex(SupportInstance unit) {
+  public static int LevelIndex(SupportInstance unit) {
     MasteryLevel level = unit.level;
     return Array.IndexOf(Enum.GetValues(level.GetType()), level);
   }
