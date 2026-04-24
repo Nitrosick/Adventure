@@ -48,7 +48,7 @@ public class PlayerArmy : MonoBehaviour {
         unit.Equip.UnequipAll();
         Destroy(Units[i]);
         Units.RemoveAt(i);
-        return;
+        break;
       }
     }
 
@@ -65,10 +65,9 @@ public class PlayerArmy : MonoBehaviour {
     for (int i = 0; i < Supports.Count; i++) {
       if (Supports[i].data.id == id && Supports[i].level == level) {
         Supports.RemoveAt(i);
-        return;
+        break;
       }
     }
-    // FIXME: Не обновляется состояние стейта
     UpdateState();
   }
 

@@ -249,8 +249,8 @@ public enum MapZoneType {
   Battle,
   Constructing,
   Recruitment,
-  Ambush,
-  Quest, // TODO: Удалить или заменить
+  Ambush, // TODO: Заменить
+  Quest, // TODO: Заменить
   Collecting,
   Rest,
   Excavation,

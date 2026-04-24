@@ -20,7 +20,7 @@ public class MapZoneBuilding : MonoBehaviour {
   }
 
   public void Remove() {
-    if (building == Building.Watchtower) zone.RemoveEvent(MapZoneType.Ambush);
+    if (building == Building.Watchtower) zone.RemoveEvent(MapZoneType.Battle);
     zone.RemoveEvent(MapZoneType.Constructing);
     transform.GetComponent<MapZoneEvent>().CheckEvents();
   }

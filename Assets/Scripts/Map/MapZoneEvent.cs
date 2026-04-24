@@ -12,7 +12,8 @@ public class MapZoneEvent : MonoBehaviour {
   public void CheckEvents(
     bool ignoreBattle = false,
     bool forceAmbush = false,
-    bool ignoreQuest = false
+    bool ignoreQuest = false,
+    bool skipFirst = false
   ) {
     if (!ignoreQuest) QuestManager.CheckQuestsInZone(zone);
     MapUI.Instance.HideInteractableButton();
@@ -21,30 +22,32 @@ public class MapZoneEvent : MonoBehaviour {
     KnowledgeManager.UnlockArticle("aa4");
 
     T Get<T>() where T : Component => transform.GetComponent<T>();
-    MapZoneBattle battleZone = Get<MapZoneBattle>();
-    int eventIndex = 0;
 
-    if (zone.events[eventIndex] == MapZoneType.Ambush) {
-      eventIndex++;
-      if (!ignoreBattle) {
-        float chance = battleZone.ambushChance;
-        chance -= AbilityController.AmbushProtectBonus();
-        chance -= SupportController.GetBonus("su2", false)[0];
-        bool check = Randomiser.RollChance(chance);
-        if (check || forceAmbush) {
-          StartBattle(battleZone, true);
-          return;
-        }
-      }
-    }
-
-    if (eventIndex >= zone.events.Count) return;
-
-    switch (zone.events[eventIndex]) {
+    switch (zone.events[skipFirst ? 1 : 0]) {
       case MapZoneType.Battle:
         if (ignoreBattle) return;
-        if (battleZone.instant) StartBattle(battleZone);
-        else MapUI.Instance.ShowInteractableButton(battleZone.StartBattle, "battle", "Attack");
+        MapZoneBattle battle = Get<MapZoneBattle>();
+        if (battle == null) return;
+
+        if (battle.ambushChance > 0) {
+          float chance = battle.ambushChance;
+          chance -= AbilityController.AmbushProtectBonus();
+          chance -= SupportController.GetBonus("su2", false)[0];
+          bool check = Randomiser.RollChance(chance);
+
+          if (check || forceAmbush) {
+            StartBattle(battle, true);
+            return;
+          } else {
+            CheckEvents(
+              ignoreQuest: ignoreQuest,
+              skipFirst: true
+            );
+          }
+        } else {
+          if (battle.instant) StartBattle(battle);
+          else MapUI.Instance.ShowInteractableButton(battle.StartBattle, "battle", "Attack");
+        }
         break;
       case MapZoneType.Hub:
         MapUI.Instance.ShowInteractableButton(

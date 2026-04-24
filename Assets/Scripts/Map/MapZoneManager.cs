@@ -41,7 +41,7 @@ public class MapZoneManager : MonoBehaviour {
       QuestManager.CompleteQuest(quest.data);
     }
 
-    zone.RemoveEvent(MapZoneType.Battle);
+    if (!zone.HasAmbush()) zone.RemoveEvent(MapZoneType.Battle);
   }
 
   public static void GetStateData() {

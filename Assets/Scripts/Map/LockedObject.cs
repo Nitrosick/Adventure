@@ -17,6 +17,7 @@ public class LockedObject : MonoBehaviour {
   private bool opened;
 
   private readonly float[] breakingPenalty = { 0, 10, 20, 30, 50, 100 };
+  private readonly int repPenalty = -15;
 
   void Start() {
     player = Player.Instance;
@@ -83,8 +84,8 @@ public class LockedObject : MonoBehaviour {
 
     if (caught) {
       player.Army.DeleteSupport(burglar.data.id, burglar.level);
-      player.SetReputation(-15);
-      LogUI.Instance.Add("-15 Reputation");
+      player.SetReputation(repPenalty);
+      LogUI.Instance.Add($"{repPenalty} Reputation");
 
       _ = Toast.Show("warning", "You have been caught stealing");
       StateManager.SaveGame();

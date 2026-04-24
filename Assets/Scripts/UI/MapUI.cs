@@ -195,7 +195,7 @@ public class MapUI : GeneralUI {
       }
     }
 
-    if (zone.events.Contains(MapZoneType.Ambush)) {
+    if (zone.HasAmbush()) {
       if (zone.TryGetComponent<MapZoneBattle>(out var battle)) {
         ShowBattleDifficulty(battle.guard.Concat(battle.reinforcement).ToList());
       }

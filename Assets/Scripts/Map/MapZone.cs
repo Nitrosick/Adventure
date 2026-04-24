@@ -17,6 +17,7 @@ public class MapZone : MonoBehaviour {
   public LineRenderer[] pathlines;
   public GameObject[] interactiveObjects;
 
+  private MapZoneBattle battle;
   private MeshRenderer markIcon;
   private Transform markQuestIcon;
   private Way[] ways;
@@ -30,6 +31,7 @@ public class MapZone : MonoBehaviour {
   private readonly float maxDistance = 10f;
 
   void Awake() {
+    battle = transform.GetComponent<MapZoneBattle>();
     marker = transform.Find("Marker");
     markerRender = marker.GetComponent<SpriteRenderer>();
     Transform markIconObj = transform.Find("Mark");
@@ -56,7 +58,9 @@ public class MapZone : MonoBehaviour {
     Dictionary<string, MapZoneData> state = StateManager.zonesState;
 
     if (state.Count > 0 && state.ContainsKey(id)) {
-      if (state[id].events.Count > 0) events = state[id].events;
+      if (state[id].events.Count > 0) {
+        events = state[id].events;
+      }
       else SetCleared();
     }
   }
@@ -157,12 +161,15 @@ public class MapZone : MonoBehaviour {
     Dictionary<string, MapZoneData> state = StateManager.zonesState;
     if (!state.ContainsKey(id)) {
       ShowPathLines();
+      float ambushChance = 0;
+      if (battle != null) ambushChance = battle.ambushChance;
+
       state[id] = new MapZoneData {
         events = events,
-        visited = true
+        visited = true,
+        ambushChance = ambushChance
       };
-    }
-    else {
+    } else {
       state[id].visited = true;
     }
 
@@ -173,6 +180,11 @@ public class MapZone : MonoBehaviour {
 
     StateManager.currentPlayerZoneId = id;
     transform.GetComponent<MapZoneEvent>().CheckEvents();
+  }
+
+  public bool HasAmbush() {
+    if (battle != null) return battle.ambushChance > 0;
+    return false;
   }
 
   public void RemoveEvent(MapZoneType type) {
