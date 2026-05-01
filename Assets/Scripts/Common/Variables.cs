@@ -234,7 +234,8 @@ public enum Rarity {
 
 public enum ItemBonus {
   AdditionalProjectiles,
-  AdditionalGold
+  AdditionalGold,
+  Parameters
 }
 
 public enum BracingType {

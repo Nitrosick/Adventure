@@ -22,13 +22,17 @@ MonoBehaviour:
   slot: 3
   weight: 0
   rarity: 1
-  effect: {fileID: 0}
-  effectChance: 0
-  skill: {fileID: 0}
+  effects: []
+  skills: []
   icon: {fileID: 21300000, guid: 4cd50d8bbbd33f0409edd1819d3e76e3, type: 3}
+  animationSet: {fileID: 0}
+  bracingType: 0
+  bracingLocation: {x: 0, y: 0, z: 0}
+  bracingRotation: {x: 0, y: 0, z: 0}
   price: 80
   isNew: 0
   bonusValue: 15
+  onlyHero: 0
   bonusType: 0
   unitTypes: 01000000
-  allowedWeapons: 02000000
+  allowedWeapon: 02000000

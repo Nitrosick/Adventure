@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class Player : MonoBehaviour {
@@ -144,7 +145,7 @@ public class Player : MonoBehaviour {
   public void SetAbilityPoints(int value) {
     AbilityPoints += value;
     if (AbilityPoints < 0) AbilityPoints = 0;
-    StateManager.statPoints = AbilityPoints;
+    StateManager.abilityPoints = AbilityPoints;
   }
 
   public int[] GetTotalPeople() {
@@ -199,7 +200,7 @@ public class Player : MonoBehaviour {
     MapUI.Instance.HideStatus("canRest");
   }
 
-  private void GetStateData() {
+  private async void GetStateData() {
     // TODO: Перенос данных между локациями
     AbilityController.Init();
     AchievementManager.Init();
@@ -223,40 +224,42 @@ public class Player : MonoBehaviour {
     MapUI.Instance.UpdateResources();
     MapUI.Instance.UpdateLocation(StateManager.currentScene);
 
-    if (Move.CurrentZone.TryGetComponent<MapZoneBattle>(out var battleZone)) {
-      BattleResult? result = StateManager.battleResult;
+    BattleResult? result = StateManager.battleResult;
 
-      if (result != null) {
-        MapZoneManager.UpdateAfterBattle(result);
-        Reward fixedReward = battleZone.fixedReward;
-
-        switch (result) {
-          case BattleResult.Victory:
-            WinStreakUp();
-            Reward reward = StateManager.battleReward;
-            if (reward != null) {
-              reward.Add(fixedReward);
-              battleZone.fixedReward = new Reward();
-              CollectReward(reward);
-            }
-            break;
-          case BattleResult.Defeat:
-          case BattleResult.Retreat:
-            ResetWinStreak();
-            Move.SetPlayerPosition(Move.startZone);
-            SetFame(fixedReward.fame / 2 * -1);
-            break;
-        }
-
-        Effects.RemoveBuff("b1");
-        CheckVillagersOverwhelmed();
-
-        StateManager.globalTicks++;
-        StateManager.SaveGame();
-      }
+    if (result == null) {
+      MapZoneEvent events = Move.CurrentZone.GetComponent<MapZoneEvent>();
+      events.CheckEvents(ignoreBattle: true);
+      return;
     }
 
-    MapZoneEvent events = Move.CurrentZone.GetComponent<MapZoneEvent>();
-    events.CheckEvents(true);
+    if (Move.CurrentZone.TryGetComponent<MapZoneBattle>(out var battleZone)) {
+      MapZoneManager.UpdateAfterBattle(result);
+      Reward fixedReward = battleZone.fixedReward;
+
+      switch (result) {
+        case BattleResult.Victory:
+          WinStreakUp();
+          Reward reward = StateManager.battleReward;
+          if (reward != null) {
+            reward.Add(fixedReward);
+            battleZone.fixedReward = new Reward();
+            CollectReward(reward);
+          }
+          break;
+        case BattleResult.Defeat:
+        case BattleResult.Retreat:
+          ResetWinStreak();
+          Move.SetPlayerPosition(Move.startZone);
+          SetFame(fixedReward.fame / 2 * -1);
+          break;
+      }
+
+      Effects.RemoveBuff("b1");
+      CheckVillagersOverwhelmed();
+
+      StateManager.globalTicks++;
+      await Task.Yield();
+      StateManager.SaveGame();
+    }
   }
 }

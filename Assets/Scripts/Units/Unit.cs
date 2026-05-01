@@ -181,14 +181,27 @@ public class Unit : MonoBehaviour {
   }
 
   public float GetPriority() {
-    float result = Priority;
-    if (IsHero) result += AbilityController.AttackPriorityBonus();
     // TODO: Проверка на разные защитные эффекты и условия окружения
     if (Type == UnitType.Range && CurrentProjectiles == 0) return 0;
-    if (Effects.HasEffect("Cover")) result -= 2;
+
+    float result = Priority;
+
+    // Items
+    if (Equip.additional != null) {
+      if (Equip.additional.id == "ai4") result += Equip.additional.bonusValue;
+    }
+
+    // Abilities
+    if (IsHero) result += AbilityController.AttackPriorityBonus();
+
+    // Health
     if (CurrentHealth < Health.GetMaxHP() / 3) result *= 2;
     else if (CurrentHealth < Health.GetMaxHP() / 2) result *= 1.5f;
+
+    // Effects
+    if (Effects.HasEffect("Cover")) result -= 2;
     if (Effects.HasAnyEffect(new string[] { "Block", "Stun" })) result /= 3;
+
     return result;
   }
 

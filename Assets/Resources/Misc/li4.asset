@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 427374d9cb9685e48b0235976d654871, type: 3}
+  m_Name: li4
+  m_EditorClassIdentifier: 
+  id: li4
+  itemName: 'Book: Materials for bows'
+  description: The book describes the features of bow making, suitable materials,
+    and nuances of their use. It increases the <b>level</b> of all units in the player's
+    squad that use a bow as their main weapon, but not above a certain limit.
+  usable: 1
+  disposable: 1
+  rarity: 0
+  icon: {fileID: 21300000, guid: 898f7404ad0f77f4c885ad76450e321a, type: 3}
+  price: 100
+  isNew: 0
+  effectValue: 1
+  maxLevel: 5
+  allowedUnitTypes: 01000000
+  allowedEquipment: 03000000

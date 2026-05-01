@@ -9,6 +9,7 @@ public class LockedObject : MonoBehaviour {
   public Item key;
   public float catchChance;
   public Reward reward;
+  public GameObject[] interactiveObjects = {};
 
   private Player player;
   private SupportInstance burglar;
@@ -27,8 +28,12 @@ public class LockedObject : MonoBehaviour {
       Debug.LogError("Locked object components initialization error");
     }
 
-    tooltip.message = $"<b>{title}</b>\n{difficulty} lock";
+    tooltip.message = difficulty == LockDifficulty.Unlockable
+      ? $"<b>{title}</b>\nNeed a key"
+      : $"<b>{title}</b>\n{difficulty} lock";
+
     opened = StateManager.openedLocks.Contains(id);
+    if (opened) SwitchObjects();
   }
 
   public void Open() {
@@ -36,7 +41,10 @@ public class LockedObject : MonoBehaviour {
 
     if (key != null) {
       if (player.Inventory.HasItem(key)) {
+        player.Inventory.RemoveItem(key);
+        SwitchObjects();
         GetReward();
+        return;
       } else if (difficulty == LockDifficulty.Unlockable) {
         _ = Toast.Show("warning", "The lock is too complex, you need a key");
         return;
@@ -56,12 +64,10 @@ public class LockedObject : MonoBehaviour {
       return;
     }
 
-    bool isDay = TimeController.Instance.IsDay();
     breakingChance = SupportController.GetBonus("su7", false)[0];
     breakingChance -= breakingPenalty[(int)difficulty];
-    if (isDay) breakingChance /= 2;
 
-    string timeWarning = isDay ? "Breaking locks during the day is quite dangerous\n" : "";
+    string timeWarning = TimeController.Instance.IsDay() ? "Breaking locks during the day is quite dangerous\n" : "";
     string chanceWarning = breakingChance < 25 ? "This lock is too complex, the chance of picking it is very small\n" : "";
     string catchWarning = catchChance > 10 ? "In this place, you can easily be seen by people\n" : "";
 
@@ -78,7 +84,7 @@ public class LockedObject : MonoBehaviour {
 
     bool caught = Randomiser.RollChance(
       TimeController.Instance.IsDay()
-        ? catchChance * 2
+        ? catchChance * 4
         : catchChance
     );
 
@@ -95,10 +101,17 @@ public class LockedObject : MonoBehaviour {
     bool success = Randomiser.RollChance(breakingChance);
 
     if (success) {
+      SwitchObjects();
       GetReward();
     } else {
       player.Inventory.RemoveItem("t5");
       _ = Toast.Show("warning", "The lockpick is broken");
+    }
+  }
+
+  private void SwitchObjects() {
+    foreach (GameObject obj in interactiveObjects) {
+      obj.SetActive(!obj.activeSelf);
     }
   }
 
