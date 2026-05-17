@@ -147,29 +147,54 @@ public class HubMenuUI : MonoBehaviour {
     switch (feature) {
       case MapZoneFeature.Healing:
         healingSection.gameObject.SetActive(true);
-        healingSection.Init(mapZone.healerName, mapZone.healerLevel);
+        healingSection.Init(
+          mapZone.healerName,
+          mapZone.healerLevel,
+          mapZone.commonAvatar
+        );
         break;
       case MapZoneFeature.Training:
         trainingSection.gameObject.SetActive(true);
+
+        List<TrainingChain> soldierTrainingChains = mapZone.soldierTrainingChains.ToList();
+        List<TrainingChain> supportTrainingChains = mapZone.supportTrainingChains.ToList();
+
+        if (mapZone.Upgrades.Contains(MapZoneFeature.Training)) {
+          soldierTrainingChains.AddRange(mapZone.additionalSoldierTrainingChains);
+          supportTrainingChains.AddRange(mapZone.additionalSupportTrainingChains);
+        }          
+
         trainingSection.Init(
           mapZone.trainerName,
           mapZone.trainerLevel,
-          mapZone.soldierTrainingChains,
-          mapZone.supportTrainingChains
+          soldierTrainingChains,
+          supportTrainingChains,
+          mapZone.commonAvatar
         );
         break;
       case MapZoneFeature.Trading:
         tradingSection.gameObject.SetActive(true);
+
+        List<Equipment> equipmentGoods = mapZone.equipmentGoods.ToList();
+        List<Item> itemGoods = mapZone.itemGoods.ToList();
+
+        if (mapZone.Upgrades.Contains(MapZoneFeature.Trading)) {
+          equipmentGoods.AddRange(mapZone.additionalEquipmentGoods);
+          itemGoods.AddRange(mapZone.additionalItemGoods);
+        }          
+
         tradingSection.Init(
           mapZone.merchantName,
           mapZone.merchantLevel,
           mapZone.resourcesSale,
-          mapZone.equipmentGoods,
-          mapZone.itemGoods
+          equipmentGoods,
+          itemGoods,
+          mapZone.commonAvatar
         );
         break;
       case MapZoneFeature.Weaponsmith:
         craftingSection.gameObject.SetActive(true);
+
         List<CraftingRecipe> weaponRecipes = mapZone.weaponsmithRecipes.ToList();
         if (mapZone.Upgrades.Contains(MapZoneFeature.Weaponsmith))
           weaponRecipes.AddRange(mapZone.weaponsmithAdditionalRecipes);
@@ -178,11 +203,13 @@ public class HubMenuUI : MonoBehaviour {
           mapZone.weaponsmithName,
           mapZone.weaponsmithLevel,
           feature,
-          weaponRecipes
+          weaponRecipes,
+          mapZone.commonAvatar
         );
         break;
       case MapZoneFeature.Armorer:
         craftingSection.gameObject.SetActive(true);
+
         List<CraftingRecipe> armorRecipes = mapZone.armorerRecipes.ToList();
         if (mapZone.Upgrades.Contains(MapZoneFeature.Armorer))
           armorRecipes.AddRange(mapZone.armorerAdditionalRecipes);
@@ -191,7 +218,8 @@ public class HubMenuUI : MonoBehaviour {
           mapZone.armorerName,
           mapZone.armorerLevel,
           feature,
-          armorRecipes
+          armorRecipes,
+          mapZone.commonAvatar
         );
         break;
       case MapZoneFeature.Quests:
@@ -199,7 +227,8 @@ public class HubMenuUI : MonoBehaviour {
         questsSection.Init(
           mapZone.elderName,
           mapZone.elderLevel,
-          mapZone.quests
+          mapZone.quests,
+          mapZone.commonAvatar
         );
         break;
     }

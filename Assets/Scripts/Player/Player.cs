@@ -158,6 +158,7 @@ public class Player : MonoBehaviour {
     SetReputation(reward.reputation);
     SetStatPoints(reward.statPoints);
     SetAbilityPoints(reward.abilityPoints);
+    SetVillagers(reward.villagers);
 
     int goldValue = Randomiser.GetRandomInRange(reward.goldRange[0], reward.goldRange[1]);
     SetGold(goldValue);

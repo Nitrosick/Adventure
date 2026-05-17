@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class HubMenuFeature : MonoBehaviour {
+  protected Image avatar;
   private TextMeshProUGUI title;
   private TextMeshProUGUI level;
   private Image avatarBackground;
@@ -16,6 +17,7 @@ public class HubMenuFeature : MonoBehaviour {
   private readonly float slotsGap = 4f;
 
   protected virtual void Awake() {
+    avatar = transform.Find("Head/Avatar/Image").GetComponent<Image>();
     title = transform.Find("Head/Data/Name").GetComponent<TextMeshProUGUI>();
     level = transform.Find("Head/Data/Level").GetComponent<TextMeshProUGUI>();
     avatarBackground = transform.Find("Head/Avatar/Background").GetComponent<Image>();
@@ -30,7 +32,7 @@ public class HubMenuFeature : MonoBehaviour {
 
   private bool ComponentsInitialized() {
     return new object[] {
-      title, level, avatarBackground
+      title, level, avatarBackground, avatar
     }.All(x => x != null);
   }
 

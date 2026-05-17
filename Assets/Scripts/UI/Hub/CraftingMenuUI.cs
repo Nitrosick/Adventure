@@ -7,8 +7,6 @@ public class CraftingMenuUI : HubMenuFeature {
   public Sprite weaponsmithAvatar;
   public Sprite armorerAvatar;
   public GameObject recipePrefab;
-
-  private Image masterIcon;
   private GameObject weaponsmithDesc;
   private GameObject armorerDesc;
   private Transform recipesPanel;
@@ -20,7 +18,6 @@ public class CraftingMenuUI : HubMenuFeature {
 
     T Get<T>(string path) where T : Component => transform.Find(path).GetComponent<T>();
 
-    masterIcon = Get<Image>("Head/Avatar/Image");
     weaponsmithDesc = transform.Find("WeaponsmithDesc").gameObject;
     armorerDesc = transform.Find("ArmorerDesc").gameObject;
     recipesPanel = Get<Transform>("Recipes");
@@ -35,20 +32,26 @@ public class CraftingMenuUI : HubMenuFeature {
 
   private bool ComponentsInitialized() {
     return new object[] {
-      masterIcon, weaponsmithDesc, armorerDesc, recipesPanel
+      weaponsmithDesc, armorerDesc, recipesPanel
     }.All(x => x != null);
   }
 
-  public void Init(string name, MasteryLevel lvl, MapZoneFeature type, List<CraftingRecipe> recipes) {
+  public void Init(
+    string name,
+    MasteryLevel lvl,
+    MapZoneFeature type,
+    List<CraftingRecipe> recipes,
+    Sprite customAvatar = null
+  ) {
     InitHeader(name, lvl);
 
     switch (type) {
       case MapZoneFeature.Weaponsmith:
-        masterIcon.sprite = weaponsmithAvatar;
+        avatar.sprite = customAvatar == null ? weaponsmithAvatar : customAvatar;
         weaponsmithDesc.SetActive(true);
         break;
       case MapZoneFeature.Armorer:
-        masterIcon.sprite = armorerAvatar;
+        avatar.sprite = customAvatar == null ? armorerAvatar : customAvatar;
         armorerDesc.SetActive(true);
         break;
     }
@@ -69,7 +72,7 @@ public class CraftingMenuUI : HubMenuFeature {
     if (!ComponentsInitialized()) return;
     weaponsmithDesc.SetActive(false);
     armorerDesc.SetActive(false);
-    masterIcon.sprite = null;
+    avatar.sprite = null;
     ClearSlots(recipesPanel);
   }
 }

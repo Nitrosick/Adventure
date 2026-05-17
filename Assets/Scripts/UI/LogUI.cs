@@ -24,6 +24,7 @@ public class LogUI : MonoBehaviour {
     if (reward.reputation < 0) Add($"<color=#F61010>{reward.reputation} Reputation</color>");
     if (reward.statPoints > 0) Add($"<color=#EFBF0D>+{reward.statPoints} Stat points</color>");
     if (reward.abilityPoints > 0) Add($"<color=#EFBF0D>+{reward.abilityPoints} Ability points</color>");
+    if (reward.villagers > 0) Add($"<color=#EFBF0D>+{reward.villagers} Villagers</color>");
     if (reward.projectiles > 0) Add($"+{reward.projectiles} Projectiles");
 
     for (int i = 0; i < reward.resources.Length; i++) {

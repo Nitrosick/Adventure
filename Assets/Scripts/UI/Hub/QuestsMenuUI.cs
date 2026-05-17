@@ -1,8 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class QuestsMenuUI : HubMenuFeature {
+  public Sprite unitAvatar;
   private Transform questsList;
   private GameObject emptyText;
   private List<QuestInstance> quests;
@@ -25,7 +27,12 @@ public class QuestsMenuUI : HubMenuFeature {
     }.All(x => x != null);
   }
 
-  public void Init(string name, MasteryLevel lvl, Quest[] _quests) {
+  public void Init(
+    string name,
+    MasteryLevel lvl,
+    Quest[] _quests,
+    Sprite customAvatar = null
+  ) {
     InitHeader(name, lvl);
     List<QuestInstance> questsList = new();
 
@@ -34,6 +41,7 @@ public class QuestsMenuUI : HubMenuFeature {
       questsList.Add(new QuestInstance(q, QuestState.Inactive));
     }
 
+    avatar.sprite = customAvatar == null ? unitAvatar : customAvatar;
     quests = questsList;
     UpdateQuestsData();
   }

@@ -1,8 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TrainingMenuUI : HubMenuFeature {
+  public Sprite unitAvatar;
   public GameObject chainPrefab;
   private Transform soldiersPanel;
   private Transform supportsPanel;
@@ -30,13 +32,20 @@ public class TrainingMenuUI : HubMenuFeature {
     }.All(x => x != null);
   }
 
-  public void Init(string name, MasteryLevel lvl, TrainingChain[] soldiers, TrainingChain[] supports) {
+  public void Init(
+    string name,
+    MasteryLevel lvl,
+    List<TrainingChain> soldiers,
+    List<TrainingChain> supports,
+    Sprite customAvatar = null
+  ) {
+    avatar.sprite = customAvatar == null ? unitAvatar : customAvatar;
     InitHeader(name, lvl);
     RenderChains(soldiers, soldiersPanel);
     RenderChains(supports, supportsPanel);
   }
 
-  private void RenderChains(TrainingChain[] chains, Transform panel) {
+  private void RenderChains(List<TrainingChain> chains, Transform panel) {
     foreach (TrainingChain chain in chains) {
       GameObject obj = Instantiate(chainPrefab, panel);
       obj.GetComponent<TrainingChainUI>().Init(chain);

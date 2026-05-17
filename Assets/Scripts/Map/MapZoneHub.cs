@@ -6,6 +6,7 @@ public class MapZoneHub : MonoBehaviour {
   public bool isHome;
   public MapZoneFeature[] features;
   public List<MapZoneFeature> Upgrades { get; set; } = new() { };
+  public Sprite commonAvatar;
 
   [Header("Healing")]
   public string healerName;
@@ -15,14 +16,18 @@ public class MapZoneHub : MonoBehaviour {
   public string trainerName;
   public MasteryLevel trainerLevel;
   public TrainingChain[] soldierTrainingChains;
+  public TrainingChain[] additionalSoldierTrainingChains;
   public TrainingChain[] supportTrainingChains;
+  public TrainingChain[] additionalSupportTrainingChains;
 
   [Header("Trading")]
   public string merchantName;
   public MasteryLevel merchantLevel;
   public bool resourcesSale;
   public Equipment[] equipmentGoods;
+  public Equipment[] additionalEquipmentGoods;
   public Item[] itemGoods;
+  public Item[] additionalItemGoods;
 
   [Header("Weaponsmith")]
   public string weaponsmithName;

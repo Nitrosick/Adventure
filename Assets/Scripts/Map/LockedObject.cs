@@ -4,6 +4,7 @@ using UnityEngine;
 public class LockedObject : MonoBehaviour {
   public string id;
   public string title;
+  public string altText;
   public MapZone parentZone;
   public LockDifficulty difficulty;
   public Item key;
@@ -120,7 +121,8 @@ public class LockedObject : MonoBehaviour {
     burglar = null;
 
     player.CollectReward(reward);
-    _ = Toast.Show("success", "The lock has been successfully opened");
+    string text = altText ?? "The lock has been successfully opened";
+    _ = Toast.Show("success", text);
     StateManager.openedLocks.Add(id);
     SetOpened();
   }

@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class HealingMenuUI : HubMenuFeature {
+  public Sprite unitAvatar;
   private TextMeshProUGUI intensity;
   private TextMeshProUGUI reanimationChance;
   private TextMeshProUGUI healCost;
@@ -83,7 +84,11 @@ public class HealingMenuUI : HubMenuFeature {
     reanimationChances[MasteryLevel.Master] = 100;
   }
 
-  public void Init(string name, MasteryLevel lvl) {
+  public void Init(
+    string name,
+    MasteryLevel lvl,
+    Sprite customAvatar = null
+  ) {
     InitHeader(name, lvl);
 
     int[] intensityValues = healValues[lvl];
@@ -94,6 +99,7 @@ public class HealingMenuUI : HubMenuFeature {
     );
 
     reanimationChance.text = "Reanimation chance: " + reanimationChances[lvl] + "%";
+    avatar.sprite = customAvatar == null ? unitAvatar : customAvatar;
 
     UpdateSlotsSize(woundedSlots);
     UpdateSlotsSize(deadSlots);
