@@ -12,20 +12,20 @@ public class MapZoneEvent : MonoBehaviour {
   public void CheckEvents(
     bool ignoreBattle = false,
     bool forceAmbush = false,
-    bool ignoreQuest = false,
-    bool skipFirst = false
+    bool ignoreQuest = false
   ) {
     if (!ignoreQuest) QuestManager.CheckQuestsInZone(zone);
     MapUI.Instance.HideInteractableButton();
     if (zone == null || zone.events.Count < 1) return;
-
     KnowledgeManager.UnlockArticle("aa4");
+
+    int order = 0;
+    if (ignoreBattle && zone.events[0] == MapZoneType.Battle) order++;
 
     T Get<T>() where T : Component => transform.GetComponent<T>();
 
-    switch (zone.events[skipFirst ? 1 : 0]) {
+    switch (zone.events[order]) {
       case MapZoneType.Battle:
-        if (ignoreBattle) return;
         MapZoneBattle battle = Get<MapZoneBattle>();
         if (battle == null) return;
 
@@ -35,15 +35,8 @@ public class MapZoneEvent : MonoBehaviour {
           chance -= SupportController.GetBonus("su2", false)[0];
           bool check = Randomiser.RollChance(chance);
 
-          if (check || forceAmbush) {
-            StartBattle(battle, true);
-            return;
-          } else {
-            CheckEvents(
-              ignoreQuest: ignoreQuest,
-              skipFirst: true
-            );
-          }
+          if (check || forceAmbush) StartBattle(battle, true);
+          else CheckEvents(ignoreQuest: ignoreQuest);
         } else {
           if (battle.instant) StartBattle(battle);
           else MapUI.Instance.ShowInteractableButton(battle.StartBattle, "battle", "Attack");

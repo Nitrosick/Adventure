@@ -226,10 +226,10 @@ public class Player : MonoBehaviour {
     MapUI.Instance.UpdateLocation(StateManager.currentScene);
 
     BattleResult? result = StateManager.battleResult;
+    MapZoneEvent events = Move.CurrentZone.GetComponent<MapZoneEvent>();
 
     if (result == null) {
-      MapZoneEvent events = Move.CurrentZone.GetComponent<MapZoneEvent>();
-      events.CheckEvents(ignoreBattle: true);
+      events.CheckEvents();
       return;
     }
 
@@ -261,6 +261,7 @@ public class Player : MonoBehaviour {
       StateManager.globalTicks++;
       await Task.Yield();
       StateManager.SaveGame();
+      events.CheckEvents(ignoreBattle: true);
     }
   }
 }
