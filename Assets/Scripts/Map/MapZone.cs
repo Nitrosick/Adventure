@@ -134,7 +134,7 @@ public class MapZone : MonoBehaviour {
   }
 
   public void SwitchIconMaterial(bool on) {
-    if (markIcon == null) return;
+    if (markIcon == null || events.Contains(MapZoneType.Hub)) return;
     Material stone = GameManager.I.stoneMaterial;
     Material gold = GameManager.I.goldMaterial;
     markIcon.material = on ? gold : stone;
