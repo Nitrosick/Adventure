@@ -6,32 +6,34 @@ public class Tool : Item {
     MapZone zone = Player.Instance.Move.CurrentZone;
     if (zone == null) return;
 
-    switch (id) {
-      case "t1":
-        // Кирка
-        Fail();
-        break;
-      case "t2":
-        if (
-          zone.events.Count > 0 &&
-          zone.events[0] == MapZoneType.Excavation &&
-          zone.TryGetComponent<MapZoneExcavation>(out var excavation)
-        ) {
+    if (
+      zone.events.Count > 0 &&
+      zone.events[0] == MapZoneType.Excavation &&
+      zone.TryGetComponent<MapZoneExcavation>(out var excavation)
+    ) {
+      // TODO: Можно сделать fade
+      switch (id) {
+        case "t1": // Pickaxe
+          foreach (BlockedPath path in excavation.unlockPathes) path.Unlock();
+          zone.RemoveEvent(MapZoneType.Excavation);
+          _ = Toast.Show("success", "The blockage has been cleared");
+          break;
+        case "t2": // Shovel
           Player.Instance.CollectReward(excavation.reward);
           zone.RemoveEvent(MapZoneType.Excavation);
           _ = Toast.Show("success", "You've unearthed a treasure");
-        }
-        else {
+          break;
+        case "t3": // Sledgehammer
+
           Fail();
-        }
-        break;
-      case "t3":
-        // Кувалда
-        Fail();
-        break;
-      default:
-        Fail();
-        break;
+          break;
+        default:
+          Fail();
+          break;
+      }
+    }
+    else {
+      Fail();
     }
   }
 
