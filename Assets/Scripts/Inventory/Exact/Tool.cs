@@ -15,6 +15,12 @@ public class Tool : Item {
       switch (id) {
         case "t1": // Pickaxe
           foreach (BlockedPath path in excavation.unlockPathes) path.Unlock();
+
+          foreach (MapZone z in excavation.relyZones) {
+            z.AddToState();
+            z.RemoveEvent(MapZoneType.Excavation);
+          }
+
           zone.RemoveEvent(MapZoneType.Excavation);
           _ = Toast.Show("success", "The blockage has been cleared");
           break;

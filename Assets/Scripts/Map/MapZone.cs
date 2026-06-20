@@ -158,20 +158,7 @@ public class MapZone : MonoBehaviour {
       UnhoverMarker();
     }
 
-    Dictionary<string, MapZoneData> state = StateManager.zonesState;
-    if (!state.ContainsKey(id)) {
-      ShowPathLines();
-      float ambushChance = 0;
-      if (battle != null) ambushChance = battle.ambushChance;
-
-      state[id] = new MapZoneData {
-        events = events,
-        visited = true,
-        ambushChance = ambushChance
-      };
-    } else {
-      state[id].visited = true;
-    }
+    AddToState();
 
     if (events.Count > 0 && events[0] == MapZoneType.Hub) {
       StateManager.startPlayerZoneId = id;
@@ -247,5 +234,23 @@ public class MapZone : MonoBehaviour {
 
   private void TriggerAchievement(string id, float value = 1f) {
     AchievementManager.UpdateAchievement(id, value, false);
+  }
+
+  public void AddToState() {
+    Dictionary<string, MapZoneData> state = StateManager.zonesState;
+
+    if (!state.ContainsKey(id)) {
+      ShowPathLines();
+      float ambushChance = 0;
+      if (battle != null) ambushChance = battle.ambushChance;
+
+      state[id] = new MapZoneData {
+        events = events,
+        visited = true,
+        ambushChance = ambushChance
+      };
+    } else {
+      state[id].visited = true;
+    }
   }
 }
