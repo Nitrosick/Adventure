@@ -15,6 +15,7 @@ public class Tool : Item {
       switch (id) {
         case "t1": // Pickaxe
           foreach (BlockedPath path in excavation.unlockPathes) path.Unlock();
+          Player.Instance.CollectReward(excavation.reward);
 
           foreach (MapZone z in excavation.relyZones) {
             z.AddToState();

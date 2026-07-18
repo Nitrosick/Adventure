@@ -24,12 +24,12 @@ public class PauseMenu : MonoBehaviour {
     Transform mainMenuButtonObj = panel.Find("Buttons/MainMenu");
     if (mainMenuButtonObj != null) {
       mainMenuButton = mainMenuButtonObj.GetComponent<Button>();
-      mainMenuButton.onClick.AddListener(ToMainMenu);
+      mainMenuButton.onClick.AddListener(ToMainMenuConfirmation);
     }
     Transform exitGameObj = panel.Find("Buttons/Exit");
     if (exitGameObj != null) {
       exitGame = exitGameObj.GetComponent<Button>();
-      exitGame.onClick.AddListener(ExitGame);
+      exitGame.onClick.AddListener(ExitConfirmation);
     }
     Transform retreatButtonObj = panel.Find("Buttons/Retreat");
     if (retreatButtonObj != null) {
@@ -42,8 +42,8 @@ public class PauseMenu : MonoBehaviour {
   }
 
   void OnDestroy() {
-    if (mainMenuButton != null) mainMenuButton.onClick.RemoveListener(ToMainMenu);
-    if (exitGame != null) exitGame.onClick.RemoveListener(ExitGame);
+    if (mainMenuButton != null) mainMenuButton.onClick.RemoveListener(ToMainMenuConfirmation);
+    if (exitGame != null) exitGame.onClick.RemoveListener(ExitConfirmation);
     if (retreatButton != null) retreatButton.onClick.RemoveListener(RetreatConfirmation);
     continueGame.onClick.RemoveListener(Close);
     // optionsButton.onClick.RemoveListener(() => {});
@@ -61,16 +61,38 @@ public class PauseMenu : MonoBehaviour {
     SceneController.CloseWindow("pause");
   }
 
-  private static void ToMainMenu() {
+  private static void ToMainMenuConfirmation() {
+    string text = ExitText();
+
+    Dialog.Instance.Confirmation(
+      ToMainMenu,
+      "Exit the game",
+      text
+    );
+  }
+
+  private static void ToMainMenu(bool accepted) {
+    if (!accepted) return;
     panel.gameObject.SetActive(false);
     SceneController.SwitchScene("Scenes/Menu");
   }
 
-  private static void ExitGame() {
+  private static void ExitConfirmation() {
+    string text = ExitText();
+
+    Dialog.Instance.Confirmation(
+      ExitGame,
+      "Exit the game",
+      text
+    );
+  }
+
+  private static void ExitGame(bool accepted) {
+    if (!accepted) return;
     Application.Quit();
   }
 
-  private void RetreatConfirmation() {
+  private static void RetreatConfirmation() {
     Dialog.Instance.Confirmation(
       Retreat,
       "Retreating",
@@ -83,5 +105,11 @@ public class PauseMenu : MonoBehaviour {
     Close();
     BattleManager.Instance.battleResult = BattleResult.Retreat;
     BattleManager.Instance.Finish();
+  }
+
+  private static string ExitText() {
+    SaveData data = StateManager.LoadGame(StateManager.saveSlot, false);
+    string lastSave = data.saveTime ?? "-";    
+    return $"Are you sure you want to quit the game?\nYou will lose unsaved progress.\nLast save: <b>{lastSave}</b>";
   }
 }
