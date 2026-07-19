@@ -81,8 +81,29 @@ public class QuestManager : MonoBehaviour {
   private static void UpgradeZone(string id, MapZoneFeature feature) {
     MapZone zone = MapZoneManager.FindById(id);
     if (zone == null) return;
+
     if (zone.TryGetComponent<MapZoneHub>(out var hub)) {
       hub.AddUpgrade(feature);
+      string hubName = hub.GetComponent<MapZone>().zoneName;
+
+      switch (feature) {
+        case MapZoneFeature.Healing:
+          LogUI.Instance.Add($"A <b>Doctor</b> has appeared in the <b>{hubName}</b> area");
+          break;
+        case MapZoneFeature.Trading:
+          LogUI.Instance.Add($"In the <b>{hubName}</b> area, the merchant has new <b>Goods</b> available");
+          break;
+        case MapZoneFeature.Weaponsmith:
+        case MapZoneFeature.Armorer:
+          LogUI.Instance.Add($"New <b>Сrafting recipes</b> have become available in the <b>{hubName}</b> zone");
+          break;
+        case MapZoneFeature.Training:
+          LogUI.Instance.Add($"In the <b>{hubName}</b> zone, you can now train new <b>Units</b>");
+          break;
+        case MapZoneFeature.Quests:
+          LogUI.Instance.Add($"New <b>Quests</b> are available in the <b>{hubName}</b> zone");
+          break;
+      }
     }
   }
 
