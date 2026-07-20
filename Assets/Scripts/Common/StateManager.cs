@@ -78,7 +78,7 @@ public static class StateManager {
 
   public static void ResetPlayerData() {
     saveSlot = 0;
-    dayTime = 720f;
+    dayTime = 600f;
     globalTicks = 1;
     currentScene = "";
     startPlayerZoneId = "6";

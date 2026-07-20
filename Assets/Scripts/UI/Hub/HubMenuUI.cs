@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -24,6 +25,8 @@ public class HubMenuUI : MonoBehaviour {
 
   // Sections
   private static Transform welcomeSection;
+  private static TextMeshProUGUI welcomeTitle;
+  private static TextMeshProUGUI welcomeDescription;
   private static HealingMenuUI healingSection;
   private static TrainingMenuUI trainingSection;
   private static TradingMenuUI tradingSection;
@@ -60,6 +63,8 @@ public class HubMenuUI : MonoBehaviour {
     closeButton = Get<Button>("Navigation/Control/Close");
 
     welcomeSection = FindInContent("Welcome");
+    welcomeTitle = GetInContent<TextMeshProUGUI>("Welcome/Content/Title");
+    welcomeDescription = GetInContent<TextMeshProUGUI>("Welcome/Content/Description");
     healingSection = GetInContent<HealingMenuUI>("Healing");
     trainingSection = GetInContent<TrainingMenuUI>("Training");
     tradingSection = GetInContent<TradingMenuUI>("Trading");
@@ -95,7 +100,7 @@ public class HubMenuUI : MonoBehaviour {
       menu, navigation, closeButton, saveButton, healingFeature,
       healingSection, welcomeSection, tradingFeature, tradingSection, weaponUpFeature,
       armorUpFeature, craftingSection, trainingFeature, trainingSection, questsFeature,
-      questsSection
+      questsSection, welcomeTitle, welcomeDescription
     }.All(x => x != null);
   }
 
@@ -129,6 +134,12 @@ public class HubMenuUI : MonoBehaviour {
   }
 
   private static void InitData(MapZoneHub zone) {
+    MapZone zoneData = zone.GetComponent<MapZone>();
+
+    if (zone.isHome) welcomeTitle.text = "Welcome home!";
+    else welcomeTitle.text = zoneData.zoneName;
+    welcomeDescription.text = zoneData.description;
+
     soldierTrainingChains = zone.soldierTrainingChains.ToList();
     supportTrainingChains = zone.supportTrainingChains.ToList();
 

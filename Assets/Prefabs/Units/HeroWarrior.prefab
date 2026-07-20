@@ -191,6 +191,7 @@ MonoBehaviour:
     reputation: 0
     statPoints: 0
     abilityPoints: 0
+    villagers: 0
     goldRange: 0000000000000000
     resources: 00000000000000000000000000000000
     equipment: []
@@ -252,7 +253,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec5b028da6dc547439d86efcce72f644, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fakeMissle: {fileID: 0}
 --- !u!114 &8113060124673339358
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -477,6 +477,11 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 5e07d2501d718be4d9a38b0f6de0e616,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 635547659545568360, guid: 5e07d2501d718be4d9a38b0f6de0e616,
+        type: 3}
+      propertyPath: m_Layer
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 5e07d2501d718be4d9a38b0f6de0e616,
