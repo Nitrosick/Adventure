@@ -222,7 +222,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.12
+  m_Radius: 0.095
   m_Center: {x: 0.000000059604645, y: 1, z: -0.00000008940697}
 --- !u!114 &3769942709103539625
 MonoBehaviour:
@@ -539,6 +539,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 2689122839035759688}
+    - targetCorrespondingSourceObject: {fileID: 3211805249137726609, guid: 84c49e1e0de9d4c46b23fb5372beeaf4,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5491540834028333529}
   m_SourcePrefab: {fileID: 100100000, guid: 84c49e1e0de9d4c46b23fb5372beeaf4, type: 3}
 --- !u!1 &1638474231703697323 stripped
 GameObject:
@@ -565,6 +569,7 @@ MonoBehaviour:
     reputation: 0
     statPoints: 0
     abilityPoints: 0
+    villagers: 0
     goldRange: 0000000000000000
     resources: 00000000000000000000000000000000
     equipment: []
@@ -608,6 +613,18 @@ MonoBehaviour:
   message: '<b>Chest</b>
 
     May contain gold, resources, or even equipment elements'
+--- !u!114 &5491540834028333529
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1638474231703697323}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22948691c78fe6e40bc622f0d5d89df0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &2159149523830844689 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2871413613839945259, guid: 84c49e1e0de9d4c46b23fb5372beeaf4,

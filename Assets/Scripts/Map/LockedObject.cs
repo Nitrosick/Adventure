@@ -11,6 +11,7 @@ public class LockedObject : MonoBehaviour {
   public float catchChance;
   public Reward reward;
   public GameObject[] interactiveObjects = {};
+  public bool removeHighlight = true;
 
   private Player player;
   private SupportInstance burglar;
@@ -130,5 +131,6 @@ public class LockedObject : MonoBehaviour {
   public void SetOpened() {
     opened = true;
     tooltip.message = title;
+    if (removeHighlight) Destroy(GetComponent<Highlightable>());
   }
 }
