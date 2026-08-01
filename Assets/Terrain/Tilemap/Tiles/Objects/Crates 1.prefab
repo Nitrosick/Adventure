@@ -330,6 +330,7 @@ GameObject:
   - component: {fileID: 6677429621835422567}
   - component: {fileID: 1989767798494691178}
   - component: {fileID: 3863589790121078598}
+  - component: {fileID: 2173619253756571544}
   m_Layer: 11
   m_Name: Objects
   m_TagString: Breakable
@@ -410,6 +411,18 @@ MonoBehaviour:
 
     Sometimes
     something useful can be found inside'
+--- !u!114 &2173619253756571544
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6949114703796479251}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22948691c78fe6e40bc622f0d5d89df0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1119831040894321222
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -765,19 +778,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 4
+  climbTo: {fileID: 0}
   spawnType: 0
   loot:
     experience: 0
     fame: 0
+    reputation: 0
+    statPoints: 0
+    abilityPoints: 0
+    villagers: 0
     goldRange: 0000000000000000
     resources: 00000000000000000000000000000000
     equipment: []
     items: []
-  lootPickEffect: {fileID: 7421624496474942857, guid: d963e4f57afad6f4c956e7cfb36b4ba9,
-    type: 3}
+    projectiles: 0
   height: 1
   allyFocusPoint: 0
   enemyFocusPoint: 0
+  reinforcementFocusPoint: 0
   lootDropChance: 0
 --- !u!1001 &4237684395121289669
 PrefabInstance:

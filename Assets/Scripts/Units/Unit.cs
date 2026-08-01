@@ -100,7 +100,7 @@ public class Unit : MonoBehaviour {
     Relation = relation;
     FailedAttacks = 0;
 
-    if (Relation == UnitRelation.Ally) Ui.MarkAsAlly();
+    Ui.InitMarkersColor();
     if (CurrentHealth == 0) CurrentHealth = Health.GetMaxHP();
     Ui.UpdateHealth(Health.GetMaxHP(), CurrentHealth);
 

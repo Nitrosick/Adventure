@@ -54,7 +54,7 @@ public class UnitHealth : MonoBehaviour {
     unit.IsDead = true;
     unit.CurrentTile.OccupiedBy = null;
     unit.UnitCollider.enabled = false;
-    unit.Ui.ClearMarkers();
+    unit.Ui.DisableMarkers();
     unit.Ui.HideHealthBar();
     unit.Ui.HideChargesBar();
     unit.Effects.ClearEffects();

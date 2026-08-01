@@ -15,9 +15,11 @@ public class TimeController : MonoBehaviour {
   private float visualTime;
 
   private Light sun;
+  private Light moon;
   private TextMeshProUGUI uiTime;
   private Image iconImage;
-  public AnimationCurve lightIntensity;
+  public AnimationCurve sunIntensity;
+  public AnimationCurve moonIntensity;
   public Gradient lightColor;
   public Sprite sunIcon;
   public Sprite moonIcon;
@@ -30,17 +32,19 @@ public class TimeController : MonoBehaviour {
     Instance = this;
     GameObject timerPanel = GameObject.FindWithTag("DayTime");
     GameObject sunObj = GameObject.FindWithTag("Sun");
+    GameObject moonObj = GameObject.FindWithTag("Moon");
 
-    if (timerPanel == null || sunObj == null) {
+    if (timerPanel == null || sunObj == null || moonObj == null) {
       Debug.LogError("Time controller components initialization error");
       return;
     }
 
     sun = sunObj.GetComponent<Light>();
+    moon = moonObj.GetComponent<Light>();
     uiTime = timerPanel.transform.Find("Value").GetComponent<TextMeshProUGUI>();
     iconImage = timerPanel.transform.Find("Icon").GetComponent<Image>();
 
-    if (sun == null || uiTime == null || iconImage == null || sunIcon == null || moonIcon == null) {
+    if (sun == null || moon == null || uiTime == null || iconImage == null || sunIcon == null || moonIcon == null) {
       return;
     }
 
@@ -48,7 +52,8 @@ public class TimeController : MonoBehaviour {
 
     if (currentTime >= dayStart && currentTime < nightStart) {
       iconImage.sprite = sunIcon;
-    } else {
+    }
+    else {
       iconImage.sprite = moonIcon;
     }
   }
@@ -75,27 +80,44 @@ public class TimeController : MonoBehaviour {
       if (currentTime >= dayLength) currentTime = 0f;
     }
 
-    visualTime = Mathf.Lerp(visualTime, currentTime, Time.deltaTime * 5f);
-    UpdateSun(visualTime);
+    float delta = currentTime - visualTime;
+
+    if (Mathf.Abs(delta) > dayLength * 0.5f) {
+      if (delta > 0) delta -= dayLength;
+      else delta += dayLength;
+    }
+
+    visualTime += delta * Time.deltaTime * 5f;
+
+    if (visualTime < 0) visualTime += dayLength;
+    if (visualTime >= dayLength) visualTime -= dayLength;
+
+    UpdateLight(visualTime);
     UpdateEnviroment();
     if (uiTime != null) uiTime.text = GetTimeString();
     StateManager.dayTime = currentTime;
   }
 
-  private void UpdateSun(float time) {
+  private void UpdateLight(float time) {
     float normalizedTime = time / dayLength;
-    float angle = normalizedTime * 360f - 95f;
 
-    sun.transform.rotation = Quaternion.Euler(angle, 170f, 0f);
-    sun.intensity = lightIntensity.Evaluate(normalizedTime);
+    float sunAngle = normalizedTime * 360f - 95f;
+    float moonAngle = sunAngle + 180f;
+
+    sun.transform.rotation = Quaternion.Euler(sunAngle, 170f, 0f);
+    sun.intensity = sunIntensity.Evaluate(normalizedTime);
     sun.color = lightColor.Evaluate(normalizedTime);
+
+    moon.transform.rotation = Quaternion.Euler(moonAngle, 170f, 0f);
+    moon.intensity = moonIntensity.Evaluate(normalizedTime);
   }
 
   private void UpdateEnviroment() {
     if ((int)currentTime == dayStart) {
       LightSwitchOff();
       _ = Toast.Show("sun", "The day has come");
-    } else if ((int)currentTime == nightStart) {
+    }
+    else if ((int)currentTime == nightStart) {
       LightSwitchOn();
       _ = Toast.Show("moon", "Night had fallen");
     }

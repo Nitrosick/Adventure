@@ -6,8 +6,8 @@ using UnityEngine;
 public class UnitUI : MonoBehaviour {
   private Unit unit;
   private Canvas canvas;
-  private GameObject marker;
-  private GameObject markerActive;
+  private Renderer marker;
+  private Renderer markerActive;
   private GameObject healthBar;
   private RectTransform healthBarFill;
   private Transform skillChargesBar;
@@ -21,11 +21,14 @@ public class UnitUI : MonoBehaviour {
     { PopupType.Inactive, "#A0A0A0" }
   };
 
+  private readonly string allyMarkerColor = "#2B8EF3";
+  private readonly string enemyMarkerColor = "#F61010";
+
   void Awake() {
     unit = transform.GetComponent<Unit>();
     canvas = transform.Find("UI").GetComponent<Canvas>();
-    marker = transform.Find("Marker").gameObject;
-    markerActive = transform.Find("MarkerActive").gameObject;
+    marker = transform.Find("Marker").GetComponent<Renderer>();
+    markerActive = transform.Find("MarkerActive").GetComponent<Renderer>();
     healthBar = transform.Find("UI/HealthBar").gameObject;
     healthBarFill = transform.Find("UI/HealthBar/Fill").GetComponent<RectTransform>();
     skillChargesBar = transform.Find("UI/Charges").GetComponent<Transform>();
@@ -41,32 +44,33 @@ public class UnitUI : MonoBehaviour {
     }
 
     canvas.worldCamera = Camera.main;
-    ClearMarkers();
   }
 
-  void OnDestroy() {
-    ClearMarkers();
-  }
+  public void InitMarkersColor() {
+    bool ally = unit.Relation == UnitRelation.Ally;
 
-  public void MarkAsAlly() {
-    marker.SetActive(true);
+    ColorUtility.TryParseHtmlString(
+      ally ? allyMarkerColor : enemyMarkerColor,
+      out Color color
+    );
+
+    marker.material.color = color;
+    markerActive.material.color = color;
   }
 
   public void MarkAsActive() {
-    if (unit.Relation == UnitRelation.Enemy) return;
-    markerActive.SetActive(true);
-    marker.SetActive(false);
+    markerActive.gameObject.SetActive(true);
+    marker.gameObject.SetActive(false);
   }
 
   public void MarkAsInactive() {
-    if (unit.Relation == UnitRelation.Enemy) return;
-    markerActive.SetActive(false);
-    marker.SetActive(true);
+    markerActive.gameObject.SetActive(false);
+    marker.gameObject.SetActive(true);
   }
 
-  public void ClearMarkers() {
-    marker.SetActive(false);
-    markerActive.SetActive(false);
+  public void DisableMarkers() {
+    marker.gameObject.SetActive(false);
+    markerActive.gameObject.SetActive(false);
   }
 
   public void ShowHealthBar() { healthBar.SetActive(true); }

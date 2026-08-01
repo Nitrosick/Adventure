@@ -561,6 +561,7 @@ MonoBehaviour:
     reputation: 0
     statPoints: 0
     abilityPoints: 0
+    villagers: 0
     goldRange: 0000000000000000
     resources: 00000000000000000000000000000000
     equipment: []
@@ -569,6 +570,7 @@ MonoBehaviour:
   height: 3
   allyFocusPoint: 0
   enemyFocusPoint: 0
+  reinforcementFocusPoint: 0
   lootDropChance: 100
 --- !u!114 &2668726421341324952
 MonoBehaviour:
@@ -671,8 +673,30 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3211805249137726609, guid: 84c49e1e0de9d4c46b23fb5372beeaf4,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1207995406370941300}
   m_SourcePrefab: {fileID: 100100000, guid: 84c49e1e0de9d4c46b23fb5372beeaf4, type: 3}
+--- !u!1 &5009903238113789208 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3211805249137726609, guid: 84c49e1e0de9d4c46b23fb5372beeaf4,
+    type: 3}
+  m_PrefabInstance: {fileID: 7571782052438921609}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1207995406370941300
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5009903238113789208}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22948691c78fe6e40bc622f0d5d89df0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &5678213255289003938 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2871413613839945259, guid: 84c49e1e0de9d4c46b23fb5372beeaf4,

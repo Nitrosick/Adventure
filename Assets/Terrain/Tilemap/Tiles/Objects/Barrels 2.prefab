@@ -224,6 +224,7 @@ GameObject:
   - component: {fileID: 4886245624676005475}
   - component: {fileID: 6742377879164341591}
   - component: {fileID: 7280380035813934205}
+  - component: {fileID: 6928716221828032771}
   m_Layer: 11
   m_Name: Objects
   m_TagString: Breakable
@@ -303,6 +304,18 @@ MonoBehaviour:
 
     Sometimes
     something useful can be found inside'
+--- !u!114 &6928716221828032771
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2573939553368703633}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22948691c78fe6e40bc622f0d5d89df0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5991686989834900101
 GameObject:
   m_ObjectHideFlags: 0
@@ -733,6 +746,10 @@ MonoBehaviour:
   loot:
     experience: 0
     fame: 0
+    reputation: 0
+    statPoints: 0
+    abilityPoints: 0
+    villagers: 0
     goldRange: 0000000000000000
     resources: 00000000000000000000000000000000
     equipment: []
@@ -741,6 +758,7 @@ MonoBehaviour:
   height: 1
   allyFocusPoint: 0
   enemyFocusPoint: 0
+  reinforcementFocusPoint: 0
   lootDropChance: 0
 --- !u!65 &1836944756263456036
 BoxCollider:
