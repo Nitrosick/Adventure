@@ -79,18 +79,32 @@ public class UnitMove : MonoBehaviour {
     if (unit.IsDead) {
       await Task.Delay(1500);
       PhaseManager.NextPhase();
-    } else if (unit.CurrentMovePoints < 1 || unit.Relation == UnitRelation.Enemy) {
-      PhaseManager.NextPhase();
-    } else {
-      TileManager.ShowReachableTiles(
-        unit.CurrentTile,
-        unit.CurrentMovePoints
-      );
+      return;
     }
+
+    if (unit.Relation == UnitRelation.Enemy) {
+      BattleAI.Init(unit);
+      BattleAI.EnemyMove();
+      return;
+    }
+
+    if (unit.CurrentMovePoints < 1) {
+      PhaseManager.NextPhase();
+      return;
+    }
+
+    TileManager.ShowReachableTiles(
+      unit.CurrentTile,
+      unit.CurrentMovePoints
+    );
   }
 
   public void Climb() {
     if (unit.CurrentMovePoints < mpToClimb) {
+      if (unit.Relation == UnitRelation.Enemy) {
+        PhaseManager.NextPhase();
+        return;
+      }
       _ = Toast.Show("warning", "Not enough movement points");
       return;
     }
@@ -98,6 +112,11 @@ public class UnitMove : MonoBehaviour {
     Tile tileFrom = unit.CurrentTile;
     if (tileFrom.type != TileType.Climb || tileFrom.climbTo == null) return;
     Tile tileTo = tileFrom.climbTo;
+
+    if (tileTo.OccupiedBy != null) {
+      _ = Toast.Show("warning", "Someone is blocking the way");
+      return;
+    }
 
     _ = CameraController.FocusOn(tileTo.GetPos());
     tileFrom.OccupiedBy = null;

@@ -82,7 +82,7 @@ public class Tile : MonoBehaviour {
     foreach (var dir in TileManager.allDirections) {
       Vector2Int neighborCoord = Coords + dir;
 
-      if (tiles.ContainsKey(neighborCoord)) {
+      if (tiles.ContainsKey(neighborCoord) && tiles[neighborCoord].height == height) {
         Neighbors.Add(tiles[neighborCoord]);
       }
     }

@@ -3,10 +3,10 @@ using System.Linq;
 using UnityEngine;
 
 public static class BattleAI {
-  private static Unit enemy;
-  private static UnitMove enemyMove;
-  private static Tile enemyTile;
-  private static float AttackRange => enemy.Equip.GetRange();
+  public static Unit enemy;
+  public static UnitMove enemyMove;
+  public static Tile enemyTile;
+  public static float AttackRange => enemy.Equip.GetRange();
 
   public static void Init(Unit unit) {
     if (unit == null) {
@@ -15,6 +15,7 @@ public static class BattleAI {
     }
 
     enemy = unit;
+    enemy.Target = null;
     enemyMove = enemy.GetComponent<UnitMove>();
     enemyTile = enemy.CurrentTile;
 
@@ -59,173 +60,134 @@ public static class BattleAI {
   }
 
   private static void ComeCloser() {
-    List<Unit> players = PlayerUnits();
-    List<Tile> walkable = TileManager.GetAllWalkable(enemyTile);
-    Tile bestTile = null;
-    float bestScore = Mathf.Infinity;
+    Unit closestPlayer = PlayerUnits()
+      .OrderBy(p =>
+        BattleAIHeplers.GetDistance(
+          enemyTile, p.CurrentTile
+        ))
+      .FirstOrDefault();
 
-    foreach (Tile tile in walkable) {
-      if (BattleAIHeplers.IsTrap(tile)) continue;
-
-      List<Tile> path = Pathfinding.FindPath(enemyTile, tile, enemy.CurrentMovePoints);
-      if (path == null) continue;
-
-      foreach (Unit player in players) {
-        float dist = BattleAIHeplers.GetDistance(tile, player.CurrentTile);
-
-        if (dist < bestScore) {
-          bestScore = dist;
-          bestTile = tile;
-        }
-      }
+    if (closestPlayer == null) {
+      PhaseManager.NextPhase();
+      return;
     }
 
-    if (bestTile != null) enemyMove.OnMove(bestTile);
-    else PhaseManager.NextPhase();
+    BattleAINavigation.MoveToTile(closestPlayer.CurrentTile);
   }
 
   private static void MoveAway() {
     List<Unit> players = PlayerUnits();
-    List<Tile> allWalkableTiles = TileManager.GetAllWalkable(enemyTile);
     Tile safestTile = null;
-    float furthest = float.NegativeInfinity;
+    float furthestDistance = float.NegativeInfinity;
 
-    foreach (Tile tile in allWalkableTiles) {
-      if (tile == enemyTile) continue;
+    foreach (Tile tile in TileManager.tiles.Values) {
       if (BattleAIHeplers.IsTrap(tile)) continue;
-      List<Tile> path = Pathfinding.FindPath(enemyTile, tile, enemy.CurrentMovePoints);
-      if (path == null) continue;
-      float dist = players.Min(t => BattleAIHeplers.GetDistance(tile, t.CurrentTile));
+      if (tile.OccupiedBy != null) continue;
 
-      if (dist > furthest) {
+      float distanceToClosestPlayer =
+        players.Min(player =>
+          BattleAIHeplers.GetDistance(
+            tile, player.CurrentTile
+          )
+        );
+
+      if (distanceToClosestPlayer > furthestDistance) {
+        furthestDistance = distanceToClosestPlayer;
         safestTile = tile;
-        furthest = dist;
       }
     }
 
-    if (safestTile != null) enemyMove.OnMove(safestTile);
+    if (safestTile != null) BattleAINavigation.MoveToTile(safestTile);
     else PhaseManager.NextPhase();
   }
 
-  private static bool TryFindTileToShootFrom(out Tile moveTile, out Unit target) {
-    moveTile = null;
-    target = null;
+  private static void MoveToEnemy(IEnumerable<Unit> targets) {
+    foreach (Unit target in targets) {
+      Tile attackTile = BattleAIHeplers.GetAttackTile(target);
 
-    if (enemy.Type != UnitType.Range) return false;
-    List<Unit> players = PlayerUnits();
-    if (players.Count == 0) return false;
-    List<Tile> walkable = TileManager.GetAllWalkable(enemyTile);
+      if (attackTile == null) continue;
 
-    foreach (Tile tile in walkable) {
-      if (tile == enemyTile) continue;
-      if (BattleAIHeplers.IsTrap(tile)) continue;
-      if (BattleAIHeplers.HasEnemyTooClose(tile)) continue;
-      List<Tile> path = Pathfinding.FindPath(enemyTile, tile, enemy.CurrentMovePoints);
-      if (path == null) continue;
+      BattleAIHeplers.SetAttackTarget(
+        enemy, target, AttackRange
+      );
 
-      foreach (Unit player in players) {
-        float dist = Pathfinding.GetCost(tile, player.CurrentTile, AttackRange);
-        if (dist < 2 || dist > AttackRange) continue;
-        if (!BattleAIHeplers.LineOfSightClear(enemy, tile.GetPos(), player.CurrentTile.GetPos())) continue;
-
-        moveTile = tile;
-        target = player;
-        return true;
-      }
-    }
-    return false;
-  }
-
-  private static Tile TryMoveToNeighborOf(Unit target) {
-    if (target.CurrentTile.Neighbors.Contains(enemyTile)) {
-      if (enemy.Type == UnitType.Range && BattleAIHeplers.HasEnemyTooClose(enemyTile)) return null;
-      if (!BattleAIHeplers.CanAttackFromHeight(enemy, enemyTile, target)) return null;
-      return enemyTile;
-    }
-
-    foreach (Tile neighbor in target.CurrentTile.Neighbors) {
-      if (!BattleAIHeplers.CanAttackFromHeight(enemy, neighbor, target)) continue;
-      if (BattleAIHeplers.IsTrap(neighbor)) continue;
-      if (!TileManager.TileIsWalkable(target.CurrentTile, neighbor)) continue;
-
-      List<Tile> path = Pathfinding.FindPath(enemyTile, neighbor, enemy.CurrentMovePoints);
-
-      if (path != null) {
-        enemyMove.OnMove(neighbor);
-        return neighbor;
-      }
-    }
-    return null;
-  }
-
-  private static void MoveToClosestEnemy() {
-    List<Unit> players = PlayerUnits();
-    foreach (Unit target in players.OrderBy(u => BattleAIHeplers.GetDistance(enemyTile, u.CurrentTile))) {
-      Tile tile = TryMoveToNeighborOf(target);
-
-      if (tile != null && BattleAIHeplers.CanAttackFromHeight(enemy, tile, target)) {
-        BattleAIHeplers.SetAttackTarget(enemy, target, tile, AttackRange);
-        if (tile == enemyTile) PhaseManager.NextPhase();
-        return;
-      }
-    }
-    if (enemy.Type == UnitType.Range && TryFindTileToShootFrom(out Tile moveTile, out Unit shootTarget)) {
-      BattleAIHeplers.SetAttackTarget(enemy, shootTarget, moveTile, AttackRange);
-      enemyMove.OnMove(moveTile);
-    } else {
-      ComeCloser();
-    }
-  }
-
-  private static void MoveToPriorityEnemy() {
-    List<Unit> players = PlayerUnits();
-    foreach (Unit target in players) {
-      Tile tile = TryMoveToNeighborOf(target);
-
-      if (tile != null && BattleAIHeplers.CanAttackFromHeight(enemy, tile, target)) {
-        BattleAIHeplers.SetAttackTarget(enemy, target, tile, AttackRange);
-        if (tile == enemyTile) PhaseManager.NextPhase();
-        return;
-      }
-    }
-    if (enemy.Type == UnitType.Range && TryFindTileToShootFrom(out Tile moveTile, out Unit shootTarget)) {
-      BattleAIHeplers.SetAttackTarget(enemy, shootTarget, moveTile, AttackRange);
-      enemyMove.OnMove(moveTile);
-    } else {
-      ComeCloser();
-    }
-  }
-
-  private static void KeepDistance() {
-    if (enemy.Type == UnitType.Range && !BattleAIHeplers.CanShootFromCurrentTile(enemy, enemyTile)) {
-      if (TryFindTileToShootFrom(out Tile moveTile, out Unit shootTarget)) {
-        BattleAIHeplers.SetAttackTarget(enemy, shootTarget, moveTile, AttackRange);
-        enemyMove.OnMove(moveTile);
-      } else {
-        PhaseManager.NextPhase();
-      }
+      if (attackTile == enemyTile) PhaseManager.NextPhase();
+      else BattleAINavigation.MoveToTile(attackTile);
       return;
     }
 
+    if (
+      enemy.Type == UnitType.Range &&
+      BattleAIHeplers.TryFindTileToShootFrom(
+        out Tile shootTile, out Unit shootTarget
+      )
+    ) {
+      BattleAIHeplers.SetAttackTarget(
+        enemy, shootTarget, AttackRange
+      );
+
+      BattleAINavigation.MoveToTile(shootTile);
+      return;
+    }
+
+    ComeCloser();
+  }
+
+  private static void MoveToClosestEnemy() {
+    MoveToEnemy(
+      PlayerUnits().OrderBy(
+        p => BattleAIHeplers.GetDistance(
+          enemyTile, p.CurrentTile
+        )
+      )
+    );
+  }
+
+  private static void MoveToPriorityEnemy() {
+    MoveToEnemy(PlayerUnits());
+  }
+
+  private static void KeepDistance() {
     List<Unit> players = PlayerUnits();
-    List<Tile> allWalkable = TileManager.GetAllWalkable(enemyTile);
+
+    List<Tile> reachableTiles =
+      BattleAIHeplers.GetReachableTiles(
+        enemyTile,
+        enemy.CurrentMovePoints
+      );
+
+    reachableTiles.Add(enemyTile);
+
     Tile bestTile = null;
     Unit bestTarget = null;
     float bestScore = float.NegativeInfinity;
 
-    foreach (Tile tile in allWalkable) {
+    foreach (Tile tile in reachableTiles) {
       if (BattleAIHeplers.IsTrap(tile)) continue;
-      if (enemy.Type == UnitType.Range && BattleAIHeplers.HasEnemyTooClose(tile)) continue;
 
-      List<Tile> path = Pathfinding.FindPath(enemyTile, tile, enemy.CurrentMovePoints);
-      if (path == null) continue;
+      if (
+        enemy.Type == UnitType.Range &&
+        BattleAIHeplers.HasEnemyTooClose(tile)
+      ) continue;
 
       foreach (Unit target in players) {
-        if (!BattleAIHeplers.CanAttackFromHeight(enemy, tile, target)) continue;
-        float dist = Pathfinding.GetCost(tile, target.CurrentTile, AttackRange);
-        if (dist < 2 || dist > AttackRange) continue;
-        if (!BattleAIHeplers.LineOfSightClear(enemy, tile.GetPos(), target.CurrentTile.GetPos())) continue;
-        float score = BattleAIHeplers.EvaluateTileScore(players, tile, target);
+        if (
+          !BattleAIHeplers.CanAttackFromTile(
+            enemy, tile, target, AttackRange
+          )
+        ) continue;
+
+        float distance = Pathfinding.GetCost(
+          tile,
+          target.CurrentTile,
+          AttackRange
+        );
+
+        if (distance < 2) continue;
+
+        float score = BattleAIHeplers.EvaluateTileScore(
+          players, tile, target
+        );
 
         if (score > bestScore) {
           bestScore = score;
@@ -236,64 +198,61 @@ public static class BattleAI {
     }
 
     if (bestTile != null) {
-      BattleAIHeplers.SetAttackTarget(enemy, bestTarget, bestTile, AttackRange);
-      enemyMove.OnMove(bestTile);
+      BattleAIHeplers.SetAttackTarget(
+        enemy, bestTarget, AttackRange
+      );
+
+      if (bestTile == enemyTile) PhaseManager.NextPhase();
+      else BattleAINavigation.MoveToTile(bestTile);
+
       return;
     }
 
-    if (players.Count == 0) {
-      PhaseManager.NextPhase();
-      return;
-    }
+    Unit closestTarget = players
+      .OrderBy(u => BattleAIHeplers.GetDistance(
+        enemyTile, u.CurrentTile
+      ))
+      .First();
 
-    Tile closest = null;
-    float closestDistance = Mathf.Infinity;
-    Unit priorityTarget = players[0];
-
-    foreach (Tile tile in allWalkable) {
-      if (BattleAIHeplers.IsTrap(tile)) continue;
-      if (enemy.Type == UnitType.Range && BattleAIHeplers.HasEnemyTooClose(tile)) continue;
-      if (!BattleAIHeplers.CanAttackFromHeight(enemy, tile, priorityTarget)) continue;
-
-      List<Tile> path = Pathfinding.FindPath(enemyTile, tile, enemy.CurrentMovePoints);
-      if (path == null) continue;
-
-      float dist = BattleAIHeplers.GetDistance(tile, priorityTarget.CurrentTile);
-      if (dist < closestDistance) {
-        closest = tile;
-        closestDistance = dist;
-        BattleAIHeplers.SetAttackTarget(enemy, priorityTarget, tile, AttackRange);
-      }
-    }
-
-    if (closest != null) enemyMove.OnMove(closest);
-    else PhaseManager.NextPhase();
+    BattleAINavigation.MoveToTile(closestTarget.CurrentTile);
   }
 
   private static void HoldPosition() {
-    if (enemy.Type == UnitType.Range && !BattleAIHeplers.CanShootFromCurrentTile(enemy, enemyTile)) {
-      if (TryFindTileToShootFrom(out Tile moveTile, out Unit shootTarget)) {
-        BattleAIHeplers.SetAttackTarget(enemy, shootTarget, moveTile, AttackRange);
-        enemyMove.OnMove(moveTile);
-      } else {
+    if (
+      enemy.Type == UnitType.Range &&
+      !BattleAIHeplers.CanShootFromCurrentTile(enemy, enemyTile)
+    ) {
+      if (
+        BattleAIHeplers.TryFindTileToShootFrom(
+          out Tile shootTile, out Unit shootTarget
+        )
+      ) {
+        BattleAIHeplers.SetAttackTarget(
+          enemy, shootTarget, AttackRange
+        );
+
+        BattleAINavigation.MoveToTile(shootTile);
+      }
+      else {
         PhaseManager.NextPhase();
       }
+
       return;
     }
 
-    List<Unit> players = PlayerUnits();
+    foreach (Unit target in PlayerUnits()) {
+      if (
+        !BattleAIHeplers.CanAttackFromTile(
+          enemy, enemyTile, target, AttackRange
+        )
+      ) continue;
 
-    foreach (Unit target in players) {
-      if (!BattleAIHeplers.CanAttackFromHeight(enemy, enemyTile, target)) continue;
-      float dist = Pathfinding.GetCost(enemyTile, target.CurrentTile, AttackRange);
-      if (dist < 2 || dist > AttackRange) continue;
-      if (!BattleAIHeplers.LineOfSightClear(enemy, enemyTile.GetPos(), target.CurrentTile.GetPos())) continue;
-      BattleAIHeplers.SetAttackTarget(enemy, target, enemyTile, AttackRange);
+      BattleAIHeplers.SetAttackTarget(
+        enemy, target, AttackRange
+      );
 
-      if (enemy.Target != null) {
-        PhaseManager.NextPhase();
-        return;
-      }
+      PhaseManager.NextPhase();
+      return;
     }
 
     PhaseManager.NextPhase();
@@ -301,49 +260,62 @@ public static class BattleAI {
 
   private static void MoveToBestPiercingPosition() {
     List<Unit> players = PlayerUnits();
-    List<Tile> allWalkable = TileManager.GetAllWalkable(enemyTile);
-    allWalkable.Add(enemyTile);
-
     Tile bestTile = null;
     Unit bestTarget = null;
     float bestScore = float.NegativeInfinity;
 
-    foreach (Tile tile in allWalkable) {
+    foreach (Tile tile in TileManager.tiles.Values) {
+      if (tile.OccupiedBy != null && tile != enemyTile) continue;
       if (BattleAIHeplers.IsTrap(tile)) continue;
-      if (enemy.Type == UnitType.Range && tile == enemyTile && BattleAIHeplers.HasEnemyTooClose(tile)) continue;
-      List<Tile> path = Pathfinding.FindPath(enemyTile, tile, enemy.CurrentMovePoints);
-      if (path == null && tile != enemyTile) continue;
+
+      if (
+        enemy.Type == UnitType.Range &&
+        tile == enemyTile &&
+        BattleAIHeplers.HasEnemyTooClose(tile)
+      ) continue;
 
       foreach (Unit target in players) {
-        if (!BattleAIHeplers.CanAttackFromHeight(enemy, tile, target)) continue;
-        float dist = Pathfinding.GetCost(tile, target.CurrentTile, AttackRange);
-        if (dist > AttackRange) continue;
-        Vector3 dir = (target.CurrentTile.GetPos() - tile.GetPos()).normalized;
-        float maxDist = AttackRange + 0.1f;
+        if (
+          !BattleAIHeplers.CanAttackFromTile(
+            enemy, tile, target, AttackRange
+          )
+        ) continue;
 
-        int obstacleLayer = LayerMask.NameToLayer("Obstacle");
-        int unitLayer = LayerMask.NameToLayer("Unit");
-        RaycastHit[] hits = Calculate.HitsOnTrajectory(tile, target.CurrentTile);
+        RaycastHit[] hits =
+          Calculate.HitsOnTrajectory(
+            tile, target.CurrentTile
+          );
 
         int enemiesHit = 0;
         int alliesHit = 0;
         bool blocked = false;
 
+        int obstacleLayer = LayerMask.NameToLayer("Obstacle");
+        int unitLayer = LayerMask.NameToLayer("Unit");
+
         foreach (var hit in hits) {
-          var go = hit.collider.gameObject;
+          GameObject go = hit.collider.gameObject;
+
           if (go.layer == obstacleLayer) {
             blocked = true;
             break;
           }
-          if (go.layer == unitLayer && go.TryGetComponent<Unit>(out var u)) {
-            if (u.Relation == UnitRelation.Ally) enemiesHit++;
+
+          if (
+            go.layer == unitLayer &&
+            go.TryGetComponent<Unit>(out var unit)
+          ) {
+            if (unit.Relation == UnitRelation.Ally) enemiesHit++;
             else alliesHit++;
           }
         }
 
         if (blocked || enemiesHit == 0) continue;
 
-        float score = BattleAIHeplers.EvaluateTileScore(players, tile, target, enemiesHit, alliesHit);
+        float score =
+          BattleAIHeplers.EvaluateTileScore(
+            players, tile, target, enemiesHit, alliesHit
+          );
 
         if (score > bestScore) {
           bestScore = score;
@@ -354,9 +326,12 @@ public static class BattleAI {
     }
 
     if (bestTile != null) {
-      BattleAIHeplers.SetAttackTarget(enemy, bestTarget, bestTile, AttackRange);
-      if (bestTile != enemyTile) enemyMove.OnMove(bestTile);
-      else PhaseManager.NextPhase();
+      BattleAIHeplers.SetAttackTarget(
+        enemy, bestTarget, AttackRange
+      );
+
+      if (bestTile == enemyTile) PhaseManager.NextPhase();
+      else BattleAINavigation.MoveToTile(bestTile);
       return;
     }
 

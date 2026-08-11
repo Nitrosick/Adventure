@@ -109,10 +109,17 @@ public class QueueManager : MonoBehaviour {
 
     FocusOnUnit();
 
-    if (
-      CurrentUnit.Relation != UnitRelation.Enemy &&
-      CurrentUnit.CurrentTile.type == TileType.Climb
-    ) BattleUI.Instance.ShowClimbButton();
+    if (CurrentUnit.Relation == UnitRelation.Enemy) {
+      if (CurrentUnit.BehaviorType != AIBehaviorType.HoldPosition) return;
+      int enemiesClose = BattleAIHeplers.CountEnemiesInRange(
+        BattleAI.PlayerUnits(), CurrentUnit, 4
+      );
+      if (enemiesClose > 0) CurrentUnit.BehaviorType = AIBehaviorType.KeepDistance;
+      return;
+    }
+
+    if (CurrentUnit.CurrentTile.type == TileType.Climb)
+      BattleUI.Instance.ShowClimbButton();
   }
 
   private void HandleUI(Unit unit) {

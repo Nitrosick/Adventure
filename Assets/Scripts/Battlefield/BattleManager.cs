@@ -128,7 +128,6 @@ public class BattleManager : MonoBehaviour {
       unit.FromData(data);
       unit.Init(tile, relation);
       if (unit.Type == UnitType.Range && tile.height > 1) unit.BehaviorType = AIBehaviorType.HoldPosition;
-      // TODO: Проверка расположения врагов для смены поведения
       QueueManager.Instance.Queue.Add(unit);
     }
   }

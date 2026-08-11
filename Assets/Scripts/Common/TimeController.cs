@@ -9,7 +9,7 @@ public class TimeController : MonoBehaviour {
   private readonly float dayLength = 1440f; // 24 hours
   private readonly float dayStart = 300f; // 5:00
   private readonly float nightStart = 1050f; // 17:30
-  public float timeMultiplier = 1f; // 1sec. = 1min.
+  public float timeMultiplier = 1f; // 1f = 1sec.
   public float currentTime = 720f; // 12:00
   private float timer = 0f;
   private float visualTime;
@@ -76,7 +76,7 @@ public class TimeController : MonoBehaviour {
 
     if (timer >= 1f) {
       timer -= 1f;
-      currentTime += timeMultiplier;
+      currentTime += timeMultiplier / 60;
       if (currentTime >= dayLength) currentTime = 0f;
     }
 

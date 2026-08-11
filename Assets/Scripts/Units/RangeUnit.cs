@@ -101,7 +101,8 @@ public class RangeUnit : UnitCombat {
   protected void LaunchMissle(
     Missle missile,
     Vector3 velocity,
-    RangedAttackData data) {
+    RangedAttackData data
+  ) {
     missile.Launch(this, velocity, data.damage, data.critModifier, data.success);
   }
 
