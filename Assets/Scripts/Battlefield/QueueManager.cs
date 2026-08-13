@@ -120,6 +120,8 @@ public class QueueManager : MonoBehaviour {
 
     if (CurrentUnit.CurrentTile.type == TileType.Climb)
       BattleUI.Instance.ShowClimbButton();
+    else
+      BattleUI.Instance.HideClimbButton();
   }
 
   private void HandleUI(Unit unit) {

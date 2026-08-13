@@ -15,7 +15,6 @@ public static class BattleAI {
     }
 
     enemy = unit;
-    enemy.Target = null;
     enemyMove = enemy.GetComponent<UnitMove>();
     enemyTile = enemy.CurrentTile;
 
@@ -218,28 +217,6 @@ public static class BattleAI {
   }
 
   private static void HoldPosition() {
-    if (
-      enemy.Type == UnitType.Range &&
-      !BattleAIHeplers.CanShootFromCurrentTile(enemy, enemyTile)
-    ) {
-      if (
-        BattleAIHeplers.TryFindTileToShootFrom(
-          out Tile shootTile, out Unit shootTarget
-        )
-      ) {
-        BattleAIHeplers.SetAttackTarget(
-          enemy, shootTarget, AttackRange
-        );
-
-        BattleAINavigation.MoveToTile(shootTile);
-      }
-      else {
-        PhaseManager.NextPhase();
-      }
-
-      return;
-    }
-
     foreach (Unit target in PlayerUnits()) {
       if (
         !BattleAIHeplers.CanAttackFromTile(

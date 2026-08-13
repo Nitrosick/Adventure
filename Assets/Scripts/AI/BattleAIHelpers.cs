@@ -3,7 +3,8 @@ using System.Linq;
 using UnityEngine;
 
 public static class BattleAIHeplers {
-  private static readonly float unitPointOffset = 0.75f;
+  // private static readonly float unitPointOffset = 0.75f;
+  // Evaluation weights
   private static readonly float distanceWeight = 1.0f;
   private static readonly float coverWeight = 0.5f;
   private static readonly float enemyHitWeight = 5.0f;
@@ -40,32 +41,135 @@ public static class BattleAIHeplers {
     );
   }
 
-  public static bool LineOfSightClear(Unit unit, Vector3 from, Vector3 to) {
-    float offset = unit.Equip.primary?.trajectory == ShotTrajectory.Arc
-      ? unitPointOffset * 1.5f
-      : unitPointOffset;
+  // public static bool LineOfSightClear(Unit unit, Vector3 from, Vector3 to) {
+  //   float offset = unit.Equip.primary?.trajectory == ShotTrajectory.Arc
+  //     ? unitPointOffset * 1.5f
+  //     : unitPointOffset;
 
-    Vector3 fixedFrom = from + new Vector3(0, offset, 0);
-    Vector3 fixedTo = to + new Vector3(0, offset, 0);
-    Vector3 direction = (fixedTo - fixedFrom).normalized;
-    GameObject source = unit.gameObject;
-    float dist = Vector3.Distance(fixedFrom, fixedTo);
+  //   Vector3 fixedFrom = from + new Vector3(0, offset, 0);
+  //   Vector3 fixedTo = to + new Vector3(0, offset, 0);
+  //   Vector3 direction = (fixedTo - fixedFrom).normalized;
+  //   GameObject source = unit.gameObject;
+  //   float dist = Vector3.Distance(fixedFrom, fixedTo);
 
-    Ray ray = new(fixedFrom, direction);
-    RaycastHit[] hits = Physics.RaycastAll(ray, dist, ~0, QueryTriggerInteraction.Collide);
+  //   Ray ray = new(fixedFrom, direction);
+  //   RaycastHit[] hits = Physics.RaycastAll(ray, dist, ~0, QueryTriggerInteraction.Collide);
 
-    foreach (var hit in hits) {
-      GameObject hitObj = hit.collider.gameObject;
-      if (hitObj == source) continue;
+  //   foreach (var hit in hits) {
+  //     GameObject hitObj = hit.collider.gameObject;
+  //     if (hitObj == source) continue;
 
-      if (hitObj.layer == LayerMask.NameToLayer("Obstacle") ||
-          hitObj.layer == LayerMask.NameToLayer("BattlefieldTile")) return false;
+  //     if (hitObj.layer == LayerMask.NameToLayer("Obstacle") ||
+  //         hitObj.layer == LayerMask.NameToLayer("BattlefieldTile")) return false;
 
-      if (hitObj.TryGetComponent<Unit>(out var hitUnit)) {
-        if (hitUnit.Relation == unit.Relation) return false;
+  //     if (hitObj.TryGetComponent<Unit>(out var hitUnit)) {
+  //       if (hitUnit.Relation == unit.Relation) return false;
+  //       continue;
+  //     }
+  //   }
+  //   return true;
+  // }
+
+  public static bool LineOfSightClear(Unit shooter, Unit target) {
+    if (shooter == null || target == null) return false;
+
+    ShotTrajectory trajectory = shooter.Equip.primary?.trajectory ?? ShotTrajectory.Direct;
+
+    return trajectory == ShotTrajectory.Arc
+      ? ArcLineOfSightClear(shooter, target)
+      : DirectLineOfSightClear(shooter, target);
+  }
+
+  private static bool DirectLineOfSightClear(Unit shooter, Unit target) {
+    Collider shooterCollider = shooter.GetComponent<Collider>();
+    Collider targetCollider = target.GetComponent<Collider>();
+
+    if (shooterCollider == null || targetCollider == null) return false;
+
+    Vector3 from = shooterCollider.bounds.center;
+    Vector3 to = targetCollider.bounds.center;
+
+    Vector3 direction = (to - from).normalized;
+    float distance = Vector3.Distance(from, to);
+
+    RaycastHit[] hits = Physics.RaycastAll(
+      from, direction, distance, ~0, QueryTriggerInteraction.Collide
+    );
+
+    System.Array.Sort(
+      hits, (a, b) => a.distance.CompareTo(b.distance)
+    );
+
+    foreach (RaycastHit hit in hits) {
+      GameObject hitObject = hit.collider.gameObject;
+
+      if (hitObject == shooter.gameObject) continue;
+
+      if (hit.collider.TryGetComponent(out Unit hitUnit)) {
+        if (hitUnit == target) return true;
+        if (hitUnit.Relation == shooter.Relation) return false;
         continue;
       }
+
+      int layer = hitObject.layer;
+
+      if (
+        layer == LayerMask.NameToLayer("Obstacle") ||
+        layer == LayerMask.NameToLayer("BattlefieldTile")
+      ) return false;
     }
+
+    return true;
+  }
+
+  private static bool ArcLineOfSightClear(Unit shooter, Unit target) {
+    Collider shooterCollider = shooter.GetComponent<Collider>();
+    Collider targetCollider = target.GetComponent<Collider>();
+
+    if (shooterCollider == null || targetCollider == null) return false;
+
+    Vector3 from = shooterCollider.bounds.center;
+    Vector3 to = targetCollider.bounds.center;
+
+    const float arcHeight = 3f;
+    const int segments = 12;
+
+    Vector3 previousPoint = from;
+
+    for (int i = 1; i <= segments; i++) {
+      float t = i / (float)segments;
+
+      Vector3 currentPoint = Vector3.Lerp(from, to, t);
+      currentPoint.y += Mathf.Sin(t * Mathf.PI) * arcHeight;
+
+      Vector3 direction = currentPoint - previousPoint;
+      float distance = direction.magnitude;
+
+      RaycastHit[] hits = Physics.RaycastAll(
+        previousPoint, direction.normalized, distance, ~0, QueryTriggerInteraction.Collide
+      );
+
+      foreach (RaycastHit hit in hits) {
+        GameObject hitObject = hit.collider.gameObject;
+
+        if (hitObject == shooter.gameObject) continue;
+
+        if (
+          hit.collider.TryGetComponent(out Unit hitUnit) &&
+          hitUnit == target
+        ) continue;
+
+        int layer = hitObject.layer;
+
+        if (
+          layer == LayerMask.NameToLayer("Obstacle") ||
+          layer == LayerMask.NameToLayer("BattlefieldTile")
+        ) return false;
+      }
+
+      previousPoint = currentPoint;
+    }
+
     return true;
   }
 
@@ -126,18 +230,20 @@ public static class BattleAIHeplers {
       fromTile.height != target.CurrentTile.height
     ) return false;
 
+    if (unit.Type == UnitType.Range) {
+      if (HasEnemyTooClose(fromTile)) return false;
+      if (
+        !LineOfSightClear(
+          unit, target
+        )
+      ) return false;
+    }
+
     float distance = Pathfinding.GetCost(
       fromTile, target.CurrentTile, attackRange
     );
 
     if (distance > attackRange) return false;
-
-    if (
-      !LineOfSightClear(
-        unit, fromTile.GetPos(), target.CurrentTile.GetPos()
-      )
-    ) return false;
-
     return true;
   }
 
@@ -147,6 +253,7 @@ public static class BattleAIHeplers {
     float attackRange
   ) {
     if (
+      !target.IsDead &&
       CanAttackFromTile(
         unit, unit.CurrentTile, target, attackRange
       )
@@ -156,11 +263,6 @@ public static class BattleAIHeplers {
     else {
       unit.Target = null;
     }
-  }
-
-  public static bool CanShootFromCurrentTile(Unit unit, Tile tile) {
-    if (unit.Type != UnitType.Range) return true;
-    return !HasEnemyTooClose(tile);
   }
 
   public static Tile FindClimbTile(Tile destination) {
@@ -223,7 +325,7 @@ public static class BattleAIHeplers {
 
         if (
           !LineOfSightClear(
-            unit, tile.GetPos(), player.CurrentTile.GetPos()
+            unit, player
           )
         ) continue;
 
