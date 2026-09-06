@@ -32,16 +32,4 @@ public class MeleeUnit : UnitCombat {
 
     Ui.UpdateCharges(TotalSkillCharges, SkillCharges);
   }
-
-  public override void BlockStance(string id) {
-    Effect effect = Factory.CreateEffectById(id);
-    if (effect == null) return;
-
-    Effects.ApplyEffect(effect);
-    Animator.SetBlocking(true);
-
-    if (SkillCharges <= 0) BattleUI.Instance.DisableSkills();
-    if (Skills.GetActiveSkills().Count > 0) Ui.UpdateCharges(TotalSkillCharges, SkillCharges);
-    NextPhase(true);
-  }
 }

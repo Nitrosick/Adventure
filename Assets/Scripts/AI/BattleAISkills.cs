@@ -63,7 +63,7 @@ public static class BattleAISkills {
           ) {
             skip = false;
             unit.SetSkillCharges(-skill.cost);
-            unit.BlockStance(skill.skillName == "Wall" ? "e2" : "e7");
+            unit.Skills.BlockStance(skill.skillName == "Wall" ? "e2" : "e7");
           }
           break;
       }

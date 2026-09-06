@@ -40,11 +40,11 @@ public class Skill : ScriptableObject {
     switch (skillName) {
       case "Block":
         unit.SetSkillCharges(-cost);
-        unit.BlockStance("e2");
+        unit.Skills.BlockStance("e2");
         break;
       case "Wall":
         unit.SetSkillCharges(-cost);
-        unit.BlockStance("e7");
+        unit.Skills.BlockStance("e7");
         break;
     }
   }

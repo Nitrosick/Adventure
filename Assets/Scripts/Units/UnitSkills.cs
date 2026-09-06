@@ -4,11 +4,9 @@ using UnityEngine;
 
 public class UnitSkills : MonoBehaviour {
   private Unit unit;
-  private UnitEquipment equip;
 
   void Awake() {
     unit = transform.GetComponent<Unit>();
-    equip = transform.GetComponent<UnitEquipment>();
 
     if (!ComponentsInitialized()) {
       Debug.LogError("Unit skills components initialization error");
@@ -17,7 +15,7 @@ public class UnitSkills : MonoBehaviour {
 
   private bool ComponentsInitialized() {
     return new object[] {
-      unit, equip
+      unit
     }.All(x => x != null);
   }
 
@@ -25,6 +23,8 @@ public class UnitSkills : MonoBehaviour {
   public List<Skill> GetPassiveSkills() => GetSkills(false);
 
   private List<Skill> GetSkills(bool active) {
+    UnitEquipment equip = unit.Equip;
+
     return new[] { equip.primary, equip.secondary, equip.armor, equip.additional }
       .Where(e => e != null && e.skills != null)
       .SelectMany(e => e.skills)
@@ -73,6 +73,18 @@ public class UnitSkills : MonoBehaviour {
       Effect effect = Factory.CreateEffectById(id);
       if (effect != null) unit.Effects.ApplyEffect(effect);
     }
+  }
+
+  public void BlockStance(string id) {
+    Effect effect = Factory.CreateEffectById(id);
+    if (effect == null) return;
+
+    unit.Effects.ApplyEffect(effect);
+    unit.Animator.SetBlocking(true);
+
+    if (unit.SkillCharges <= 0) BattleUI.Instance.DisableSkills();
+    if (unit.Skills.GetActiveSkills().Count > 0) unit.Ui.UpdateCharges(unit.TotalSkillCharges, unit.SkillCharges);
+    unit.NextPhase(true);
   }
 }
 

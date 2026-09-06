@@ -314,19 +314,22 @@ public class Unit : MonoBehaviour {
   }
 
   // Overloaded
+  // Melee attacks
   public virtual void OnAttack(Unit target = null) { }
   public virtual void DealDamage(bool charged = false) { }
   public virtual void DealPierceDamage(bool charged = false) { }
   public virtual void DealAoeDamage(AttackType attackType) { }
 
-  public virtual void BreakObject(Breakable target) { }
-  public virtual void ChopTree(TreeObject target) { }
-
+  // Shooting
   public virtual void Shoot() { }
   public virtual void CrossbowShoot() { }
   public virtual void BowShoot() { }
 
-  public virtual void BlockStance(string id) { }
+  // Enviroment
+  public virtual void BreakObject(Breakable target) { }
+  public virtual void ChopTree(TreeObject target) { }
+
+  // Other
   protected virtual bool DamageBlocked() { return false; }
 
   public virtual void NextPhase(bool instant = false) { }
