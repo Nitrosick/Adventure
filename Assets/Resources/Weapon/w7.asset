@@ -31,20 +31,20 @@ MonoBehaviour:
   bracingRotation: {x: 0, y: 180, z: 45}
   price: 50
   isNew: 0
+  hand: 1
+  prefab: {fileID: 6661733261368495049, guid: a14dcade0138f374bbdf94dad5e34755, type: 3}
+  damageType: 2
+  scalingStats: 01000000
   damage: 4
   critModifier: 1.7
+  range: 10
   armorPenetration: 0
   precision: 87
-  range: 10
-  missleSpeed: 15
-  prefab: {fileID: 6899369443386078255, guid: d12a6e7fd2c117549ad3a4d61e7faae6, type: 3}
-  damageType: 2
-  trajectory: 2
-  scalingStats: 01000000
   chargedAttackParams:
     hitChancePenalty: 0
     damageBonus: 0
     critBonus: 0
-  hand: 1
+  missleSpeed: 15
+  trajectory: 2
   misslePrefab: {fileID: 8836926817537799933, guid: 9ee5bddc8d1f45f4dbe47c7ef35385d4,
     type: 3}

@@ -37,7 +37,7 @@ public class QueueManager : MonoBehaviour {
       BattleAI.Init(CurrentUnit);
       BattleAI.EnemyMove();
     } else {
-      List<Skill> skills = CurrentUnit.Equip.GetActiveSkills();
+      List<Skill> skills = CurrentUnit.Skills.GetActiveSkills();
       BattleUI.Instance.ShowSkills(skills, PhaseManager.CurrentPhase, CurrentUnit);
       CurrentUnit.Ui.MarkAsActive();
     }

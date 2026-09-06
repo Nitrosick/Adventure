@@ -1,0 +1,62 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 637e9a84f7a72294a949cb41532886b0, type: 3}
+  m_Name: a18
+  m_EditorClassIdentifier: 
+  id: a18
+  itemName: Hunting doublet
+  description: A light, agile doublet combined with high leather boots is the standard
+    set for a village hunter. It is almost useless in combat, but for tracking and
+    waiting for game for hours, it is just the thing.
+  requirementStats: 010000000100000000000000
+  requirementLevel: 1
+  type: 5
+  slot: 2
+  weight: 0
+  rarity: 0
+  effects: []
+  skills: []
+  icon: {fileID: 21300000, guid: 4ee4a24240a843442994cc79022ef6be, type: 3}
+  animationSet: {fileID: 0}
+  bracingType: 0
+  bracingLocation: {x: 0, y: 0, z: 0}
+  bracingRotation: {x: 0, y: 0, z: 0}
+  price: 70
+  isNew: 0
+  defense: 1
+  blockMultiplier: 1
+  prefabM: {fileID: 6778779788523897742, guid: 18325c52110331c4b8995859647cd781, type: 3}
+  prefabL: {fileID: 0}
+  resistsMap:
+  - type: 1
+    value: 0
+  - type: 2
+    value: 3
+  - type: 3
+    value: 0
+  - type: 4
+    value: 3
+  - type: 5
+    value: 0
+  - type: 6
+    value: 15
+  - type: 7
+    value: 0
+  bodyView:
+    hideBeard: 0
+    hideHair: 0
+    handsMaterial: {fileID: 2100000, guid: 343b52cae03af5b43ba965f56392b334, type: 2}
+    armsMaterial: {fileID: 2100000, guid: 2ed285ca696469c4a9fc8deaec1dcb3f, type: 2}
+    torsoMaterial: {fileID: 2100000, guid: 2ed285ca696469c4a9fc8deaec1dcb3f, type: 2}
+    underwearMaterial: {fileID: 2100000, guid: 2ed285ca696469c4a9fc8deaec1dcb3f, type: 2}
+    legsMaterial: {fileID: 2100000, guid: 2ed285ca696469c4a9fc8deaec1dcb3f, type: 2}
+    footsMaterial: {fileID: 2100000, guid: 2ed285ca696469c4a9fc8deaec1dcb3f, type: 2}

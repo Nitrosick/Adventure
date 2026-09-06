@@ -41,7 +41,7 @@ public class MeleeUnit : UnitCombat {
     Animator.SetBlocking(true);
 
     if (SkillCharges <= 0) BattleUI.Instance.DisableSkills();
-    if (Equip.GetActiveSkills().Count > 0) Ui.UpdateCharges(TotalSkillCharges, SkillCharges);
+    if (Skills.GetActiveSkills().Count > 0) Ui.UpdateCharges(TotalSkillCharges, SkillCharges);
     NextPhase(true);
   }
 }

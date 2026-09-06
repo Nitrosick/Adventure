@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 6508725779702045150}
   - component: {fileID: 1941463840525008381}
   - component: {fileID: -4995011487116678424}
+  - component: {fileID: 475715462480851653}
   m_Layer: 7
   m_Name: Robber
   m_TagString: Unit
@@ -174,6 +175,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   innateSkills:
   - {fileID: 11400000, guid: 568b2f9a6c1b35944b3cbea27dcf4219, type: 2}
+--- !u!114 &475715462480851653
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2548740166397950227}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4de9d33156b2734286db6b83b7d74b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &7275578570123573145
 PrefabInstance:
   m_ObjectHideFlags: 0

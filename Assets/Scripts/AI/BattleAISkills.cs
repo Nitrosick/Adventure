@@ -7,7 +7,7 @@ public static class BattleAISkills {
     Unit target = unit.Target;
     bool skip = true;
 
-    foreach (Skill skill in unit.Equip.GetActiveSkills().Where(s => s.skillPhases.Contains(BattlePhase.Attack))) {
+    foreach (Skill skill in unit.Skills.GetActiveSkills().Where(s => s.skillPhases.Contains(BattlePhase.Attack))) {
       if (unit.SkillCharges < skill.cost) continue;
 
       switch (skill.skillName) {
@@ -76,7 +76,7 @@ public static class BattleAISkills {
   public static void MovePhaseSkills(Unit unit) {
     // if (enemy.SkillCharges == 0) return;
 
-    // List<Skill> skills = enemy.Equip.GetActiveSkills()
+    // List<Skill> skills = enemy.Skills.GetActiveSkills()
     //   .Where(s => s.skillPhases.Contains(BattlePhase.Movement))
     //   .ToList();
     // if (skills.Count == 0) return;

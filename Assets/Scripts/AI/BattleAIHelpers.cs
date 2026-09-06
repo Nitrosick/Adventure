@@ -41,35 +41,6 @@ public static class BattleAIHeplers {
     );
   }
 
-  // public static bool LineOfSightClear(Unit unit, Vector3 from, Vector3 to) {
-  //   float offset = unit.Equip.primary?.trajectory == ShotTrajectory.Arc
-  //     ? unitPointOffset * 1.5f
-  //     : unitPointOffset;
-
-  //   Vector3 fixedFrom = from + new Vector3(0, offset, 0);
-  //   Vector3 fixedTo = to + new Vector3(0, offset, 0);
-  //   Vector3 direction = (fixedTo - fixedFrom).normalized;
-  //   GameObject source = unit.gameObject;
-  //   float dist = Vector3.Distance(fixedFrom, fixedTo);
-
-  //   Ray ray = new(fixedFrom, direction);
-  //   RaycastHit[] hits = Physics.RaycastAll(ray, dist, ~0, QueryTriggerInteraction.Collide);
-
-  //   foreach (var hit in hits) {
-  //     GameObject hitObj = hit.collider.gameObject;
-  //     if (hitObj == source) continue;
-
-  //     if (hitObj.layer == LayerMask.NameToLayer("Obstacle") ||
-  //         hitObj.layer == LayerMask.NameToLayer("BattlefieldTile")) return false;
-
-  //     if (hitObj.TryGetComponent<Unit>(out var hitUnit)) {
-  //       if (hitUnit.Relation == unit.Relation) return false;
-  //       continue;
-  //     }
-  //   }
-  //   return true;
-  // }
-
   public static bool LineOfSightClear(Unit shooter, Unit target) {
     if (shooter == null || target == null) return false;
 

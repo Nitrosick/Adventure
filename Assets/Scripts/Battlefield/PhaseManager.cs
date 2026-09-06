@@ -47,7 +47,7 @@ public class PhaseManager : MonoBehaviour
 
   private static void PhaseActions() {
     Unit unit = QueueManager.Instance.CurrentUnit;
-    List<Skill> skills = unit.Equip.GetActiveSkills();
+    List<Skill> skills = unit.Skills.GetActiveSkills();
 
     if (unit.Relation != UnitRelation.Enemy) {
       BattleUI.Instance.ShowSkills(skills, CurrentPhase, unit);
@@ -77,7 +77,7 @@ public class PhaseManager : MonoBehaviour
           BattleAISkills.AttackPhaseSkills(unit);
         } else {
           int targets = TileManager.ShowAttackGrid(unit);
-          if (targets == 0 && !unit.Equip.HasNonTargetSkills()) NextPhase();
+          if (targets == 0 && !unit.Skills.HasNonTargetSkills()) NextPhase();
         }
         break;
     }

@@ -84,7 +84,7 @@ public class UnitUI : MonoBehaviour {
   }
 
   public void UpdateCharges(int total, int current) {
-    if (unit.Equip.GetActiveSkills().Count == 0) return;
+    if (unit.Skills.GetActiveSkills().Count == 0) return;
 
     if (current < 1) {
       HideChargesBar();

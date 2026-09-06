@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 5534043588480448948}
   - component: {fileID: 8113060124673339358}
   - component: {fileID: -6268994605874723547}
+  - component: {fileID: 2794003892128143005}
   m_Layer: 7
   m_Name: Raider
   m_TagString: Unit
@@ -172,6 +173,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   innateSkills: []
+--- !u!114 &2794003892128143005
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2548740166397950227}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4de9d33156b2734286db6b83b7d74b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1021754585490050717
 PrefabInstance:
   m_ObjectHideFlags: 0

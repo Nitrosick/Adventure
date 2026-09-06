@@ -11,6 +11,7 @@ public class Unit : MonoBehaviour {
   public UnitUI Ui { get; private set; }
   public UnitAnimator Animator { get; private set; }
   public UnitEquipment Equip { get; private set; }
+  public UnitSkills Skills { get; private set; }
   public UnitEffects Effects { get; private set; }
   public Sprite avatar;
   public string PrefabId { get; protected set; }
@@ -67,6 +68,7 @@ public class Unit : MonoBehaviour {
   protected void Awake() {
     Health = transform.GetComponent<UnitHealth>();
     Equip = transform.GetComponent<UnitEquipment>();
+    Skills = transform.GetComponent<UnitSkills>();
     Effects = transform.GetComponent<UnitEffects>();
   }
 
@@ -89,7 +91,7 @@ public class Unit : MonoBehaviour {
     if (
       UnitCollider == null || Move == null || Health == null ||
       Ui == null || Animator == null || Equip == null ||
-      Effects == null
+      Effects == null || Skills == null
     ) {
       Debug.LogError("Unit components initialization error");
       return;
@@ -106,8 +108,8 @@ public class Unit : MonoBehaviour {
 
     if (IsHero) TotalSkillCharges += (int)AbilityController.ChargesBonus();
     SetSkillCharges(TotalSkillCharges);
-    if (Equip.GetActiveSkills().Count > 0) Ui.UpdateCharges(TotalSkillCharges, SkillCharges);
-    Equip.ApplyInstantEffects();
+    if (Skills.GetActiveSkills().Count > 0) Ui.UpdateCharges(TotalSkillCharges, SkillCharges);
+    Skills.ApplyInstantEffects();
   }
 
   private void SetMovePoints() {
@@ -122,7 +124,7 @@ public class Unit : MonoBehaviour {
     }
 
     // Passive skills
-    List<Skill> skills = Equip.GetPassiveSkills();
+    List<Skill> skills = Skills.GetPassiveSkills();
     foreach (Skill skill in skills) {
       if (skill.skillName == "Comfort") result++;
     }

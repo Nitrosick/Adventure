@@ -192,7 +192,7 @@ public static class Calculate {
 
   public static List<Skill> ItemPassiveSkills(Unit unit) {
     List<Skill> result = new();
-    List<Skill> skills = unit.Equip.GetPassiveSkills();
+    List<Skill> skills = unit.Skills.GetPassiveSkills();
 
     foreach (Skill skill in skills) {
       float chance = skill.activateChance;

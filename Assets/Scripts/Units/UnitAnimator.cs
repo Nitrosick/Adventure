@@ -58,7 +58,7 @@ public class UnitAnimator : MonoBehaviour {
   }
 
   public void TakeDamage() {
-    // TODO: Указать все состояния, в которых не сбрасывается анимация
+    // TODO: Указать все состояния, в которых не сбрасывается анимация при получении урона
     if (!animator.GetBool("IsBlocking")) animator.Play("Idle", 0, 0f);
     animator.SetTrigger("Damage");
   }
@@ -73,6 +73,10 @@ public class UnitAnimator : MonoBehaviour {
 
   public void Parry() {
     animator.SetTrigger("Parry");
+  }
+
+  public void SetTrap() {
+    animator.SetTrigger("SetTrap");
   }
 
   public void Reset() {
