@@ -46,6 +46,10 @@ public class Skill : ScriptableObject {
         unit.SetSkillCharges(-cost);
         unit.Skills.BlockStance("e7");
         break;
+      case "Bear trap":
+        unit.SetSkillCharges(-cost);
+        unit.Skills.SetTrap(TrapType.BearTrap);
+        break;
     }
   }
 

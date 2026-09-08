@@ -133,6 +133,7 @@ public class UnitMove : MonoBehaviour {
         if (unit.Relation == UnitRelation.Ally) tile.TakeLoot();
         return true;
       case TileType.Trap:
+        if (tile.transform.GetComponentInChildren<Trap>().Relation == unit.Relation) return true;
         tile.TriggerTrap();
         return false;
     }

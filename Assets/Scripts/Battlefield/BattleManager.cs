@@ -6,7 +6,6 @@ using UnityEngine;
 public class BattleManager : MonoBehaviour {
   public static BattleManager Instance;
   public TrapRegistry trapRegistry;
-  public GameObject hiddenTrapPrefab;
   public ParticleSystem healEffect;
 
   private UnitData[] allies;
@@ -133,13 +132,11 @@ public class BattleManager : MonoBehaviour {
   }
 
   private void SpawnTraps(int enemyTraps) {
-    // TODO: Союзные ловушки
-
     for (int i = 0; i < enemyTraps; i++) {
       Tile tile = TileManager.GetRandomFreeTile();
       if (tile == null) continue;
 
-      GameObject trapObj = Instantiate(Instance.hiddenTrapPrefab, tile.transform);
+      GameObject trapObj = Instantiate(GameManager.I.hiddenTrap, tile.transform);
       trapObj.transform.position = tile.GetPos();
       trapObj.GetComponent<Trap>().Init(UnitRelation.Enemy, StateManager.trapType);
       tile.type = TileType.Trap;

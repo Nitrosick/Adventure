@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class UnitSkills : MonoBehaviour {
@@ -75,16 +76,38 @@ public class UnitSkills : MonoBehaviour {
     }
   }
 
+  private void AfterSkillUse() {
+    if (unit.SkillCharges <= 0) BattleUI.Instance.DisableSkills();
+    if (unit.Skills.GetActiveSkills().Count > 0) unit.Ui.UpdateCharges(unit.TotalSkillCharges, unit.SkillCharges);
+    // unit.NextPhase(true);
+    _ = QueueManager.Instance.NextUnit();
+  }
+
   public void BlockStance(string id) {
     Effect effect = Factory.CreateEffectById(id);
     if (effect == null) return;
 
     unit.Effects.ApplyEffect(effect);
     unit.Animator.SetBlocking(true);
+    AfterSkillUse();
+  }
 
-    if (unit.SkillCharges <= 0) BattleUI.Instance.DisableSkills();
-    if (unit.Skills.GetActiveSkills().Count > 0) unit.Ui.UpdateCharges(unit.TotalSkillCharges, unit.SkillCharges);
-    unit.NextPhase(true);
+  public async void SetTrap(TrapType type) {
+    unit.Animator.SetTrap();
+    await Task.Delay(1500);
+
+    GameObject prefab = type == TrapType.BearTrap
+      ? GameManager.I.bearTrap
+      : GameManager.I.spikeTrap;
+
+    Tile tile = unit.CurrentTile;
+
+    GameObject trapObj = Instantiate(prefab, tile.transform);
+    trapObj.transform.position = tile.GetPos();
+    trapObj.GetComponent<Trap>().Init(unit.Relation, type);
+    tile.type = TileType.Trap;
+
+    AfterSkillUse();
   }
 }
 

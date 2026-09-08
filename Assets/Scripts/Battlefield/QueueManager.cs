@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class QueueManager : MonoBehaviour {
   public static QueueManager Instance;
-
+  private BattleUI UI => BattleUI.Instance;
   public List<Unit> Queue { get; private set; } = new();
   public Unit CurrentUnit { get; private set; }
   public int Round { get; private set; } = 1;
@@ -15,10 +15,7 @@ public class QueueManager : MonoBehaviour {
   }
 
   void OnDestroy() {
-    Queue.Clear();
-    CurrentUnit = null;
-    Round = 1;
-    orderNumber = 0;
+    Instance = null;
   }
 
   public void Init() {
@@ -31,15 +28,14 @@ public class QueueManager : MonoBehaviour {
     orderNumber = 0;
     CurrentUnit = Queue[0];
     FocusOnUnit();
-    BattleUI.Instance.UpdateQueue(Queue);
+    UI.UpdateQueue(Queue);
 
     if (CurrentUnit.Relation == UnitRelation.Enemy) {
       BattleAI.Init(CurrentUnit);
       BattleAI.EnemyMove();
-    } else {
-      List<Skill> skills = CurrentUnit.Skills.GetActiveSkills();
-      BattleUI.Instance.ShowSkills(skills, PhaseManager.CurrentPhase, CurrentUnit);
-      CurrentUnit.Ui.MarkAsActive();
+    }
+    else {
+      ShowUnitUI();
     }
   }
 
@@ -48,7 +44,7 @@ public class QueueManager : MonoBehaviour {
   }
 
   public async Task NextUnit() {
-    if (Queue == null || Queue.Count == 0) return;
+    if (Queue.Count == 0) return;
     await AdvanceOrder();
     Unit nextUnit = await GetNextAliveUnit();
     if (nextUnit == null) return;
@@ -80,13 +76,13 @@ public class QueueManager : MonoBehaviour {
   }
 
   private async Task SwitchTo(Unit nextUnit) {
-    HandleUI(nextUnit);
-    BeforeSwitch();
+    DeactivateCurrentUnit();
     CurrentUnit = nextUnit;
-    await AfterSwitch();
+    HandleUI(CurrentUnit);
+    await ActivateNextUnit();
   }
 
-  private void BeforeSwitch() {
+  private void DeactivateCurrentUnit() {
     CurrentUnit.SetAttackType(AttackType.Standard);
     if (CurrentUnit.CurrentTile.type == TileType.Cover) {
       CurrentUnit.Animator.SetCrouching(true);
@@ -94,7 +90,7 @@ public class QueueManager : MonoBehaviour {
     CurrentUnit.Ui.MarkAsInactive();
   }
 
-  private async Task AfterSwitch() {
+  private async Task ActivateNextUnit() {
     CurrentUnit.Effects.ProcessTurnEffects();
 
     if (CurrentUnit.IsDead || CurrentUnit.Effects.PreventsTurn()) {
@@ -105,8 +101,9 @@ public class QueueManager : MonoBehaviour {
     CurrentUnit.ResetMovePoints();
     CurrentUnit.Animator.Reset();
     CurrentUnit.Ui.MarkAsActive();
-    BattleUI.Instance.UpdateQueue(Queue, orderNumber);
+    UI.UpdateQueue(Queue, orderNumber);
 
+    ShowUnitUI();
     FocusOnUnit();
 
     if (CurrentUnit.Relation == UnitRelation.Enemy) {
@@ -119,19 +116,31 @@ public class QueueManager : MonoBehaviour {
     }
 
     if (CurrentUnit.CurrentTile.type == TileType.Climb)
-      BattleUI.Instance.ShowClimbButton();
+      UI.ShowClimbButton();
     else
-      BattleUI.Instance.HideClimbButton();
+      UI.HideClimbButton();
   }
 
   private void HandleUI(Unit unit) {
-    if (unit.Relation == UnitRelation.Enemy) {
-      BattleUI.Instance.DisableUI();
-    }
-    else {
-      BattleUI.Instance.EnableUI();
+    bool isPlayer = unit.Relation == UnitRelation.Ally;
+
+    if (isPlayer) {
+      UI.EnableUI();
       _ = Toast.Show("move", "Movement phase", 1);
     }
+    else {
+      UI.DisableUI();
+    }
+  }
+
+  private void ShowUnitUI() {
+    CurrentUnit.Ui.MarkAsActive();
+
+    UI.ShowSkills(
+      CurrentUnit.Skills.GetActiveSkills(),
+      PhaseManager.CurrentPhase,
+      CurrentUnit
+    );
   }
 
   private void FocusOnUnit() {
@@ -144,17 +153,16 @@ public class QueueManager : MonoBehaviour {
   }
 
   public bool CheckBattleIsOver() {
-    int alliesCount = 0;
-    int enemiesCount = 0;
+    bool hasAllies = Queue.Exists(u =>
+      !u.IsDead && u.Relation == UnitRelation.Ally);
 
-    foreach (Unit unit in Queue) {
-      if (unit.IsDead) continue;
-      if (unit.Relation == UnitRelation.Ally) alliesCount++;
-      else if (unit.Relation == UnitRelation.Enemy) enemiesCount++;
-    }
+    bool hasEnemies = Queue.Exists(u =>
+      !u.IsDead && u.Relation == UnitRelation.Enemy);
 
-    if (alliesCount == 0) BattleManager.Instance.battleResult = BattleResult.Defeat;
-    else if (enemiesCount == 0) BattleManager.Instance.battleResult = BattleResult.Victory;
+    if (!hasAllies)
+      BattleManager.Instance.battleResult = BattleResult.Defeat;
+    else if (!hasEnemies)
+      BattleManager.Instance.battleResult = BattleResult.Victory;
 
     if (BattleManager.Instance.battleResult != null) {
       BattleManager.Instance.Finish();

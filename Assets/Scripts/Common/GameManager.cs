@@ -32,6 +32,11 @@ public class GameManager : MonoBehaviour {
   [Header("Animations")]
   public RuntimeAnimatorController fistsAnimController;
 
+  [Header("Traps")]
+  public GameObject hiddenTrap;
+  public GameObject bearTrap;
+  public GameObject spikeTrap;
+
   [Header("IDs")]
   // Unit IDs for achievements
   public readonly string[] banditIds = { "u3", "u6", "u7", "u13", "u15", "u16" };

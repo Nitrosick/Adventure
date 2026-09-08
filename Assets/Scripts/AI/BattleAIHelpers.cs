@@ -19,7 +19,7 @@ public static class BattleAIHeplers {
     if (tile.type == TileType.Trap) {
       Trap trap = tile.GetComponentInChildren<Trap>();
       if (trap == null) return false;
-      if (trap.Relation == UnitRelation.Enemy) return true;
+      if (trap.Relation == UnitRelation.Ally) return true;
     }
     return false;
   }

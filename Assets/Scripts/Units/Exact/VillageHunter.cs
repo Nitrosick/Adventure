@@ -5,7 +5,7 @@ public class VillageHunter : RangeUnit {
     Intelligence = 1;
 
     Name = "Village hunter";
-    Description = "Hunters in villages are respected, because in many ways it depends on them what the residents will have for dinner today. They are often taken into the army for their outstanding shooting skills";
+    Description = "Hunters in villages are respected, because in many ways it depends on them what the residents will have for dinner today. They are often recruited into the army for their ability to shoot and set traps";
     PrefabId = "u17";
     Type = UnitType.Range;
     MaxLevel = 7;
