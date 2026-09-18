@@ -237,13 +237,31 @@ public class BuildingUI : MonoBehaviour {
 
     Close();
     SceneController.ShowEventInfo("build", "Building");
+
     await SceneController.Fade(0f, 1f, true);
 
     mapZone.Remove();
     foreach (BlockedPath path in mapZone.unlockPathes) path.Unlock();
-    mapZone = null;
-
+    player.AddPassiveIncome(mapZone.passiveIncome);
+    
     await SceneController.Fade(1f, 0f, false);
+
+    switch (mapZone.building) {
+      case Building.Lumbercamp:
+        LogUI.Instance.Add("The <b>Lumbercamp</b> will passively provide <b>Wood</b>");
+        break;
+      case Building.Mine:
+        LogUI.Instance.Add("The <b>Mine</b> will passively provide <b>Metal</b>");
+        break;
+      case Building.StoneBridge:
+        LogUI.Instance.Add("Access to the previously inaccessible area is open");
+        break;
+      case Building.Watchtower:
+        LogUI.Instance.Add("No more <b>Ambushes</b> will occur in this zone");
+        break;
+    }
+
+    mapZone = null;
     SceneController.HideEventInfo();
     StateManager.SaveGame();
   }

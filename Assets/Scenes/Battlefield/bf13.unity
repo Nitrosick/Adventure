@@ -5038,6 +5038,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.y
       value: -24.036
       objectReference: {fileID: 0}
+    - target: {fileID: 8368173233444314805, guid: 5047cad96e6038548bdd45ac6b01f29c,
+        type: 3}
+      propertyPath: loot.goldRange.Array.data[0]
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 8368173233444314805, guid: 5047cad96e6038548bdd45ac6b01f29c,
+        type: 3}
+      propertyPath: loot.goldRange.Array.data[1]
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 8368173233444314805, guid: 5047cad96e6038548bdd45ac6b01f29c,
+        type: 3}
+      propertyPath: loot.resources.Array.data[3]
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -26446,6 +26461,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Crates 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8368173233444314805, guid: 68e310cce26739443b4d22c82cdfe717,
+        type: 3}
+      propertyPath: lootDropChance
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 8368173233444314805, guid: 68e310cce26739443b4d22c82cdfe717,
+        type: 3}
+      propertyPath: loot.goldRange.Array.data[0]
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8368173233444314805, guid: 68e310cce26739443b4d22c82cdfe717,
+        type: 3}
+      propertyPath: loot.goldRange.Array.data[1]
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

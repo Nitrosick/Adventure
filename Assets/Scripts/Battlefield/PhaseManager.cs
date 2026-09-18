@@ -5,6 +5,7 @@ using UnityEngine;
 public class PhaseManager : MonoBehaviour
 {
   public static BattlePhase CurrentPhase { get; private set; }
+  private readonly static string[] blockingEffects = new string[] { "Block", "Wall" };
 
   void Awake() {
     CurrentPhase = BattlePhase.Movement;
@@ -18,12 +19,12 @@ public class PhaseManager : MonoBehaviour
   public async static void NextPhase() {
     TileManager.HideGrid();
 
-    if (QueueManager.Instance.CurrentUnit.IsDead) {
-      await QueueManager.Instance.NextUnit();
-      await Task.Yield();
-      PhaseActions();
-      return;
-    }
+    // if (QueueManager.Instance.CurrentUnit.IsDead) {
+    //   await QueueManager.Instance.NextUnit();
+    //   await Task.Yield();
+    //   PhaseActions();
+    //   return;
+    // }
 
     if (BattleManager.Instance.battleResult != null) return;
 
@@ -41,7 +42,7 @@ public class PhaseManager : MonoBehaviour
     }
 
     BattleUI.Instance.SwitchPhase(CurrentPhase);
-    await Task.Yield();
+    // await Task.Yield();
     PhaseActions();
   }
 
@@ -61,14 +62,7 @@ public class PhaseManager : MonoBehaviour
         break;
 
       case BattlePhase.Attack:
-        if (unit.Effects.HasAnyEffect(new string[] { "Block", "Wall" })) {
-          NextPhase();
-          return;
-        }
-
-        if (unit.Type == UnitType.Range && unit.CurrentProjectiles == 0) {
-          // TODO: Проверка на возможность использовать скиллы у лучников
-          if (unit.Relation == UnitRelation.Ally) _ = Toast.Show("warning", "No projectiles");
+        if (!CanAttack(unit)) {
           NextPhase();
           return;
         }
@@ -81,5 +75,13 @@ public class PhaseManager : MonoBehaviour
         }
         break;
     }
+  }
+
+  private static bool CanAttack(Unit unit) {
+    // TODO: Проверка на возможность использовать скиллы у лучников
+    if (unit.Effects.HasAnyEffect(blockingEffects)) return false;
+    if (unit.Type == UnitType.Range && unit.CurrentProjectiles == 0) return false;
+    if (unit.Relation == UnitRelation.Ally) _ = Toast.Show("warning", "No projectiles");
+    return true;
   }
 }

@@ -270,7 +270,8 @@ public enum MapZoneFeature {
 public enum Building {
   Watchtower,
   Lumbercamp,
-  StoneBridge
+  StoneBridge,
+  Mine
 }
 
 public enum LockDifficulty {

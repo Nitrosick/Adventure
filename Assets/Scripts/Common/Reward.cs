@@ -12,6 +12,7 @@ public class Reward {
   public int[] resources = { 0, 0, 0, 0 }; // Wood, Stone, Metal, Leather
   public List<Equipment> equipment = new();
   public List<Item> items = new();
+  public List<Unit> units = new();
   public int projectiles;
 
   public void Add(Reward other) {
@@ -27,6 +28,8 @@ public class Reward {
 
     equipment.AddRange(other.equipment);
     items.AddRange(other.items);
+    units.AddRange(other.units);
+
     foreach (Equipment item in equipment) item.isNew = true;
     foreach (Item item in items) item.isNew = true;
   }

@@ -148,6 +148,24 @@ public class Player : MonoBehaviour {
     StateManager.abilityPoints = AbilityPoints;
   }
 
+  public void AddPassiveIncome(PassiveIncome data) {
+    if (data.resources.Any(r => r > 0)) {
+      for (int i = 0; i < data.resources.Length; i++) {
+        StateManager.passiveIncome.resources[i] += data.resources[i];
+      }
+    }
+
+    if (data.gold > 0) {
+      StateManager.passiveIncome.gold += data.gold;
+    }
+  }
+
+  public void ReceivePassiveIncome() {
+    PassiveIncome income = StateManager.passiveIncome;
+    SetResources(income.resources);
+    SetGold(income.gold);
+  }
+
   public int[] GetTotalPeople() {
     return new int[] { Villagers, Army.Units.Count, Army.Supports.Count };
   }
@@ -159,6 +177,8 @@ public class Player : MonoBehaviour {
     SetStatPoints(reward.statPoints);
     SetAbilityPoints(reward.abilityPoints);
     SetVillagers(reward.villagers);
+
+    foreach (Unit unit in reward.units) Army.AddUnit(unit);
 
     int goldValue = Randomiser.GetRandomInRange(reward.goldRange[0], reward.goldRange[1]);
     SetGold(goldValue);
@@ -258,7 +278,7 @@ public class Player : MonoBehaviour {
       Effects.RemoveBuff("b1");
       CheckVillagersOverwhelmed();
 
-      StateManager.globalTicks++;
+      TimeController.Instance.GlobalTickUp();
       await Task.Yield();
       StateManager.SaveGame();
       events.CheckEvents(ignoreBattle: true);

@@ -146,4 +146,9 @@ public class TimeController : MonoBehaviour {
 
   public bool IsDay() => currentTime >= dayStart && currentTime < nightStart;
   public bool IsNight() => currentTime < dayStart || currentTime >= nightStart;
+
+  public void GlobalTickUp() {
+    Player.Instance.ReceivePassiveIncome();
+    StateManager.globalTicks++;
+  }
 }

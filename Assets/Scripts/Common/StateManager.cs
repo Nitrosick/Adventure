@@ -65,6 +65,7 @@ public static class StateManager {
   public static Equipment[] inventoryEquipment;
   public static Item[] inventoryItems;
   public static HashSet<string> playerBuffs;
+  public static PassiveIncome passiveIncome;
 
   public static void ResetTemp() {
     enterScene = "";
@@ -110,6 +111,7 @@ public static class StateManager {
     inventoryEquipment = new Equipment[] { };
     inventoryItems = new Item[] { };
     playerBuffs = new HashSet<string> { };
+    passiveIncome = new PassiveIncome { };
     ResetTemp();
   }
 
@@ -227,7 +229,8 @@ public static class StateManager {
       playerSupports = playerSupports,
       inventoryEquipmentIds = equipIds,
       inventoryItemIds = itemIds,
-      playerBuffs = playerBuffs
+      playerBuffs = playerBuffs,
+      passiveIncome = passiveIncome
     };
     return data;
   }
@@ -264,6 +267,7 @@ public static class StateManager {
     inventoryEquipment = Factory.CreateEquipById(data.inventoryEquipmentIds);
     inventoryItems = Factory.CreateItemById(data.inventoryItemIds);
     playerBuffs = data.playerBuffs;
+    passiveIncome = data.passiveIncome;
   }
 
   public static void InitPlayerArmy() {

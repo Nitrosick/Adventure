@@ -6,6 +6,7 @@ public class MapZoneBuilding : MonoBehaviour {
   public Requirements requirements;
   public Sprite sprite;
   public BlockedPath[] unlockPathes = {};
+  public PassiveIncome passiveIncome;
 
   void Awake() {
     zone = transform.GetComponent<MapZone>();

@@ -36,4 +36,5 @@ public class SaveData {
   public AchievementData[] achievements;
   public AbilityData[] abilities;
   public HashSet<string> playerBuffs;
+  public PassiveIncome passiveIncome;
 }
