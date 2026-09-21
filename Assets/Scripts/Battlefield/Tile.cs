@@ -131,28 +131,16 @@ public class Tile : MonoBehaviour {
     if (transform.TryGetComponent<TooltipTrigger>(out var tooltip)) tooltip.message = "";
   }
 
-  private GameObject SetTrap(Trap hidden) {
-    if (hidden == null || hidden.Relation == UnitRelation.Ally) return null;
-
-    Destroy(hidden.gameObject);
-
-    GameObject prefab = BattleManager.Instance.trapRegistry.Get(hidden.Type);
-    if (prefab == null) return null;
-
-    GameObject trap = Instantiate(prefab, transform);
-    trap.transform.position = GetPos();
-    return trap;
-  }
-
-  public GameObject UncoverTrap() {
-    Trap hiddenTrap = transform.GetComponentInChildren<Trap>();
-    return SetTrap(hiddenTrap);
+  public void UncoverTrap() {
+    Trap trap = GetComponentInChildren<Trap>();
+    if (trap == null) return;
+    trap.Reveal();
   }
 
   public void TriggerTrap() {
-    GameObject trap = UncoverTrap();
+    Trap trap = GetComponentInChildren<Trap>();
     if (trap == null) return;
-    trap.GetComponent<Trap>().Trigger(QueueManager.Instance.CurrentUnit);
+    trap.Trigger(QueueManager.Instance.CurrentUnit);
     type = TileType.Open;
   }
 }

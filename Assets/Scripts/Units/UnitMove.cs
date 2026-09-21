@@ -28,6 +28,17 @@ public class UnitMove : MonoBehaviour {
     );
 
     if (pathTiles == null) return;
+    float moveCost = 0f;
+
+    for (int i = 1; i < pathTiles.Count; i++) {
+      moveCost += Pathfinding.GetCost(
+        pathTiles[i - 1],
+        pathTiles[i]
+      );
+    }
+
+    if (unit.CurrentMovePoints < moveCost) return;
+    unit.CurrentMovePoints -= moveCost;
 
     BattleUI.Instance.DisableUI();
     _ = CameraController.FocusOn(target.GetPos());
@@ -37,13 +48,6 @@ public class UnitMove : MonoBehaviour {
     foreach (Tile tile in pathTiles) path.Enqueue(tile);
     await Task.Yield();
     IsMoving = true;
-
-    float moveCost = 0f;
-    if (unit.CurrentMovePoints == 0) return;
-    for (int i = 1; i < pathTiles.Count; i++) {
-      moveCost += Pathfinding.GetCost(pathTiles[i - 1], pathTiles[i]);
-    }
-    unit.CurrentMovePoints -= moveCost;
   }
 
   private void MoveAlongPath() {
@@ -58,6 +62,12 @@ public class UnitMove : MonoBehaviour {
     transform.position = Vector3.MoveTowards(transform.position, targetPos, unit.MoveSpeed * Time.deltaTime);
 
     if (Vector3.Distance(transform.position, targetPos) < 0.01f) {
+      Tile previousTile = unit.CurrentTile;
+
+      unit.CurrentTile = targetTile;
+      previousTile.OccupiedBy = null;
+      targetTile.OccupiedBy = unit;
+
       bool canMove = CheckTileTypeOnMove(targetTile);
 
       if (canMove) path.Dequeue();
@@ -133,7 +143,8 @@ public class UnitMove : MonoBehaviour {
         if (unit.Relation == UnitRelation.Ally) tile.TakeLoot();
         return true;
       case TileType.Trap:
-        if (tile.transform.GetComponentInChildren<Trap>().Relation == unit.Relation) return true;
+        Trap trap = tile.transform.GetComponentInChildren<Trap>();
+        if (trap.Relation == unit.Relation) return true;
         tile.TriggerTrap();
         return false;
     }

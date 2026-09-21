@@ -134,8 +134,7 @@ public class TileManager : MonoBehaviour {
     if (trapTiles.Count == 0) return;
 
     foreach (Tile tile in trapTiles) {
-      bool success = Randomiser.RollChance(chance);
-      if (success) tile.UncoverTrap();
+      if (Randomiser.RollChance(chance)) tile.UncoverTrap();
     }
   }
 
@@ -144,8 +143,8 @@ public class TileManager : MonoBehaviour {
 
     HideGrid();
 
-    Queue<Tile> frontier = new ();
-    Dictionary<Tile, float> costSoFar = new ();
+    Queue<Tile> frontier = new();
+    Dictionary<Tile, float> costSoFar = new();
 
     frontier.Enqueue(startTile);
     costSoFar[startTile] = 0;
