@@ -25,25 +25,25 @@ MonoBehaviour:
   effects: []
   skills: []
   icon: {fileID: 21300000, guid: 488a28c6b43e7d644931d03215d8359a, type: 3}
-  animationSet: {fileID: 9100000, guid: 82506fd5931819649bf717bb38703d44, type: 2}
+  animationSet: {fileID: 22100000, guid: b4fd1adcd9ecb2d429bc136cfa2aafc4, type: 2}
   bracingType: 0
   bracingLocation: {x: 12.3, y: 22.8, z: 0}
   bracingRotation: {x: 0, y: 180, z: -135}
   price: 90
   isNew: 0
-  damage: 7
-  critModifier: 1.3
-  armorPenetration: 25
-  precision: 85
-  range: 1
-  missleSpeed: 1
+  hand: 0
   prefab: {fileID: 8109463894766015606, guid: a24ec10aa631c104a888c0dc95485906, type: 3}
   damageType: 3
-  trajectory: 0
   scalingStats: 00000000
+  damage: 7
+  critModifier: 1.3
+  range: 1
+  armorPenetration: 25
+  precision: 85
   chargedAttackParams:
     hitChancePenalty: 15
     damageBonus: 50
     critBonus: 10
-  hand: 0
+  missleSpeed: 1
+  trajectory: 0
   misslePrefab: {fileID: 0}
