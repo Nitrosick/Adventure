@@ -445,7 +445,9 @@ public class PlayerMenuUI : MonoBehaviour {
   }
 
   public static void FrameSlot() {
-    MenuSlot[] allSlots = FindObjectsOfType<MenuSlot>();
+    MenuSlot[] allSlots = FindObjectsByType<MenuSlot>(
+      FindObjectsSortMode.None
+    );
     if (allSlots.Length > 0) {
       foreach (MenuSlot slot in allSlots) slot.SwitchActiveFrame(false);
       if (selectedSlot != null) selectedSlot.SwitchActiveFrame(true);

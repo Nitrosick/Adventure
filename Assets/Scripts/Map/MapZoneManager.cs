@@ -71,14 +71,18 @@ public class MapZoneManager : MonoBehaviour {
     }
 
     // Blocked pathes
-    foreach (BlockedPath path in FindObjectsOfType<BlockedPath>()) {
+    foreach (BlockedPath path in FindObjectsByType<BlockedPath>(
+      FindObjectsSortMode.None
+    )) {
       if (StateManager.unlockedPassages.Contains(path.id)) path.Unlock();
       else path.Init();
     }
 
     // Picked loot
     var looted = StateManager.collectedZoneLoot;
-    foreach (MapLoot loot in FindObjectsOfType<MapLoot>().Where(l => looted.Contains(l.id))) {
+    foreach (MapLoot loot in FindObjectsByType<MapLoot>(
+      FindObjectsSortMode.None
+    ).Where(l => looted.Contains(l.id))) {
       Destroy(loot.gameObject);
     }
 

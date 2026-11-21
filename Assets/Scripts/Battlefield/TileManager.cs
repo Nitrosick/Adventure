@@ -29,11 +29,17 @@ public class TileManager : MonoBehaviour {
     tiles.Clear();
     fillers.Clear();
 
-    foreach (Tile tile in FindObjectsOfType<Tile>(true)) {
+    foreach (Tile tile in FindObjectsByType<Tile>(
+      FindObjectsInactive.Include,
+      FindObjectsSortMode.None
+    )) {
       tiles[tile.Coords] = tile;
     }
 
-    foreach (TileFiller tile in FindObjectsOfType<TileFiller>(true)) {
+    foreach (TileFiller tile in FindObjectsByType<TileFiller>(
+      FindObjectsInactive.Include,
+      FindObjectsSortMode.None
+    )) {
       fillers.Add(tile);
     }
 

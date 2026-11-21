@@ -104,7 +104,9 @@ public class TradingMenuUI : HubMenuFeature {
   }
 
   public void CheckBalance() {
-    foreach (SlotWithPrice slot in FindObjectsOfType<SlotWithPrice>()) {
+    foreach (SlotWithPrice slot in FindObjectsByType<SlotWithPrice>(
+      FindObjectsSortMode.None
+    )) {
       slot.UpdatePrice();
     }
   }
